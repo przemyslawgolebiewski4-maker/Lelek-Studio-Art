@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lelek Studio — Objects shaped by hand and time</title>
+<meta name="description" content="Lelek Studio — functional ceramics, sculpture and painting by a Berlin-based artist. Handmade pieces shaped by hand, time and attention."/>
+<link rel="canonical" href="https://lelekstudio.com"/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://lelekstudio.com"/>
+<meta property="og:title" content="Lelek Studio — Objects shaped by hand and time"/>
+<meta property="og:description" content="Functional ceramics, sculpture and painting. Berlin-based studio practice."/>
+<meta name="robots" content="index,follow"/>
+<meta name="theme-color" content="#E6D8C7"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --clay:#E6D8C7;
+  --stone:#CFC4B5;
+  --earth:#3A2F28;
+  --terra:#A36B3F;
+  --cream:#F5EFE6;
+  --moss:#6B7B5E;
+  --light:#FAF6F1;
+  --border:rgba(58,47,40,0.12);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--light);
+  color:var(--earth);
+  font-family:'Inter',sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+  cursor:default;
+}
+
+/* CUSTOM CURSOR */
+.cursor{
+  width:8px;height:8px;
+  background:var(--earth);
+  border-radius:50%;
+  position:fixed;
+  top:0;left:0;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform 0.15s ease;
+}
+.cursor-ring{
+  width:32px;height:32px;
+  border:1px solid rgba(58,47,40,0.4);
+  border-radius:50%;
+  position:fixed;
+  top:0;left:0;
+  pointer-events:none;
+  z-index:9998;
+  transition:all 0.08s ease;
+}
+
+/* LANGUAGE TOGGLE */
+.lang-pl .en{display:none}
+.lang-pl .pl{display:block !important}
+.en{display:block}
+.pl{display:none}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;
+  z-index:100;
+  padding:28px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.4s,padding 0.4s;
+}
+nav.scrolled{
+  background:rgba(250,246,241,0.92);
+  backdrop-filter:blur(12px);
+  padding:18px 48px;
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Playfair Display',serif;
+  font-size:20px;
+  font-weight:400;
+  letter-spacing:0.5px;
+  color:var(--earth);
+  text-decoration:none;
+}
+.nav-logo span{
+  font-style:italic;
+  color:var(--terra);
+}
+.nav-right{
+  display:flex;align-items:center;gap:40px;
+}
+.nav-links{
+  display:flex;gap:32px;list-style:none;
+}
+.nav-links a{
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--earth);
+  text-decoration:none;
+  opacity:0.7;
+  transition:opacity 0.2s;
+}
+.nav-links a:hover{opacity:1}
+.lang-toggle{
+  display:flex;gap:2px;
+  font-size:12px;
+  letter-spacing:1px;
+}
+.lang-btn{
+  background:none;border:none;cursor:pointer;
+  padding:4px 8px;
+  color:var(--earth);
+  opacity:0.4;
+  font-family:'Inter',sans-serif;
+  font-size:12px;
+  letter-spacing:1px;
+  transition:opacity 0.2s;
+}
+.lang-btn.active{opacity:1;border-bottom:1px solid var(--earth)}
+
+/* HERO */
+#hero{
+  height:100vh;
+  position:relative;
+  overflow:hidden;
+  display:flex;align-items:flex-end;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:var(--clay);
+  overflow:hidden;
+}
+.hero-bg img{
+  width:100%;height:100%;
+  object-fit:cover;
+  opacity:0.85;
+  transform:scale(1.05);
+  transition:transform 8s ease;
+}
+.hero-bg::after{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(58,47,40,0.5) 0%, transparent 50%);
+}
+.hero-content{
+  position:relative;z-index:2;
+  padding:0 48px 72px;
+  max-width:700px;
+}
+.hero-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:rgba(250,246,241,0.7);
+  margin-bottom:16px;
+  font-weight:300;
+}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(52px,7vw,88px);
+  line-height:1.0;
+  letter-spacing:-1px;
+  color:var(--cream);
+  margin-bottom:8px;
+}
+.hero-title em{
+  font-style:italic;
+  color:var(--clay);
+}
+.hero-subtitle{
+  font-family:'Cormorant Garamond',serif;
+  font-size:22px;
+  font-weight:300;
+  font-style:italic;
+  color:rgba(250,246,241,0.8);
+  margin-bottom:40px;
+  line-height:1.4;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--cream);
+  text-decoration:none;
+  border-bottom:1px solid rgba(250,246,241,0.4);
+  padding-bottom:4px;
+  transition:border-color 0.3s,gap 0.3s;
+}
+.hero-cta:hover{border-color:var(--cream);gap:18px}
+
+/* SCROLL INDICATOR */
+.scroll-indicator{
+  position:absolute;bottom:32px;right:48px;
+  z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-line{
+  width:1px;height:60px;
+  background:rgba(250,246,241,0.3);
+  position:relative;overflow:hidden;
+}
+.scroll-line::after{
+  content:'';
+  position:absolute;top:-100%;left:0;
+  width:100%;height:100%;
+  background:var(--cream);
+  animation:scrolldown 2s infinite ease-in-out;
+}
+@keyframes scrolldown{
+  0%{top:-100%}
+  100%{top:100%}
+}
+
+/* SECTIONS */
+.section{padding:120px 0}
+.container{max-width:1200px;margin:0 auto;padding:0 48px}
+.section-tag{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--terra);
+  margin-bottom:16px;
+  opacity:0.8;
+}
+h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,4vw,56px);
+  font-weight:400;
+  line-height:1.1;
+  letter-spacing:-0.5px;
+  margin-bottom:48px;
+}
+h2 em{font-style:italic;color:var(--terra)}
+
+/* PORTFOLIO */
+#portfolio{background:var(--light)}
+.portfolio-intro{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:end;
+  margin-bottom:80px;
+}
+.portfolio-text p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;
+  font-weight:300;
+  line-height:1.7;
+  color:rgba(58,47,40,0.75);
+  max-width:480px;
+}
+
+/* PORTFOLIO CATEGORY LABEL */
+.category-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--earth);
+  opacity:0.4;
+  margin-bottom:32px;
+  padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+
+/* GRID — asymmetric */
+.works-grid-functional{
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr 1fr;
+  gap:16px;
+  margin-bottom:80px;
+}
+.works-grid-sculptural{
+  display:grid;
+  grid-template-columns:0.8fr 1.2fr 1fr;
+  gap:16px;
+}
+.work-item{
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+}
+.work-item.tall{grid-row:span 2}
+.work-thumb{
+  width:100%;
+  aspect-ratio:3/4;
+  background:var(--clay);
+  overflow:hidden;
+  position:relative;
+}
+.work-thumb.wide{aspect-ratio:4/3}
+.work-thumb img{
+  width:100%;height:100%;
+  object-fit:cover;
+  transition:transform 0.6s ease;
+  filter:saturate(0.9);
+}
+.work-item:hover .work-thumb img{transform:scale(1.04)}
+.work-overlay{
+  position:absolute;inset:0;
+  background:rgba(58,47,40,0);
+  transition:background 0.3s;
+  display:flex;align-items:flex-end;
+  padding:24px;
+}
+.work-item:hover .work-overlay{background:rgba(58,47,40,0.3)}
+.work-info{
+  opacity:0;
+  transform:translateY(8px);
+  transition:all 0.3s;
+  color:var(--cream);
+}
+.work-item:hover .work-info{opacity:1;transform:translateY(0)}
+.work-title{
+  font-family:'Playfair Display',serif;
+  font-size:18px;
+  font-weight:400;
+  font-style:italic;
+}
+.work-meta{
+  font-size:11px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  opacity:0.8;
+  margin-top:4px;
+}
+.work-caption{
+  margin-top:12px;
+  font-size:13px;
+  color:rgba(58,47,40,0.6);
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+}
+
+/* ABOUT */
+#about{
+  background:var(--cream);
+  position:relative;
+  overflow:hidden;
+}
+#about::before{
+  content:'';
+  position:absolute;
+  top:-200px;right:-200px;
+  width:600px;height:600px;
+  background:radial-gradient(circle,rgba(163,107,63,0.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.about-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.about-image{
+  position:relative;
+}
+.about-img-main{
+  width:100%;
+  aspect-ratio:3/4;
+  object-fit:cover;
+  filter:saturate(0.85);
+}
+.about-img-accent{
+  position:absolute;
+  bottom:-32px;right:-32px;
+  width:45%;
+  aspect-ratio:1;
+  object-fit:cover;
+  border:6px solid var(--cream);
+  filter:saturate(0.85);
+}
+.about-content{}
+.about-content p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;
+  font-weight:300;
+  line-height:1.75;
+  color:rgba(58,47,40,0.8);
+  margin-bottom:24px;
+}
+.about-content p:first-of-type{
+  font-size:24px;
+  color:var(--earth);
+}
+.about-sig{
+  font-family:'Playfair Display',serif;
+  font-size:32px;
+  font-style:italic;
+  color:var(--terra);
+  margin-top:32px;
+}
+
+/* WHERE TO FIND */
+#find{background:var(--stone)}
+.find-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+}
+.find-block{
+  margin-bottom:48px;
+}
+.find-block h3{
+  font-family:'Playfair Display',serif;
+  font-size:28px;
+  font-weight:400;
+  font-style:italic;
+  margin-bottom:16px;
+  color:var(--earth);
+}
+.find-block p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  font-weight:300;
+  line-height:1.7;
+  color:rgba(58,47,40,0.75);
+  margin-bottom:12px;
+}
+.find-detail{
+  font-size:13px;
+  letter-spacing:0.5px;
+  color:rgba(58,47,40,0.5);
+  margin-bottom:4px;
+}
+.find-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--terra);
+  text-decoration:none;
+  margin-top:12px;
+  border-bottom:1px solid rgba(163,107,63,0.3);
+  padding-bottom:2px;
+  transition:border-color 0.2s,gap 0.2s;
+}
+.find-link:hover{border-color:var(--terra);gap:12px}
+.divider{
+  width:40px;height:1px;
+  background:var(--terra);
+  opacity:0.4;
+  margin:32px 0;
+}
+
+/* CONTACT */
+#contact{
+  background:var(--earth);
+  color:var(--cream);
+}
+#contact .section-tag{color:var(--clay);opacity:0.6}
+#contact h2{color:var(--cream)}
+#contact h2 em{color:var(--clay)}
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:start;
+}
+.contact-intro p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;
+  font-weight:300;
+  line-height:1.7;
+  color:rgba(250,246,241,0.7);
+  margin-bottom:24px;
+}
+.contact-detail{
+  display:flex;align-items:center;gap:12px;
+  font-size:13px;
+  letter-spacing:0.5px;
+  color:rgba(250,246,241,0.5);
+  margin-bottom:16px;
+}
+.contact-detail a{
+  color:var(--clay);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.contact-detail a:hover{color:var(--cream)}
+.contact-form{}
+.form-row{margin-bottom:20px}
+.form-label{
+  display:block;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:rgba(250,246,241,0.4);
+  margin-bottom:8px;
+}
+.form-input{
+  width:100%;
+  background:rgba(250,246,241,0.06);
+  border:1px solid rgba(250,246,241,0.15);
+  border-radius:0;
+  padding:14px 16px;
+  color:var(--cream);
+  font-size:15px;
+  font-family:'Inter',sans-serif;
+  outline:none;
+  transition:border-color 0.2s;
+}
+.form-input:focus{border-color:rgba(250,246,241,0.4)}
+.form-input::placeholder{color:rgba(250,246,241,0.25)}
+textarea.form-input{resize:vertical;min-height:120px}
+.form-submit{
+  display:inline-flex;align-items:center;gap:12px;
+  background:transparent;
+  border:1px solid rgba(250,246,241,0.3);
+  color:var(--cream);
+  padding:14px 32px;
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  transition:all 0.3s;
+  margin-top:8px;
+}
+.form-submit:hover{
+  background:rgba(250,246,241,0.08);
+  border-color:rgba(250,246,241,0.6);
+  gap:18px;
+}
+.form-msg{
+  margin-top:16px;
+  font-size:14px;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  display:none;
+}
+.form-msg.success{color:var(--clay);display:block}
+.form-msg.error{color:#e07070;display:block}
+
+/* FOOTER */
+footer{
+  padding:40px 48px;
+  background:var(--earth);
+  border-top:1px solid rgba(250,246,241,0.08);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-logo{
+  font-family:'Playfair Display',serif;
+  font-size:16px;
+  font-style:italic;
+  color:rgba(250,246,241,0.4);
+}
+.footer-links{display:flex;gap:24px}
+.footer-links a{
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:rgba(250,246,241,0.3);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.footer-links a:hover{color:rgba(250,246,241,0.7)}
+
+/* LIGHTBOX */
+.lightbox{
+  position:fixed;inset:0;
+  background:rgba(30,24,20,0.95);
+  z-index:1000;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s;
+}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox img{
+  max-width:90vw;
+  max-height:85vh;
+  object-fit:contain;
+}
+.lightbox-close{
+  position:absolute;top:32px;right:40px;
+  font-size:28px;
+  color:rgba(250,246,241,0.5);
+  cursor:pointer;
+  background:none;border:none;
+  transition:color 0.2s;
+  line-height:1;
+}
+.lightbox-close:hover{color:var(--cream)}
+.lightbox-caption{
+  position:absolute;bottom:40px;left:50%;
+  transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:16px;
+  color:rgba(250,246,241,0.5);
+  white-space:nowrap;
+}
+
+/* ANIMATIONS */
+.reveal{
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.7s ease,transform 0.7s ease;
+}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:20px 24px}
+  nav.scrolled{padding:14px 24px}
+  .nav-links{display:none}
+  .hero-content{padding:0 24px 56px}
+  .container{padding:0 24px}
+  .section{padding:80px 0}
+  .portfolio-intro,.about-grid,.find-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .works-grid-functional,.works-grid-sculptural{grid-template-columns:1fr 1fr;gap:12px}
+  .about-img-accent{display:none}
+  footer{flex-direction:column;gap:16px;text-align:center;padding:32px 24px}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Lelek <span>Studio</span></a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#portfolio"><span class="en">Portfolio</span><span class="pl">Portfolio</span></a></li>
+      <li><a href="#about"><span class="en">About</span><span class="pl">O mnie</span></a></li>
+      <li><a href="#find"><span class="en">Where to find</span><span class="pl">Gdzie kupić</span></a></li>
+      <li><a href="#contact"><span class="en">Contact</span><span class="pl">Kontakt</span></a></li>
+    </ul>
+    <div class="lang-toggle">
+      <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btnPl" onclick="setLang('pl')">PL</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="/images/hero.jpg" alt="Lelek Studio ceramics" id="heroBg"/>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-label">
+      <span class="en">Berlin · Ceramic Studio</span>
+      <span class="pl">Berlin · Pracownia ceramiczna</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="en">Objects shaped<br>by <em>hand</em> and time</span>
+      <span class="pl">Obiekty kształtowane<br><em>ręką</em> i czasem</span>
+    </h1>
+    <p class="hero-subtitle">
+      <span class="en">Functional ceramics, sculpture and painting</span>
+      <span class="pl">Ceramika użytkowa, rzeźba i malarstwo</span>
+    </p>
+    <a href="#portfolio" class="hero-cta">
+      <span class="en">View portfolio</span>
+      <span class="pl">Zobacz portfolio</span>
+      <span>&#8594;</span>
+    </a>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section">
+  <div class="container">
+    <div class="portfolio-intro reveal">
+      <div>
+        <div class="section-tag">
+          <span class="en">Selected works</span>
+          <span class="pl">Wybrane prace</span>
+        </div>
+        <h2>
+          <span class="en">Form, surface<br>and <em>presence</em></span>
+          <span class="pl">Forma, powierzchnia<br>i <em>obecność</em></span>
+        </h2>
+      </div>
+      <div class="portfolio-text">
+        <p class="en">The practice moves between functional ceramics and sculptural, image-based work — shaped slowly by hand, material and attention.</p>
+        <p class="pl">Praktyka porusza się między ceramiką użytkową a pracami rzeźbiarskimi — kształtowanymi powoli ręką, materiałem i uważnością.</p>
+      </div>
+    </div>
+
+    <!-- FUNCTIONAL CERAMICS -->
+    <div class="category-label reveal">
+      <span class="en">Functional ceramics</span>
+      <span class="pl">Ceramika użytkowa</span>
+    </div>
+    <div class="works-grid-functional reveal">
+      <div class="work-item" onclick="openLightbox('/images/soft-drip.jpg','Soft Drip')">
+        <div class="work-thumb">
+          <img src="/images/soft-drip.jpg" alt="Soft Drip"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title">Soft Drip</div>
+              <div class="work-meta en">Functional ceramics</div>
+              <div class="work-meta pl">Ceramika użytkowa</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Soft Drip</p>
+        <p class="work-caption pl">Soft Drip</p>
+      </div>
+      <div class="work-item" onclick="openLightbox('/images/earth-drip.jpg','Earth Drip')">
+        <div class="work-thumb wide">
+          <img src="/images/earth-drip.jpg" alt="Earth Drip"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title">Earth Drip</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Earth Drip</p>
+        <p class="work-caption pl">Earth Drip</p>
+      </div>
+      <div class="work-item" onclick="openLightbox('/images/common-use.jpg','Common Use')">
+        <div class="work-thumb">
+          <img src="/images/common-use.jpg" alt="Common Use"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title">Common Use</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Common Use</p>
+        <p class="work-caption pl">Common Use</p>
+      </div>
+      <div class="work-item" onclick="openLightbox('/images/untitled-vase.jpg','Untitled Vase')">
+        <div class="work-thumb">
+          <img src="/images/untitled-vase.jpg" alt="Untitled Vase"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title">Untitled Vase</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Untitled Vase</p>
+        <p class="work-caption pl">Untitled Vase</p>
+      </div>
+    </div>
+
+    <!-- SCULPTURAL -->
+    <div class="category-label reveal">
+      <span class="en">Sculpture &amp; painting</span>
+      <span class="pl">Rzeźba i malarstwo</span>
+    </div>
+    <div class="works-grid-sculptural reveal">
+      <div class="work-item" onclick="openLightbox('/images/inherited-quiet.jpg','Inherited Quiet I–II')">
+        <div class="work-thumb">
+          <img src="/images/inherited-quiet.jpg" alt="Inherited Quiet"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title">Inherited Quiet I–II</div>
+              <div class="work-meta en">Sculptural work</div>
+              <div class="work-meta pl">Praca rzeźbiarska</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Inherited Quiet I–II</p>
+        <p class="work-caption pl">Inherited Quiet I–II</p>
+      </div>
+      <div class="work-item" onclick="openLightbox('/images/sculpture-2.jpg','Selected work')">
+        <div class="work-thumb">
+          <img src="/images/sculpture-2.jpg" alt="Selected work"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title en">Selected work</div>
+              <div class="work-title pl">Wybrana praca</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Selected work</p>
+        <p class="work-caption pl">Wybrana praca</p>
+      </div>
+      <div class="work-item" onclick="openLightbox('/images/painting-1.jpg','Painting')">
+        <div class="work-thumb">
+          <img src="/images/painting-1.jpg" alt="Painting"/>
+          <div class="work-overlay">
+            <div class="work-info">
+              <div class="work-title en">Painting</div>
+              <div class="work-title pl">Obraz</div>
+            </div>
+          </div>
+        </div>
+        <p class="work-caption en">Painting</p>
+        <p class="work-caption pl">Obraz</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image reveal">
+        <img src="/images/about.jpg" alt="Lelek Studio — artist" class="about-img-main"/>
+        <img src="/images/studio.jpg" alt="Clay Stories Berlin" class="about-img-accent"/>
+      </div>
+      <div class="about-content reveal">
+        <div class="section-tag">
+          <span class="en">About</span>
+          <span class="pl">O mnie</span>
+        </div>
+        <h2>
+          <span class="en">Shaped by<br><em>material</em> and care</span>
+          <span class="pl">Ukształtowana<br><em>materiałem</em> i uważnością</span>
+        </h2>
+        <p class="en">I grew up in central Poland, surrounded by fields and forests — places that quietly shaped my sensitivity to material, form and rhythm. Nature has always been a steady presence in my life, something I continually return to in my work.</p>
+        <p class="pl">Dorastałam w centralnej Polsce, otoczona polami i lasami — miejscami, które cicho kształtowały moją wrażliwość na materiał, formę i rytm. Natura zawsze była stałą obecnością w moim życiu.</p>
+        <p class="en">Today, I combine wheel-thrown forms with sculptural elements, moving between functional ceramics, sculpture and painting. My practice is guided by material, intuition and a slow, attentive process.</p>
+        <p class="pl">Dziś łączę formy toczone na kole z elementami rzeźbiarskimi, poruszając się między ceramiką użytkową, rzeźbą i malarstwem. Moją pracą kieruje materiał, intuicja i powolny, uważny proces.</p>
+        <div class="about-sig">Lelek Studio</div>
+        <div class="divider"></div>
+        <a href="https://www.instagram.com/lelek.pottery/" target="_blank" class="find-link">
+          @lelek.pottery &#8594;
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHERE TO FIND -->
+<section id="find" class="section">
+  <div class="container">
+    <div class="find-grid">
+      <div class="reveal">
+        <div class="section-tag">
+          <span class="en">Where to find</span>
+          <span class="pl">Gdzie kupić</span>
+        </div>
+        <h2>
+          <span class="en">Find my<br><em>work</em></span>
+          <span class="pl">Znajdź<br><em>moje prace</em></span>
+        </h2>
+        <div class="find-block">
+          <h3>Clay Stories Berlin</h3>
+          <p class="en">I am a member of Clay Stories Berlin — a shared ceramic studio and community focused on material practice and contemporary ceramics. My functional ceramics are available through the studio.</p>
+          <p class="pl">Jestem członkiem Clay Stories Berlin — wspólnej pracowni ceramicznej skupionej na praktyce materiałowej i współczesnej ceramice. Moje prace są dostępne przez studio.</p>
+          <div class="find-detail">Kollwitzstra&#223;e 82, Berlin</div>
+          <a href="https://www.instagram.com" target="_blank" class="find-link">
+            <span class="en">Instagram: Clay Stories Berlin &#8594;</span>
+            <span class="pl">Instagram: Clay Stories Berlin &#8594;</span>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="find-block" style="margin-top:120px">
+          <h3>
+            <span class="en">Markets &amp; exhibitions</span>
+            <span class="pl">Targi i wystawy</span>
+          </h3>
+          <p class="en">I occasionally take part in local markets in Berlin. These appearances are irregular and usually connected to seasonal or collaborative events.</p>
+          <p class="pl">Okazjonalnie biorę udział w lokalnych targach w Berlinie. Terminy są nieregularne, zazwyczaj związane z sezonowymi lub wspólnymi wydarzeniami.</p>
+          <div class="divider"></div>
+          <h3>
+            <span class="en">Collaborations</span>
+            <span class="pl">Współpraca</span>
+          </h3>
+          <p class="en">I am open to exhibition opportunities and collaborations, particularly in Poland, as well as in other contexts aligned with my practice.</p>
+          <p class="pl">Jestem otwarta na możliwości wystawiennicze i współpracę, szczególnie w Polsce oraz w innych kontekstach zgodnych z moją praktyką.</p>
+          <a href="#contact" class="find-link" style="margin-top:16px">
+            <span class="en">Get in touch &#8594;</span>
+            <span class="pl">Skontaktuj się &#8594;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="section-tag">
+          <span class="en">Contact</span>
+          <span class="pl">Kontakt</span>
+        </div>
+        <h2>
+          <span class="en">Let's<br><em>connect</em></span>
+          <span class="pl">Napisz<br><em>do mnie</em></span>
+        </h2>
+        <p class="en">For inquiries, collaborations, exhibitions or commissions, please use the form or reach out directly.</p>
+        <p class="pl">W sprawie zapytań, współpracy, wystaw lub zamówień użyj formularza lub napisz bezpośrednio.</p>
+        <div class="divider" style="background:var(--clay)"></div>
+        <div class="contact-detail">
+          <span>&#9675;</span>
+          <a href="mailto:lelekstudio@lelekstudio.com">lelekstudio@lelekstudio.com</a>
+        </div>
+        <div class="contact-detail">
+          <span>&#9675;</span>
+          <a href="https://www.instagram.com/lelek.pottery/" target="_blank">@lelek.pottery</a>
+        </div>
+        <div class="contact-detail">
+          <span>&#9675;</span>
+          <span>Berlin, Germany</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <form id="contactForm" onsubmit="submitContact(event)">
+          <div class="form-row">
+            <label class="form-label">
+              <span class="en">Your name</span>
+              <span class="pl">Twoje imię</span>
+            </label>
+            <input type="text" id="cName" required class="form-input" placeholder="Jane Smith"/>
+          </div>
+          <div class="form-row">
+            <label class="form-label">
+              <span class="en">Email address</span>
+              <span class="pl">Adres email</span>
+            </label>
+            <input type="email" id="cEmail" required class="form-input" placeholder="jane@example.com"/>
+          </div>
+          <div class="form-row">
+            <label class="form-label">
+              <span class="en">Subject</span>
+              <span class="pl">Temat</span>
+            </label>
+            <input type="text" id="cSubject" class="form-input en" placeholder="Inquiry / Collaboration / Commission"/>
+            <input type="text" id="cSubjectPl" class="form-input pl" placeholder="Zapytanie / Współpraca / Zamówienie" style="display:none"/>
+          </div>
+          <div class="form-row">
+            <label class="form-label">
+              <span class="en">Message</span>
+              <span class="pl">Wiadomość</span>
+            </label>
+            <textarea id="cMessage" required class="form-input" rows="5" placeholder="..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">
+            <span class="en">Send message</span>
+            <span class="pl">Wyślij</span>
+            <span>&#8594;</span>
+          </button>
+          <div class="form-msg" id="formSuccess">
+            <span class="en">Thank you. I will get back to you soon.</span>
+            <span class="pl">Dziękuję. Odezwę się wkrótce.</span>
+          </div>
+          <div class="form-msg error" id="formError" style="display:none">
+            <span class="en">Something went wrong. Please email me directly.</span>
+            <span class="pl">Coś poszło nie tak. Napisz bezpośrednio na email.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Lelek Studio · Berlin</div>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/lelek.pottery/" target="_blank">Instagram</a>
+    <a href="mailto:lelekstudio@lelekstudio.com">
+      <span class="en">Email</span>
+      <span class="pl">Email</span>
+    </a>
+    <span style="font-size:12px;color:rgba(250,246,241,0.2);letter-spacing:1px">&#169; 2026</span>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">&#215;</button>
+  <img src="" alt="" id="lightboxImg"/>
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+// CURSOR
+var cur=document.getElementById('cursor');
+var ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',function(e){
+  cur.style.left=(e.clientX-4)+'px';
+  cur.style.top=(e.clientY-4)+'px';
+  ring.style.left=(e.clientX-16)+'px';
+  ring.style.top=(e.clientY-16)+'px';
+});
+document.querySelectorAll('a,button,.work-item').forEach(function(el){
+  el.addEventListener('mouseenter',function(){cur.style.transform='scale(2)';ring.style.transform='scale(1.5)'});
+  el.addEventListener('mouseleave',function(){cur.style.transform='scale(1)';ring.style.transform='scale(1)'});
+});
+
+// NAV SCROLL
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+});
+
+// HERO PARALLAX
+window.addEventListener('scroll',function(){
+  var s=window.scrollY;
+  var h=document.getElementById('heroBg');
+  if(h)h.style.transform='scale(1.05) translateY('+(s*0.15)+'px)';
+});
+
+// LANGUAGE
+function setLang(lang){
+  document.body.classList.toggle('lang-pl',lang==='pl');
+  document.getElementById('btnEn').classList.toggle('active',lang==='en');
+  document.getElementById('btnPl').classList.toggle('active',lang==='pl');
+  localStorage.setItem('lelek-lang',lang);
+}
+(function(){
+  var saved=localStorage.getItem('lelek-lang');
+  if(saved==='pl')setLang('pl');
+})();
+
+// REVEAL ON SCROLL
+var revealObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target);}
+  });
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(function(el){revealObs.observe(el);});
+
+// LIGHTBOX
+function openLightbox(src,caption){
+  document.getElementById('lightboxImg').src=src;
+  document.getElementById('lightboxCaption').textContent=caption;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox();});
+
+// CONTACT FORM — Resend via Vercel Function
+async function submitContact(e){
+  e.preventDefault();
+  var btn=e.target.querySelector('.form-submit');
+  btn.disabled=true;
+  var data={
+    name:document.getElementById('cName').value,
+    email:document.getElementById('cEmail').value,
+    subject:document.getElementById('cSubject').value||document.getElementById('cSubjectPl').value,
+    message:document.getElementById('cMessage').value
+  };
+  try{
+    var r=await fetch('/api/contact',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+    if(r.ok){
+      document.getElementById('formSuccess').classList.add('success');
+      document.getElementById('contactForm').reset();
+    } else {
+      document.getElementById('formError').style.display='block';
+    }
+  }catch(err){
+    document.getElementById('formError').style.display='block';
+  }
+  btn.disabled=false;
+}
+</script>
+</body>
+</html>
