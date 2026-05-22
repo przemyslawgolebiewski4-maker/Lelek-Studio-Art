@@ -152,6 +152,35 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
   h2{font-size:28px}
   .sec{padding:48px 0}
 }
+
+.story-sec{background:var(--light)}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+.story-img{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;background:var(--clay)}
+.story-img picture{display:block;width:100%;height:100%}
+.story-img img{width:100%;height:100%;object-fit:cover;object-position:center top}
+.story-img-caption{position:absolute;bottom:14px;left:16px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(58,47,40,.45)}
+.story-text{}
+.story-body{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;font-style:italic;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.story-sig{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--terra);opacity:.6;margin-top:24px}
+.elements-bar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--earth)}
+.el-item{padding:22px 24px;border-right:0.5px solid rgba(245,239,230,.06)}
+.el-item:last-child{border-right:none}
+.el-num{font-size:9px;letter-spacing:.2em;color:rgba(196,168,130,.35);text-transform:uppercase;margin-bottom:5px}
+.el-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:var(--cream)}
+.el-name em{font-style:italic;color:var(--clay)}
+.hero-quote{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:rgba(245,239,230,.45);margin-bottom:10px;line-height:1.5}
+.footer-lelek{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:rgba(163,107,63,.3);margin-top:3px}
+
+@media(max-width:900px){
+  .story-grid{grid-template-columns:1fr;gap:36px}
+  .story-img{aspect-ratio:3/2}
+  .elements-bar{grid-template-columns:repeat(4,1fr)}
+  .el-item{padding:16px 12px}
+}
+@media(max-width:600px){
+  .elements-bar{grid-template-columns:repeat(2,1fr)}
+  .el-item{border-bottom:0.5px solid rgba(245,239,230,.06)}
+}
 </style>
 </head>
 <body>
@@ -183,7 +212,7 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
   function productCard(item, ratio, link){
     const href = link ? esc(item.url || '#') : '#';
     const tag = item.tag ? '<span class="card-tag">'+esc(item.tag)+'</span>' : '';
-    const price = item.price ? '<div class="card-price">'+esc(item.price)+'</div>' : '';
+    const price = '';
     const badge = item.badge ? '<span class="badge">'+esc(item.badge)+'</span>' : '';
     const inner =
       '<div class="card-thumb '+ratio+'">'+imgTag(item.image, item.alt, '')+'</div>'+
@@ -209,10 +238,11 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
     $('#navIg').textContent = s.instagramHandle;
 
     const navItems = [
+      {label:'Story', href:'#story'},
+      {label:'Works', href:'#featured'},
       {label:'Ceramics', href:'#ceramics'},
       {label:'Vessels', href:'#vessels'},
-      {label:'Wall', href:'#wall'},
-      {label:'Process', href:'#process'},
+      {label:'Wall objects', href:'#wall'},
       {label:'Find', href:'#find'}
     ];
     $('#navLinks').innerHTML = navItems.map(n =>
@@ -243,6 +273,7 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
         '<div class="hero-inner">'+
           '<p class="hero-eyebrow">'+esc(h.eyebrow)+'</p>'+
           '<h1>'+esc(h.headline)+' <em>'+esc(h.headlineEm)+'</em></h1>'+
+          '<p class="hero-quote">"'+esc(h.quote)+'"</p>'+
           '<p class="hero-sub">'+esc(h.subheadline)+'</p>'+
           '<div class="hero-ctas">'+
             '<a href="'+esc(h.cta1Url)+'" class="btn-line">'+esc(h.cta1Text)+' &#8594;</a>'+
@@ -251,8 +282,39 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
         '</div>'+
       '</section>'+
 
-      '<section id="featured" class="sec">'+
+      '<section id="story" class="sec story-sec">'+
         '<div class="cont">'+
+          '<div class="story-grid">'+
+            '<div class="story-img">'+
+              '<picture>'+
+                '<source media="(max-width:768px)" srcset="'+esc(data.story.imageMobile||data.story.image)+'"/>'+
+                '<img src="'+esc(data.story.image)+'" alt="'+esc(data.story.imageAlt)+'" loading="lazy" width="800" height="1000"/>'+
+              '</picture>'+
+              '<div class="story-img-caption">'+esc(data.story.imageCaption)+'</div>'+
+            '</div>'+
+            '<div class="story-text">'+
+              '<div class="sec-tag">'+esc(data.story.eyebrow)+'</div>'+
+              h2(data.story.heading, data.story.headingEm)+
+              '<p class="story-body">'+esc(data.story.body1)+'</p>'+
+              '<p class="story-body">'+esc(data.story.body2)+'</p>'+
+              '<p class="story-body">'+esc(data.story.body3)+'</p>'+
+              '<p class="story-sig">'+esc(data.story.signature)+'</p>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</section>'+
+
+      '<div class="elements-bar">'+
+        data.elements.map(el =>
+          '<div class="el-item">'+
+            '<div class="el-num">'+esc(el.number)+'</div>'+
+            '<div class="el-name"><em>'+esc(el.name)+'</em></div>'+
+          '</div>'
+        ).join('')+
+      '</div>'+
+
+      '<section id="featured" class="sec">'+
+        '<div class="cont" id="works">'+
           '<div class="sec-tag">'+esc(data.featured.eyebrow)+'</div>'+
           h2(data.featured.heading, data.featured.headingEm)+
           '<div class="grid grid-square">'+feat+'</div>'+
@@ -344,6 +406,7 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
 
       '<footer>'+
         '<div class="footer-logo">'+esc(s.name)+' &middot; '+esc(s.location)+'</div>'+
+        '<div class="footer-lelek">'+esc(s.lelekMeaning)+'</div>'+
         '<div class="footer-links">'+
           '<a href="'+esc(s.instagram)+'" target="_blank" rel="noopener noreferrer">'+esc(s.instagramHandle)+'</a>'+
           '<a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>'+

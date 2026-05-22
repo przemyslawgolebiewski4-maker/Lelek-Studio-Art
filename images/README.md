@@ -19,19 +19,19 @@ Replace placeholder files with final photography. Use WebP where possible; keep 
 
 | File | Size |
 |------|------|
-| `cup-1.jpg`, `cup-2.jpg`, `bowl-1.jpg` | 800 x 800 (square) |
+| `cup-1.jpg`, `cup-2.jpg`, `bowl-1.jpg`, `teapot-1.jpg` | 800 x 800 (square) |
 
 ## Vessels (`images/vessels/`)
 
 | File | Size |
 |------|------|
-| `vessel-1.jpg`, `vessel-2.jpg` | 800 x 1000 (portrait) |
+| `vessel-1.jpg`, `vessel-2.jpg`, `vessel-3.jpg` | 800 x 1000 (portrait) |
 
 ## Wall (`images/wall/`)
 
 | File | Size |
 |------|------|
-| `wall-1.jpg`, `wall-2.jpg`, `wall-3.jpg` | 800 x 1000 (portrait) |
+| `wall-1.jpg`, `wall-2.jpg`, `wall-3.jpg`, `bookend-1.jpg`, `bookend-2.jpg` | 800 x 1000 (portrait) - bookends placeholder until photos added |
 
 ## Process (`images/process/`)
 
