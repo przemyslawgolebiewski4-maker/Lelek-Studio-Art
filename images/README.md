@@ -38,7 +38,7 @@ Replace placeholder files with final photography. Use WebP where possible; keep 
 | File | Size |
 |------|------|
 | `studio.jpg` | 1200 x 800 (landscape, 3:2) |
-| `studio-mobile.jpg` | 800 x 1200 (portrait, 2:3) - used below 768px width |
+| `studio-mobile.jpg` | 800 x 533 (landscape, 3:2) - used below 768px width |
 
 ## SEO / social (optional, add to site root or `images/`)
 
