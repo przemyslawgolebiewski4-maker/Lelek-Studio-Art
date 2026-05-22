@@ -279,7 +279,12 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
 
       '<section id="process" class="sec">'+
         '<div class="cont process-grid">'+
-          '<div class="process-img">'+imgTag(proc.image, proc.imageAlt, '')+'</div>'+
+          '<div class="process-img">'+
+            '<picture>'+
+              '<source media="(max-width:768px)" srcset="'+esc(proc.imageMobile||proc.image)+'"/>'+
+              imgTag(proc.image, proc.imageAlt, '')+
+            '</picture>'+
+          '</div>'+
           '<div class="process-text">'+
             '<div class="sec-tag">'+esc(proc.eyebrow)+'</div>'+
             h2(proc.heading, proc.headingEm)+
