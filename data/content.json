@@ -1,0 +1,214 @@
+{
+  "site": {
+    "name": "Lelek Studio",
+    "tagline": "Shaped by hand, fired with intention",
+    "description": "Handmade functional ceramics, vessels and wall objects from a Berlin studio. Each piece shaped slowly by material, process and use.",
+    "url": "https://www.lelekstudio.com",
+    "instagram": "https://www.instagram.com/lelek.studio.berlin/",
+    "instagramHandle": "@lelek.studio.berlin",
+    "email": "lelekstudio@lelekstudio.com",
+    "etsy": "https://www.etsy.com/shop/LelekStudio",
+    "artistUrl": "https://www.p-golebiewski.xyz",
+    "location": "Berlin, Germany",
+    "studioName": "Clay Stories Berlin",
+    "studioAddress": "Kollwitzstrasse 82, 10435 Berlin",
+    "studioInstagram": "https://www.instagram.com/claystories.berlin/",
+    "studioInstagramHandle": "@claystories.berlin"
+  },
+  "hero": {
+    "eyebrow": "Handmade in Berlin - Ceramic Studio",
+    "headline": "Shaped by hand,",
+    "headlineEm": "fired with intention",
+    "subheadline": "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
+    "image": "/images/hero/hero-main.jpg",
+    "imageMobile": "/images/hero/hero-main-mobile.jpg",
+    "imageAlt": "Lelek Studio Berlin - handmade stoneware ceramics and wall objects by ceramist Przemyslaw Golebiewski",
+    "cta1Text": "Browse ceramics",
+    "cta1Url": "#ceramics",
+    "cta2Text": "Wall objects",
+    "cta2Url": "#wall"
+  },
+  "featured": {
+    "eyebrow": "New in studio",
+    "heading": "Currently",
+    "headingEm": "available",
+    "items": [
+      {
+        "id": "feat-1",
+        "image": "/images/featured/feat-1.jpg",
+        "alt": "Soft Drip Cup - handmade wheel-thrown stoneware cup with drip glaze, Lelek Studio Berlin",
+        "title": "Soft Drip Cup",
+        "meta": "Stoneware",
+        "price": "from 55 EUR",
+        "badge": "New",
+        "url": "#ceramics"
+      },
+      {
+        "id": "feat-2",
+        "image": "/images/featured/feat-2.jpg",
+        "alt": "Common Use Bowl - handmade wheel-thrown stoneware bowl, Lelek Studio Berlin",
+        "title": "Common Use Bowl",
+        "meta": "Stoneware",
+        "price": "45 EUR",
+        "badge": "",
+        "url": "#ceramics"
+      },
+      {
+        "id": "feat-3",
+        "image": "/images/featured/feat-3.jpg",
+        "alt": "Wall Object I - handbuilt ceramic wall object with functional and decorative purpose, Lelek Studio Berlin",
+        "title": "Wall Object I",
+        "meta": "Stoneware",
+        "price": "inquire",
+        "badge": "New",
+        "url": "#wall"
+      },
+      {
+        "id": "feat-4",
+        "image": "/images/featured/feat-4.jpg",
+        "alt": "Earth Drip Vessel - wheel-thrown stoneware vessel with earth-tone drip glaze, Lelek Studio Berlin",
+        "title": "Earth Drip Vessel",
+        "meta": "Stoneware",
+        "price": "95 EUR",
+        "badge": "",
+        "url": "#vessels"
+      },
+      {
+        "id": "feat-5",
+        "image": "/images/featured/feat-5.jpg",
+        "alt": "Soft Drip Cup series - handmade wheel-thrown stoneware cups, Lelek Studio Berlin",
+        "title": "Soft Drip Cup",
+        "meta": "Stoneware",
+        "price": "from 55 EUR",
+        "badge": "",
+        "url": "#ceramics"
+      }
+    ]
+  },
+  "ceramics": {
+    "eyebrow": "Functional ceramic",
+    "heading": "Made for",
+    "headingEm": "everyday use",
+    "body": "Cups, bowls and vessels for daily ritual. Wheel-thrown stoneware with glaze applied by hand - each piece slightly different from the next.",
+    "ctaText": "Shop on Etsy",
+    "items": [
+      {
+        "id": "cup-1",
+        "image": "/images/ceramics/cup-1.jpg",
+        "alt": "Soft Drip Cup - handmade wheel-thrown stoneware cup with soft drip glaze, Lelek Studio Berlin",
+        "title": "Soft Drip Cup",
+        "meta": "Wheel-thrown stoneware",
+        "price": "from 55 EUR"
+      },
+      {
+        "id": "bowl-1",
+        "image": "/images/ceramics/bowl-1.jpg",
+        "alt": "Common Use Bowl - handmade stoneware bowl wheel-thrown with organic glaze, Lelek Studio Berlin",
+        "title": "Common Use Bowl",
+        "meta": "Wheel-thrown stoneware",
+        "price": "from 45 EUR"
+      },
+      {
+        "id": "cup-2",
+        "image": "/images/ceramics/cup-2.jpg",
+        "alt": "Earth Drip Cup - wheel-thrown stoneware cup with earth-tone drip glaze, Lelek Studio Berlin",
+        "title": "Earth Drip Cup",
+        "meta": "Wheel-thrown stoneware",
+        "price": "from 55 EUR"
+      }
+    ]
+  },
+  "vessels": {
+    "eyebrow": "Vessels",
+    "heading": "Between use",
+    "headingEm": "and form",
+    "body": "Stoneware vessels shaped on the wheel and by hand. Pieces that hold flowers, objects, or simply space - each one a single form shaped by material and process.",
+    "ctaText": "Browse vessels",
+    "items": [
+      {
+        "id": "vessel-1",
+        "image": "/images/vessels/vessel-1.jpg",
+        "alt": "Earth Drip Vessel - wheel-thrown stoneware vessel with earth-tone glaze and raku firing, Lelek Studio Berlin",
+        "title": "Earth Drip Vessel",
+        "meta": "Stoneware, raku",
+        "price": "95 EUR"
+      },
+      {
+        "id": "vessel-2",
+        "image": "/images/vessels/vessel-2.jpg",
+        "alt": "Soft Drip Vessel - wheel-thrown stoneware vessel with soft drip glaze, Lelek Studio Berlin",
+        "title": "Soft Drip Vessel",
+        "meta": "Stoneware",
+        "price": "85 EUR"
+      }
+    ]
+  },
+  "wall": {
+    "eyebrow": "Wall objects",
+    "heading": "Ceramic for",
+    "headingEm": "your walls",
+    "body": "Handmade ceramic objects designed for walls - each piece functional and decorative. Built through intuitive handbuilding, form emerging from the material. For interiors that want something made by hand, not manufactured.",
+    "note": "Available for interior designers and architects - custom dimensions on request",
+    "items": [
+      {
+        "id": "wall-1",
+        "image": "/images/wall/wall-1.jpg",
+        "alt": "Wall Object I - handbuilt ceramic wall object with blue glaze, functional and decorative, Lelek Studio Berlin",
+        "title": "Wall Object I",
+        "meta": "Stoneware, blue glaze",
+        "tag": "Functional"
+      },
+      {
+        "id": "wall-2",
+        "image": "/images/wall/wall-2.jpg",
+        "alt": "Wall Object II - handbuilt ceramic wall piece, stoneware with glaze, Lelek Studio Berlin",
+        "title": "Wall Object II",
+        "meta": "Stoneware",
+        "tag": "Functional"
+      },
+      {
+        "id": "wall-3",
+        "image": "/images/wall/wall-3.jpg",
+        "alt": "Wall Object III - handbuilt ceramic wall object with organic form and glaze, Lelek Studio Berlin",
+        "title": "Wall Object III",
+        "meta": "Stoneware, glaze",
+        "tag": "Functional"
+      }
+    ]
+  },
+  "slot": {
+    "visible": false,
+    "label": "Upcoming",
+    "text": "New series dropping soon - follow @lelek.studio.berlin"
+  },
+  "process": {
+    "eyebrow": "Process",
+    "heading": "Made slowly,",
+    "headingEm": "with attention",
+    "image": "/images/process/studio.jpg",
+    "imageAlt": "Lelek Studio Berlin - ceramic process, wheel-throwing and intuitive handbuilding in the studio",
+    "body1": "Each functional piece starts on the wheel - shaped, trimmed, glazed by hand. Wall objects are built differently: through intuitive handbuilding, form emerging from the material rather than the wheel.",
+    "body2": "Small batches, slow process, made at Clay Stories Berlin. The glaze is applied by hand and fired at high temperature - the result is always slightly different from what was planned, and better for it.",
+    "signature": "Lelek Studio - Berlin"
+  },
+  "find": {
+    "studio": {
+      "eyebrow": "Find us",
+      "name": "Clay Stories Berlin",
+      "address": "Kollwitzstrasse 82\n10435 Berlin",
+      "body": "Available in studio during open days and selected sales events. Follow Instagram for dates.",
+      "instagramHandle": "@claystories.berlin",
+      "instagramUrl": "https://www.instagram.com/claystories.berlin/",
+      "note": "Studio visits by appointment - contact us directly"
+    },
+    "online": {
+      "eyebrow": "Online",
+      "heading": "Shop on Etsy",
+      "body": "Functional ceramics available for worldwide shipping. New pieces added after each firing.",
+      "etsyText": "Visit Etsy shop",
+      "customHeading": "Interior projects",
+      "customBody": "Wall objects and custom orders - get in touch directly for interior projects.",
+      "customLinkText": "lelekstudio@lelekstudio.com"
+    }
+  }
+}
