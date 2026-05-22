@@ -126,19 +126,28 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
   nav.scrolled{padding:12px 24px}
   .hero-inner{padding:0 24px 64px}
   footer{padding:28px 24px;flex-direction:column;text-align:center}
+  .sec{padding:64px 0}
+  .sec-head{margin-bottom:36px}
 }
 @media(max-width:768px){
   #process .process-grid{gap:44px;align-items:stretch}
-  #process .process-img{aspect-ratio:2/3}
+  #process .process-img{aspect-ratio:3/2}
   #process .process-text{padding-top:4px}
   #process .process-text h2{margin-bottom:28px}
   #process .process-text p{font-size:19px;margin-bottom:16px}
   #process .process-sig{margin-top:20px;font-size:20px}
+  .sec{padding:56px 0}
+  .grid-portrait{grid-template-columns:1fr}
 }
 @media(max-width:600px){
   .hero-ctas{flex-direction:column;gap:16px}
   .grid-square{grid-template-columns:repeat(2,1fr)}
   #process .process-grid{gap:36px}
+}
+@media(max-width:480px){
+  h1{font-size:36px;letter-spacing:-.5px}
+  h2{font-size:28px}
+  .sec{padding:48px 0}
 }
 </style>
 </head>
@@ -344,6 +353,11 @@ footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;ali
   const nav = $('#nav');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
   $('#navToggle').addEventListener('click', () => nav.classList.toggle('open'));
+  document.addEventListener('click', e => {
+    if(nav.classList.contains('open') && !nav.contains(e.target)){
+      nav.classList.remove('open');
+    }
+  });
   $('#navLinks').addEventListener('click', e => {
     if(e.target.tagName === 'A') nav.classList.remove('open');
   });
