@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Lelek Studio — Design Mockup · Japandi / Wabi-sabi</title>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Infant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Shippori+Mincho:wght@400;500&family=Karla:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   LELEK STUDIO — DESIGN MOCKUP v1
+   Aesthetic: Wabi-sabi · Japandi · Farmhouse
+   Color harmony: Analogous warm (terracotta → bronze → umber)
+                 + split-complement sage accent
+                 + achromatic metallic axis
+   ═══════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  /* Primary — terracotta / czerwono-słodziakowy (≈18° hue) */
+  --terra:#B54A32;
+  --terra-deep:#8B3424;
+  --terra-glow:rgba(181,74,50,.12);
+
+  /* Analogous — bronze & umber (≈30–45°) */
+  --bronze:#A67B4B;
+  --bronze-light:#C49A6C;
+  --umber:#5C4030;
+
+  /* Achromatic — ink & metallic */
+  --ink:#141210;
+  --charcoal:#2A2420;
+  --metal:#9A9EA3;
+  --metal-light:#D4D8DC;
+  --metal-shine:linear-gradient(135deg,#7A7E83 0%,#B8BCC1 40%,#E8ECF0 55%,#9A9EA3 100%);
+
+  /* Neutrals — rice paper & linen (farmhouse) */
+  --rice:#F0E8DC;
+  --linen:#E5DBCC;
+  --ash:#B8AEA2;
+  --mist:rgba(20,18,16,.45);
+
+  /* Split-complement accent — muted sage (≈150°) */
+  --sage:#5C6B5A;
+  --sage-whisper:rgba(92,107,90,.08);
+
+  /* Spacing rhythm — ma (間) */
+  --ma-xs:12px;--ma-sm:24px;--ma-md:48px;--ma-lg:96px;--ma-xl:160px;
+
+  --ease:cubic-bezier(.22,1,.36,1);
+  --font-display:'Cormorant Infant',Georgia,serif;
+  --font-body:'Karla',system-ui,sans-serif;
+  --font-jp:'Shippori Mincho',serif;
+  --font-mono:'IBM Plex Mono',monospace;
+}
+
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  background:var(--rice);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.65;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+
+/* Noise texture — wabi-sabi imperfection */
+body::before{
+  content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Mockup banner ─── */
+.mockup-bar{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  background:var(--ink);color:var(--rice);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;padding:8px 24px;
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+}
+.mockup-bar a{color:var(--bronze-light);border-bottom:1px solid rgba(196,154,108,.4)}
+
+/* ─── Navigation ─── */
+nav{
+  position:fixed;top:32px;left:0;right:0;z-index:200;
+  padding:20px var(--ma-md);
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .5s var(--ease);
+}
+nav.scrolled{
+  top:32px;background:rgba(240,232,220,.92);backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(20,18,16,.06);
+}
+.nav-logo{
+  font-family:var(--font-display);font-size:20px;font-weight:400;
+  letter-spacing:.02em;
+}
+.nav-logo span{color:var(--terra);font-style:italic}
+.nav-center{display:flex;gap:36px}
+.nav-center a{
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  opacity:.5;transition:opacity .25s;
+}
+.nav-center a:hover{opacity:1}
+.nav-cta{
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+  padding:10px 20px;border:1px solid var(--terra);color:var(--terra);
+  transition:all .3s var(--ease);
+}
+.nav-cta:hover{background:var(--terra);color:var(--rice)}
+
+/* ─── Hero — asymmetric split, NOT full-bleed template ─── */
+#hero{
+  min-height:100vh;display:grid;
+  grid-template-columns:1fr 1.15fr;
+  padding-top:80px;position:relative;
+}
+.hero-text{
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:var(--ma-lg) var(--ma-md) var(--ma-lg) var(--ma-md);
+  position:relative;
+}
+.hero-vertical{
+  position:absolute;left:var(--ma-md);top:50%;transform:translateY(-50%);
+  writing-mode:vertical-rl;text-orientation:mixed;
+  font-family:var(--font-jp);font-size:13px;letter-spacing:.4em;
+  color:var(--bronze);opacity:.55;
+}
+.hero-chapter{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ash);margin-bottom:var(--ma-sm);
+}
+h1{
+  font-family:var(--font-display);
+  font-size:clamp(42px,5.5vw,76px);
+  font-weight:300;line-height:1.05;letter-spacing:-.02em;
+  margin-bottom:var(--ma-sm);
+}
+h1 em{font-style:italic;color:var(--terra);font-weight:400}
+.hero-quote{
+  font-family:var(--font-display);font-size:17px;font-style:italic;
+  color:var(--mist);max-width:380px;margin-bottom:var(--ma-md);line-height:1.6;
+}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--ma-sm);align-items:center}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--terra);color:var(--rice);
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  padding:16px 28px;border:none;cursor:pointer;
+  transition:background .3s var(--ease);
+}
+.btn-primary:hover{background:var(--terra-deep)}
+.btn-ghost{
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink);opacity:.55;border-bottom:1px solid var(--ash);
+  padding-bottom:4px;transition:all .3s;
+}
+.btn-ghost:hover{opacity:1;border-color:var(--terra);color:var(--terra)}
+
+.hero-visual{position:relative;overflow:hidden;background:var(--linen)}
+.hero-visual img{
+  width:100%;height:100%;object-fit:cover;
+  filter:saturate(.82) contrast(1.02);
+}
+/* Organic blob mask — breaks the rectangle grid */
+.hero-visual::before{
+  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:var(--rice);
+  clip-path:ellipse(18% 28% at 0% 50%);
+}
+.hero-visual::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:30%;z-index:1;
+  background:linear-gradient(to top,var(--rice),transparent);
+}
+.hero-stamp{
+  position:absolute;bottom:var(--ma-md);right:var(--ma-md);z-index:3;
+  width:88px;height:88px;border-radius:50%;
+  background:var(--terra);color:var(--rice);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--font-jp);font-size:11px;letter-spacing:.1em;
+  box-shadow:0 8px 32px rgba(181,74,50,.25);
+  transform:rotate(-8deg);transition:transform .4s var(--ease);
+  cursor:pointer;
+}
+.hero-stamp:hover{transform:rotate(0deg) scale(1.05)}
+.hero-stamp small{font-family:var(--font-mono);font-size:7px;letter-spacing:.15em;opacity:.7;margin-top:2px}
+
+/* ─── Color palette strip (design system showcase) ─── */
+.palette{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border-top:1px solid rgba(20,18,16,.08);
+  border-bottom:1px solid rgba(20,18,16,.08);
+}
+.swatch{padding:20px 16px;position:relative}
+.swatch-label{
+  font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;
+  text-transform:uppercase;margin-top:8px;opacity:.7;
+}
+.swatch-hex{font-family:var(--font-mono);font-size:9px;opacity:.45}
+.s1{background:var(--terra)}.s1 .swatch-label,.s1 .swatch-hex{color:var(--rice)}
+.s2{background:var(--bronze)}.s2 .swatch-label,.s2 .swatch-hex{color:var(--rice)}
+.s3{background:var(--ink)}.s3 .swatch-label,.s3 .swatch-hex{color:var(--metal-light)}
+.s4{background:var(--metal-shine)}.s4 .swatch-label,.s4 .swatch-hex{color:var(--ink)}
+.s5{background:var(--rice);border-right:1px solid rgba(20,18,16,.06)}
+.s6{background:var(--sage)}.s6 .swatch-label,.s6 .swatch-hex{color:var(--rice)}
+
+/* ─── Section utilities ─── */
+.sec{padding:var(--ma-xl) 0}
+.cont{max-width:1280px;margin:0 auto;padding:0 var(--ma-md)}
+.sec-tag{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--terra);margin-bottom:var(--ma-sm);
+}
+h2{
+  font-family:var(--font-display);font-size:clamp(32px,4vw,56px);
+  font-weight:300;line-height:1.08;letter-spacing:-.01em;
+}
+h2 em{font-style:italic;color:var(--bronze)}
+
+/* ─── Horizontal vitrine — museum scroll, NOT card grid ─── */
+#vitrine{background:var(--linen);padding:var(--ma-lg) 0 var(--ma-xl)}
+.vitrine-head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:0 var(--ma-md) var(--ma-md);max-width:1280px;margin:0 auto;
+}
+.vitrine-scroll{
+  display:flex;gap:var(--ma-sm);overflow-x:auto;
+  padding:0 var(--ma-md) var(--ma-sm);
+  scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.vitrine-scroll::-webkit-scrollbar{display:none}
+.vitrine-item{
+  flex:0 0 clamp(260px,28vw,340px);scroll-snap-align:start;
+  position:relative;
+}
+.vitrine-frame{
+  aspect-ratio:3/4;overflow:hidden;background:var(--rice);
+  position:relative;
+}
+.vitrine-frame img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.vitrine-item:hover .vitrine-frame img{transform:scale(1.03)}
+.vitrine-num{
+  position:absolute;top:16px;left:16px;
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;
+  color:var(--rice);background:rgba(20,18,16,.5);padding:6px 10px;
+}
+.vitrine-caption{padding:16px 4px}
+.vitrine-caption h3{font-family:var(--font-display);font-size:22px;font-weight:400;margin-bottom:4px}
+.vitrine-caption p{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mist)}
+
+/* ─── Story — offset asymmetric layout ─── */
+#story .story-wrap{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:var(--ma-lg);align-items:start;
+}
+.story-img-wrap{position:relative;margin-top:var(--ma-lg)}
+.story-img{
+  aspect-ratio:4/5;overflow:hidden;background:var(--ash);
+  position:relative;
+}
+.story-img img{width:100%;height:100%;object-fit:cover}
+.story-img-accent{
+  position:absolute;top:-24px;right:-24px;width:120px;height:120px;
+  border:1px solid var(--bronze);opacity:.35;
+}
+.story-body{
+  font-family:var(--font-display);font-size:19px;font-weight:300;
+  line-height:1.85;color:var(--mist);margin-bottom:20px;
+}
+.story-sig{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--bronze);margin-top:var(--ma-md);
+}
+
+/* ─── Elements bar — wabi-sabi horizontal kintsugi line ─── */
+.elements{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--ink);position:relative;
+}
+.elements::before{
+  content:'';position:absolute;top:50%;left:5%;right:5%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--bronze-light),var(--terra),var(--bronze-light),transparent);
+  opacity:.4;
+}
+.el{padding:28px 24px;text-align:center;position:relative;z-index:1}
+.el-jp{font-family:var(--font-jp);font-size:28px;color:var(--bronze-light);opacity:.5;margin-bottom:6px}
+.el-name{font-family:var(--font-display);font-size:18px;color:var(--rice);font-style:italic}
+
+/* ─── Architect portal — metallic, technical, outside-the-box ─── */
+#architects{
+  background:var(--charcoal);color:var(--metal-light);
+  position:relative;overflow:hidden;
+  padding:var(--ma-xl) 0;
+}
+#architects::before{
+  content:'';position:absolute;inset:0;opacity:.06;
+  background-image:
+    linear-gradient(var(--metal) 1px,transparent 1px),
+    linear-gradient(90deg,var(--metal) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.arch-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:var(--ma-lg);
+  position:relative;z-index:1;
+}
+.arch-tag{
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.35em;
+  text-transform:uppercase;color:var(--bronze-light);margin-bottom:var(--ma-sm);
+}
+#architects h2{color:var(--rice);margin-bottom:var(--ma-md)}
+#architects h2 em{color:var(--bronze-light)}
+.arch-body{
+  font-size:16px;line-height:1.8;color:rgba(212,216,220,.65);
+  max-width:440px;margin-bottom:var(--ma-md);
+}
+.arch-list{list-style:none;margin-bottom:var(--ma-md)}
+.arch-list li{
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;
+  padding:12px 0;border-bottom:1px solid rgba(154,158,163,.15);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.arch-list li span{color:var(--bronze-light)}
+.arch-cta{
+  display:inline-flex;align-items:center;gap:14px;
+  background:var(--metal-shine);color:var(--ink);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;padding:18px 32px;
+  transition:transform .3s var(--ease);
+}
+.arch-cta:hover{transform:translateY(-2px)}
+.arch-visual{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+}
+.arch-visual .av{aspect-ratio:1;overflow:hidden;background:rgba(154,158,163,.1)}
+.arch-visual .av img{width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.9)}
+.arch-visual .av:first-child{grid-row:span 2;aspect-ratio:auto}
+
+/* ─── Etsy shop seal section ─── */
+#shop{
+  background:var(--rice);text-align:center;
+  padding:var(--ma-xl) var(--ma-md);
+  position:relative;
+}
+.shop-inner{max-width:560px;margin:0 auto}
+.shop-seal{
+  width:140px;height:140px;border-radius:50%;
+  background:var(--terra);color:var(--rice);
+  margin:0 auto var(--ma-md);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:var(--font-jp);font-size:18px;
+  box-shadow:0 0 0 8px var(--terra-glow),0 0 0 16px rgba(181,74,50,.05);
+  transition:transform .5s var(--ease);
+}
+.shop-seal:hover{transform:scale(1.06)}
+.shop-seal small{font-family:var(--font-mono);font-size:8px;letter-spacing:.2em;margin-top:4px;opacity:.7}
+#shop p{font-family:var(--font-display);font-size:20px;font-style:italic;color:var(--mist);margin-bottom:var(--ma-md)}
+
+/* ─── Find / contact ─── */
+#find{background:var(--linen)}
+.find-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--ma-md)}
+.find-card{padding:var(--ma-md);border:1px solid rgba(20,18,16,.08);background:var(--rice)}
+.find-card h3{font-family:var(--font-display);font-size:24px;font-weight:400;margin-bottom:12px}
+.find-card p{font-size:14px;color:var(--mist);line-height:1.7;margin-bottom:16px}
+.find-link{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--terra);border-bottom:1px solid var(--terra-glow);
+  padding-bottom:2px;
+}
+
+/* ─── Footer ─── */
+footer{
+  background:var(--ink);color:rgba(240,232,220,.4);
+  padding:var(--ma-md);display:flex;flex-wrap:wrap;
+  justify-content:space-between;align-items:center;gap:20px;
+}
+.footer-brand{font-family:var(--font-display);font-size:16px;color:var(--rice)}
+.footer-brand em{font-style:italic;color:var(--bronze-light)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:10px;letter-spacing:.15em;text-transform:uppercase;transition:color .2s}
+.footer-links a:hover{color:var(--rice)}
+
+/* ─── Responsive ─── */
+@media(max-width:900px){
+  .nav-center{display:none}
+  #hero{grid-template-columns:1fr;min-height:auto}
+  .hero-visual{min-height:50vh;order:-1}
+  .hero-vertical{display:none}
+  .palette{grid-template-columns:repeat(3,1fr)}
+  #story .story-wrap,.arch-grid,.find-grid{grid-template-columns:1fr}
+  .story-img-accent{display:none}
+  .arch-visual{order:-1}
+  .elements{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .sec{padding:var(--ma-lg) 0}
+  nav{padding:16px 20px}
+  .cont{padding:0 20px}
+  .palette{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="mockup-bar">
+  <span>Design mockup v1 — Japandi / Wabi-sabi / Farmhouse</span>
+  <a href="index.html">← Current site</a>
+</div>
+
+<nav id="nav">
+  <a href="#" class="nav-logo">Lelek <span>Studio</span></a>
+  <div class="nav-center">
+    <a href="#story">Story</a>
+    <a href="#vitrine">Works</a>
+    <a href="#architects">Architects</a>
+    <a href="#shop">Shop</a>
+    <a href="#find">Contact</a>
+  </div>
+  <a href="https://www.etsy.com/shop/LelekStudio" class="nav-cta" target="_blank" rel="noopener">Etsy →</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <div class="hero-vertical">手作り · Berlin</div>
+    <p class="hero-chapter">壱 · Handmade ceramics</p>
+    <h1>Shaped by hand,<br><em>guided by instinct</em></h1>
+    <p class="hero-quote">"Every grain of sand is different too..."</p>
+    <p class="hero-quote" style="font-style:normal;font-family:var(--font-body);font-size:14px;opacity:.65">
+      Functional ceramics, vessels and wall objects — each piece shaped slowly by material, process and use.
+    </p>
+    <div class="hero-actions">
+      <a href="#vitrine" class="btn-primary">View works →</a>
+      <a href="#architects" class="btn-ghost">For architects</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img src="/images/hero/hero-main.jpg" alt="Lelek Studio handmade stoneware ceramics"/>
+    <a href="https://www.etsy.com/shop/LelekStudio" class="hero-stamp" target="_blank" rel="noopener">
+      店
+      <small>Etsy</small>
+    </a>
+  </div>
+</section>
+
+<!-- PALETTE -->
+<div class="palette" aria-label="Brand color palette">
+  <div class="swatch s1"><div class="swatch-label">Terracotta</div><div class="swatch-hex">#B54A32</div></div>
+  <div class="swatch s2"><div class="swatch-label">Bronze</div><div class="swatch-hex">#A67B4B</div></div>
+  <div class="swatch s3"><div class="swatch-label">Ink</div><div class="swatch-hex">#141210</div></div>
+  <div class="swatch s4"><div class="swatch-label">Metallic</div><div class="swatch-hex">#9A9EA3</div></div>
+  <div class="swatch s5"><div class="swatch-label">Rice paper</div><div class="swatch-hex">#F0E8DC</div></div>
+  <div class="swatch s6"><div class="swatch-label">Sage</div><div class="swatch-hex">#5C6B5A</div></div>
+</div>
+
+<!-- VITRINE — horizontal scroll -->
+<section id="vitrine">
+  <div class="vitrine-head">
+    <div>
+      <div class="sec-tag">弐 · Currently available</div>
+      <h2>New in <em>studio</em></h2>
+    </div>
+    <a href="https://www.etsy.com/shop/LelekStudio" class="btn-ghost" target="_blank" rel="noopener">Shop on Etsy →</a>
+  </div>
+  <div class="vitrine-scroll">
+    <a href="#shop" class="vitrine-item">
+      <div class="vitrine-frame"><span class="vitrine-num">01</span><img src="/images/featured/feat-1.jpg" alt="Soft Drip Cup" loading="lazy"/></div>
+      <div class="vitrine-caption"><h3>Soft Drip Cup</h3><p>Wheel-thrown stoneware</p></div>
+    </a>
+    <a href="#shop" class="vitrine-item">
+      <div class="vitrine-frame"><span class="vitrine-num">02</span><img src="/images/featured/feat-2.jpg" alt="Ritual Use Bowl" loading="lazy"/></div>
+      <div class="vitrine-caption"><h3>Ritual Use Bowl</h3><p>Wheel-thrown stoneware</p></div>
+    </a>
+    <a href="#architects" class="vitrine-item">
+      <div class="vitrine-frame"><span class="vitrine-num">03</span><img src="/images/featured/feat-3.jpg" alt="Wall Object" loading="lazy"/></div>
+      <div class="vitrine-caption"><h3>Wall Object</h3><p>Handbuilding · For interiors</p></div>
+    </a>
+    <a href="#shop" class="vitrine-item">
+      <div class="vitrine-frame"><span class="vitrine-num">04</span><img src="/images/featured/feat-4.jpg" alt="Corrosion Vessel" loading="lazy"/></div>
+      <div class="vitrine-caption"><h3>Corrosion Vessel</h3><p>Stoneware</p></div>
+    </a>
+    <a href="#shop" class="vitrine-item">
+      <div class="vitrine-frame"><span class="vitrine-num">05</span><img src="/images/featured/feat-5.jpg" alt="Water Drop Vase" loading="lazy"/></div>
+      <div class="vitrine-caption"><h3>Water Drop Vase</h3><p>Blue drip glaze</p></div>
+    </a>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story" class="sec">
+  <div class="cont story-wrap">
+    <div class="story-img-wrap">
+      <div class="story-img-accent"></div>
+      <div class="story-img"><img src="/images/process/studio.jpg" alt="Ceramist at the wheel" loading="lazy"/></div>
+    </div>
+    <div>
+      <div class="sec-tag">参 · The story</div>
+      <h2>From peatlands<br><em>to clay</em></h2>
+      <p class="story-body">As a small boy I always followed the pull of nature — that was where I felt safe. Spending hours wandering through the wilderness of the village where I grew up, I forgot about the rest of the world.</p>
+      <p class="story-body">I am self-taught. I work intuitively, whether painting or working with clay. In Berlin, the community in different studios showed me the tools. The rest is a process of discovery — of listening to my own intuition.</p>
+      <p class="story-sig">Przemyslaw Golebiewski · ceramist</p>
+    </div>
+  </div>
+</section>
+
+<!-- ELEMENTS -->
+<div class="elements">
+  <div class="el"><div class="el-jp">土</div><div class="el-name">Earth</div></div>
+  <div class="el"><div class="el-jp">水</div><div class="el-name">Water</div></div>
+  <div class="el"><div class="el-jp">火</div><div class="el-name">Fire</div></div>
+  <div class="el"><div class="el-jp">風</div><div class="el-name">Air</div></div>
+</div>
+
+<!-- ARCHITECTS — key conversion section -->
+<section id="architects">
+  <div class="cont arch-grid">
+    <div>
+      <div class="arch-tag">For professionals</div>
+      <h2>Objects for<br><em>considered spaces</em></h2>
+      <p class="arch-body">Handbuilt wall objects and sculptural pieces for interiors that want something made by hand — not manufactured. Custom dimensions, glaze palettes and series commissions available.</p>
+      <ul class="arch-list">
+        <li>Wall objects &amp; panels <span>→</span></li>
+        <li>Custom dimensions <span>→</span></li>
+        <li>Series for hospitality <span>→</span></li>
+        <li>Material samples <span>→</span></li>
+      </ul>
+      <a href="mailto:lelekstudio@lelekstudio.com" class="arch-cta">Start a project →</a>
+    </div>
+    <div class="arch-visual">
+      <div class="av"><img src="/images/wall/wall-1.jpg" alt="Wall object I" loading="lazy"/></div>
+      <div class="av"><img src="/images/wall/bookend-1.jpg" alt="Bookend I" loading="lazy"/></div>
+      <div class="av"><img src="/images/wall/bookend-2.jpg" alt="Bookend II" loading="lazy"/></div>
+    </div>
+  </div>
+</section>
+
+<!-- ETSY SHOP -->
+<section id="shop">
+  <div class="shop-inner">
+    <div class="sec-tag" style="text-align:center">Shop</div>
+    <a href="https://www.etsy.com/shop/LelekStudio" target="_blank" rel="noopener">
+      <div class="shop-seal">店<div class="shop-seal-label"><small>Lelek Studio</small></div></div>
+    </a>
+    <h2 style="margin-bottom:16px">Functional ceramics<br><em>on Etsy</em></h2>
+    <p>Cups, bowls and vessels — wheel-thrown stoneware with glaze applied by hand. New pieces added after each firing. Worldwide shipping.</p>
+    <a href="https://www.etsy.com/shop/LelekStudio" class="btn-primary" target="_blank" rel="noopener">Visit Etsy shop →</a>
+  </div>
+</section>
+
+<!-- FIND -->
+<section id="find" class="sec">
+  <div class="cont">
+    <div class="sec-tag">Contact</div>
+    <h2 style="margin-bottom:var(--ma-md)">Find <em>us</em></h2>
+    <div class="find-grid">
+      <div class="find-card">
+        <h3>Studio</h3>
+        <p>Clay Stories Berlin<br>Kollwitzstrasse 82<br>10435 Berlin</p>
+        <a href="https://www.instagram.com/claystories.berlin/" class="find-link" target="_blank" rel="noopener">@claystories.berlin →</a>
+      </div>
+      <div class="find-card">
+        <h3>Online</h3>
+        <p>Functional ceramics for worldwide shipping. Follow for new firings and studio dates.</p>
+        <a href="https://www.etsy.com/shop/LelekStudio" class="find-link" target="_blank" rel="noopener">Etsy shop →</a>
+      </div>
+      <div class="find-card" style="border-color:var(--terra);background:var(--terra-glow)">
+        <h3>Interior projects</h3>
+        <p>Wall objects and custom orders for architects and interior designers.</p>
+        <a href="mailto:lelekstudio@lelekstudio.com" class="find-link">lelekstudio@lelekstudio.com →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">Lelek <em>Studio</em> · Berlin</div>
+  <div class="footer-links">
+    <a href="https://www.instagram.com/lelek.studio.berlin/" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://www.etsy.com/shop/LelekStudio" target="_blank" rel="noopener">Etsy</a>
+    <a href="mailto:lelekstudio@lelekstudio.com">Email</a>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60);
+});
+</script>
+</body>
+</html>
