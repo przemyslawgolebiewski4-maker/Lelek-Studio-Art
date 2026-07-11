@@ -1,0 +1,33 @@
+import mongoose, { Schema, type Model, type InferSchemaType } from "mongoose";
+
+const ProductSchema = new Schema(
+  {
+    slug: { type: String, required: true, unique: true },
+    catalog: { type: String, default: "" },
+    title: { type: String, required: true },
+    category: {
+      type: String,
+      enum: ["ceramics", "vessels", "wall-objects"],
+      required: true,
+    },
+    material: { type: String, required: true },
+    description: { type: String, default: "" },
+    process: { type: String, default: "" },
+    etsyUrl: { type: String, default: "" },
+    images: { type: [String], default: [] },
+    metaTitle: { type: String, default: "" },
+    metaDescription: { type: String, default: "" },
+    published: { type: Boolean, default: false },
+    order: { type: Number, default: 0 },
+    price: { type: Number, default: null },
+    nativeCheckout: { type: Boolean, default: false },
+  },
+  { collection: "products", timestamps: true },
+);
+
+export type IProduct = InferSchemaType<typeof ProductSchema> & {
+  _id: mongoose.Types.ObjectId;
+};
+
+export const Product: Model<IProduct> =
+  mongoose.models.Product ?? mongoose.model<IProduct>("Product", ProductSchema);

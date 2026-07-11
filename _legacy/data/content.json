@@ -1,0 +1,256 @@
+{
+  "site": {
+    "name": "Lelek Studio",
+    "tagline": "Shaped by hand, guided by instinct",
+    "description": "Lelek Studio is the ceramic practice of Przemyslaw Golebiewski - a self-taught ceramist from rural Poland, working in Berlin. Handmade functional ceramics, vessels and wall objects shaped by intuition, earth, water, fire and air.",
+    "url": "https://www.lelekstudio.com",
+    "instagram": "https://www.instagram.com/lelek.studio.berlin/",
+    "instagramHandle": "@lelek.studio.berlin",
+    "email": "lelekstudio@lelekstudio.com",
+    "etsy": "https://www.etsy.com/shop/LelekStudio",
+    "artistUrl": "https://www.p-golebiewski.xyz",
+    "location": "Berlin, Germany",
+    "studioName": "Clay Stories Berlin",
+    "studioAddress": "Kollwitzstrasse 82\n10435 Berlin",
+    "studioInstagram": "https://www.instagram.com/claystories.berlin/",
+    "studioInstagramHandle": "@claystories.berlin",
+    "lelekMeaning": "Lelek - kozodoj - the nightjar"
+  },
+  "hero": {
+    "eyebrow": "Handmade in Berlin - Ceramic Studio",
+    "headline": "Shaped by hand,",
+    "headlineEm": "guided by instinct",
+    "quote": "Kazde ziarno piasku jest tez inne...",
+    "subheadline": "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
+    "image": "/images/hero/hero-main.jpg",
+    "imageMobile": "/images/hero/hero-main-mobile.jpg",
+    "imageAlt": "Lelek Studio Berlin - handmade stoneware ceramics and wall objects by ceramist Przemyslaw Golebiewski",
+    "cta1Text": "View works",
+    "cta1Url": "#works",
+    "cta2Text": "My story",
+    "cta2Url": "#story"
+  },
+  "story": {
+    "eyebrow": "The story",
+    "heading": "From peatlands",
+    "headingEm": "to clay",
+    "image": "/images/process/studio.jpg",
+    "imageMobile": "/images/process/studio-mobile.jpg",
+    "imageAlt": "Przemyslaw Golebiewski - ceramist at the wheel, Clay Stories Berlin",
+    "imageCaption": "Clay Stories Berlin",
+    "body1": "As a small boy I always followed the pull of nature - that was where I felt safe. Spending hours wandering through the wilderness of the village where I grew up, I forgot about the rest of the world. Only here and now mattered.",
+    "body2": "Not far from my family home stretched wide peatlands, home to different animals, the sounds of nature, and probably other presences I was not aware of. I slipped away there whenever I could, into my second world, where it was only me, the material things of nature, and whatever lay beyond them.",
+    "body3": "I never got to finish art school, but that did not stop me from searching for a way to express what I often could not put into words - maybe I still cannot. I am self-taught. I work intuitively, whether painting or working with clay. In Berlin, the community in different studios showed me the tools and how to use them. The rest is a process of discovery, of listening to my own intuition. Maybe that is why I almost never make identical things. Every grain of sand is different too...",
+    "signature": "Przemyslaw Golebiewski - ceramist"
+  },
+  "elements": [
+    {"number": "I.", "name": "Earth"},
+    {"number": "II.", "name": "Water"},
+    {"number": "III.", "name": "Fire"},
+    {"number": "IV.", "name": "Air"}
+  ],
+  "featured": {
+    "eyebrow": "New in studio",
+    "heading": "Currently",
+    "headingEm": "available",
+    "items": [
+      {
+        "id": "feat-1",
+        "image": "/images/featured/feat-1.jpg",
+        "alt": "Soft Drip Cup - handmade wheel-thrown stoneware cup with soft drip glaze, Lelek Studio Berlin",
+        "title": "Soft Drip Cup",
+        "meta": "Wheel-thrown stoneware",
+        "badge": "New",
+        "url": "#ceramics"
+      },
+      {
+        "id": "feat-2",
+        "image": "/images/featured/feat-2.jpg",
+        "alt": "Ritual Use Bowl - handmade wheel-thrown stoneware bowl, Lelek Studio Berlin",
+        "title": "Ritual Use Bowl",
+        "meta": "Wheel-thrown stoneware",
+        "badge": "",
+        "url": "#ceramics"
+      },
+      {
+        "id": "feat-3",
+        "image": "/images/featured/feat-3.jpg",
+        "alt": "Wall Object - handbuilt ceramic wall object, Lelek Studio Berlin",
+        "title": "Wall Object",
+        "meta": "Stoneware, intuitive handbuilding",
+        "badge": "New",
+        "url": "#wall"
+      },
+      {
+        "id": "feat-4",
+        "image": "/images/featured/feat-4.jpg",
+        "alt": "Corrosion Vessel - wheel-thrown stoneware vessel with rust-brown glaze, Lelek Studio Berlin",
+        "title": "Corrosion Vessel",
+        "meta": "Stoneware",
+        "badge": "",
+        "url": "#vessels"
+      },
+      {
+        "id": "feat-5",
+        "image": "/images/featured/feat-5.jpg",
+        "alt": "Small Water Drop Vase - handmade stoneware vase with blue drip glaze, Lelek Studio Berlin",
+        "title": "Small Water Drop Vase",
+        "meta": "Stoneware, blue glaze",
+        "badge": "",
+        "url": "#vessels"
+      }
+    ]
+  },
+  "ceramics": {
+    "eyebrow": "Functional ceramic",
+    "heading": "Made for",
+    "headingEm": "everyday ritual",
+    "body": "Cups and bowls for daily use. Wheel-thrown stoneware with glaze applied by hand - each piece slightly different from the next.",
+    "ctaText": "Available in my Etsy shop",
+    "items": [
+      {
+        "id": "cup-1",
+        "image": "/images/ceramics/cup-1.jpg",
+        "alt": "Soft Drip Cup - handmade wheel-thrown stoneware cup with soft drip glaze, Lelek Studio Berlin",
+        "title": "Soft Drip Cup",
+        "meta": "Wheel-thrown stoneware"
+      },
+      {
+        "id": "bowl-1",
+        "image": "/images/ceramics/bowl-1.jpg",
+        "alt": "Ritual Use Bowl - handmade stoneware bowl for daily ritual, wheel-thrown, Lelek Studio Berlin",
+        "title": "Ritual Use Bowl",
+        "meta": "Wheel-thrown stoneware"
+      },
+      {
+        "id": "cup-2",
+        "image": "/images/ceramics/cup-2.jpg",
+        "alt": "Everyday Cup - handmade wheel-thrown stoneware cup, Lelek Studio Berlin",
+        "title": "Everyday Cup",
+        "meta": "Wheel-thrown stoneware"
+      },
+      {
+        "id": "teapot-1",
+        "image": "/images/ceramics/teapot-1.jpg",
+        "alt": "Small Tea Pot naked clay - handmade stoneware teapot, unglazed exterior, glazed interior only, Lelek Studio Berlin",
+        "title": "Small Tea Pot",
+        "meta": "Naked clay - glazed interior only"
+      }
+    ]
+  },
+  "vessels": {
+    "eyebrow": "Vessels",
+    "heading": "Between use",
+    "headingEm": "and form",
+    "body": "Stoneware vessels shaped on the wheel. Pieces that hold flowers, objects, or simply space - each one a single form shaped by material and process.",
+    "ctaText": "Available in my Etsy shop",
+    "items": [
+      {
+        "id": "vessel-1",
+        "image": "/images/vessels/vessel-1.jpg",
+        "alt": "Corrosion Vessel - wheel-thrown stoneware vessel with rust-brown oxide glaze, Lelek Studio Berlin",
+        "title": "Corrosion Vessel",
+        "meta": "Wheel-thrown stoneware"
+      },
+      {
+        "id": "vessel-2",
+        "image": "/images/vessels/vessel-2.jpg",
+        "alt": "Still Form Vase - handbuilt stoneware vase, Lelek Studio Berlin",
+        "title": "Still Form Vase",
+        "meta": "Stoneware, handbuild"
+      },
+      {
+        "id": "vessel-3",
+        "image": "/images/vessels/vessel-3.jpg",
+        "alt": "Untitled Vase - handmade stoneware vessel, wheel-thrown, Lelek Studio Berlin",
+        "title": "Untitled Vase",
+        "meta": "Wheel-thrown stoneware"
+      }
+    ]
+  },
+  "wall": {
+    "eyebrow": "Wall objects and Objects",
+    "heading": "Shaped by hand,",
+    "headingEm": "placed in space",
+    "body": "Handmade ceramic objects for walls and shelves - each piece functional and present. Built through intuitive handbuilding, form emerging from the material. For interiors that want something made by hand, not manufactured.",
+    "note": "Available for interior designers and architects - custom dimensions on request",
+    "items": [
+      {
+        "id": "wall-1",
+        "image": "/images/wall/wall-1.jpg",
+        "alt": "Wall Object I - handbuilt ceramic wall object, stoneware with blue glaze, Lelek Studio Berlin",
+        "title": "Wall Object I",
+        "meta": "Stoneware, intuitive handbuilding",
+        "tag": ""
+      },
+      {
+        "id": "wall-2",
+        "image": "/images/wall/wall-2.jpg",
+        "alt": "Wall Object II - handbuilt ceramic wall piece, stoneware, Lelek Studio Berlin",
+        "title": "Wall Object II",
+        "meta": "Stoneware, intuitive handbuilding",
+        "tag": ""
+      },
+      {
+        "id": "wall-3",
+        "image": "/images/wall/wall-3.jpg",
+        "alt": "Wall Object III - handbuilt ceramic wall object, stoneware with glaze, Lelek Studio Berlin",
+        "title": "Wall Object III",
+        "meta": "Stoneware, intuitive handbuilding",
+        "tag": ""
+      },
+      {
+        "id": "wall-4",
+        "image": "/images/wall/bookend-1.jpg",
+        "alt": "Bookend I - sculptural ceramic bookend, handbuilt stoneware, Lelek Studio Berlin",
+        "title": "Bookend I",
+        "meta": "Stoneware, handbuilt",
+        "tag": ""
+      },
+      {
+        "id": "wall-5",
+        "image": "/images/wall/bookend-2.jpg",
+        "alt": "Bookend II - sculptural ceramic bookend, handbuilt stoneware, Lelek Studio Berlin",
+        "title": "Bookend II",
+        "meta": "Stoneware, handbuilt",
+        "tag": ""
+      }
+    ]
+  },
+  "slot": {
+    "visible": false,
+    "label": "Upcoming",
+    "text": "New series dropping soon - follow @lelek.studio.berlin"
+  },
+  "process": {
+    "eyebrow": "Process",
+    "heading": "Made slowly,",
+    "headingEm": "without a plan",
+    "image": "/images/process/studio.jpg",
+    "imageMobile": "/images/process/studio-mobile.jpg",
+    "imageAlt": "Ceramist Przemyslaw Golebiewski at the wheel, Clay Stories Berlin studio",
+    "body1": "Each functional piece starts on the wheel - shaped, trimmed, glazed by hand. Wall objects are built differently: through intuitive handbuilding, form emerging from the material rather than the wheel.",
+    "body2": "Small batches, slow process, made at Clay Stories Berlin. The glaze is applied by hand and fired at high temperature - the result is always slightly different from what was planned, and better for it.",
+    "signature": "Earth - water - fire - air"
+  },
+  "find": {
+    "studio": {
+      "eyebrow": "Find us",
+      "name": "Clay Stories Berlin",
+      "address": "Kollwitzstrasse 82\n10435 Berlin",
+      "body": "Available in studio during open days and selected sales events. Follow Instagram for dates.",
+      "instagramHandle": "@claystories.berlin",
+      "instagramUrl": "https://www.instagram.com/claystories.berlin/",
+      "note": "Studio visits by appointment - contact us directly"
+    },
+    "online": {
+      "eyebrow": "Online",
+      "heading": "Shop on Etsy",
+      "body": "Functional ceramics available for worldwide shipping. New pieces added after each firing.",
+      "etsyText": "Visit Etsy shop",
+      "customHeading": "Interior projects",
+      "customBody": "Wall objects and custom orders - get in touch directly for interior projects.",
+      "customLinkText": "lelekstudio@lelekstudio.com"
+    }
+  }
+}
