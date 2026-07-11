@@ -13,14 +13,18 @@
    ```
    Or copy `.env.example` to `.env.local` and fill `DATABASE_URL`.
 
-2. Install and seed:
-   ```bash
-   npm install
-   npm run db:seed
-   npm run dev
-   ```
+3. **Seed database** (choose one):
 
-3. Open http://localhost:3000 and http://localhost:3000/api/health
+   **Option A - one click on Vercel** (no local setup):
+   - Add `SETUP_SECRET` to Vercel Environment Variables (any random string)
+   - After deploy, open once:
+     `https://your-domain.vercel.app/api/setup/seed?secret=YOUR_SETUP_SECRET`
+
+   **Option B - local:**
+   ```bash
+   npx vercel env pull .env.local
+   npm run db:seed
+   ```
 
 ## MongoDB
 
