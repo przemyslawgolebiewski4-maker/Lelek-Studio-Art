@@ -3,436 +3,318 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Lelek Studio Berlin - Handmade ceramics, vessels and wall objects</title>
-<meta name="description" content="Lelek Studio - handmade functional ceramics, vessels and wall objects from a Berlin studio by ceramist Przemyslaw Golebiewski."/>
+<title>Lelek Studio — Objects shaped by earth</title>
+<meta name="description" content="Lelek Studio Berlin — handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski. Studio designing objects for contemporary interiors."/>
 <link rel="canonical" href="https://www.lelekstudio.com"/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://www.lelekstudio.com"/>
-<meta property="og:title" content="Lelek Studio - Shaped by hand, fired with intention"/>
-<meta property="og:description" content="Handmade functional ceramics, vessels and wall objects from Berlin."/>
+<meta property="og:title" content="Lelek Studio — Earth is the author"/>
+<meta property="og:description" content="Handmade stoneware objects from Berlin. Guided by instinct, shaped by earth."/>
+<meta property="og:image" content="https://www.lelekstudio.com/images/og-image.png"/>
 <meta name="robots" content="index,follow"/>
-<meta name="theme-color" content="#E6D8C7"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --clay:#E6D8C7;--stone:#CFC4B5;--earth:#3A2F28;
-  --terra:#A36B3F;--cream:#F5EFE6;--light:#FAF6F1;
-  --border:rgba(58,47,40,0.1);--muted:rgba(58,47,40,0.55);
+<meta name="theme-color" content="#F4F1EA"/>
+<link rel="stylesheet" href="/css/monolith.css"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Lelek Studio",
+  "url": "https://www.lelekstudio.com",
+  "logo": "https://www.lelekstudio.com/images/og-image.png",
+  "description": "Handmade stoneware objects, vessels and wall pieces from Berlin.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Berlin",
+    "addressCountry": "DE"
+  },
+  "sameAs": [
+    "https://www.instagram.com/lelek.studio.berlin/",
+    "https://www.etsy.com/shop/LelekStudio"
+  ]
 }
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--light);color:var(--earth);font-family:'Inter',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden;max-width:100%}
-a{color:inherit}
-img{display:block;max-width:100%}
-.img-missing{opacity:0}
-
-nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:24px 48px;display:flex;align-items:center;justify-content:space-between;transition:all .4s}
-nav.scrolled{background:rgba(250,246,241,.94);backdrop-filter:blur(16px);padding:14px 48px;border-bottom:1px solid var(--border)}
-.nav-logo{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;letter-spacing:.5px;color:var(--earth);text-decoration:none}
-.nav-logo em{font-style:italic;color:var(--terra)}
-.nav-right{display:flex;align-items:center;gap:32px}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--earth);text-decoration:none;opacity:.55;transition:opacity .2s}
-.nav-links a:hover{opacity:1}
-.nav-ig{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--terra);text-decoration:none;opacity:.85}
-.nav-toggle{display:none;background:none;border:none;cursor:pointer;padding:4px}
-.nav-toggle span{display:block;width:22px;height:1px;background:var(--earth);margin:6px 0}
-
-#hero{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end}
-.hero-media{position:absolute;inset:0;background:var(--clay)}
-.hero-media img{width:100%;height:100%;object-fit:cover;opacity:.9}
-.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(30,22,16,.62) 0%,rgba(30,22,16,.12) 55%,transparent 100%)}
-.hero-inner{position:relative;z-index:2;padding:0 48px 72px;max-width:720px}
-.hero-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(245,239,230,.65);margin-bottom:18px}
-h1{font-family:'Playfair Display',serif;font-size:clamp(44px,6vw,80px);line-height:1.02;letter-spacing:-1px;color:var(--cream);margin-bottom:14px}
-h1 em{font-style:italic;color:var(--clay)}
-.hero-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.2vw,22px);font-weight:300;font-style:italic;color:rgba(245,239,230,.78);margin-bottom:36px;line-height:1.5;max-width:560px}
-.hero-ctas{display:flex;flex-wrap:wrap;gap:28px}
-.btn-line{display:inline-flex;align-items:center;gap:10px;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(245,239,230,.35);padding-bottom:4px;transition:all .3s;background:none;border-top:none;border-left:none;border-right:none;cursor:pointer;font-family:'Inter',sans-serif}
-.btn-line:hover{border-bottom-color:var(--cream);gap:16px}
-.btn-line.dark{color:var(--earth);border-bottom-color:rgba(58,47,40,.3)}
-.btn-line.dark:hover{border-bottom-color:var(--earth)}
-.btn-line.terra{color:var(--terra);border-bottom-color:rgba(163,107,63,.35)}
-.btn-line.terra:hover{border-bottom-color:var(--terra)}
-
-.sec{padding:96px 0}
-.cont{max-width:1180px;width:100%;margin:0 auto;padding:0 48px;min-width:0}
-.sec-tag{font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:var(--terra);opacity:.75;margin-bottom:12px}
-h2{font-family:'Playfair Display',serif;font-size:clamp(32px,3.8vw,50px);font-weight:400;line-height:1.1;letter-spacing:-.5px;margin-bottom:32px}
-h2 em{font-style:italic;color:var(--terra)}
-.sec-intro{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:300;color:var(--muted);line-height:1.75;max-width:520px;margin-bottom:40px}
-.divider{width:36px;height:1px;background:var(--terra);opacity:.35;margin:28px 0}
-.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px;margin-bottom:56px}
-.sec-head .sec-intro{margin-bottom:0}
-
-#featured{background:var(--cream)}
-#slot{background:var(--earth);color:var(--cream);text-align:center;padding:48px 24px}
-#slot .slot-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.5;margin-bottom:8px}
-#slot p{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300}
-
-.grid{display:grid;gap:20px}
-.grid-square{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
-.grid-portrait{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-.card{position:relative;overflow:hidden;background:var(--clay);text-decoration:none;color:inherit}
-.card-thumb{overflow:hidden;background:var(--stone)}
-.card-thumb.ratio-1{aspect-ratio:1}
-.card-thumb.ratio-portrait{aspect-ratio:4/5}
-.card-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .65s ease;filter:saturate(.9)}
-.card:hover .card-thumb img{transform:scale(1.04)}
-.card-body{padding:18px 4px 8px}
-.card-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:400;margin-bottom:4px}
-.card-meta{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
-.card-price{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--terra);margin-top:6px}
-.card-tag{display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--terra);margin-top:6px}
-.badge{position:absolute;top:14px;left:14px;z-index:2;font-size:9px;letter-spacing:2px;text-transform:uppercase;background:var(--earth);color:var(--cream);padding:5px 10px}
-
-#ceramics{background:var(--light)}
-#vessels{background:var(--cream)}
-#wall{background:var(--light)}
-.wall-note{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:var(--muted);margin-top:-16px;margin-bottom:40px;max-width:560px}
-
-#process .process-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:center;width:100%;min-width:0}
-#process .process-grid > *{min-width:0}
-.process-img{width:100%;aspect-ratio:3/2;overflow:hidden;background:var(--clay)}
-.process-img picture{display:block;width:100%;height:100%}
-.process-img img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.88)}
-.process-text p{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;line-height:1.75;color:var(--muted);margin-bottom:18px}
-.process-sig{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:var(--earth);margin-top:28px}
-
-#find{background:var(--cream)}
-.find-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;width:100%;min-width:0}
-.find-grid > *{min-width:0}
-.find-block h3{font-family:'Playfair Display',serif;font-size:26px;font-weight:400;margin-bottom:14px}
-.find-block p{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;line-height:1.7;color:var(--muted);margin-bottom:10px;white-space:pre-line}
-.find-note{font-size:13px;color:var(--muted);margin-top:16px}
-
-footer{padding:32px 48px;background:var(--earth);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px}
-.footer-logo{font-family:'Playfair Display',serif;font-size:15px;color:rgba(245,239,230,.85)}
-.footer-links{display:flex;flex-wrap:wrap;gap:24px}
-.footer-links a{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(245,239,230,.35);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:rgba(245,239,230,.75)}
-
-.loading{min-height:50vh;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--muted)}
-.err-msg{padding:80px 48px;text-align:center;color:var(--terra)}
-
-@media(max-width:900px){
-  .nav-links,.nav-ig{display:none}
-  .nav-toggle{display:block}
-  nav.open .nav-right{position:fixed;inset:0;top:0;background:rgba(250,246,241,.98);flex-direction:column;justify-content:center;align-items:center;gap:40px;padding:80px 24px}
-  nav.open .nav-links,nav.open .nav-ig{display:flex;flex-direction:column;align-items:center;gap:24px}
-  #process .process-grid,#find .find-grid{grid-template-columns:1fr;gap:40px}
-  .cont{padding:0 24px}
-  nav{padding:20px 24px}
-  nav.scrolled{padding:12px 24px}
-  .hero-inner{padding:0 24px 64px}
-  footer{padding:28px 24px;flex-direction:column;text-align:center}
-  .sec{padding:64px 0}
-  .sec-head{flex-direction:column;align-items:flex-start;margin-bottom:36px}
-  .sec-head .sec-intro,.sec-intro,.wall-note{max-width:100%}
-  .grid-portrait,.grid-square{grid-template-columns:1fr}
-}
-@media(max-width:768px){
-  #process .process-grid{gap:44px;align-items:stretch}
-  #process .process-img{aspect-ratio:800/533}
-  #process .process-text{padding-top:4px}
-  #process .process-text h2{margin-bottom:28px}
-  #process .process-text p{font-size:19px;margin-bottom:16px}
-  #process .process-sig{margin-top:20px;font-size:20px}
-  .sec{padding:56px 0}
-}
-@media(max-width:600px){
-  .hero-ctas{flex-direction:column;gap:16px}
-  .grid-square{grid-template-columns:repeat(2,minmax(0,1fr))}
-  #process .process-grid{gap:36px}
-}
-@media(max-width:480px){
-  h1{font-size:36px;letter-spacing:-.5px}
-  h2{font-size:28px}
-  .sec{padding:48px 0}
-}
-
-.story-sec{background:var(--light)}
-.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
-.story-img{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:2px;background:var(--clay)}
-.story-img picture{display:block;width:100%;height:100%}
-.story-img img{width:100%;height:100%;object-fit:cover;object-position:center top}
-.story-img-caption{position:absolute;bottom:14px;left:16px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(58,47,40,.45)}
-.story-text{}
-.story-body{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:300;font-style:italic;color:var(--muted);line-height:1.8;margin-bottom:16px}
-.story-sig{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--terra);opacity:.6;margin-top:24px}
-.elements-bar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--earth)}
-.el-item{padding:22px 24px;border-right:0.5px solid rgba(245,239,230,.06)}
-.el-item:last-child{border-right:none}
-.el-num{font-size:9px;letter-spacing:.2em;color:rgba(196,168,130,.35);text-transform:uppercase;margin-bottom:5px}
-.el-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:400;color:var(--cream)}
-.el-name em{font-style:italic;color:var(--clay)}
-.hero-quote{font-family:'Cormorant Garamond',serif;font-size:17px;font-style:italic;color:rgba(245,239,230,.45);margin-bottom:10px;line-height:1.5}
-.footer-lelek{font-family:'Cormorant Garamond',serif;font-size:12px;font-style:italic;color:rgba(163,107,63,.3);margin-top:3px}
-
-@media(max-width:900px){
-  .story-grid{grid-template-columns:1fr;gap:36px}
-  .story-img{aspect-ratio:3/2}
-  .elements-bar{grid-template-columns:repeat(4,1fr)}
-  .el-item{padding:16px 12px}
-}
-@media(max-width:600px){
-  .elements-bar{grid-template-columns:repeat(2,1fr)}
-  .el-item{border-bottom:0.5px solid rgba(245,239,230,.06)}
-}
-</style>
+</script>
 </head>
 <body>
 
-<nav id="nav">
-  <a href="#" class="nav-logo">Lelek <em>Studio</em></a>
-  <button type="button" class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
-  <div class="nav-right" id="navRight">
-    <ul class="nav-links" id="navLinks"></ul>
-    <a href="#" class="nav-ig" id="navIg" target="_blank" rel="noopener noreferrer"></a>
-  </div>
+<div class="grid-seams" aria-hidden="true"></div>
+
+<nav class="site-nav" id="nav" aria-label="Primary">
+  <a href="#">Lelek Studio</a>
+  <a href="#" id="navShop" target="_blank" rel="noopener noreferrer">Shop ↗</a>
 </nav>
 
-<main id="app"><div class="loading">Loading...</div></main>
+<main id="app" class="scroll-canvas">
+  <div class="loading-screen">Loading...</div>
+</main>
 
 <script>
-(function(){
-  const $ = (s, r=document) => r.querySelector(s);
-  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+(function () {
+  const $ = (s, r = document) => r.querySelector(s);
+  const esc = (s) =>
+    String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
 
-  function imgTag(src, alt, cls){
-    return '<img src="'+esc(src)+'" alt="'+esc(alt)+'" loading="lazy" class="'+cls+'" onerror="this.classList.add(\'img-missing\')"/>';
+  function img(src, alt) {
+    return (
+      '<img src="' +
+      esc(src) +
+      '" alt="' +
+      esc(alt) +
+      '" loading="lazy" decoding="async" onerror="this.style.opacity=0"/>'
+    );
   }
 
-  function h2(heading, headingEm){
-    return '<h2>'+esc(heading)+' <em>'+esc(headingEm)+'</em></h2>';
+  function renderProduct(p) {
+    const align = p.align || "left";
+    return (
+      '<article class="block-exhibit" aria-labelledby="prod-' +
+      esc(p.catalog) +
+      '">' +
+      '<div class="cat-num exhibit-num">' +
+      esc(p.catalog) +
+      "</div>" +
+      '<div class="exhibit-frame align-' +
+      esc(align) +
+      '">' +
+      '<div class="exhibit-inner" data-speed="0.15">' +
+      img(p.image, p.alt) +
+      "</div>" +
+      '<span class="exhibit-hover-tag">Open →</span>' +
+      "</div>" +
+      '<div class="exhibit-caption align-' +
+      esc(align) +
+      '">' +
+      '<h2 class="caption-title" id="prod-' +
+      esc(p.catalog) +
+      '">' +
+      esc(p.title) +
+      "</h2>" +
+      '<div class="caption-meta">' +
+      "<span>" +
+      esc(p.material) +
+      "</span>" +
+      "<span>" +
+      esc(p.process) +
+      "</span>" +
+      "<span>" +
+      esc(p.year) +
+      "</span>" +
+      "<span>" +
+      esc(p.availability) +
+      "</span>" +
+      "</div>" +
+      "</div>" +
+      "</article>"
+    );
   }
 
-  function productCard(item, ratio, link){
-    const href = link ? esc(item.url || '#') : '#';
-    const tag = item.tag ? '<span class="card-tag">'+esc(item.tag)+'</span>' : '';
-    const price = '';
-    const badge = item.badge ? '<span class="badge">'+esc(item.badge)+'</span>' : '';
-    const inner =
-      '<div class="card-thumb '+ratio+'">'+imgTag(item.image, item.alt, '')+'</div>'+
-      '<div class="card-body">'+
-        '<div class="card-title">'+esc(item.title)+'</div>'+
-        '<div class="card-meta">'+esc(item.meta)+'</div>'+
-        tag + price +
-      '</div>';
-    if(link){
-      return '<a class="card" href="'+href+'">'+badge+inner+'</a>';
-    }
-    return '<article class="card">'+badge+inner+'</article>';
+  function renderInterior(i) {
+    const align = i.align || "right";
+    return (
+      '<article class="block-interior">' +
+      '<div class="cat-num interior-num">' +
+      esc(i.catalog) +
+      "</div>" +
+      '<div class="interior-frame align-' +
+      esc(align) +
+      '">' +
+      '<div class="exhibit-inner" data-speed="0.12">' +
+      img(i.image, i.alt) +
+      "</div>" +
+      "</div>" +
+      '<div class="interior-caption align-' +
+      esc(align) +
+      '">' +
+      '<h3 class="caption-title">' +
+      esc(i.title) +
+      "</h3>" +
+      '<div class="caption-meta">' +
+      "<span>" +
+      esc(i.context) +
+      "</span>" +
+      "<span>" +
+      esc(i.location) +
+      "</span>" +
+      "</div>" +
+      "</div>" +
+      "</article>"
+    );
   }
 
-  function render(data){
+  function render(data) {
     const s = data.site;
-    const etsy = s.etsy;
+    const m = data.manifest;
+    const q = data.quote;
+    const shop = data.shop;
+    const iv = data.intervention;
+    const ct = data.contact;
+    const ft = data.footer;
 
-    document.title = s.name + ' Berlin - ' + s.tagline;
-    $('meta[name="description"]').setAttribute('content', s.description);
+    document.title = s.name + " — " + s.tagline;
+    $('meta[name="description"]').setAttribute("content", s.description);
 
-    $('#navIg').href = s.instagram;
-    $('#navIg').textContent = s.instagramHandle;
+    $("#navShop").href = shop.url;
 
-    const navItems = [
-      {label:'Story', href:'#story'},
-      {label:'Works', href:'#featured'},
-      {label:'Ceramics', href:'#ceramics'},
-      {label:'Vessels', href:'#vessels'},
-      {label:'Wall objects', href:'#wall'},
-      {label:'Find', href:'#find'}
-    ];
-    $('#navLinks').innerHTML = navItems.map(n =>
-      '<li><a href="'+n.href+'">'+esc(n.label)+'</a></li>'
-    ).join('');
+    const manifestLines = m.lines
+      .map(function (line, idx) {
+        const cls = idx === m.lines.length - 1 ? "" : idx === 2 ? ' class="indent"' : "";
+        return "<span" + cls + ">" + esc(line) + "</span>";
+      })
+      .join("");
 
-    const h = data.hero;
-    const feat = data.featured.items.map(i => productCard(i, 'ratio-1', true)).join('');
-    const ceram = data.ceramics.items.map(i => productCard(i, 'ratio-1', false)).join('');
-    const vess = data.vessels.items.map(i => productCard(i, 'ratio-portrait', false)).join('');
-    const wall = data.wall.items.map(i => productCard(i, 'ratio-portrait', false)).join('');
+    const voidLines = iv.lines
+      .map(function (line, idx) {
+        const cls = idx === 1 ? ' class="indent"' : "";
+        return "<span" + cls + ">" + esc(line) + "</span>";
+      })
+      .join("");
 
-    const slotHtml = data.slot.visible
-      ? '<section id="slot"><div class="cont"><div class="slot-label">'+esc(data.slot.label)+'</div><p>'+esc(data.slot.text)+'</p></div></section>'
-      : '';
+    const contactLines = ct.headline
+      .map(function (line) {
+        return "<span>" + esc(line) + "</span>";
+      })
+      .join("");
 
-    const find = data.find;
-    const proc = data.process;
+    const footerWords = ft.words
+      .map(function (w) {
+        return "<span>" + esc(w) + "</span>";
+      })
+      .join("");
 
-    $('#app').innerHTML =
-      '<section id="hero">'+
-        '<div class="hero-media">'+
-          '<picture>'+
-            '<source media="(max-width:768px)" srcset="'+esc(h.imageMobile)+'"/>'+
-            imgTag(h.image, h.imageAlt, '')+
-          '</picture>'+
-        '</div>'+
-        '<div class="hero-inner">'+
-          '<p class="hero-eyebrow">'+esc(h.eyebrow)+'</p>'+
-          '<h1>'+esc(h.headline)+' <em>'+esc(h.headlineEm)+'</em></h1>'+
-          '<p class="hero-quote">"'+esc(h.quote)+'"</p>'+
-          '<p class="hero-sub">'+esc(h.subheadline)+'</p>'+
-          '<div class="hero-ctas">'+
-            '<a href="'+esc(h.cta1Url)+'" class="btn-line">'+esc(h.cta1Text)+' &#8594;</a>'+
-            '<a href="'+esc(h.cta2Url)+'" class="btn-line">'+esc(h.cta2Text)+' &#8594;</a>'+
-          '</div>'+
-        '</div>'+
-      '</section>'+
+    $("#app").innerHTML =
+      '<header class="block-manifest">' +
+      '<div class="cat-num manifest-num">001</div>' +
+      '<h1 class="manifest-title">' +
+      manifestLines +
+      "</h1>" +
+      '<p class="manifest-sub">' +
+      esc(m.sub) +
+      "</p>" +
+      "</header>" +
 
-      '<section id="story" class="sec story-sec">'+
-        '<div class="cont">'+
-          '<div class="story-grid">'+
-            '<div class="story-img">'+
-              '<picture>'+
-                '<source media="(max-width:768px)" srcset="'+esc(data.story.imageMobile||data.story.image)+'"/>'+
-                '<img src="'+esc(data.story.image)+'" alt="'+esc(data.story.imageAlt)+'" loading="lazy" width="800" height="1000"/>'+
-              '</picture>'+
-              '<div class="story-img-caption">'+esc(data.story.imageCaption)+'</div>'+
-            '</div>'+
-            '<div class="story-text">'+
-              '<div class="sec-tag">'+esc(data.story.eyebrow)+'</div>'+
-              h2(data.story.heading, data.story.headingEm)+
-              '<p class="story-body">'+esc(data.story.body1)+'</p>'+
-              '<p class="story-body">'+esc(data.story.body2)+'</p>'+
-              '<p class="story-body">'+esc(data.story.body3)+'</p>'+
-              '<p class="story-sig">'+esc(data.story.signature)+'</p>'+
-            '</div>'+
-          '</div>'+
-        '</div>'+
-      '</section>'+
+      '<section class="block-quote" aria-label="Quote">' +
+      '<div class="cat-num">' +
+      esc(q.catalog) +
+      "</div>" +
+      '<blockquote class="quote-text" data-speed="-0.08">' +
+      esc(q.text) +
+      "</blockquote>" +
+      "</section>" +
 
-      '<div class="elements-bar">'+
-        data.elements.map(el =>
-          '<div class="el-item">'+
-            '<div class="el-num">'+esc(el.number)+'</div>'+
-            '<div class="el-name"><em>'+esc(el.name)+'</em></div>'+
-          '</div>'
-        ).join('')+
-      '</div>'+
+      data.products.map(renderProduct).join("") +
 
-      '<section id="featured" class="sec">'+
-        '<div class="cont" id="works">'+
-          '<div class="sec-tag">'+esc(data.featured.eyebrow)+'</div>'+
-          h2(data.featured.heading, data.featured.headingEm)+
-          '<div class="grid grid-square">'+feat+'</div>'+
-        '</div>'+
-      '</section>'+
+      '<section class="block-shop" aria-label="Shop">' +
+      '<a class="shop-link" href="' +
+      esc(shop.url) +
+      '" target="_blank" rel="noopener noreferrer">' +
+      esc(shop.label) +
+      " ↗</a>" +
+      '<p class="shop-note">' +
+      esc(shop.note) +
+      "</p>" +
+      "</section>" +
 
-      slotHtml+
+      '<section class="block-void" aria-label="Intervention">' +
+      '<div class="cat-num">' +
+      esc(iv.catalog) +
+      "</div>" +
+      '<h2 class="void-title">' +
+      voidLines +
+      "</h2>" +
+      "</section>" +
 
-      '<section id="ceramics" class="sec">'+
-        '<div class="cont">'+
-          '<div class="sec-head">'+
-            '<div>'+
-              '<div class="sec-tag">'+esc(data.ceramics.eyebrow)+'</div>'+
-              h2(data.ceramics.heading, data.ceramics.headingEm)+
-            '</div>'+
-            '<p class="sec-intro">'+esc(data.ceramics.body)+'</p>'+
-          '</div>'+
-          '<div class="grid grid-square">'+ceram+'</div>'+
-          '<div class="divider"></div>'+
-          '<a href="'+esc(etsy)+'" class="btn-line terra" target="_blank" rel="noopener noreferrer">'+esc(data.ceramics.ctaText)+' &#8594;</a>'+
-        '</div>'+
-      '</section>'+
+      data.interiors.map(renderInterior).join("") +
 
-      '<section id="vessels" class="sec">'+
-        '<div class="cont">'+
-          '<div class="sec-head">'+
-            '<div>'+
-              '<div class="sec-tag">'+esc(data.vessels.eyebrow)+'</div>'+
-              h2(data.vessels.heading, data.vessels.headingEm)+
-            '</div>'+
-            '<p class="sec-intro">'+esc(data.vessels.body)+'</p>'+
-          '</div>'+
-          '<div class="grid grid-portrait">'+vess+'</div>'+
-        '</div>'+
-      '</section>'+
+      '<section class="block-contact" aria-label="Contact">' +
+      '<div class="cat-num contact-num">' +
+      esc(ct.catalog) +
+      "</div>" +
+      '<h2 class="contact-headline">' +
+      contactLines +
+      "</h2>" +
+      '<p class="contact-sub">' +
+      esc(ct.sub) +
+      "</p>" +
+      '<a class="contact-email" href="mailto:' +
+      esc(s.email) +
+      '">' +
+      esc(ct.cta) +
+      "</a>" +
+      '<p class="contact-note">' +
+      esc(ct.note) +
+      "</p>" +
+      "</section>" +
 
-      '<section id="wall" class="sec">'+
-        '<div class="cont">'+
-          '<div class="sec-tag">'+esc(data.wall.eyebrow)+'</div>'+
-          h2(data.wall.heading, data.wall.headingEm)+
-          '<p class="sec-intro">'+esc(data.wall.body)+'</p>'+
-          '<p class="wall-note">'+esc(data.wall.note)+'</p>'+
-          '<div class="grid grid-portrait">'+wall+'</div>'+
-        '</div>'+
-      '</section>'+
+      '<footer class="site-footer">' +
+      '<div class="footer-words">' +
+      footerWords +
+      "</div>" +
+      '<div class="footer-since">' +
+      esc(ft.since) +
+      "</div>" +
+      '<div class="footer-links">' +
+      '<a href="' +
+      esc(s.instagram) +
+      '" target="_blank" rel="noopener noreferrer">' +
+      esc(s.instagramHandle) +
+      "</a>" +
+      '<a href="' +
+      esc(shop.url) +
+      '" target="_blank" rel="noopener noreferrer">Etsy</a>' +
+      '<a href="' +
+      esc(s.artistUrl) +
+      '" target="_blank" rel="noopener noreferrer">Przemyslaw Golebiewski</a>' +
+      "</div>" +
+      "</footer>";
 
-      '<section id="process" class="sec">'+
-        '<div class="cont process-grid">'+
-          '<div class="process-img">'+
-            '<picture>'+
-              '<source media="(max-width:768px)" srcset="'+esc(proc.imageMobile||proc.image)+'"/>'+
-              imgTag(proc.image, proc.imageAlt, '')+
-            '</picture>'+
-          '</div>'+
-          '<div class="process-text">'+
-            '<div class="sec-tag">'+esc(proc.eyebrow)+'</div>'+
-            h2(proc.heading, proc.headingEm)+
-            '<p>'+esc(proc.body1)+'</p>'+
-            '<p>'+esc(proc.body2)+'</p>'+
-            '<p class="process-sig">'+esc(proc.signature)+'</p>'+
-          '</div>'+
-        '</div>'+
-      '</section>'+
-
-      '<section id="find" class="sec">'+
-        '<div class="cont find-grid">'+
-          '<div class="find-block">'+
-            '<div class="sec-tag">'+esc(find.studio.eyebrow)+'</div>'+
-            '<h3>'+esc(find.studio.name)+'</h3>'+
-            '<p>'+esc(find.studio.address)+'</p>'+
-            '<p>'+esc(find.studio.body)+'</p>'+
-            '<div class="divider"></div>'+
-            '<a href="'+esc(find.studio.instagramUrl)+'" class="btn-line terra" target="_blank" rel="noopener noreferrer">'+esc(find.studio.instagramHandle)+' &#8594;</a>'+
-            '<p class="find-note">'+esc(find.studio.note)+'</p>'+
-          '</div>'+
-          '<div class="find-block">'+
-            '<div class="sec-tag">'+esc(find.online.eyebrow)+'</div>'+
-            '<h3>'+esc(find.online.heading)+'</h3>'+
-            '<p>'+esc(find.online.body)+'</p>'+
-            '<div class="divider"></div>'+
-            '<a href="'+esc(etsy)+'" class="btn-line dark" target="_blank" rel="noopener noreferrer">'+esc(find.online.etsyText)+' &#8594;</a>'+
-            '<div class="divider"></div>'+
-            '<h3>'+esc(find.online.customHeading)+'</h3>'+
-            '<p>'+esc(find.online.customBody)+'</p>'+
-            '<a href="mailto:'+esc(s.email)+'" class="btn-line terra">'+esc(find.online.customLinkText)+' &#8594;</a>'+
-          '</div>'+
-        '</div>'+
-      '</section>'+
-
-      '<footer>'+
-        '<div class="footer-logo">'+esc(s.name)+' &middot; '+esc(s.location)+'</div>'+
-        '<div class="footer-lelek">'+esc(s.lelekMeaning)+'</div>'+
-        '<div class="footer-links">'+
-          '<a href="'+esc(s.instagram)+'" target="_blank" rel="noopener noreferrer">'+esc(s.instagramHandle)+'</a>'+
-          '<a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>'+
-          '<a href="'+esc(etsy)+'" target="_blank" rel="noopener noreferrer">Etsy</a>'+
-          '<a href="'+esc(s.artistUrl)+'" target="_blank" rel="noopener noreferrer">Przemyslaw Golebiewski</a>'+
-        '</div>'+
-      '</footer>';
+    initScrollOffset();
   }
 
-  const nav = $('#nav');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
-  $('#navToggle').addEventListener('click', () => nav.classList.toggle('open'));
-  document.addEventListener('click', e => {
-    if(nav.classList.contains('open') && !nav.contains(e.target)){
-      nav.classList.remove('open');
-    }
-  });
-  $('#navLinks').addEventListener('click', e => {
-    if(e.target.tagName === 'A') nav.classList.remove('open');
-  });
+  function initScrollOffset() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  fetch('/data/content.json')
-    .then(r => { if(!r.ok) throw new Error(r.status); return r.json(); })
+    const layers = document.querySelectorAll("[data-speed]");
+    if (!layers.length) return;
+
+    let ticking = false;
+
+    function update() {
+      const scrollY = window.scrollY;
+      layers.forEach(function (el) {
+        const speed = parseFloat(el.getAttribute("data-speed"));
+        const rect = el.getBoundingClientRect();
+        const center = rect.top + rect.height / 2;
+        const offset = (center - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      function () {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true }
+    );
+    update();
+  }
+
+  fetch("/data/content.json")
+    .then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.json();
+    })
     .then(render)
-    .catch(() => {
-      $('#app').innerHTML = '<p class="err-msg">Could not load site content. Check that data/content.json is available.</p>';
+    .catch(function () {
+      $("#app").innerHTML =
+        '<p class="err-msg">Could not load site content. Check that data/content.json is available.</p>';
     });
 })();
 </script>
