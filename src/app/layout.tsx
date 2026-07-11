@@ -1,7 +1,4 @@
 import type { Metadata } from "next";
-import { Navigation } from "@/components/public/Navigation";
-import { Footer } from "@/components/public/Footer";
-import { getSiteSettings } from "@/lib/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,28 +12,10 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let settings: Record<string, string> = {};
-  try {
-    settings = await getSiteSettings();
-  } catch {
-    // fallback defaults handled in Footer
-  }
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="grid-seams antialiased">
-        <Navigation />
-        <main>{children}</main>
-        <Footer
-          siteName={settings.site_name}
-          instagram={settings.instagram}
-          instagramHandle={settings.instagram_handle}
-          email={settings.email}
-          etsyUrl={settings.etsy_url}
-          artistUrl={settings.artist_url}
-        />
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
