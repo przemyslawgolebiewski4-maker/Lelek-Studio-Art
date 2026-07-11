@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { Navigation } from "@/components/public/Navigation";
-import { Footer } from "@/components/public/Footer";
 import { Hero } from "@/components/public/Hero";
 import { FeaturedWorks } from "@/components/public/FeaturedWorks";
 import { getPublicHomeData } from "@/lib/site";
@@ -15,13 +13,11 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   let hero: Record<string, string> = {};
   let featured: Awaited<ReturnType<typeof getPublicHomeData>>["featured"] = [];
-  let settings: Record<string, string> = {};
 
   try {
     const data = await getPublicHomeData();
     hero = data.hero;
     featured = data.featured;
-    settings = data.settings;
   } catch {
     hero = {
       eyebrow: "Handmade in Berlin - Ceramic Studio",
@@ -76,7 +72,10 @@ export default async function HomePage() {
           <p className="mt-4 max-w-xl text-sand">
             Ceramics for residential, hospitality, and concept stores.
           </p>
-          <Link href="/for-architects" className="btn-primary mt-8 inline-flex border-cream bg-transparent text-cream hover:bg-cream hover:text-ink">
+          <Link
+            href="/for-architects"
+            className="btn-primary mt-8 inline-flex border-cream bg-transparent text-cream hover:bg-cream hover:text-ink"
+          >
             Get in touch ↗
           </Link>
         </div>
