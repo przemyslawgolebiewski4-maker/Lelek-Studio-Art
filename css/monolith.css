@@ -1,0 +1,666 @@
+/*
+  BINARY CHROMATIC RULE — complementary pair, 180° on color wheel
+  Background: Unbleached Ceramic Linen #F4F1EA
+  Foreground: Volcanic Ash Black #121212
+  No shades. No opacity. No gradients. No third colors.
+*/
+
+:root {
+  --bg: #F4F1EA;
+  --fg: #121212;
+  --seam: 3px solid var(--fg);
+  --seam-heavy: 4px solid var(--fg);
+  --font-serif: "Times New Roman", Times, serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --space-unit: clamp(2rem, 6vw, 5rem);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-serif);
+  line-height: 1.05;
+  overflow-x: hidden;
+  cursor: crosshair;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* ── BAUHAUS GRID SEAM (fixed reference lines) ── */
+.grid-seams {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.grid-seams::before,
+.grid-seams::after {
+  content: "";
+  position: absolute;
+  background: var(--fg);
+}
+
+.grid-seams::before {
+  top: 0;
+  bottom: 0;
+  left: 4vw;
+  width: 1px;
+}
+
+.grid-seams::after {
+  top: 0;
+  bottom: 0;
+  right: 4vw;
+  width: 1px;
+}
+
+/* ── CATALOG NUMBER (museum label) ── */
+.cat-num {
+  font-family: var(--font-mono);
+  font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── FIXED NAV (minimal, bauhaus) ── */
+.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 4vw;
+  mix-blend-mode: difference;
+  color: var(--bg);
+}
+
+.site-nav a {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.site-nav a:hover {
+  transform: translate(3px, -3px);
+}
+
+/* ── SCROLL CANVAS (continuous narrative) ── */
+.scroll-canvas {
+  position: relative;
+}
+
+/* ── MANIFEST (001) ── */
+.block-manifest {
+  min-height: 100vh;
+  padding: 18vh 4vw 12vh;
+  border-bottom: var(--seam-heavy);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.manifest-num {
+  margin-bottom: 8vh;
+}
+
+.manifest-title {
+  font-size: clamp(3.5rem, 14vw, 14rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+}
+
+.manifest-title span {
+  display: block;
+}
+
+.manifest-title .indent {
+  padding-left: clamp(0rem, 18vw, 22rem);
+}
+
+.manifest-sub {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.5vw, 1rem);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  max-width: 28rem;
+  margin-top: 6vh;
+  line-height: 1.6;
+}
+
+/* ── QUOTE VOID (70% emptiness) ── */
+.block-quote {
+  min-height: 90vh;
+  padding: 30vh 4vw;
+  border-bottom: var(--seam);
+  position: relative;
+}
+
+.block-quote .cat-num {
+  position: absolute;
+  top: 4vw;
+  left: 4vw;
+}
+
+.quote-text {
+  font-size: clamp(1.8rem, 4.5vw, 4rem);
+  font-style: italic;
+  max-width: 14ch;
+  margin-left: auto;
+  margin-right: clamp(0rem, 12vw, 18rem);
+}
+
+/* ── EXHIBIT BLOCK (one object = one screen journey) ── */
+.block-exhibit {
+  min-height: 140vh;
+  position: relative;
+  border-bottom: var(--seam);
+  padding-bottom: 20vh;
+}
+
+.exhibit-num {
+  position: absolute;
+  top: 4vw;
+  left: 4vw;
+  z-index: 5;
+}
+
+.exhibit-frame {
+  position: relative;
+  border: var(--seam-heavy);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.exhibit-inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.exhibit-inner img {
+  filter: grayscale(0.08) contrast(1.02);
+  min-height: 100%;
+}
+
+/* Bleed beyond viewport — gallery cut */
+.exhibit-frame.align-left {
+  width: 72vw;
+  height: 75vh;
+  margin-left: -2vw;
+  margin-top: 18vh;
+}
+
+.exhibit-frame.align-right {
+  width: 68vw;
+  height: 70vh;
+  margin-left: auto;
+  margin-right: -4vw;
+  margin-top: 22vh;
+}
+
+.exhibit-frame.align-center {
+  width: 85vw;
+  height: 65vh;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  margin-top: 20vh;
+}
+
+.exhibit-frame:hover {
+  transform: translate(3px, -3px);
+}
+
+.exhibit-frame.align-center:hover {
+  transform: translate(calc(-50% + 3px), -3px);
+}
+
+.exhibit-frame:hover .exhibit-hover-tag {
+  opacity: 1;
+}
+
+.exhibit-hover-tag {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--fg);
+  color: var(--bg);
+  padding: 0.35rem 0.6rem;
+  opacity: 0;
+}
+
+/* Museum caption */
+.exhibit-caption {
+  padding: 3rem 4vw 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 90vw;
+}
+
+.exhibit-caption.align-left {
+  margin-left: 4vw;
+}
+
+.exhibit-caption.align-right {
+  margin-left: auto;
+  margin-right: 4vw;
+  text-align: right;
+}
+
+.exhibit-caption.align-center {
+  margin: 0 auto;
+  text-align: center;
+  grid-template-columns: 1fr;
+  max-width: 40rem;
+}
+
+.caption-title {
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.caption-meta {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  line-height: 2;
+  align-self: end;
+}
+
+.caption-meta span {
+  display: block;
+}
+
+/* ── SHOP PIERCE ── */
+.block-shop {
+  min-height: 50vh;
+  padding: 15vh 4vw;
+  border-bottom: var(--seam-heavy);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.shop-link {
+  font-size: clamp(2.5rem, 8vw, 7rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  border: var(--seam-heavy);
+  padding: 1.5rem 3rem;
+  line-height: 0.9;
+}
+
+.shop-link:hover {
+  transform: translate(3px, -3px);
+  box-shadow: 6px 6px 0 var(--fg);
+}
+
+.shop-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* ── BLACK INTERVENTION (surprise moment) ── */
+.block-void {
+  min-height: 100vh;
+  background: var(--fg);
+  color: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4vw;
+  border-bottom: var(--seam-heavy);
+  border-color: var(--bg);
+}
+
+.block-void .cat-num {
+  position: absolute;
+  top: 4vw;
+  left: 4vw;
+  color: var(--bg);
+}
+
+.void-title {
+  font-size: clamp(2.5rem, 10vw, 9rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.88;
+}
+
+.void-title span {
+  display: block;
+}
+
+.void-title .indent {
+  padding-left: clamp(0rem, 20vw, 24rem);
+}
+
+/* ── INTERIOR EXHIBITS ── */
+.block-interior {
+  min-height: 130vh;
+  position: relative;
+  border-bottom: var(--seam);
+}
+
+.interior-num {
+  position: absolute;
+  top: 4vw;
+  right: 4vw;
+  z-index: 5;
+}
+
+.interior-frame {
+  position: absolute;
+  border: var(--seam-heavy);
+  overflow: hidden;
+}
+
+.interior-frame.align-right {
+  width: 78vw;
+  height: 72vh;
+  top: 12vh;
+  right: -6vw;
+}
+
+.interior-frame.align-left {
+  width: 62vw;
+  height: 58vh;
+  top: 20vh;
+  left: -3vw;
+}
+
+.interior-frame:hover {
+  transform: translate(3px, -3px);
+}
+
+.interior-caption {
+  position: absolute;
+  bottom: 8vh;
+  left: 4vw;
+  max-width: 20rem;
+}
+
+.interior-caption.align-right {
+  left: auto;
+  right: 8vw;
+  text-align: right;
+}
+
+.interior-caption .caption-title {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+/* ── CONTACT (luxury mailto, no form) ── */
+.block-contact {
+  min-height: 100vh;
+  padding: 25vh 4vw;
+  border-bottom: var(--seam-heavy);
+  position: relative;
+}
+
+.contact-num {
+  position: absolute;
+  top: 4vw;
+  left: 4vw;
+}
+
+.contact-headline {
+  font-size: clamp(3rem, 12vw, 11rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  margin-bottom: 8vh;
+}
+
+.contact-headline span {
+  display: block;
+}
+
+.contact-sub {
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-style: italic;
+  margin-bottom: 4vh;
+  padding-left: clamp(0rem, 15vw, 20rem);
+}
+
+.contact-email {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  border-top: var(--seam);
+  border-bottom: var(--seam);
+  padding: 1.25rem 0;
+  margin-left: clamp(0rem, 15vw, 20rem);
+}
+
+.contact-email:hover {
+  transform: translate(3px, 0);
+}
+
+.contact-note {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 3rem;
+  margin-left: clamp(0rem, 15vw, 20rem);
+  max-width: 24rem;
+  line-height: 1.8;
+}
+
+/* ── FOOTER ── */
+.site-footer {
+  padding: 4vw;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: end;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.footer-words {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.footer-words span::after {
+  content: " /";
+  opacity: 0.4;
+}
+
+.footer-words span:last-child::after {
+  content: "";
+}
+
+.footer-since {
+  text-align: right;
+}
+
+.footer-links {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: var(--seam);
+}
+
+.footer-links a:hover {
+  transform: translate(3px, -3px);
+}
+
+/* ── SCROLL OFFSET LAYERS ── */
+[data-speed] {
+  will-change: transform;
+}
+
+/* ── LOADING / ERROR ── */
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.err-msg {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  padding: 4vw;
+  text-align: center;
+}
+
+/* ── MOBILE: maintain asymmetry, not collapse to generic grid ── */
+@media (max-width: 768px) {
+  .grid-seams::before,
+  .grid-seams::after {
+    display: none;
+  }
+
+  .site-nav {
+    mix-blend-mode: normal;
+    color: var(--fg);
+    background: var(--bg);
+    border-bottom: var(--seam);
+  }
+
+  .manifest-title .indent,
+  .void-title .indent {
+    padding-left: 0;
+  }
+
+  .exhibit-frame.align-left,
+  .exhibit-frame.align-right,
+  .exhibit-frame.align-center {
+    width: 92vw;
+    height: 55vh;
+    margin-left: 4vw;
+    margin-right: 0;
+    transform: none;
+  }
+
+  .exhibit-frame.align-center:hover {
+    transform: translate(3px, -3px);
+  }
+
+  .exhibit-caption {
+    grid-template-columns: 1fr;
+    text-align: left !important;
+    margin-left: 4vw !important;
+    margin-right: 0 !important;
+  }
+
+  .interior-frame.align-right,
+  .interior-frame.align-left {
+    width: 94vw;
+    height: 50vh;
+    left: 3vw;
+    right: auto;
+    top: 14vh;
+  }
+
+  .interior-caption {
+    position: relative;
+    bottom: auto;
+    padding: 2rem 4vw 8vh;
+  }
+
+  .block-shop {
+    align-items: flex-start;
+  }
+
+  .contact-sub,
+  .contact-email,
+  .contact-note {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .quote-text {
+    margin-right: 0;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-since {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-speed] {
+    transform: none !important;
+  }
+
+  .exhibit-frame:hover,
+  .shop-link:hover,
+  .contact-email:hover,
+  .interior-frame:hover,
+  .site-nav a:hover,
+  .footer-links a:hover {
+    transform: none;
+  }
+}
