@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { connectDB } from "./db";
 import { HomeSection, Product, Setting } from "../models";
@@ -21,8 +21,18 @@ type LegacyContent = {
 };
 
 function loadLegacyContent(): LegacyContent {
-  const legacyPath = join(process.cwd(), "..", "_legacy", "data", "content.json");
-  return JSON.parse(readFileSync(legacyPath, "utf-8")) as LegacyContent;
+  const candidates = [
+    join(process.cwd(), "data", "content.json"),
+    join(process.cwd(), "..", "_legacy", "data", "content.json"),
+  ];
+
+  for (const path of candidates) {
+    if (existsSync(path)) {
+      return JSON.parse(readFileSync(path, "utf-8")) as LegacyContent;
+    }
+  }
+
+  throw new Error(`Seed content not found. Tried: ${candidates.join(", ")}`);
 }
 
 export async function seedDatabase(options?: { force?: boolean }) {
