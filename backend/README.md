@@ -45,3 +45,10 @@ npm run dev
 GET /setup/seed?secret=SETUP_SECRET
 GET /setup/seed?secret=SETUP_SECRET&force=true
 ```
+
+## Setup (one-time, requires SETUP_SECRET)
+
+```bash
+GET  /setup/status?secret=SETUP_SECRET   # check DB + admin count
+POST /setup/admin?secret=SETUP_SECRET    # body: { email, password, name }
+```

@@ -14,6 +14,12 @@ MongoDB Atlas (lelek_studio)
 
 Vercel **nie** łączy się z MongoDB. Wszystkie dane idą przez Railway API.
 
+## Launch checklist
+
+Pełna instrukcja uruchomienia produkcji: **[docs/LAUNCH.md](docs/LAUNCH.md)**
+
+Skrót: ustaw `NEXT_PUBLIC_API_URL` → seed → create-admin → custom domain `api.lelekstudio.com` dla admin login.
+
 ## Local development
 
 **Terminal 1 — API:**
