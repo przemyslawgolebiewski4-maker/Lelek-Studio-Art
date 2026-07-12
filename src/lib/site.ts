@@ -2,6 +2,9 @@ import { serverFetch } from "@/lib/api-server";
 import type { Product } from "@/types/product";
 import type {
   ArchitectsSection,
+  ElementsSection,
+  FeaturedSection,
+  FindSection,
   JournalPost,
   JournalPostSummary,
   JournalSection,
@@ -36,13 +39,55 @@ export async function getSiteSettings(): Promise<Record<string, string>> {
 }
 
 export async function getPublicHomeData() {
-  const [settings, featured, hero] = await Promise.all([
+  const [
+    settings,
+    featured,
+    hero,
+    story,
+    elements,
+    architects,
+    journalSection,
+    journalPosts,
+    find,
+    featuredSection,
+  ] = await Promise.all([
     serverFetch<Record<string, string>>("/settings/public", { fallback: {} }),
     serverFetch<Product[]>("/products/public?limit=6", { fallback: [] }),
     serverFetch<Record<string, string>>("/sections/hero", { fallback: DEFAULT_HERO }),
+    serverFetch<StorySection>("/sections/story", { fallback: DEFAULT_STORY }),
+    serverFetch<ElementsSection>("/sections/elements", { fallback: { items: [] } }),
+    serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS }),
+    serverFetch<JournalSection>("/sections/journal", {
+      fallback: {
+        eyebrow: "Journal",
+        heading: "Stories from",
+        headingEm: "the studio",
+        sub: "Notes on process, material and making in Berlin.",
+      },
+    }),
+    serverFetch<JournalPostSummary[]>("/journal/public", { fallback: [] }),
+    serverFetch<FindSection>("/sections/find", { fallback: {} }),
+    serverFetch<FeaturedSection>("/sections/featured", {
+      fallback: {
+        eyebrow: "Works",
+        heading: "Form, surface",
+        headingEm: "and presence",
+      },
+    }),
   ]);
 
-  return { settings, hero, featured };
+  return {
+    settings,
+    hero,
+    featured,
+    featuredSection,
+    story,
+    elements: elements.items ?? [],
+    architects,
+    journalSection,
+    journalPosts: journalPosts.slice(0, 1),
+    find,
+  };
 }
 
 export async function getFeaturedProducts(limit = 3): Promise<Product[]> {

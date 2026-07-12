@@ -138,8 +138,9 @@ https://TWOJ-API.up.railway.app/setup/status?secret=TWOJ_SETUP_SECRET
 
 ## Step 7 — Opcjonalnie (następne sprinty)
 
-- [ ] Custom domain `api.lelekstudio.com` na Railway
+- [x] Collections / product detail pages (Sprint B)
+- [x] About, Journal CMS, Architects form (Sprint C)
+- [x] Homepage CMS — story, elements, featured, journal teaser, find (Sprint D)
+- [ ] Custom domain `api.lelekstudio.com` na Railway (lepsze admin cookies)
 - [ ] Resend — verify domain dla emaili z formularza
-- [ ] Google Search Console (plik weryfikacji już w `/public/`)
-- [ ] Collections / product detail pages (Sprint 6)
-- [ ] Journal CMS (Sprint 5–7)
+- [x] Google Search Console + sitemap

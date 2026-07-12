@@ -48,3 +48,26 @@ export interface JournalSection {
   headingEm?: string;
   sub?: string;
 }
+
+export interface ElementItem {
+  number: string;
+  name: string;
+}
+
+export interface ElementsSection {
+  items?: ElementItem[];
+}
+
+export interface FeaturedSection {
+  eyebrow?: string;
+  heading?: string;
+  headingEm?: string;
+}
+
+export interface FindSection {
+  studioName?: string;
+  studioAddress?: string;
+  studioInstagram?: string;
+  etsyUrl?: string;
+  lelekMeaning?: string;
+}

@@ -1,14 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import type { FeaturedSection } from "@/types/content";
 
-export function FeaturedWorks({ products }: { products: Product[] }) {
+export function FeaturedWorks({
+  products,
+  section,
+}: {
+  products: Product[];
+  section?: FeaturedSection;
+}) {
   return (
     <section className="section-pad border-b border-sand">
       <div className="container-wide">
-        <p className="eyebrow mb-3">Works</p>
+        {section?.eyebrow ? <p className="eyebrow mb-3">{section.eyebrow}</p> : (
+          <p className="eyebrow mb-3">Works</p>
+        )}
         <h2 className="text-[var(--text-3xl)]">
-          Form, surface <span className="italic-serif text-rust">and presence</span>
+          {section?.heading ?? "Form, surface"}{" "}
+          <span className="italic-serif text-rust">{section?.headingEm ?? "and presence"}</span>
         </h2>
 
         <div className="mt-12 space-y-24 md:space-y-32">

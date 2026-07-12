@@ -17,7 +17,12 @@ type LegacyContent = {
   hero: Record<string, string>;
   story: Record<string, string>;
   elements: { number: string; name: string }[];
-  featured: { items: { title: string; meta: string; image: string; alt: string }[] };
+  featured: {
+    eyebrow: string;
+    heading: string;
+    headingEm: string;
+    items: { title: string; meta: string; image: string; alt: string }[];
+  };
 };
 
 function loadLegacyContent(): LegacyContent {
@@ -115,6 +120,15 @@ export async function seedDatabase(options?: { force?: boolean }) {
       sectionKey: "elements",
       order: 2,
       content: { items: legacy.elements },
+    },
+    {
+      sectionKey: "featured",
+      order: 3,
+      content: {
+        eyebrow: legacy.featured.eyebrow,
+        heading: legacy.featured.heading,
+        headingEm: legacy.featured.headingEm,
+      },
     },
     {
       sectionKey: "architects",
