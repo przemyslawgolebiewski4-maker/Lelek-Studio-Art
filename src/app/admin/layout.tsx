@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getSession } from "@/lib/auth";
+import { getAdminSession } from "@/lib/session";
 import { AdminNav } from "@/components/admin/AdminNav";
 
 export const metadata: Metadata = {
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const session = await getSession();
+  const session = await getAdminSession();
 
   return (
     <div className="min-h-screen bg-ink text-cream">

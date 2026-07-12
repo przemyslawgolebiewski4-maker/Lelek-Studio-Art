@@ -2,17 +2,21 @@
 
 Next.js frontend (Vercel) + Express API (Railway) + MongoDB Atlas.
 
-## Architecture
+```
+Przeglądarka
+    ↓
+Vercel (Next.js — frontend + SSR)
+    ↓ fetch (NEXT_PUBLIC_API_URL)
+Railway (Express API — backend)
+    ↓
+MongoDB Atlas (lelek_studio)
+```
 
-| Layer | Stack | Deploy |
-|-------|-------|--------|
-| Frontend | Next.js 15 | Vercel |
-| API | Express + TypeScript | Railway (`/backend`) |
-| Database | MongoDB Atlas `lelek_studio` | Atlas |
+Vercel **nie** łączy się z MongoDB. Wszystkie dane idą przez Railway API.
 
 ## Local development
 
-**Terminal 1 - API:**
+**Terminal 1 — API:**
 ```bash
 cd backend
 cp .env.example .env
@@ -21,39 +25,54 @@ npm run dev
 # http://localhost:3001/health
 ```
 
-**Terminal 2 - Frontend:**
+**Terminal 2 — Frontend:**
 ```bash
 cp .env.example .env.local
-# Set NEXT_PUBLIC_API_URL=http://localhost:3001
 npm install
 npm run dev
 # http://localhost:3000
 ```
 
-**Seed database:**
+**Seed database (via API):**
+```bash
+# SETUP_SECRET in backend/.env
+npm run db:seed
+# or: GET http://localhost:3001/setup/seed?secret=YOUR_SETUP_SECRET
 ```
-GET http://localhost:3001/setup/seed?secret=YOUR_SETUP_SECRET
-```
 
-## Deploy
+## Environment variables
 
-### Railway (API)
-1. New project → Deploy from GitHub
-2. Set **Root Directory** to `backend` OR use repo root with `backend/railway.toml`
-3. Env vars: `DATABASE_URL`, `JWT_SECRET`, `SETUP_SECRET`, `RESEND_KEY`, `ADMIN_EMAIL`, `FRONTEND_URL`
+### Vercel (frontend only)
 
-### Vercel (Frontend)
-1. Connect repo, framework Next.js
-2. Env: `NEXT_PUBLIC_API_URL=https://your-api.up.railway.app`, `NEXT_PUBLIC_SITE_URL`
+| Variable | Required | Example |
+|----------|----------|---------|
+| `NEXT_PUBLIC_API_URL` | Yes | `https://api.lelekstudio.com` |
+| `NEXT_PUBLIC_SITE_URL` | Yes | `https://www.lelekstudio.com` |
+
+**Usuń z Vercel** (jeśli są): `DATABASE_URL`, `JWT_SECRET`, `RESEND_KEY`, `SETUP_SECRET`, `ADMIN_EMAIL`.
+
+### Railway (backend only)
+
+| Variable | Required | Example |
+|----------|----------|---------|
+| `DATABASE_URL` | Yes | `mongodb+srv://...@cluster/lelek_studio?...` |
+| `JWT_SECRET` | Yes | 64+ random chars |
+| `SETUP_SECRET` | Yes | random string (seed endpoint) |
+| `RESEND_KEY` | Yes | `re_...` |
+| `ADMIN_EMAIL` | Yes | `lelekstudio@lelekstudio.com` |
+| `FRONTEND_URL` | Yes | `https://www.lelekstudio.com` |
+
+Railway: **Root Directory = `backend`**, healthcheck `/health`.
 
 ## Admin
 
 - Login: `/admin/login`
-- User must have `adminRole: "lelek_admin"` in MongoDB
+- User in MongoDB needs `adminRole: "lelek_admin"` + bcrypt `passwordHash`
+- Production: use `api.lelekstudio.com` + `www.lelekstudio.com` with cookie domain `.lelekstudio.com`
 
-## API routes
+## API (Railway)
 
-- `GET /health` - health check
+- `GET /health`
 - `POST /auth/login`, `POST /auth/logout`, `GET /auth/me`
 - `GET /products/public`, `GET /settings/public`, `GET /sections/hero`
 - `GET/POST /admin/products`, `GET/PATCH/DELETE /admin/products/:id`

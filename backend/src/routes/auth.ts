@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { connectDB } from "../lib/db";
+import { adminCookieOptions } from "../lib/cookies";
 import { COOKIE_NAME, comparePassword, requireAdmin, signToken } from "../lib/auth";
 import { User, isLelekAdmin } from "../models";
 
@@ -29,13 +30,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = signToken(user._id.toString());
-    res.cookie(COOKIE_NAME, token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 604800000,
-      path: "/",
-    });
+    res.cookie(COOKIE_NAME, token, adminCookieOptions());
 
     res.json({ ok: true, name: user.name, email: user.email });
   } catch {
@@ -44,12 +39,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/logout", (_req, res) => {
-  res.clearCookie(COOKIE_NAME, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    path: "/",
-  });
+  res.clearCookie(COOKIE_NAME, adminCookieOptions());
   res.json({ ok: true });
 });
 

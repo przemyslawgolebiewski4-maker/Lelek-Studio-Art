@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiPost, apiPatch } from "@/lib/api";
-import type { IProduct } from "@/models/Product";
+import type { Product } from "@/types/product";
 import {
   AdminButton,
   AdminInput,
@@ -27,7 +27,7 @@ export type ProductFormData = {
   order: number;
 };
 
-export function productToForm(product?: Partial<IProduct>): ProductFormData {
+export function productToForm(product?: Partial<Product>): ProductFormData {
   return {
     slug: product?.slug ?? "",
     catalog: product?.catalog ?? "",

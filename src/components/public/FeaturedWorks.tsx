@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { IProduct } from "@/models/Product";
+import type { Product } from "@/types/product";
 
-export function FeaturedWorks({ products }: { products: IProduct[] }) {
+export function FeaturedWorks({ products }: { products: Product[] }) {
   return (
     <section className="section-pad border-b border-sand">
       <div className="container-wide">
@@ -15,7 +15,7 @@ export function FeaturedWorks({ products }: { products: IProduct[] }) {
           {products.map((product, index) => {
             const align = index % 2 === 0 ? "md:mr-auto md:ml-[-2vw]" : "md:ml-auto md:mr-[-2vw]";
             return (
-              <article key={product._id.toString()} className="relative">
+              <article key={String(product._id)} className="relative">
                 <p className="cat-num mb-4">{product.catalog || String(index + 1).padStart(3, "0")}</p>
                 <div className={`grid gap-6 md:grid-cols-[1.2fr_0.8fr] md:items-end ${align}`}>
                   <Link

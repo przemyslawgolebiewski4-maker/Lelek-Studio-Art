@@ -13,13 +13,21 @@ import setupRouter from "./routes/setup";
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const allowedOrigins = new Set([
+  "https://www.lelekstudio.com",
+  "https://lelekstudio.com",
+  process.env.FRONTEND_URL ?? "http://localhost:3000",
+]);
+
 app.use(
   cors({
-    origin: [
-      "https://www.lelekstudio.com",
-      "https://lelek-studio-art.vercel.app",
-      process.env.FRONTEND_URL ?? "http://localhost:3000",
-    ],
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin) || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   }),
 );

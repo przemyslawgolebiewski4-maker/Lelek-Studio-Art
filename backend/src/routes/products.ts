@@ -19,6 +19,42 @@ productsPublicRouter.get("/products/public", async (req, res) => {
   }
 });
 
+const PRODUCT_FIELDS = [
+  "slug",
+  "catalog",
+  "title",
+  "category",
+  "material",
+  "description",
+  "process",
+  "etsyUrl",
+  "images",
+  "metaTitle",
+  "metaDescription",
+  "published",
+  "order",
+  "price",
+  "nativeCheckout",
+] as const;
+
+function normalizeSlug(value: unknown): string {
+  if (typeof value !== "string") return "";
+  return value.trim().toLowerCase().replace(/\s+/g, "-");
+}
+
+function pickProductFields(body: Record<string, unknown>) {
+  const data: Record<string, unknown> = {};
+  for (const key of PRODUCT_FIELDS) {
+    if (key in body) data[key] = body[key];
+  }
+  if (typeof data.slug === "string") data.slug = normalizeSlug(data.slug);
+  if (typeof data.title === "string") data.title = data.title.trim();
+  if (Array.isArray(data.images)) {
+    data.images = data.images.filter((item) => typeof item === "string");
+  }
+  return data;
+}
+
 export const productsAdminRouter = Router();
 
 productsAdminRouter.get("/products", requireAdmin, async (_req, res) => {
@@ -34,7 +70,35 @@ productsAdminRouter.get("/products", requireAdmin, async (_req, res) => {
 productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
   try {
     await connectDB();
-    const product = await Product.create(req.body);
+    const data = pickProductFields(req.body as Record<string, unknown>);
+    const slug = typeof data.slug === "string" ? data.slug : "";
+    const title = typeof data.title === "string" ? data.title : "";
+
+    if (!slug || !title) {
+      res.status(400).json({ ok: false, error: "Slug and title required" });
+      return;
+    }
+
+    const existing = await Product.findOne({ slug });
+    if (existing) {
+      res.status(409).json({ ok: false, error: "Slug already exists" });
+      return;
+    }
+
+    const product = await Product.create({
+      catalog: "",
+      category: "ceramics",
+      material: "",
+      description: "",
+      process: "",
+      etsyUrl: "",
+      images: [],
+      metaTitle: "",
+      metaDescription: "",
+      published: false,
+      order: 0,
+      ...data,
+    });
     res.status(201).json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -58,7 +122,8 @@ productsAdminRouter.get("/products/:id", requireAdmin, async (req, res) => {
 productsAdminRouter.patch("/products/:id", requireAdmin, async (req, res) => {
   try {
     await connectDB();
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    const updates = pickProductFields(req.body as Record<string, unknown>);
+    const product = await Product.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     }).lean();
