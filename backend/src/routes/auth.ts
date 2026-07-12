@@ -33,8 +33,13 @@ router.post("/login", async (req, res) => {
     res.cookie(COOKIE_NAME, token, adminCookieOptions(req.hostname));
 
     res.json({ ok: true, name: user.name, email: user.email, token });
-  } catch {
-    res.status(401).json({ error: "Invalid credentials" });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({
+      error: "Server error during login",
+      code: "server_error",
+      hint: "Check JWT_SECRET and DATABASE_URL on Railway",
+    });
   }
 });
 

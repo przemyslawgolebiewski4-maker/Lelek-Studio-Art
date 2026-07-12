@@ -41,7 +41,7 @@ export default function LoginForm() {
     try {
       const res = await apiPost("/auth/login", { email, password });
 
-      let data: { ok?: boolean; token?: string; error?: string };
+      let data: { ok?: boolean; token?: string; error?: string; code?: string; hint?: string };
       try {
         data = await res.json();
       } catch {
@@ -53,7 +53,15 @@ export default function LoginForm() {
       }
 
       if (!res.ok || !data.ok) {
-        setError(data.error ?? "Nieprawidłowy email lub hasło");
+        if (data.code === "not_admin") {
+          setError("Konto istnieje, ale brak roli lelek_admin. Użyj /setup/admin?force=true");
+        } else if (data.code === "wrong_password") {
+          setError("Złe hasło. Zresetuj przez /setup/admin?force=true");
+        } else if (data.code === "server_error") {
+          setError(data.hint ?? "Błąd serwera API. Sprawdź JWT_SECRET na Railway.");
+        } else {
+          setError(data.error ?? "Nieprawidłowy email lub hasło");
+        }
         setLoading(false);
         return;
       }

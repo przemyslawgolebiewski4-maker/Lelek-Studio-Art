@@ -83,7 +83,7 @@ npm run create-admin -- \
 Lub curl:
 
 ```bash
-curl -X POST "https://TWOJ-API.up.railway.app/setup/admin?secret=TWOJ_SETUP_SECRET" \
+curl -X POST "https://TWOJ-API.up.railway.app/setup/admin?secret=TWOJ_SETUP_SECRET&force=true" \
   -H "Content-Type: application/json" \
   -d '{"email":"lelekstudio@lelekstudio.com","password":"TwojeSilneHaslo123!","name":"Przemyslaw Golebiewski"}'
 ```

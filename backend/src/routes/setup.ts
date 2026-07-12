@@ -70,13 +70,33 @@ router.post("/admin", async (req, res) => {
     }
 
     await connectDB();
+    const force = req.query.force === "true";
     const existing = await User.findOne({ email });
+    const passwordHash = await hashPassword(password);
+
     if (existing) {
-      res.status(409).json({ ok: false, error: "User already exists" });
+      if (!force) {
+        res.status(409).json({
+          ok: false,
+          error: "User already exists. Add ?force=true to reset password and admin role.",
+        });
+        return;
+      }
+
+      existing.passwordHash = passwordHash;
+      existing.name = name;
+      existing.adminRole = "lelek_admin";
+      existing.emailVerified = true;
+      await existing.save();
+
+      res.json({
+        ok: true,
+        message: "Admin updated (password reset)",
+        user: { id: existing._id.toString(), email: existing.email, name: existing.name },
+      });
       return;
     }
 
-    const passwordHash = await hashPassword(password);
     const user = await User.create({
       email,
       passwordHash,

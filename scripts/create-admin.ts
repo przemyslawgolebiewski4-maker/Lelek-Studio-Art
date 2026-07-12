@@ -18,11 +18,18 @@ async function main() {
   const name = getArg("name");
 
   if (!email || !password || !name) {
-    console.error("Usage: npm run create-admin -- --email=you@example.com --password=... --name=\"Your Name\"");
+    console.error(
+      "Usage: npm run create-admin -- --email=you@example.com --password=... --name=\"Your Name\" [--force]",
+    );
     process.exit(1);
   }
 
-  const res = await fetch(`${API_URL}/setup/admin?secret=${encodeURIComponent(SETUP_SECRET)}`, {
+  const force = process.argv.includes("--force");
+  const url = new URL(`${API_URL}/setup/admin`);
+  url.searchParams.set("secret", SETUP_SECRET);
+  if (force) url.searchParams.set("force", "true");
+
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email, password, name }),
