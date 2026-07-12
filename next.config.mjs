@@ -3,6 +3,11 @@ const nextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  async redirects() {
+    return [
+      { source: "/sitemap_lelek.xml", destination: "/sitemap.xml", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

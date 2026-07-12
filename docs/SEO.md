@@ -51,8 +51,19 @@ Zawiera:
 ### Po weryfikacji w GSC
 
 1. Search Console → **Sitemaps**
-2. Submit: `https://www.lelekstudio.com/sitemap.xml`
-3. Poczekaj 24–48h na indeksację
+2. Submit: `sitemap.xml` (tylko to — **nie** plik weryfikacji Google!)
+3. Usuń błędne wpisy:
+   - ❌ `/googlea016b4b9cf83275b.html` — to plik weryfikacji, nie sitemap
+   - ❌ `/sitemap_lelek.xml` — stara mapa (legacy), usuń lub zostaw redirect
+4. Poczekaj 24–48h — status powinien być **Sukces**
+
+### Częste błędy w GSC
+
+| Wpis | Problem | Co zrobić |
+|------|---------|-----------|
+| `/googlea016b4b9cf83275b.html` | Plik weryfikacji, nie sitemap | Usuń z listy map witryn |
+| `/sitemap.xml` — „Nie udało się pobrać” | Stary deploy / brak pliku | Teraz działa — usuń wpis i dodaj `sitemap.xml` ponownie |
+| `/sitemap_lelek.xml` — Sukces | Stary static site (4 URL) | Usuń; `/sitemap_lelek.xml` przekierowuje na `/sitemap.xml` |
 
 ---
 
