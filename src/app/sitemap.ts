@@ -1,0 +1,34 @@
+import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/config";
+import { serverFetch } from "@/lib/api-server";
+import type { Product } from "@/types/product";
+
+const STATIC_ROUTES: { path: string; priority: number; changeFrequency: MetadataRoute.Sitemap[0]["changeFrequency"] }[] = [
+  { path: "", priority: 1, changeFrequency: "weekly" },
+  { path: "/collections", priority: 0.9, changeFrequency: "weekly" },
+  { path: "/about", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/for-architects", priority: 0.7, changeFrequency: "monthly" },
+  { path: "/journal", priority: 0.6, changeFrequency: "weekly" },
+];
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const products = await serverFetch<Product[]>("/products/public?limit=50", { fallback: [] });
+  const now = new Date();
+
+  const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map(({ path, priority, changeFrequency }) => ({
+    url: path ? `${SITE_URL}${path}` : `${SITE_URL}/`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  }));
+
+  const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
+    url: `${SITE_URL}/objects/${product.slug}`,
+    lastModified: product.updatedAt ? new Date(product.updatedAt) : now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
+  return [...staticEntries, ...productEntries];
+}

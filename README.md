@@ -16,7 +16,8 @@ Vercel **nie** łączy się z MongoDB. Wszystkie dane idą przez Railway API.
 
 ## Launch checklist
 
-Pełna instrukcja uruchomienia produkcji: **[docs/LAUNCH.md](docs/LAUNCH.md)**
+Pełna instrukcja uruchomienia produkcji: **[docs/LAUNCH.md](docs/LAUNCH.md)**  
+SEO i Google Search Console: **[docs/SEO.md](docs/SEO.md)**
 
 Skrót: ustaw `NEXT_PUBLIC_API_URL` → seed → create-admin → custom domain `api.lelekstudio.com` dla admin login.
 
