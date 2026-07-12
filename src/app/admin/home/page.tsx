@@ -19,6 +19,11 @@ type SectionRow = {
   content: Record<string, string | unknown>;
 };
 
+const SECTION_HINTS: Partial<Record<HomeSectionKey, string>> = {
+  hero: "Optional looped video: add video + videoMobile (MP4 URL or /videos/hero.mp4). Poster falls back to image.",
+  story: "Optional looped video for the story block: video + videoMobile. Leave empty to use still images.",
+};
+
 const SECTION_LABELS: Record<HomeSectionKey, string> = {
   hero: "Hero",
   story: "Story / About",
@@ -152,6 +157,10 @@ export default function AdminHomePage() {
                   Visible
                 </label>
               </div>
+
+              {SECTION_HINTS[selected.sectionKey] ? (
+                <p className="text-sm leading-relaxed text-metal">{SECTION_HINTS[selected.sectionKey]}</p>
+              ) : null}
 
               {fields.map((field, index) => (
                 <div key={index} className="grid gap-3 md:grid-cols-[180px_1fr]">

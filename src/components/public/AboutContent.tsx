@@ -1,39 +1,30 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { StorySection } from "@/types/content";
+import { MediaBlock } from "@/components/public/MediaBlock";
 
 export function AboutContent({ story }: { story: StorySection }) {
   const image = story.image ?? "/images/process/studio.jpg";
   const imageMobile = story.imageMobile ?? image;
+  const alt = story.imageAlt || "Lelek Studio";
 
   return (
     <article>
       <div className="story">
         <div className="story-img">
-          <div className="story-img-frame">
-            <Image
-              src={image}
-              alt={story.imageAlt || "Lelek Studio"}
-              fill
-              className="hidden md:block"
-              sizes="50vw"
-              priority
-            />
-            <Image
-              src={imageMobile}
-              alt={story.imageAlt || "Lelek Studio"}
-              fill
-              className="md:hidden"
-              sizes="100vw"
-              priority
-            />
-          </div>
+          <MediaBlock
+            image={image}
+            imageMobile={imageMobile}
+            video={story.video}
+            videoMobile={story.videoMobile}
+            alt={alt}
+            variant="story"
+          />
           {story.imageCaption ? (
             <div className="story-img-label">{story.imageCaption}</div>
           ) : null}
         </div>
 
-        <div className="story-text">
+        <div className="story-text surface-wabi">
           {story.eyebrow ? <div className="story-eyebrow">{story.eyebrow}</div> : null}
           <h1 className="story-h2">
             {story.heading}

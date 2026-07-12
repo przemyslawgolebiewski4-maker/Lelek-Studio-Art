@@ -29,6 +29,8 @@ export interface StorySection {
   signature?: string;
   image?: string;
   imageMobile?: string;
+  video?: string;
+  videoMobile?: string;
   imageAlt?: string;
   imageCaption?: string;
 }

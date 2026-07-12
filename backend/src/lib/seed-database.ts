@@ -93,6 +93,9 @@ export async function seedDatabase(options?: { force?: boolean }) {
         image: legacy.hero.image,
         imageMobile: legacy.hero.imageMobile,
         imageAlt: legacy.hero.imageAlt,
+        video: "",
+        videoMobile: "",
+        imageCaption: "Vessel — Clay Stories Berlin",
         cta1Text: "View works",
         cta1Url: "/collections",
         cta2Text: "My story",
@@ -114,6 +117,8 @@ export async function seedDatabase(options?: { force?: boolean }) {
         imageMobile: legacy.story.imageMobile,
         imageAlt: legacy.story.imageAlt,
         imageCaption: legacy.story.imageCaption,
+        video: "",
+        videoMobile: "",
       },
     },
     {

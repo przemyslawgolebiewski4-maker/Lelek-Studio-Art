@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import type { ElementItem } from "@/types/content";
+import { MediaBlock } from "@/components/public/MediaBlock";
 
 export type HeroContent = {
   eyebrow?: string;
@@ -10,6 +10,8 @@ export type HeroContent = {
   subheadline?: string;
   image?: string;
   imageMobile?: string;
+  video?: string;
+  videoMobile?: string;
   imageAlt?: string;
   imageCaption?: string;
   cta1Text?: string;
@@ -27,34 +29,25 @@ type HeroProps = {
 export function Hero({ content, elements = [] }: HeroProps) {
   const image = content.image ?? "/images/hero/hero-main.jpg";
   const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
+  const alt = content.imageAlt ?? "Lelek Studio Berlin — handmade ceramics";
 
   return (
     <section className="hero">
       <div className="hero-img">
-        <div className="hero-img-inner">
-          <Image
-            src={imageMobile}
-            alt={content.imageAlt ?? "Lelek Studio Berlin — handmade ceramics"}
-            fill
-            priority
-            className="md:hidden"
-            sizes="100vw"
-          />
-          <Image
-            src={image}
-            alt={content.imageAlt ?? "Lelek Studio Berlin — handmade ceramics"}
-            fill
-            priority
-            className="hidden md:block"
-            sizes="58vw"
-          />
-        </div>
+        <MediaBlock
+          image={image}
+          imageMobile={imageMobile}
+          video={content.video}
+          videoMobile={content.videoMobile}
+          alt={alt}
+          variant="hero"
+        />
         {content.imageCaption ? (
           <div className="hero-img-label">{content.imageCaption}</div>
         ) : null}
       </div>
 
-      <div className="hero-text">
+      <div className="hero-text surface-wabi">
         <div className="hero-top">
           {content.eyebrow ? <div className="hero-eyebrow">{content.eyebrow}</div> : null}
           <h1 className="hero-h1">
@@ -91,13 +84,9 @@ export function Hero({ content, elements = [] }: HeroProps) {
                 </div>
               ))}
             </div>
-            {content.kozodoj ? (
-              <div className="hero-kozodoj">{content.kozodoj}</div>
-            ) : (
-              <div className="hero-kozodoj">
-                Lelek — kozodoj — the nightjar — Slavic spirit
-              </div>
-            )}
+            <div className="hero-kozodoj">
+              {content.kozodoj ?? "Lelek — kozodoj — the nightjar — Slavic spirit"}
+            </div>
           </div>
         ) : null}
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const links = [
@@ -15,9 +16,15 @@ type NavigationProps = {
   etsyUrl?: string;
 };
 
+function isActive(pathname: string, href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
 export function Navigation({
   etsyUrl = "https://www.etsy.com/shop/LelekStudio",
 }: NavigationProps) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -26,6 +33,10 @@ export function Navigation({
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <header id="site-nav" className="site-nav">
@@ -36,7 +47,12 @@ export function Navigation({
       <ul className="nav-links">
         {links.map((link) => (
           <li key={link.href}>
-            <Link href={link.href}>{link.label}</Link>
+            <Link
+              href={link.href}
+              className={isActive(pathname, link.href) ? "is-active" : undefined}
+            >
+              {link.label}
+            </Link>
           </li>
         ))}
       </ul>
@@ -65,7 +81,12 @@ export function Navigation({
 
       <div className={`nav-mobile ${open ? "open" : ""}`}>
         {links.map((link) => (
-          <Link key={link.href} href={link.href} onClick={() => setOpen(false)}>
+          <Link
+            key={link.href}
+            href={link.href}
+            className={isActive(pathname, link.href) ? "is-active" : undefined}
+            onClick={() => setOpen(false)}
+          >
             {link.label}
           </Link>
         ))}
