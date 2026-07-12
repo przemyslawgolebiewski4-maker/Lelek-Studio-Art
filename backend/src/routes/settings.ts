@@ -14,6 +14,7 @@ const PUBLIC_KEYS = [
   "instagram_handle",
   "email",
   "artist_url",
+  "location",
 ];
 
 const PUBLIC_SECTION_KEYS = [

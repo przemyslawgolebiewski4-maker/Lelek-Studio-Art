@@ -8,17 +8,21 @@ export default async function PublicLayout({ children }: { children: React.React
   const settings = await getSiteSettings();
 
   return (
-    <div className="grid-seams">
-      <Navigation />
+    <>
+      <Navigation
+        instagram={settings.instagram}
+        instagramHandle={settings.instagram_handle}
+      />
       <main>{children}</main>
       <Footer
         siteName={settings.site_name}
+        location={settings.location}
         instagram={settings.instagram}
         instagramHandle={settings.instagram_handle}
         email={settings.email}
         etsyUrl={settings.etsy_url}
         artistUrl={settings.artist_url}
       />
-    </div>
+    </>
   );
 }

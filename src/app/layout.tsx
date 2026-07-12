@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { SITE_URL } from "@/lib/config";
+import { fontVariables } from "@/lib/fonts";
 import { DEFAULT_DESCRIPTION, DEFAULT_OG_IMAGE, SEO_KEYWORDS, SITE_NAME } from "@/lib/seo";
 import "./globals.css";
 
@@ -35,10 +36,14 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#E6D8C7",
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className={`${fontVariables} antialiased`}>{children}</body>
     </html>
   );
 }
