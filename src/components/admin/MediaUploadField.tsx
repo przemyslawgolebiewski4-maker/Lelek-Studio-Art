@@ -2,7 +2,8 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { apiUpload } from "@/lib/api";
+import { uploadMedia, type UploadProgress } from "@/lib/media-upload";
+import { formatFileSize } from "@/lib/upload-utils";
 
 type MediaUploadFieldProps = {
   label: string;
@@ -25,6 +26,7 @@ export function MediaUploadField({
 }: MediaUploadFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [progress, setProgress] = useState<UploadProgress | null>(null);
   const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(false);
 
@@ -37,14 +39,16 @@ export function MediaUploadField({
 
   async function uploadFile(file: File) {
     setUploading(true);
+    setProgress(null);
     setError("");
-    const { res, data } = await apiUpload(file, folder);
+    const result = await uploadMedia(file, folder, (event) => setProgress(event));
     setUploading(false);
-    if (!res.ok || !data.ok || !data.url) {
-      setError(data.error ?? "Upload failed");
+    setProgress(null);
+    if (!result.ok) {
+      setError(result.error);
       return;
     }
-    onChange(data.url);
+    onChange(result.url);
   }
 
   function onFilePick(e: React.ChangeEvent<HTMLInputElement>) {
@@ -81,13 +85,23 @@ export function MediaUploadField({
             />
           )}
           <div className="admin-media-preview-actions">
-            <button type="button" className="admin-table-action" onClick={() => inputRef.current?.click()}>
+            <button type="button" className="admin-table-action" onClick={() => inputRef.current?.click()} disabled={uploading}>
               Replace
             </button>
-            <button type="button" className="admin-table-action" onClick={() => onChange("")}>
+            <button type="button" className="admin-table-action" onClick={() => onChange("")} disabled={uploading}>
               Remove
             </button>
           </div>
+          {uploading ? (
+            <div className="admin-media-preview-uploading">
+              <span>Uploading… {progress ? `${progress.percentage}%` : ""}</span>
+              {progress ? (
+                <div className="admin-upload-progress">
+                  <div className="admin-upload-progress-bar" style={{ width: `${progress.percentage}%` }} />
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
       ) : (
         <div
@@ -106,17 +120,36 @@ export function MediaUploadField({
           tabIndex={0}
         >
           {uploading ? (
-            <span className="admin-muted">Uploading…</span>
+            <div className="admin-upload-status">
+              <span className="admin-upload-title">
+                Uploading… {progress ? `${progress.percentage}%` : ""}
+              </span>
+              {progress ? (
+                <span className="admin-upload-sub">
+                  {formatFileSize(progress.loaded)} / {formatFileSize(progress.total)}
+                </span>
+              ) : null}
+            </div>
           ) : (
             <>
               <span className="admin-upload-title">
                 Drop {mode === "video" ? "video" : "image"} here or click to upload
               </span>
-              <span className="admin-upload-sub">JPG, PNG, WebP{mode !== "image" ? ", MP4" : ""}</span>
+              <span className="admin-upload-sub">
+                {mode === "video"
+                  ? "MP4 or WebM, max 80 MB — H.264, 720p recommended for faster upload"
+                  : "JPG, PNG, WebP"}
+              </span>
             </>
           )}
         </div>
       )}
+
+      {uploading && progress ? (
+        <div className="admin-upload-progress" aria-hidden="true">
+          <div className="admin-upload-progress-bar" style={{ width: `${progress.percentage}%` }} />
+        </div>
+      ) : null}
 
       <input
         ref={inputRef}
@@ -161,8 +194,8 @@ export function ImageListField({ label, value, onChange, folder }: ImageListFiel
     setError("");
     const added: string[] = [];
     for (const file of Array.from(files)) {
-      const { res, data } = await apiUpload(file, folder);
-      if (res.ok && data.ok && data.url) added.push(data.url);
+      const result = await uploadMedia(file, folder);
+      if (result.ok) added.push(result.url);
     }
     setUploading(false);
     if (added.length === 0) {
