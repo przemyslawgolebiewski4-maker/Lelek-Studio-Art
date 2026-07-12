@@ -13,6 +13,10 @@ Deploy this folder as a **separate Railway service**.
 
 Do **not** deploy the repo root — that is the Next.js frontend on Vercel.
 
+When Root Directory is `backend`, the working directory is already this folder.
+**Do not** use `cd backend` in build/start commands — Railway dashboard overrides
+with `cd backend` cause `No such file or directory`.
+
 ## Environment variables
 
 See `.env.example`. All secrets stay on Railway:
