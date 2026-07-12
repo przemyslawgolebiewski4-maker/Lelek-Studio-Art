@@ -11,10 +11,10 @@ API: **Railway** (`*.up.railway.app` or `api.lelekstudio.com`)
 
 | Variable | Value |
 |----------|-------|
-| `NEXT_PUBLIC_API_URL` | Railway public URL, np. `https://lelek-studio-api-production.up.railway.app` |
+| `NEXT_PUBLIC_API_URL` | Railway public URL, np. `https://twoj-serwis.up.railway.app` |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.lelekstudio.com` |
 
-**Redeploy** Vercel po zapisaniu.
+**Ważne:** `NEXT_PUBLIC_*` wchodzi w skład buildu. Po dodaniu lub zmianie → **Redeploy** (nie wystarczy sam zapis env).
 
 ### Railway → Variables
 
@@ -24,12 +24,21 @@ API: **Railway** (`*.up.railway.app` or `api.lelekstudio.com`)
 
 **Redeploy** Railway po zapisaniu.
 
-### Test
+### Test (wklej swój Railway URL)
 
 ```bash
 curl https://TWOJ-API.up.railway.app/health
 # → { "ok": true, "mongodb": "connected" }
 ```
+
+### Login failed / Check API URL
+
+Ten błąd = przeglądarka **nie dotarła** do Railway. Sprawdź:
+
+1. Vercel ma `NEXT_PUBLIC_API_URL` = dokładny URL z Railway → Settings → Networking
+2. Zrobiłeś **Redeploy Vercel** po dodaniu env
+3. W DevTools → Network → `POST .../auth/login` — jaki URL? Jeśli `localhost:3001` → brak env
+4. Railway ma `FRONTEND_URL=https://www.lelekstudio.com` (CORS)
 
 Otwórz stronę główną — po seedzie pojawią się **Featured Works** (3 produkty).
 
