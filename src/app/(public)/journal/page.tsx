@@ -19,16 +19,14 @@ export default async function JournalPage() {
   const [section, posts] = await Promise.all([getJournalSection(), getJournalPosts()]);
 
   return (
-    <section className="section-pad pt-28">
-      <div className="container-wide">
-        {section.eyebrow ? <p className="eyebrow mb-3">{section.eyebrow}</p> : null}
-        <h1 className="text-[var(--text-3xl)]">
+    <section className="section-pad page-top journal-sec">
+      <div className="container">
+        {section.eyebrow ? <div className="sec-tag">{section.eyebrow}</div> : null}
+        <h1>
           {section.heading}{" "}
-          {section.headingEm ? (
-            <span className="italic-serif text-rust">{section.headingEm}</span>
-          ) : null}
+          {section.headingEm ? <em className="text-terra not-italic">{section.headingEm}</em> : null}
         </h1>
-        {section.sub ? <p className="mt-4 max-w-xl text-metal">{section.sub}</p> : null}
+        {section.sub ? <p className="sec-intro mt-4">{section.sub}</p> : null}
         <JournalList posts={posts} />
       </div>
     </section>

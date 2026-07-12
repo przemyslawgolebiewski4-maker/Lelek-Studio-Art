@@ -7,30 +7,22 @@ export function ProductDetail({ product }: { product: Product }) {
   const [hero, ...rest] = product.images;
 
   return (
-    <article className="section-pad pt-28">
-      <div className="container-wide">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="cat-num mb-3">{product.catalog}</p>
-            <p className="eyebrow mb-2">{CATEGORY_LABELS[product.category]}</p>
-            <h1 className="text-[var(--text-3xl)] uppercase tracking-[-0.02em]">{product.title}</h1>
-            <p className="cat-num mt-3">{product.material}</p>
-          </div>
-          <Link href="/collections" className="btn-text">
-            ← All works
-          </Link>
-        </div>
+    <article className="section-pad page-top">
+      <div className="container">
+        <Link href="/collections" className="btn-line-dark mb-10 inline-flex">
+          ← All works
+        </Link>
 
-        <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-start">
+        <div className="process-grid">
           <div className="space-y-4">
             {hero ? (
-              <div className="relative aspect-[4/5] overflow-hidden border-[3px] border-ink">
+              <div className="process-img">
                 <Image
                   src={hero}
                   alt={product.metaDescription || product.title}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  sizes="(max-width: 900px) 100vw, 55vw"
                   priority
                 />
               </div>
@@ -38,37 +30,39 @@ export function ProductDetail({ product }: { product: Product }) {
             {rest.length > 0 ? (
               <div className="grid grid-cols-2 gap-4">
                 {rest.map((src) => (
-                  <div key={src} className="relative aspect-square overflow-hidden border border-ink/20">
-                    <Image src={src} alt={product.title} fill className="object-cover" sizes="30vw" />
+                  <div key={src} className="process-img !aspect-square">
+                    <Image src={src} alt={product.title} fill className="object-cover" sizes="25vw" />
                   </div>
                 ))}
               </div>
             ) : null}
           </div>
 
-          <div className="lg:sticky lg:top-28">
-            {product.description ? (
-              <p className="italic-serif text-lg text-metal">{product.description}</p>
-            ) : null}
+          <div className="process-text">
+            <div className="sec-tag">{CATEGORY_LABELS[product.category]}</div>
+            <h1>{product.title}</h1>
+            {product.material ? <p className="story-sig !mt-4 !opacity-100">{product.material}</p> : null}
+            {product.description ? <p>{product.description}</p> : null}
             {product.process ? (
-              <div className="mt-8 border-t border-sand pt-6">
-                <p className="eyebrow mb-2">Process</p>
-                <p className="text-sm leading-relaxed text-metal">{product.process}</p>
-              </div>
+              <>
+                <div className="divider" />
+                <p className="sec-tag">Process</p>
+                <p>{product.process}</p>
+              </>
             ) : null}
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-8">
               {product.etsyUrl ? (
                 <Link
                   href={product.etsyUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-primary"
+                  className="btn-line-terra inline-flex"
                 >
-                  Available on Etsy ↗
+                  Available on Etsy →
                 </Link>
               ) : (
-                <Link href="/contact" className="btn-primary">
-                  Inquire about this piece ↗
+                <Link href="/contact" className="btn-line-terra inline-flex">
+                  Inquire about this piece →
                 </Link>
               )}
             </div>

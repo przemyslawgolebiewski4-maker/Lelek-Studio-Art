@@ -33,47 +33,45 @@ export default function ContactForm() {
   }
 
   return (
-    <section className="section-pad pt-28">
+    <section className="section-pad page-top find-sec">
       <div className="container max-w-xl">
-        <p className="eyebrow mb-3">Contact</p>
-        <h1 className="text-[var(--text-3xl)]">Say something honest</h1>
-        <p className="mt-4 text-metal">
-          Questions about a piece, a commission, or collaboration - write directly.
+        <div className="sec-tag">Contact</div>
+        <h1>Say something honest</h1>
+        <p className="sec-intro mt-4">
+          Questions about a piece, a commission, or collaboration — write directly.
         </p>
 
         {status === "success" ? (
-          <p className="mt-8 border border-ink/10 bg-sand/20 p-4 text-sm">
-            Message sent. Thank you - we will reply soon.
-          </p>
+          <p className="story-body mt-10">Message sent. Thank you — we will reply soon.</p>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-10 grid gap-5">
-            {error ? <p className="text-sm text-rust">{error}</p> : null}
+          <form onSubmit={handleSubmit} className="form-panel grid gap-6">
+            {error ? <p className="text-sm text-terra">{error}</p> : null}
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Name</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Name</span>
               <input
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
               />
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Email</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Email</span>
               <input
                 type="email"
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
               />
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Type</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Type</span>
               <select
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.type}
                 onChange={(e) =>
                   setForm({ ...form, type: e.target.value as "general" | "architect" })
@@ -84,20 +82,20 @@ export default function ContactForm() {
               </select>
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Subject</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Subject</span>
               <input
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.subject}
                 onChange={(e) => setForm({ ...form, subject: e.target.value })}
               />
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Message</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Message</span>
               <textarea
                 rows={6}
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input resize-none"
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 required
@@ -107,9 +105,9 @@ export default function ContactForm() {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="btn-primary w-fit disabled:opacity-60"
+              className="btn-line-terra w-fit disabled:opacity-60"
             >
-              {status === "loading" ? "Sending..." : "Send message"}
+              {status === "loading" ? "Sending..." : "Send message →"}
             </button>
           </form>
         )}

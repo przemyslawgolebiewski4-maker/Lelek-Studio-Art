@@ -43,31 +43,31 @@ export function ArchitectInquiryForm() {
   }
 
   return (
-    <div className="mt-12 border border-ink/10 bg-sand/10 p-6 md:p-8">
+    <>
       {status === "success" ? (
-        <p className="border border-ink/10 bg-cream p-4 text-sm">
+        <p className="story-body">
           Thank you — your inquiry has been sent. We will reply within a few business days.
         </p>
       ) : (
-        <form onSubmit={handleSubmit} className="grid gap-5">
-          {error ? <p className="text-sm text-rust">{error}</p> : null}
+        <form onSubmit={handleSubmit} className="grid gap-6">
+          {error ? <p className="text-sm text-terra">{error}</p> : null}
 
-          <div className="grid gap-5 md:grid-cols-2">
-            <label className="block">
-              <span className="eyebrow mb-2 block">Name</span>
+          <div className="grid gap-6 md:grid-cols-2">
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Name</span>
               <input
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 required
               />
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Email</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Email</span>
               <input
                 type="email"
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
@@ -75,20 +75,20 @@ export function ArchitectInquiryForm() {
             </label>
           </div>
 
-          <div className="grid gap-5 md:grid-cols-2">
-            <label className="block">
-              <span className="eyebrow mb-2 block">Company / Studio</span>
+          <div className="grid gap-6 md:grid-cols-2">
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Company / Studio</span>
               <input
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.company}
                 onChange={(e) => setForm({ ...form, company: e.target.value })}
               />
             </label>
 
-            <label className="block">
-              <span className="eyebrow mb-2 block">Project type</span>
+            <label className="form-field">
+              <span className="sec-tag !opacity-100">Project type</span>
               <select
-                className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+                className="form-input"
                 value={form.projectType}
                 onChange={(e) => setForm({ ...form, projectType: e.target.value })}
               >
@@ -102,21 +102,21 @@ export function ArchitectInquiryForm() {
             </label>
           </div>
 
-          <label className="block">
-            <span className="eyebrow mb-2 block">Subject</span>
+          <label className="form-field">
+            <span className="sec-tag !opacity-100">Subject</span>
             <input
-              className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+              className="form-input"
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
               placeholder="Wall objects for a hotel lobby"
             />
           </label>
 
-          <label className="block">
-            <span className="eyebrow mb-2 block">Project details</span>
+          <label className="form-field">
+            <span className="sec-tag !opacity-100">Project details</span>
             <textarea
               rows={6}
-              className="w-full border border-ink/20 bg-cream px-3 py-2 outline-none focus:border-rust"
+              className="form-input resize-none"
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               placeholder="Timeline, dimensions, quantity, location..."
@@ -127,12 +127,12 @@ export function ArchitectInquiryForm() {
           <button
             type="submit"
             disabled={status === "loading"}
-            className="btn-primary w-fit disabled:opacity-60"
+            className="btn-line-terra w-fit disabled:opacity-60"
           >
-            {status === "loading" ? "Sending..." : "Send inquiry"}
+            {status === "loading" ? "Sending..." : "Send inquiry →"}
           </button>
         </form>
       )}
-    </div>
+    </>
   );
 }
