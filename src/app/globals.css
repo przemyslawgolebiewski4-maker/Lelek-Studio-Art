@@ -747,8 +747,11 @@ button:hover:not(:disabled),
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  gap: 24px;
   padding: 48px 40px 32px;
   border-bottom: 3px solid var(--B);
+  position: relative;
+  z-index: 2;
 }
 
 .works-h2 {
@@ -757,6 +760,8 @@ button:hover:not(:disabled),
   font-weight: 400;
   line-height: 0.95;
   color: var(--B);
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .works-h2 em {
@@ -772,6 +777,13 @@ button:hover:not(:disabled),
   text-decoration: none;
   border-bottom: 2px solid var(--B);
   padding-bottom: 2px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 3;
+  min-height: 44px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .works-cta:hover {
@@ -848,6 +860,7 @@ button:hover:not(:disabled),
 
 .wg:hover .wg-ov {
   opacity: 1;
+  pointer-events: auto;
 }
 
 .wg-ov {
@@ -860,6 +873,7 @@ button:hover:not(:disabled),
   justify-content: flex-end;
   padding: 16px;
   z-index: 2;
+  pointer-events: none;
 }
 
 .wg-t {
@@ -1793,6 +1807,29 @@ textarea.form-inp {
   .works-grid {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: auto;
+  }
+
+  .works-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding-top: 32px;
+    padding-bottom: 24px;
+  }
+
+  .works-h2 {
+    width: 100%;
+  }
+
+  .works-cta {
+    font-size: 10px;
+    min-height: 48px;
+    padding: 8px 0;
+  }
+
+  .wg-ph {
+    min-height: 180px;
+    aspect-ratio: 4 / 5;
   }
 
   .wg.tall {
