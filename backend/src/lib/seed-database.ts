@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { connectDB } from "./db";
-import { HomeSection, Product, Setting } from "../models";
+import { HomeSection, Product, Setting, JournalPost } from "../models";
 
 type HomeSectionKey =
   | "hero"
@@ -47,6 +47,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
         products: existingProducts,
         settings: await Setting.countDocuments(),
         homeSections: await HomeSection.countDocuments(),
+        journalPosts: await JournalPost.countDocuments(),
       },
     };
   }
@@ -102,10 +103,12 @@ export async function seedDatabase(options?: { force?: boolean }) {
         headingEm: legacy.story.headingEm,
         body1: legacy.story.body1,
         body2: legacy.story.body2,
+        body3: legacy.story.body3,
         signature: legacy.story.signature,
         image: legacy.story.image,
         imageMobile: legacy.story.imageMobile,
         imageAlt: legacy.story.imageAlt,
+        imageCaption: legacy.story.imageCaption,
       },
     },
     {
@@ -117,10 +120,22 @@ export async function seedDatabase(options?: { force?: boolean }) {
       sectionKey: "architects",
       order: 4,
       content: {
+        eyebrow: "For architects & designers",
         headline: "Looking for something made by hand, not manufactured?",
         sub: "Ceramics for residential, hospitality, and concept stores.",
+        body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
         ctaText: "Get in touch",
         ctaUrl: "/for-architects",
+      },
+    },
+    {
+      sectionKey: "journal",
+      order: 5,
+      content: {
+        eyebrow: "Journal",
+        heading: "Stories from",
+        headingEm: "the studio",
+        sub: "Notes on process, material and making in Berlin.",
       },
     },
     {
@@ -175,6 +190,35 @@ export async function seedDatabase(options?: { force?: boolean }) {
     );
   }
 
+  const journalPosts = [
+    {
+      slug: "first-firing-notes",
+      title: "First firing notes",
+      excerpt: "What happens when you stop planning and let the kiln decide.",
+      body: "## Slow process\n\nEach batch is small. The glaze never lands exactly where you expect — and that is the point.\n\nI work in short sessions at Clay Stories Berlin, trimming and glazing between other commitments. The pieces that survive the first firing often surprise me most.",
+      coverImage: "/images/process/studio.jpg",
+      metaTitle: "First firing notes | Lelek Studio Journal",
+      metaDescription: "Notes from the first kiln opening at Clay Stories Berlin.",
+      published: true,
+      order: 0,
+    },
+    {
+      slug: "on-handbuilding",
+      title: "On handbuilding",
+      excerpt: "Wall objects shaped without the wheel — form emerging from clay.",
+      body: "## Intuitive handbuilding\n\nWall objects start differently from cups and bowls. No wheel — just hands, clay, and time.\n\nEach piece grows slowly. I rarely sketch first. The material suggests what it wants to become.",
+      coverImage: "/images/wall/wall-1.jpg",
+      metaTitle: "On handbuilding | Lelek Studio Journal",
+      metaDescription: "How wall objects are built at Lelek Studio Berlin.",
+      published: true,
+      order: 1,
+    },
+  ];
+
+  for (const post of journalPosts) {
+    await JournalPost.findOneAndUpdate({ slug: post.slug }, { $set: post }, { upsert: true });
+  }
+
   return {
     skipped: false,
     message: "Seed complete.",
@@ -182,6 +226,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
       products: await Product.countDocuments(),
       settings: await Setting.countDocuments(),
       homeSections: await HomeSection.countDocuments(),
+      journalPosts: await JournalPost.countDocuments(),
     },
   };
 }

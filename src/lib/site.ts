@@ -1,5 +1,12 @@
 import { serverFetch } from "@/lib/api-server";
 import type { Product } from "@/types/product";
+import type {
+  ArchitectsSection,
+  JournalPost,
+  JournalPostSummary,
+  JournalSection,
+  StorySection,
+} from "@/types/content";
 
 export type HomeSectionKey =
   | "hero"
@@ -48,6 +55,61 @@ export async function getPublishedProducts(limit = 50): Promise<Product[]> {
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   return serverFetch<Product | null>(`/products/public/${encodeURIComponent(slug)}`, {
+    fallback: null,
+  });
+}
+
+export const DEFAULT_STORY: StorySection = {
+  eyebrow: "The story",
+  heading: "From peatlands",
+  headingEm: "to clay",
+  body1:
+    "As a small boy I always followed the pull of nature - that was where I felt safe.",
+  body2:
+    "Not far from my family home stretched wide peatlands, home to different animals and the sounds of nature.",
+  body3:
+    "I am self-taught. I work intuitively, whether painting or working with clay.",
+  signature: "Przemyslaw Golebiewski - ceramist",
+  image: "/images/process/studio.jpg",
+  imageMobile: "/images/process/studio-mobile.jpg",
+  imageAlt: "Przemyslaw Golebiewski at the wheel, Clay Stories Berlin",
+  imageCaption: "Clay Stories Berlin",
+};
+
+export const DEFAULT_ARCHITECTS: ArchitectsSection = {
+  eyebrow: "For architects & designers",
+  headline: "Looking for something made by hand, not manufactured?",
+  sub: "Ceramics for residential, hospitality, and concept stores.",
+  body: "Wall objects, vessels and functional pieces for contemporary interiors.",
+  ctaText: "Get in touch",
+  ctaUrl: "/for-architects",
+};
+
+export async function getStorySection(): Promise<StorySection> {
+  return serverFetch<StorySection>("/sections/story", { fallback: DEFAULT_STORY });
+}
+
+export async function getArchitectsSection(): Promise<ArchitectsSection> {
+  return serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS });
+}
+
+export async function getJournalSection(): Promise<JournalSection> {
+  return serverFetch<JournalSection>("/sections/journal", {
+    fallback: {
+      eyebrow: "Journal",
+      heading: "Stories from",
+      headingEm: "the studio",
+      sub: "Notes on process, material and making in Berlin.",
+    },
+  });
+}
+
+export async function getJournalPosts(): Promise<JournalPostSummary[]> {
+  return serverFetch<JournalPostSummary[]>("/journal/public", { fallback: [] });
+}
+
+export async function getJournalPostBySlug(slug: string): Promise<JournalPost | null> {
+  return serverFetch<JournalPost | null>(`/journal/public/${encodeURIComponent(slug)}`, {
     fallback: null,
   });
 }

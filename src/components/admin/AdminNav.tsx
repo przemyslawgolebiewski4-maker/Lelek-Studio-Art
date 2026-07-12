@@ -7,6 +7,9 @@ import { apiPost } from "@/lib/api";
 const nav = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
+  { href: "/admin/journal", label: "Journal" },
+  { href: "/admin/home", label: "Home" },
+  { href: "/admin/settings", label: "Settings" },
   { href: "/admin/messages", label: "Messages" },
 ];
 

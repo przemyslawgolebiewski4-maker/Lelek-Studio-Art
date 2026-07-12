@@ -7,6 +7,8 @@ const MessageSchema = new Schema(
     subject: { type: String, default: "" },
     message: { type: String, required: true },
     type: { type: String, enum: ["general", "architect", "custom-order"], default: "general" },
+    company: { type: String, default: "" },
+    projectType: { type: String, default: "" },
     read: { type: Boolean, default: false },
   },
   { collection: "messages", timestamps: true },

@@ -1,0 +1,50 @@
+export interface JournalPost {
+  _id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  body?: string;
+  coverImage: string;
+  metaTitle: string;
+  metaDescription: string;
+  published: boolean;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type JournalPostSummary = Omit<JournalPost, "body">;
+
+export interface HomeSectionContent {
+  [key: string]: unknown;
+}
+
+export interface StorySection {
+  eyebrow?: string;
+  heading?: string;
+  headingEm?: string;
+  body1?: string;
+  body2?: string;
+  body3?: string;
+  signature?: string;
+  image?: string;
+  imageMobile?: string;
+  imageAlt?: string;
+  imageCaption?: string;
+}
+
+export interface ArchitectsSection {
+  eyebrow?: string;
+  headline?: string;
+  sub?: string;
+  body?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+export interface JournalSection {
+  eyebrow?: string;
+  heading?: string;
+  headingEm?: string;
+  sub?: string;
+}

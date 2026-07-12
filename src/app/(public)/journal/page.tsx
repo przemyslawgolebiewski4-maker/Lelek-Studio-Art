@@ -1,13 +1,36 @@
 import type { Metadata } from "next";
-import PlaceholderPage from "@/components/public/PlaceholderPage";
+import { JournalList } from "@/components/public/JournalList";
+import { getJournalPosts, getJournalSection } from "@/lib/site";
+import { SITE_URL } from "@/lib/config";
 
-export const metadata: Metadata = { title: "Journal" };
+export async function generateMetadata(): Promise<Metadata> {
+  const section = await getJournalSection();
+  const title = [section.heading, section.headingEm].filter(Boolean).join(" ");
+  return {
+    title: title || "Journal",
+    description: section.sub,
+    alternates: { canonical: `${SITE_URL}/journal` },
+  };
+}
 
-export default function JournalPage() {
+export const revalidate = 60;
+
+export default async function JournalPage() {
+  const [section, posts] = await Promise.all([getJournalSection(), getJournalPosts()]);
+
   return (
-    <PlaceholderPage
-      title="Stories from the studio"
-      description="Journal listing and markdown posts - Sprint 5-7."
-    />
+    <section className="section-pad pt-28">
+      <div className="container-wide">
+        {section.eyebrow ? <p className="eyebrow mb-3">{section.eyebrow}</p> : null}
+        <h1 className="text-[var(--text-3xl)]">
+          {section.heading}{" "}
+          {section.headingEm ? (
+            <span className="italic-serif text-rust">{section.headingEm}</span>
+          ) : null}
+        </h1>
+        {section.sub ? <p className="mt-4 max-w-xl text-metal">{section.sub}</p> : null}
+        <JournalList posts={posts} />
+      </div>
+    </section>
   );
 }

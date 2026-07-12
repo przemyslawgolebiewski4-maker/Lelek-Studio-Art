@@ -10,6 +10,8 @@ type MessageRow = {
   email: string;
   subject: string;
   message: string;
+  company?: string;
+  projectType?: string;
   type: "general" | "architect" | "custom-order";
   read: boolean;
   createdAt: string;
@@ -117,6 +119,16 @@ export default function AdminMessagesPage() {
               {selected.subject ? (
                 <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
                   Subject: {selected.subject}
+                </p>
+              ) : null}
+              {selected.company ? (
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
+                  Company: {selected.company}
+                </p>
+              ) : null}
+              {selected.projectType ? (
+                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
+                  Project: {selected.projectType}
                 </p>
               ) : null}
               <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-sand">

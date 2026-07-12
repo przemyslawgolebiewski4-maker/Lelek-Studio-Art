@@ -8,6 +8,7 @@ import { productsPublicRouter, productsAdminRouter } from "./routes/products";
 import messagesRouter from "./routes/messages";
 import contactRouter from "./routes/contact";
 import { settingsPublicRouter, settingsAdminRouter } from "./routes/settings";
+import { journalPublicRouter, journalAdminRouter } from "./routes/journal";
 import setupRouter from "./routes/setup";
 
 const app = express();
@@ -46,10 +47,12 @@ app.get("/health", async (_req, res) => {
 
 app.use(productsPublicRouter);
 app.use(settingsPublicRouter);
+app.use(journalPublicRouter);
 app.use("/auth", authRouter);
 app.use("/admin", productsAdminRouter);
 app.use("/admin", messagesRouter);
 app.use("/admin", settingsAdminRouter);
+app.use("/admin", journalAdminRouter);
 app.use("/contact", contactRouter);
 app.use("/setup", setupRouter);
 

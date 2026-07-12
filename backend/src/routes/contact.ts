@@ -16,6 +16,8 @@ router.post("/", async (req, res) => {
     const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
     const subject = typeof req.body.subject === "string" ? req.body.subject.trim() : "";
     const message = typeof req.body.message === "string" ? req.body.message.trim() : "";
+    const company = typeof req.body.company === "string" ? req.body.company.trim() : "";
+    const projectType = typeof req.body.projectType === "string" ? req.body.projectType.trim() : "";
     const type =
       req.body.type === "architect" || req.body.type === "custom-order"
         ? req.body.type
@@ -27,7 +29,7 @@ router.post("/", async (req, res) => {
     }
 
     await connectDB();
-    await Message.create({ name, email, subject, message, type });
+    await Message.create({ name, email, subject, message, type, company, projectType });
 
     const resendKey = process.env.RESEND_KEY;
     const adminEmail = process.env.ADMIN_EMAIL;
@@ -44,6 +46,8 @@ router.post("/", async (req, res) => {
               New message from lelekstudio.com
             </h2>
             <p><strong>Type:</strong> ${type}</p>
+            ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}
+            ${projectType ? `<p><strong>Project type:</strong> ${projectType}</p>` : ""}
             <p><strong>Name:</strong> ${name}</p>
             <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
             <p><strong>Subject:</strong> ${subject || "-"}</p>
