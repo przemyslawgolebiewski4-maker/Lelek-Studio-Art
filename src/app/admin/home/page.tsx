@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   AdminShell,
   AdminCard,
   AdminButton,
-  AdminInput,
-  AdminTextarea,
 } from "@/components/admin/AdminShell";
+import {
+  HeroSectionEditor,
+  StorySectionEditor,
+  ElementsSectionEditor,
+  TextSectionEditor,
+  FindSectionEditor,
+} from "@/components/admin/home/HomeSectionEditors";
 import { apiGet, apiPatch } from "@/lib/api";
 import type { HomeSectionKey } from "@/lib/site";
 
@@ -19,45 +25,30 @@ type SectionRow = {
   content: Record<string, string | unknown>;
 };
 
-const SECTION_HINTS: Partial<Record<HomeSectionKey, string>> = {
-  hero: "Optional looped video: add video + videoMobile (MP4 URL or /videos/hero.mp4). Poster falls back to image.",
-  story: "Optional looped video for the story block: video + videoMobile. Leave empty to use still images.",
-};
-
 const SECTION_LABELS: Record<HomeSectionKey, string> = {
   hero: "Hero",
-  story: "Story / About",
+  story: "Story",
   elements: "Elements",
-  featured: "Featured",
-  architects: "Architects CTA",
+  featured: "Featured works",
+  architects: "Architects",
   journal: "Journal teaser",
   find: "Find us",
 };
 
-function contentToFields(content: Record<string, unknown>): { key: string; value: string }[] {
-  return Object.entries(content).map(([key, value]) => ({
-    key,
-    value: typeof value === "string" ? value : JSON.stringify(value, null, 2),
-  }));
-}
-
-function fieldsToContent(fields: { key: string; value: string }[]): Record<string, unknown> {
-  const content: Record<string, unknown> = {};
-  for (const { key, value } of fields) {
-    if (!key.trim()) continue;
-    try {
-      content[key.trim()] = JSON.parse(value);
-    } catch {
-      content[key.trim()] = value;
-    }
-  }
-  return content;
-}
+const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
+  hero: "First screen — upload photo or short loop video, edit headline and buttons.",
+  story: "Section below hero — studio story with image or video.",
+  elements: "Earth · Water · Fire · Air labels.",
+  featured: "Works grid heading (products come from Products admin).",
+  architects: "B2B call-to-action block.",
+  journal: "Journal teaser heading (posts from Journal admin).",
+  find: "Studio address and Etsy links.",
+};
 
 export default function AdminHomePage() {
   const [sections, setSections] = useState<SectionRow[]>([]);
-  const [selectedKey, setSelectedKey] = useState<HomeSectionKey | null>(null);
-  const [fields, setFields] = useState<{ key: string; value: string }[]>([]);
+  const [selectedKey, setSelectedKey] = useState<HomeSectionKey>("hero");
+  const [draft, setDraft] = useState<Record<string, unknown>>({});
   const [visible, setVisible] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -81,25 +72,20 @@ export default function AdminHomePage() {
     loadSections();
   }, []);
 
-  function selectSection(section: SectionRow) {
-    setSelectedKey(section.sectionKey);
+  useEffect(() => {
+    const section = sections.find((s) => s.sectionKey === selectedKey);
+    if (!section) return;
+    setDraft(section.content as Record<string, unknown>);
     setVisible(section.visible);
-    setFields(contentToFields(section.content as Record<string, unknown>));
     setSaved(false);
     setError("");
-  }
-
-  function updateField(index: number, part: "key" | "value", value: string) {
-    setFields((prev) => prev.map((f, i) => (i === index ? { ...f, [part]: value } : f)));
-    setSaved(false);
-  }
+  }, [selectedKey, sections]);
 
   async function saveSection() {
     if (!selectedKey) return;
     setSaving(true);
     setError("");
-    const content = fieldsToContent(fields);
-    const res = await apiPatch(`/admin/sections/${selectedKey}`, { content, visible });
+    const res = await apiPatch(`/admin/sections/${selectedKey}`, { content: draft, visible });
     const data = await res.json();
     setSaving(false);
     if (!res.ok || !data.ok) {
@@ -110,90 +96,135 @@ export default function AdminHomePage() {
     await loadSections();
   }
 
-  const selected = sections.find((s) => s.sectionKey === selectedKey) ?? null;
+  function renderEditor() {
+    const onChange = (next: Record<string, unknown>) => {
+      setDraft(next);
+      setSaved(false);
+    };
+
+    switch (selectedKey) {
+      case "hero":
+        return <HeroSectionEditor content={draft} onChange={onChange} />;
+      case "story":
+        return <StorySectionEditor content={draft} onChange={onChange} />;
+      case "elements":
+        return <ElementsSectionEditor content={draft} onChange={onChange} />;
+      case "featured":
+        return (
+          <TextSectionEditor
+            content={draft}
+            onChange={onChange}
+            description={SECTION_DESCRIPTIONS.featured}
+            fields={[
+              { key: "eyebrow", label: "Eyebrow" },
+              { key: "heading", label: "Heading line 1" },
+              { key: "headingEm", label: "Heading line 2 (italic)" },
+            ]}
+          />
+        );
+      case "architects":
+        return (
+          <TextSectionEditor
+            content={draft}
+            onChange={onChange}
+            description={SECTION_DESCRIPTIONS.architects}
+            fields={[
+              { key: "eyebrow", label: "Eyebrow" },
+              { key: "headline", label: "Headline" },
+              { key: "sub", label: "Subtext", multiline: true },
+              { key: "body", label: "Body", multiline: true },
+              { key: "ctaText", label: "Button text" },
+              { key: "ctaUrl", label: "Button link", hint: "e.g. /for-architects" },
+            ]}
+          />
+        );
+      case "journal":
+        return (
+          <TextSectionEditor
+            content={draft}
+            onChange={onChange}
+            description={SECTION_DESCRIPTIONS.journal}
+            fields={[
+              { key: "eyebrow", label: "Eyebrow" },
+              { key: "heading", label: "Heading" },
+              { key: "headingEm", label: "Heading emphasis" },
+              { key: "sub", label: "Intro", multiline: true },
+            ]}
+          />
+        );
+      case "find":
+        return <FindSectionEditor content={draft} onChange={onChange} />;
+      default:
+        return null;
+    }
+  }
 
   return (
-    <AdminShell title="Home sections" subtitle="Edit homepage blocks — fields map 1:1 to public site components.">
+    <AdminShell
+      title="Homepage"
+      subtitle="Edit each section with live fields — upload images and videos directly."
+      actions={
+        <Link href="/" target="_blank" className="admin-btn ghost">
+          Preview site ↗
+        </Link>
+      }
+    >
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="admin-grid-sidebar">
-        <div>
-          {sections.map((section) => (
-            <button
-              key={section.sectionKey}
-              type="button"
-              onClick={() => selectSection(section)}
-              className={`admin-list-item ${
-                selectedKey === section.sectionKey ? "is-active" : ""
-              }`}
-            >
-              <p className="admin-list-item-title">{SECTION_LABELS[section.sectionKey]}</p>
-              <p className="admin-list-item-meta">
-                {section.sectionKey} · {section.visible ? "visible" : "hidden"}
-              </p>
-            </button>
-          ))}
-        </div>
+      <div className="admin-home-layout">
+        <nav className="admin-section-nav" aria-label="Homepage sections">
+          {(Object.keys(SECTION_LABELS) as HomeSectionKey[]).map((key) => {
+            const section = sections.find((s) => s.sectionKey === key);
+            return (
+              <button
+                key={key}
+                type="button"
+                className={`admin-section-tab ${selectedKey === key ? "is-active" : ""}`}
+                onClick={() => setSelectedKey(key)}
+              >
+                <span className="admin-section-tab-label">{SECTION_LABELS[key]}</span>
+                {section && !section.visible ? (
+                  <span className="admin-section-tab-meta">hidden</span>
+                ) : null}
+              </button>
+            );
+          })}
+        </nav>
 
         <AdminCard>
-          {selected ? (
-            <div className="admin-form-stack-lg">
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
-                <h2 className="admin-panel-title" style={{ margin: 0, border: "none", padding: 0 }}>
-                  {SECTION_LABELS[selected.sectionKey]}
-                </h2>
-                <label className="admin-checkbox">
-                  <input
-                    type="checkbox"
-                    checked={visible}
-                    onChange={(e) => {
-                      setVisible(e.target.checked);
-                      setSaved(false);
-                    }}
-                  />
-                  Visible on site
-                </label>
-              </div>
-
-              {SECTION_HINTS[selected.sectionKey] ? (
-                <p className="admin-muted">{SECTION_HINTS[selected.sectionKey]}</p>
+          <div className="admin-section-toolbar">
+            <div>
+              <h2 className="admin-panel-title" style={{ margin: 0, border: "none", padding: 0 }}>
+                {SECTION_LABELS[selectedKey]}
+              </h2>
+              {SECTION_DESCRIPTIONS[selectedKey] ? (
+                <p className="admin-muted" style={{ marginTop: 8 }}>
+                  {SECTION_DESCRIPTIONS[selectedKey]}
+                </p>
               ) : null}
-
-              {fields.map((field, index) => (
-                <div key={index} className="admin-field-row">
-                  <AdminInput
-                    label="Field"
-                    value={field.key}
-                    onChange={(e) => updateField(index, "key", e.target.value)}
-                  />
-                  <AdminTextarea
-                    label="Value"
-                    rows={field.value.includes("\n") ? 4 : 2}
-                    value={field.value}
-                    onChange={(e) => updateField(index, "value", e.target.value)}
-                  />
-                </div>
-              ))}
-
-              <button
-                type="button"
-                onClick={() => setFields((prev) => [...prev, { key: "", value: "" }])}
-                className="admin-add-field"
-              >
-                + Add field
-              </button>
-
-              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                <AdminButton onClick={saveSection} disabled={saving} className="filled">
-                  {saving ? "Saving..." : "Save section"}
-                </AdminButton>
-                {saved ? <span className="admin-success">Saved</span> : null}
-              </div>
             </div>
-          ) : (
-            <p className="admin-muted">Select a section to edit.</p>
-          )}
+            <label className="admin-checkbox">
+              <input
+                type="checkbox"
+                checked={visible}
+                onChange={(e) => {
+                  setVisible(e.target.checked);
+                  setSaved(false);
+                }}
+              />
+              Visible on site
+            </label>
+          </div>
+
+          {renderEditor()}
+
+          <div className="admin-save-bar">
+            <AdminButton onClick={saveSection} disabled={saving} className="filled">
+              {saving ? "Saving..." : "Save section"}
+            </AdminButton>
+            {saved ? <span className="admin-success">Saved — changes live after revalidate (~1 min)</span> : null}
+          </div>
         </AdminCard>
       </div>
     </AdminShell>

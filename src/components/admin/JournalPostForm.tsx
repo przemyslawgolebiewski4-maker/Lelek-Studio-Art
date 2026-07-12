@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
+import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { apiPatch, apiPost } from "@/lib/api";
 import type { JournalPost } from "@/types/content";
 
@@ -97,10 +98,11 @@ export function JournalPostForm({
         onChange={(e) => setForm({ ...form, body: e.target.value })}
       />
 
-      <AdminInput
-        label="Cover image URL"
+      <MediaUploadField
+        label="Cover image"
         value={form.coverImage}
-        onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
+        onChange={(v) => setForm({ ...form, coverImage: v })}
+        folder="journal"
       />
 
       <div className="admin-form-row-2">

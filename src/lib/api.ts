@@ -33,6 +33,21 @@ export async function apiDelete(path: string) {
   return apiGet(path, { method: "DELETE" });
 }
 
+export async function apiUpload(file: File, folder: string) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("folder", folder);
+
+  const res = await fetch("/api/admin/upload", {
+    method: "POST",
+    body: formData,
+    credentials: "include",
+  });
+
+  const data = await res.json();
+  return { res, data: data as { ok?: boolean; url?: string; error?: string } };
+}
+
 /** Direct Railway URL — for login (before session cookie exists) */
 export async function apiPostDirect(path: string, body: unknown) {
   const base = process.env.NEXT_PUBLIC_API_URL?.trim();

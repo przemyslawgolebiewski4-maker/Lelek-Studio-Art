@@ -10,6 +10,7 @@ import {
   AdminSelect,
   AdminTextarea,
 } from "@/components/admin/AdminShell";
+import { ImageListField } from "@/components/admin/MediaUploadField";
 
 export type ProductFormData = {
   slug: string;
@@ -165,11 +166,11 @@ export function ProductForm({
         onChange={(e) => update("etsyUrl", e.target.value)}
       />
 
-      <AdminTextarea
-        label="Images (one URL per line)"
-        rows={4}
+      <ImageListField
+        label="Product gallery"
         value={form.images}
-        onChange={(e) => update("images", e.target.value)}
+        onChange={(v) => update("images", v)}
+        folder="products"
       />
 
       <div className="admin-form-row-2">
