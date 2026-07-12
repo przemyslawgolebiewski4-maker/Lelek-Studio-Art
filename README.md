@@ -44,10 +44,14 @@ npm run db:seed
 
 ### Vercel (frontend only)
 
+Node.js **24.x** (from `package.json` engines / `.node-version`).
+
 | Variable | Required | Example |
 |----------|----------|---------|
 | `NEXT_PUBLIC_API_URL` | Yes | `https://api.lelekstudio.com` |
 | `NEXT_PUBLIC_SITE_URL` | Yes | `https://www.lelekstudio.com` |
+
+Build completes without API (footer/hero fallbacks). Set `NEXT_PUBLIC_API_URL` for live CMS data at runtime.
 
 **Usuń z Vercel** (jeśli są): `DATABASE_URL`, `JWT_SECRET`, `RESEND_KEY`, `SETUP_SECRET`, `ADMIN_EMAIL`.
 

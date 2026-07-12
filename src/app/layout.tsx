@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/config";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.lelekstudio.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Lelek Studio Berlin",
     template: "%s | Lelek Studio Berlin",

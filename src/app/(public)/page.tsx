@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Hero } from "@/components/public/Hero";
 import { FeaturedWorks } from "@/components/public/FeaturedWorks";
-import { getPublicHomeData } from "@/lib/site";
-import Link from "next/link";
+import { DEFAULT_HERO, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Lelek Studio Berlin - Shaped by hand, guided by instinct",
@@ -10,33 +10,14 @@ export const metadata: Metadata = {
     "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.",
 };
 
-export default async function HomePage() {
-  let hero: Record<string, string> = {};
-  let featured: Awaited<ReturnType<typeof getPublicHomeData>>["featured"] = [];
+export const revalidate = 60;
 
-  try {
-    const data = await getPublicHomeData();
-    hero = data.hero;
-    featured = data.featured;
-  } catch {
-    hero = {
-      eyebrow: "Handmade in Berlin - Ceramic Studio",
-      headline: "Shaped by hand,",
-      headlineEm: "guided by instinct",
-      subheadline:
-        "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
-      image: "/images/hero/hero-main.jpg",
-      imageMobile: "/images/hero/hero-main-mobile.jpg",
-      cta1Text: "View works",
-      cta1Url: "/collections",
-      cta2Text: "My story",
-      cta2Url: "/about",
-    };
-  }
+export default async function HomePage() {
+  const { hero, featured } = await getPublicHomeData();
 
   return (
     <>
-      <Hero content={hero} />
+      <Hero content={Object.keys(hero).length > 0 ? hero : DEFAULT_HERO} />
 
       <section className="section-pad">
         <div className="container grid gap-10 md:grid-cols-2 md:items-center">

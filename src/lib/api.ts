@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+import { API_BASE } from "@/lib/config";
 
 export async function apiGet(path: string, options?: RequestInit) {
   const res = await fetch(`${API_BASE}${path}`, {

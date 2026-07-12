@@ -1,3 +1,6 @@
+import { serverFetch } from "@/lib/api-server";
+import type { Product } from "@/types/product";
+
 export type HomeSectionKey =
   | "hero"
   | "story"
@@ -7,42 +10,34 @@ export type HomeSectionKey =
   | "journal"
   | "find";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+export const DEFAULT_HERO: Record<string, string> = {
+  eyebrow: "Handmade in Berlin - Ceramic Studio",
+  headline: "Shaped by hand,",
+  headlineEm: "guided by instinct",
+  subheadline:
+    "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
+  image: "/images/hero/hero-main.jpg",
+  imageMobile: "/images/hero/hero-main-mobile.jpg",
+  cta1Text: "View works",
+  cta1Url: "/collections",
+  cta2Text: "My story",
+  cta2Url: "/about",
+};
 
-export async function getSiteSettings() {
-  try {
-    const res = await fetch(`${API_URL}/settings/public`, { next: { revalidate: 60 } });
-    if (!res.ok) return {};
-    return res.json();
-  } catch {
-    return {};
-  }
+export async function getSiteSettings(): Promise<Record<string, string>> {
+  return serverFetch("/settings/public", { fallback: {} });
 }
 
 export async function getPublicHomeData() {
-  try {
-    const [settingsRes, featuredRes, heroRes] = await Promise.all([
-      fetch(`${API_URL}/settings/public`, { next: { revalidate: 60 } }),
-      fetch(`${API_URL}/products/public?limit=6`, { next: { revalidate: 60 } }),
-      fetch(`${API_URL}/sections/hero`, { next: { revalidate: 60 } }),
-    ]);
-    const settings = settingsRes.ok ? await settingsRes.json() : {};
-    const featured = featuredRes.ok ? await featuredRes.json() : [];
-    const hero = heroRes.ok ? await heroRes.json() : {};
-    return { settings, hero, featured };
-  } catch {
-    return { settings: {}, hero: {}, featured: [] };
-  }
+  const [settings, featured, hero] = await Promise.all([
+    serverFetch<Record<string, string>>("/settings/public", { fallback: {} }),
+    serverFetch<Product[]>("/products/public?limit=6", { fallback: [] }),
+    serverFetch<Record<string, string>>("/sections/hero", { fallback: DEFAULT_HERO }),
+  ]);
+
+  return { settings, hero, featured };
 }
 
-export async function getFeaturedProducts(limit = 3) {
-  try {
-    const res = await fetch(`${API_URL}/products/public?limit=${limit}`, {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return [];
-    return res.json();
-  } catch {
-    return [];
-  }
+export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
+  return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
 }
