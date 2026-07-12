@@ -7,65 +7,69 @@ export function ProductDetail({ product }: { product: Product }) {
   const [hero, ...rest] = product.images;
 
   return (
-    <article className="section-pad page-top">
-      <div className="container">
-        <Link href="/collections" className="btn-line-dark mb-10 inline-flex">
+    <article>
+      <div className="page-shell">
+        <Link href="/collections" className="back-link">
           ← All works
         </Link>
+      </div>
 
-        <div className="process-grid">
-          <div className="space-y-4">
-            {hero ? (
-              <div className="process-img">
-                <Image
-                  src={hero}
-                  alt={product.metaDescription || product.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 900px) 100vw, 55vw"
-                  priority
-                />
-              </div>
-            ) : null}
-            {rest.length > 0 ? (
-              <div className="grid grid-cols-2 gap-4">
-                {rest.map((src) => (
-                  <div key={src} className="process-img !aspect-square">
-                    <Image src={src} alt={product.title} fill className="object-cover" sizes="25vw" />
-                  </div>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
-          <div className="process-text">
-            <div className="sec-tag">{CATEGORY_LABELS[product.category]}</div>
-            <h1>{product.title}</h1>
-            {product.material ? <p className="story-sig !mt-4 !opacity-100">{product.material}</p> : null}
-            {product.description ? <p>{product.description}</p> : null}
-            {product.process ? (
-              <>
-                <div className="divider" />
-                <p className="sec-tag">Process</p>
-                <p>{product.process}</p>
-              </>
-            ) : null}
-            <div className="mt-8">
-              {product.etsyUrl ? (
-                <Link
-                  href={product.etsyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-line-terra inline-flex"
-                >
-                  Available on Etsy →
-                </Link>
-              ) : (
-                <Link href="/contact" className="btn-line-terra inline-flex">
-                  Inquire about this piece →
-                </Link>
-              )}
+      <div className="product-detail">
+        <div className="product-detail-imgs">
+          {hero ? (
+            <div className="product-detail-hero">
+              <Image
+                src={hero}
+                alt={product.metaDescription || product.title}
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                priority
+              />
             </div>
+          ) : null}
+          {rest.length > 0 ? (
+            <div className="product-detail-thumbs">
+              {rest.map((src) => (
+                <div key={src} className="product-detail-thumb">
+                  <Image src={src} alt={product.title} fill className="object-cover" sizes="25vw" />
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+
+        <div className="product-detail-text">
+          <div className="sec-eyebrow">{CATEGORY_LABELS[product.category]}</div>
+          <h1>{product.title}</h1>
+          {product.material ? (
+            <p className="story-sig" style={{ opacity: 1, marginTop: 8 }}>
+              {product.material}
+            </p>
+          ) : null}
+          {product.description ? <p className="story-body">{product.description}</p> : null}
+          {product.process ? (
+            <>
+              <div className="story-rule" />
+              <div className="sec-eyebrow">Process</div>
+              <p className="story-body">{product.process}</p>
+            </>
+          ) : null}
+          <div style={{ marginTop: 32 }}>
+            {product.etsyUrl ? (
+              <Link
+                href={product.etsyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-brutal filled"
+              >
+                Available on Etsy ↗
+              </Link>
+            ) : (
+              <Link href="/contact" className="btn-brutal filled">
+                Inquire about this piece
+              </Link>
+            )}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/public/Hero";
 import { FeaturedWorks } from "@/components/public/FeaturedWorks";
+import { AcquireBar } from "@/components/public/AcquireBar";
 import { HomeStorySection } from "@/components/public/HomeStorySection";
 import { HomeElementsBar } from "@/components/public/HomeElementsBar";
 import { HomeArchitectsCta } from "@/components/public/HomeArchitectsCta";
@@ -9,7 +10,7 @@ import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { DEFAULT_HERO, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Lelek Studio Berlin - Shaped by hand, guided by instinct",
+  title: "Lelek Studio Berlin — Shaped by hand, guided by instinct",
   description:
     "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.",
 };
@@ -30,14 +31,20 @@ export default async function HomePage() {
     find,
   } = await getPublicHomeData();
 
+  const elementItems = elements;
+
   return (
     <>
-      <Hero content={Object.keys(hero).length > 0 ? hero : DEFAULT_HERO} />
+      <Hero
+        content={Object.keys(hero).length > 0 ? hero : DEFAULT_HERO}
+        elements={elementItems}
+      />
       <HomeStorySection story={story} />
-      <HomeElementsBar items={elements} />
+      <HomeElementsBar items={elementItems} />
       {featured.length > 0 ? (
         <FeaturedWorks products={featured.slice(0, 6)} section={featuredSection} />
       ) : null}
+      <AcquireBar etsyUrl={settings.etsy_url ?? find.etsyUrl} />
       <HomeArchitectsCta section={architects} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />
       <HomeFindSection section={find} email={settings.email} />

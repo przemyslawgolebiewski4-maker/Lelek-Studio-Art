@@ -4,13 +4,12 @@ export function HomeElementsBar({ items }: { items: ElementItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <div className="elements-bar">
+    <div className="elements">
       {items.map((item) => (
-        <div key={item.number} className="el-item">
-          <div className="el-num">{item.number}</div>
-          <div className="el-name">
-            <em>{item.name}</em>
-          </div>
+        <div key={item.number} className="elem">
+          <span className="elem-n">{item.number}</span>
+          <div className="elem-dash" />
+          <div className="elem-name">{item.name}</div>
         </div>
       ))}
     </div>

@@ -37,13 +37,13 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#E6D8C7",
+  themeColor: "#0B0A08",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${fontVariables} antialiased`}>{children}</body>
+      <body className={fontVariables}>{children}</body>
     </html>
   );
 }

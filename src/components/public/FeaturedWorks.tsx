@@ -3,6 +3,9 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import type { FeaturedSection } from "@/types/content";
 
+const GRID_CLASSES = ["tall", "", "", "wide", "", ""] as const;
+const PH_CLASSES = ["", "lt", "lt", "", "lt", "lt"] as const;
+
 export function FeaturedWorks({
   products,
   section,
@@ -10,45 +13,45 @@ export function FeaturedWorks({
   products: Product[];
   section?: FeaturedSection;
 }) {
+  const items = products.slice(0, 6);
+
   return (
-    <section id="featured" className="section-pad featured-sec">
-      <div className="container" id="works">
-        {section?.eyebrow ? <div className="sec-tag">{section.eyebrow}</div> : null}
-        <h2>
-          {section?.heading ?? "Currently"}{" "}
-          {section?.headingEm ? (
-            <em className="text-terra not-italic">{section.headingEm}</em>
-          ) : (
-            <em className="text-terra not-italic">available</em>
-          )}
+    <section id="works" className="works">
+      <div className="works-head">
+        <h2 className="works-h2">
+          {section?.heading ?? "Form, surface"}
+          <em>{section?.headingEm ?? "and presence"}</em>
         </h2>
-
-        <div className="mt-14 grid-square">
-          {products.map((product) => (
-            <Link key={String(product._id)} href={`/objects/${product.slug}`} className="card">
-              <div className="card-thumb card-thumb-ratio-1 relative">
-                {product.images[0] ? (
-                  <Image
-                    src={product.images[0]}
-                    alt={product.metaDescription || product.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 600px) 50vw, 200px"
-                  />
-                ) : null}
-              </div>
-              <div className="card-body">
-                <div className="card-title">{product.title}</div>
-                <div className="card-meta">{product.material}</div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        <div className="divider" />
-        <Link href="/collections" className="btn-line-terra inline-flex">
-          View all works →
+        <Link href="/collections" className="works-cta">
+          View all works
         </Link>
+      </div>
+
+      <div className="works-grid">
+        {items.map((product, i) => (
+          <Link
+            key={String(product._id)}
+            href={`/objects/${product.slug}`}
+            className={`wg ${GRID_CLASSES[i] ?? ""}`}
+          >
+            <div className={`wg-ph ${PH_CLASSES[i] ?? ""}`}>
+              {product.images[0] ? (
+                <Image
+                  src={product.images[0]}
+                  alt={product.metaDescription || product.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                />
+              ) : null}
+              <span className="wg-label">{product.title}</span>
+            </div>
+            <div className="wg-ov">
+              <div className="wg-t">{product.title}</div>
+              <div className="wg-m">{product.material}</div>
+            </div>
+          </Link>
+        ))}
       </div>
     </section>
   );

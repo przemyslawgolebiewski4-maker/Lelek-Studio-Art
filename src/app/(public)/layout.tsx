@@ -9,16 +9,12 @@ export default async function PublicLayout({ children }: { children: React.React
 
   return (
     <>
-      <Navigation
-        instagram={settings.instagram}
-        instagramHandle={settings.instagram_handle}
-      />
+      <Navigation etsyUrl={settings.etsy_url} />
       <main>{children}</main>
       <Footer
         siteName={settings.site_name}
         location={settings.location}
         instagram={settings.instagram}
-        instagramHandle={settings.instagram_handle}
         email={settings.email}
         etsyUrl={settings.etsy_url}
         artistUrl={settings.artist_url}

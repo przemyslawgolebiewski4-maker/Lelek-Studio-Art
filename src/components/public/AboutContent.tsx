@@ -7,45 +7,46 @@ export function AboutContent({ story }: { story: StorySection }) {
   const imageMobile = story.imageMobile ?? image;
 
   return (
-    <article className="section-pad page-top story-sec">
-      <div className="container">
-        <div className="story-grid">
-          <div className="story-img">
+    <article>
+      <div className="story">
+        <div className="story-img">
+          <div className="story-img-frame">
             <Image
               src={image}
               alt={story.imageAlt || "Lelek Studio"}
               fill
-              className="hidden object-cover object-top md:block"
-              sizes="(max-width: 900px) 100vw, 50vw"
+              className="hidden md:block"
+              sizes="50vw"
               priority
             />
             <Image
               src={imageMobile}
               alt={story.imageAlt || "Lelek Studio"}
               fill
-              className="object-cover object-top md:hidden"
-              sizes="(max-width: 900px) 100vw, 50vw"
+              className="md:hidden"
+              sizes="100vw"
               priority
             />
-            {story.imageCaption ? (
-              <div className="story-img-caption">{story.imageCaption}</div>
-            ) : null}
           </div>
+          {story.imageCaption ? (
+            <div className="story-img-label">{story.imageCaption}</div>
+          ) : null}
+        </div>
 
-          <div className="story-text">
-            {story.eyebrow ? <div className="sec-tag">{story.eyebrow}</div> : null}
-            <h1>
-              {story.heading}{" "}
-              {story.headingEm ? <em className="text-terra not-italic">{story.headingEm}</em> : null}
-            </h1>
-            {story.body1 ? <p className="story-body">{story.body1}</p> : null}
-            {story.body2 ? <p className="story-body">{story.body2}</p> : null}
-            {story.body3 ? <p className="story-body">{story.body3}</p> : null}
-            {story.signature ? <p className="story-sig">{story.signature}</p> : null}
-            <Link href="/collections" className="btn-line-terra mt-8 inline-flex">
-              View works →
-            </Link>
-          </div>
+        <div className="story-text">
+          {story.eyebrow ? <div className="story-eyebrow">{story.eyebrow}</div> : null}
+          <h1 className="story-h2">
+            {story.heading}
+            {story.headingEm ? <em>{story.headingEm}</em> : null}
+          </h1>
+          <div className="story-rule" />
+          {story.body1 ? <p className="story-body">{story.body1}</p> : null}
+          {story.body2 ? <p className="story-body">{story.body2}</p> : null}
+          {story.body3 ? <p className="story-body">{story.body3}</p> : null}
+          {story.signature ? <p className="story-sig">{story.signature}</p> : null}
+          <Link href="/collections" className="story-link">
+            View works
+          </Link>
         </div>
       </div>
     </article>

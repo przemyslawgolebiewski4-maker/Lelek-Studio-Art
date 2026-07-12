@@ -7,32 +7,33 @@ export function JournalPostContent({ post }: { post: JournalPost }) {
   const html = marked.parse(post.body ?? "", { async: false }) as string;
 
   return (
-    <article className="section-pad page-top story-sec">
-      <div className="container max-w-3xl">
-        <Link href="/journal" className="btn-line-dark mb-8 inline-flex">
+    <article>
+      <div className="page-shell">
+        <Link href="/journal" className="back-link">
           ← Journal
         </Link>
+        <div className="sec-eyebrow">Journal</div>
+        <h1 className="page-h1">{post.title}</h1>
+        {post.excerpt ? <p className="page-intro">{post.excerpt}</p> : null}
+      </div>
 
-        <header>
-          <div className="sec-tag">Journal</div>
-          <h1>{post.title}</h1>
-          {post.excerpt ? <p className="sec-intro mt-4">{post.excerpt}</p> : null}
-        </header>
-
-        {post.coverImage ? (
-          <div className="process-img mt-10">
+      {post.coverImage ? (
+        <div style={{ background: "var(--B)", borderBottom: "3px solid var(--B)", padding: 40 }}>
+          <div className="product-detail-hero" style={{ maxWidth: 900, margin: "0 auto" }}>
             <Image
               src={post.coverImage}
               alt={post.title}
               fill
               className="object-cover"
-              sizes="768px"
+              sizes="900px"
               priority
             />
           </div>
-        ) : null}
+        </div>
+      ) : null}
 
-        <div className="prose-lelek mt-10" dangerouslySetInnerHTML={{ __html: html }} />
+      <div className="page-content">
+        <div className="prose-brutal" dangerouslySetInnerHTML={{ __html: html }} />
       </div>
     </article>
   );

@@ -4,7 +4,6 @@ type FooterProps = {
   siteName?: string;
   location?: string;
   instagram?: string;
-  instagramHandle?: string;
   email?: string;
   etsyUrl?: string;
   artistUrl?: string;
@@ -13,58 +12,46 @@ type FooterProps = {
 
 export function Footer({
   siteName = "Lelek Studio",
-  location = "Berlin, Germany",
+  location = "Berlin",
   instagram = "https://www.instagram.com/lelek.studio.berlin/",
-  instagramHandle = "@lelek.studio.berlin",
   email = "lelekstudio@lelekstudio.com",
   etsyUrl = "https://www.etsy.com/shop/LelekStudio",
   artistUrl = "https://www.p-golebiewski.xyz",
-  lelekMeaning = "Lelek - kozodoj - the nightjar",
+  lelekMeaning = "Lelek — kozodoj — the nightjar",
 }: FooterProps) {
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-earth px-6 py-8 md:px-12">
-      <div className="container flex flex-col items-center gap-5 text-center md:flex-row md:flex-wrap md:items-center md:justify-between md:text-left">
-        <div>
-          <p className="font-display text-[15px] text-[rgba(245,239,230,0.85)]">
-            {siteName} · {location}
-          </p>
-          <p className="footer-lelek mt-1 font-serif text-xs italic text-[rgba(163,107,63,0.3)]">
-            {lelekMeaning}
-          </p>
+    <footer className="site-footer">
+      <div>
+        <div className="foot-l">
+          {siteName} — {location} — {year}
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-6">
-          <Link
-            href={instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] uppercase tracking-[0.15em] text-[rgba(245,239,230,0.35)] transition-colors hover:text-[rgba(245,239,230,0.75)]"
-          >
-            {instagramHandle}
+        <div className="foot-lelek">{lelekMeaning}</div>
+      </div>
+      <ul className="foot-links">
+        <li>
+          <Link href={instagram} target="_blank" rel="noopener noreferrer">
+            Instagram
           </Link>
-          <Link
-            href={`mailto:${email}`}
-            className="text-[11px] uppercase tracking-[0.15em] text-[rgba(245,239,230,0.35)] transition-colors hover:text-[rgba(245,239,230,0.75)]"
-          >
-            {email}
-          </Link>
-          <Link
-            href={etsyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] uppercase tracking-[0.15em] text-[rgba(245,239,230,0.35)] transition-colors hover:text-[rgba(245,239,230,0.75)]"
-          >
+        </li>
+        <li>
+          <Link href={etsyUrl} target="_blank" rel="noopener noreferrer">
             Etsy
           </Link>
-          <Link
-            href={artistUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] uppercase tracking-[0.15em] text-[rgba(245,239,230,0.35)] transition-colors hover:text-[rgba(245,239,230,0.75)]"
-          >
-            Przemyslaw Golebiewski
+        </li>
+        <li>
+          <Link href="/contact">Contact</Link>
+        </li>
+        <li>
+          <Link href={artistUrl} target="_blank" rel="noopener noreferrer">
+            Art ↗
           </Link>
-        </div>
-      </div>
+        </li>
+        <li>
+          <Link href={`mailto:${email}`}>{email}</Link>
+        </li>
+      </ul>
     </footer>
   );
 }

@@ -4,15 +4,15 @@ import type { JournalPostSummary } from "@/types/content";
 
 export function JournalList({ posts }: { posts: JournalPostSummary[] }) {
   if (posts.length === 0) {
-    return <p className="sec-intro mt-10">No journal entries yet. Check back soon.</p>;
+    return <p className="page-intro">No journal entries yet. Check back soon.</p>;
   }
 
   return (
-    <div className="mt-14 grid-portrait">
+    <div className="product-grid" style={{ marginTop: 40 }}>
       {posts.map((post) => (
-        <Link key={post._id} href={`/journal/${post.slug}`} className="card">
+        <Link key={post._id} href={`/journal/${post.slug}`} className="product-card">
           {post.coverImage ? (
-            <div className="card-thumb card-thumb-ratio-portrait relative">
+            <div className="product-card-img portrait">
               <Image
                 src={post.coverImage}
                 alt={post.title}
@@ -21,10 +21,12 @@ export function JournalList({ posts }: { posts: JournalPostSummary[] }) {
                 sizes="(max-width: 768px) 50vw, 220px"
               />
             </div>
-          ) : null}
-          <div className="card-body">
-            <div className="card-title">{post.title}</div>
-            {post.excerpt ? <div className="card-meta">{post.excerpt}</div> : null}
+          ) : (
+            <div className="product-card-img portrait">{post.title}</div>
+          )}
+          <div className="product-card-body">
+            <div className="product-card-title">{post.title}</div>
+            {post.excerpt ? <div className="product-card-meta">{post.excerpt}</div> : null}
           </div>
         </Link>
       ))}

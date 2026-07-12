@@ -6,12 +6,10 @@ export default function PlaceholderPage({
   description: string;
 }) {
   return (
-    <section className="section-pad pt-28">
-      <div className="container max-w-2xl">
-        <p className="eyebrow mb-3">Coming in next sprint</p>
-        <h1 className="text-[var(--text-3xl)]">{title}</h1>
-        <p className="mt-4 text-metal">{description}</p>
-      </div>
+    <section className="page-shell">
+      <div className="sec-eyebrow">Coming soon</div>
+      <h1 className="page-h1">{title}</h1>
+      <p className="page-intro">{description}</p>
     </section>
   );
 }

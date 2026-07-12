@@ -42,97 +42,90 @@ export function ArchitectInquiryForm() {
     });
   }
 
+  if (status === "success") {
+    return (
+      <p className="story-body">
+        Thank you — your inquiry has been sent. We will reply within a few business days.
+      </p>
+    );
+  }
+
   return (
-    <>
-      {status === "success" ? (
-        <p className="story-body">
-          Thank you — your inquiry has been sent. We will reply within a few business days.
-        </p>
-      ) : (
-        <form onSubmit={handleSubmit} className="grid gap-6">
-          {error ? <p className="text-sm text-terra">{error}</p> : null}
+    <form onSubmit={handleSubmit} className="form-light">
+      {error ? <p className="form-error" style={{ color: "var(--B)" }}>{error}</p> : null}
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <label className="form-field">
-              <span className="sec-tag !opacity-100">Name</span>
-              <input
-                className="form-input"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                required
-              />
-            </label>
+      <div className="form-row">
+        <div className="form-lbl">Name</div>
+        <input
+          className="form-inp"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          required
+        />
+      </div>
 
-            <label className="form-field">
-              <span className="sec-tag !opacity-100">Email</span>
-              <input
-                type="email"
-                className="form-input"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                required
-              />
-            </label>
-          </div>
+      <div className="form-row">
+        <div className="form-lbl">Email</div>
+        <input
+          type="email"
+          className="form-inp"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          required
+        />
+      </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <label className="form-field">
-              <span className="sec-tag !opacity-100">Company / Studio</span>
-              <input
-                className="form-input"
-                value={form.company}
-                onChange={(e) => setForm({ ...form, company: e.target.value })}
-              />
-            </label>
+      <div className="form-row">
+        <div className="form-lbl">Company</div>
+        <input
+          className="form-inp"
+          value={form.company}
+          onChange={(e) => setForm({ ...form, company: e.target.value })}
+        />
+      </div>
 
-            <label className="form-field">
-              <span className="sec-tag !opacity-100">Project type</span>
-              <select
-                className="form-input"
-                value={form.projectType}
-                onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-              >
-                <option value="">Select...</option>
-                <option value="residential">Residential</option>
-                <option value="hospitality">Hospitality</option>
-                <option value="retail">Retail / concept store</option>
-                <option value="office">Office / workspace</option>
-                <option value="other">Other</option>
-              </select>
-            </label>
-          </div>
+      <div className="form-row">
+        <div className="form-lbl">Project</div>
+        <select
+          className="form-inp"
+          value={form.projectType}
+          onChange={(e) => setForm({ ...form, projectType: e.target.value })}
+        >
+          <option value="">Select...</option>
+          <option value="residential">Residential</option>
+          <option value="hospitality">Hospitality</option>
+          <option value="retail">Retail / concept store</option>
+          <option value="office">Office / workspace</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
 
-          <label className="form-field">
-            <span className="sec-tag !opacity-100">Subject</span>
-            <input
-              className="form-input"
-              value={form.subject}
-              onChange={(e) => setForm({ ...form, subject: e.target.value })}
-              placeholder="Wall objects for a hotel lobby"
-            />
-          </label>
+      <div className="form-row">
+        <div className="form-lbl">Subject</div>
+        <input
+          className="form-inp"
+          value={form.subject}
+          onChange={(e) => setForm({ ...form, subject: e.target.value })}
+          placeholder="Wall objects for a hotel lobby"
+        />
+      </div>
 
-          <label className="form-field">
-            <span className="sec-tag !opacity-100">Project details</span>
-            <textarea
-              rows={6}
-              className="form-input resize-none"
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              placeholder="Timeline, dimensions, quantity, location..."
-              required
-            />
-          </label>
+      <div className="form-row">
+        <div className="form-lbl">Details</div>
+        <textarea
+          className="form-inp"
+          value={form.message}
+          onChange={(e) => setForm({ ...form, message: e.target.value })}
+          placeholder="Timeline, dimensions, quantity, location..."
+          required
+        />
+      </div>
 
-          <button
-            type="submit"
-            disabled={status === "loading"}
-            className="btn-line-terra w-fit disabled:opacity-60"
-          >
-            {status === "loading" ? "Sending..." : "Send inquiry →"}
-          </button>
-        </form>
-      )}
-    </>
+      <div className="form-actions">
+        <button type="submit" className="form-submit" disabled={status === "loading"}>
+          {status === "loading" ? "Sending..." : "Send inquiry →"}
+        </button>
+      </div>
+    </form>
   );
 }

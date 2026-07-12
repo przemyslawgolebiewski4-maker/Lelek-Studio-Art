@@ -18,22 +18,24 @@ export default async function ForArchitectsPage() {
   const section = await getArchitectsSection();
 
   return (
-    <section className="section-pad page-top find-sec">
-      <div className="container max-w-3xl">
-        {section.eyebrow ? <div className="sec-tag">{section.eyebrow}</div> : null}
-        <h1>{section.headline}</h1>
-        {section.sub ? <p className="sec-intro mt-4">{section.sub}</p> : null}
-        {section.body ? <p className="story-body">{section.body}</p> : null}
-
-        <div className="form-panel">
-          <div className="sec-tag">Project inquiry</div>
-          <p className="sec-intro">
-            Tell us about your project — wall objects, vessels, or custom dimensions. We reply
-            within a few business days.
-          </p>
-          <ArchitectInquiryForm />
+    <>
+      <section className="arch" style={{ borderBottom: "none" }}>
+        <div>
+          {section.eyebrow ? <div className="arch-eyebrow">{section.eyebrow}</div> : null}
+          <h1 className="arch-h2">{section.headline}</h1>
+          {section.sub ? <p className="arch-body">{section.sub}</p> : null}
+          {section.body ? <p className="arch-body">{section.body}</p> : null}
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section className="page-shell">
+        <div className="sec-eyebrow">Project inquiry</div>
+        <p className="page-intro">
+          Tell us about your project — wall objects, vessels, or custom dimensions. We reply within
+          a few business days.
+        </p>
+        <ArchitectInquiryForm />
+      </section>
+    </>
   );
 }
