@@ -26,6 +26,7 @@ export const DEFAULT_HERO: Record<string, string> = {
   headlineEm: "guided by instinct",
   subheadline:
     "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
+  quote: "Every grain of sand is different too...",
   image: "/images/hero/hero-main.jpg",
   imageMobile: "/images/hero/hero-main-mobile.jpg",
   cta1Text: "View works",
