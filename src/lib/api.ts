@@ -33,19 +33,14 @@ export async function apiDelete(path: string) {
   return apiGet(path, { method: "DELETE" });
 }
 
+import { uploadMedia } from "@/lib/media-upload";
+
 export async function apiUpload(file: File, folder: string) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("folder", folder);
-
-  const res = await fetch("/api/admin/upload", {
-    method: "POST",
-    body: formData,
-    credentials: "include",
-  });
-
-  const data = await res.json();
-  return { res, data: data as { ok?: boolean; url?: string; error?: string } };
+  const result = await uploadMedia(file, folder);
+  return {
+    res: { ok: result.ok } as Response,
+    data: result.ok ? { ok: true as const, url: result.url } : { ok: false as const, error: result.error },
+  };
 }
 
 /** Direct Railway URL — for login (before session cookie exists) */

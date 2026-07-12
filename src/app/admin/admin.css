@@ -624,6 +624,24 @@
   margin-top: 6px;
 }
 
+.admin-upload-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-upload-progress {
+  height: 4px;
+  background: rgba(11, 10, 8, 0.12);
+  margin-bottom: 12px;
+}
+
+.admin-upload-progress-bar {
+  height: 100%;
+  background: var(--B);
+  transition: width 0.15s linear;
+}
+
 .admin-url-fallback {
   margin-top: 4px;
 }
@@ -654,7 +672,20 @@
   gap: 12px;
   padding: 10px 12px;
   border-top: 3px solid var(--B);
-  background: var(--W);
+}
+
+.admin-media-preview-uploading {
+  padding: 10px 12px;
+  border-top: 3px solid var(--B);
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.admin-media-preview-uploading .admin-upload-progress {
+  margin-top: 8px;
+  margin-bottom: 0;
 }
 
 .admin-gallery {
