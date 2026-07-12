@@ -113,25 +113,23 @@ export default function AdminHomePage() {
   const selected = sections.find((s) => s.sectionKey === selectedKey) ?? null;
 
   return (
-    <AdminShell title="Home sections" subtitle="Edit homepage and page content blocks">
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="mb-4 text-rust-light">{error}</p> : null}
+    <AdminShell title="Home sections" subtitle="Edit homepage blocks — fields map 1:1 to public site components.">
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <div className="space-y-2">
+      <div className="admin-grid-sidebar">
+        <div>
           {sections.map((section) => (
             <button
               key={section.sectionKey}
               type="button"
               onClick={() => selectSection(section)}
-              className={`w-full border p-4 text-left transition-colors ${
-                selectedKey === section.sectionKey
-                  ? "border-rust bg-peat/60"
-                  : "border-sand/20 bg-peat/30 hover:border-sand/40"
+              className={`admin-list-item ${
+                selectedKey === section.sectionKey ? "is-active" : ""
               }`}
             >
-              <p className="text-sm text-cream">{SECTION_LABELS[section.sectionKey]}</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-metal">
+              <p className="admin-list-item-title">{SECTION_LABELS[section.sectionKey]}</p>
+              <p className="admin-list-item-meta">
                 {section.sectionKey} · {section.visible ? "visible" : "hidden"}
               </p>
             </button>
@@ -140,12 +138,12 @@ export default function AdminHomePage() {
 
         <AdminCard>
           {selected ? (
-            <div className="space-y-5">
-              <div className="flex items-center justify-between gap-4 border-b border-sand/15 pb-4">
-                <h2 className="font-serif text-2xl text-cream">
+            <div className="admin-form-stack-lg">
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+                <h2 className="admin-panel-title" style={{ margin: 0, border: "none", padding: 0 }}>
                   {SECTION_LABELS[selected.sectionKey]}
                 </h2>
-                <label className="flex items-center gap-2 text-sm text-sand">
+                <label className="admin-checkbox">
                   <input
                     type="checkbox"
                     checked={visible}
@@ -154,16 +152,16 @@ export default function AdminHomePage() {
                       setSaved(false);
                     }}
                   />
-                  Visible
+                  Visible on site
                 </label>
               </div>
 
               {SECTION_HINTS[selected.sectionKey] ? (
-                <p className="text-sm leading-relaxed text-metal">{SECTION_HINTS[selected.sectionKey]}</p>
+                <p className="admin-muted">{SECTION_HINTS[selected.sectionKey]}</p>
               ) : null}
 
               {fields.map((field, index) => (
-                <div key={index} className="grid gap-3 md:grid-cols-[180px_1fr]">
+                <div key={index} className="admin-field-row">
                   <AdminInput
                     label="Field"
                     value={field.key}
@@ -181,20 +179,20 @@ export default function AdminHomePage() {
               <button
                 type="button"
                 onClick={() => setFields((prev) => [...prev, { key: "", value: "" }])}
-                className="font-mono text-[11px] uppercase tracking-[0.14em] text-metal hover:text-cream"
+                className="admin-add-field"
               >
                 + Add field
               </button>
 
-              <div className="flex items-center gap-4 pt-4">
-                <AdminButton onClick={saveSection} disabled={saving}>
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <AdminButton onClick={saveSection} disabled={saving} className="filled">
                   {saving ? "Saving..." : "Save section"}
                 </AdminButton>
-                {saved ? <span className="text-sm text-sand">Saved</span> : null}
+                {saved ? <span className="admin-success">Saved</span> : null}
               </div>
             </div>
           ) : (
-            <p className="text-metal">Select a section to edit.</p>
+            <p className="admin-muted">Select a section to edit.</p>
           )}
         </AdminCard>
       </div>

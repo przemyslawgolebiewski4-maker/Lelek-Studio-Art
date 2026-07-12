@@ -52,11 +52,11 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <AdminShell title="Site settings" subtitle="Global site metadata and links">
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="mb-4 text-rust-light">{error}</p> : null}
+    <AdminShell title="Site settings" subtitle="Global metadata — maps to nav, footer and SEO.">
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <AdminCard className="max-w-2xl space-y-5">
+      <AdminCard className="admin-form-stack-lg" style={{ maxWidth: 640 }}>
         {SETTING_FIELDS.map(({ key, label, multiline }) =>
           multiline ? (
             <AdminTextarea
@@ -82,11 +82,11 @@ export default function AdminSettingsPage() {
           ),
         )}
 
-        <div className="flex items-center gap-4 pt-2">
-          <AdminButton onClick={save} disabled={saving}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <AdminButton onClick={save} disabled={saving} className="filled">
             {saving ? "Saving..." : "Save settings"}
           </AdminButton>
-          {saved ? <span className="text-sm text-sand">Saved</span> : null}
+          {saved ? <span className="admin-success">Saved</span> : null}
         </div>
       </AdminCard>
     </AdminShell>

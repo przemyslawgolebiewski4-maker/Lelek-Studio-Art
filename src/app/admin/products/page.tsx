@@ -62,75 +62,71 @@ export default function AdminProductsPage() {
   return (
     <AdminShell
       title="Products"
-      subtitle="Manage catalog objects"
+      subtitle="Manage catalog objects shown in collections and featured works."
       actions={
         <AdminLinkButton href="/admin/products/new" variant="primary">
           New product
         </AdminLinkButton>
       }
     >
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="text-rust-light">{error}</p> : null}
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      {!loading && products.length === 0 ? (
-        <p className="text-metal">No products yet.</p>
-      ) : null}
+      {!loading && products.length === 0 ? <p className="admin-muted">No products yet.</p> : null}
 
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-sand/20 text-left font-mono text-[10px] uppercase tracking-[0.14em] text-metal">
-              <th className="py-3 pr-4">Title</th>
-              <th className="py-3 pr-4">Catalog</th>
-              <th className="py-3 pr-4">Category</th>
-              <th className="py-3 pr-4">Published</th>
-              <th className="py-3 pr-4">Order</th>
-              <th className="py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product) => (
-              <tr key={product._id} className="border-b border-sand/10 text-cream">
-                <td className="py-3 pr-4">
-                  <div className="font-medium">{product.title}</div>
-                  <div className="text-xs text-metal">{product.slug}</div>
-                </td>
-                <td className="py-3 pr-4 text-metal">{product.catalog || "-"}</td>
-                <td className="py-3 pr-4 text-metal">{product.category}</td>
-                <td className="py-3 pr-4">
-                  <button
-                    type="button"
-                    onClick={() => togglePublished(product._id, product.published)}
-                    className={`font-mono text-[10px] uppercase tracking-[0.12em] ${
-                      product.published ? "text-cream" : "text-metal"
-                    }`}
-                  >
-                    {product.published ? "Published" : "Draft"}
-                  </button>
-                </td>
-                <td className="py-3 pr-4 text-metal">{product.order}</td>
-                <td className="py-3">
-                  <div className="flex flex-wrap gap-2">
-                    <Link
-                      href={`/admin/products/${product._id}/edit`}
-                      className="font-mono text-[10px] uppercase tracking-[0.12em] text-sand hover:text-cream"
-                    >
-                      Edit
-                    </Link>
-                    <AdminButton
-                      variant="danger"
-                      onClick={() => deleteProduct(product._id, product.title)}
-                      className="px-2 py-1 text-[10px]"
-                    >
-                      Delete
-                    </AdminButton>
-                  </div>
-                </td>
+      {products.length > 0 ? (
+        <div className="admin-table-wrap">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Catalog</th>
+                <th>Category</th>
+                <th>Published</th>
+                <th>Order</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {products.map((product) => (
+                <tr key={product._id}>
+                  <td>
+                    <div className="admin-soft">{product.title}</div>
+                    <div className="admin-table-slug">{product.slug}</div>
+                  </td>
+                  <td className="admin-muted">{product.catalog || "—"}</td>
+                  <td className="admin-muted">{product.category}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => togglePublished(product._id, product.published)}
+                      className={`admin-table-action ${product.published ? "" : "admin-muted"}`}
+                    >
+                      {product.published ? "Published" : "Draft"}
+                    </button>
+                  </td>
+                  <td className="admin-muted">{product.order}</td>
+                  <td>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                      <Link href={`/admin/products/${product._id}/edit`} className="admin-table-action">
+                        Edit
+                      </Link>
+                      <AdminButton
+                        variant="danger"
+                        onClick={() => deleteProduct(product._id, product.title)}
+                        className="admin-table-action"
+                        style={{ padding: "2px 6px", minHeight: "auto", border: "none" }}
+                      >
+                        Delete
+                      </AdminButton>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : null}
     </AdminShell>
   );
 }

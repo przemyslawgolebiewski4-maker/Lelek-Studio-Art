@@ -13,6 +13,11 @@ const nav = [
   { href: "/admin/messages", label: "Messages" },
 ];
 
+function isActive(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname.startsWith(href);
+}
+
 export function AdminNav({ adminName }: { adminName?: string }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -27,38 +32,29 @@ export function AdminNav({ adminName }: { adminName?: string }) {
   }
 
   return (
-    <header className="border-b border-sand/20 bg-ink">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-metal">Lelek Studio</p>
-          <p className="text-sm text-cream">Admin</p>
-        </div>
-        <nav className="flex flex-wrap items-center gap-4">
-          {nav.map((item) => {
-            const active =
-              item.href === "/admin"
-                ? pathname === "/admin"
-                : pathname.startsWith(item.href);
-            return (
+    <header className="admin-nav">
+      <div className="admin-nav-inner">
+        <Link href="/admin" className="admin-nav-brand">
+          Lelek Studio
+          <span>Admin</span>
+        </Link>
+
+        <ul className="admin-nav-links">
+          {nav.map((item) => (
+            <li key={item.href}>
               <Link
-                key={item.href}
                 href={item.href}
-                className={`font-mono text-[11px] uppercase tracking-[0.14em] ${
-                  active ? "text-cream border-b border-rust pb-0.5" : "text-metal hover:text-cream"
-                }`}
+                className={isActive(pathname, item.href) ? "is-active" : undefined}
               >
                 {item.label}
               </Link>
-            );
-          })}
-        </nav>
-        <div className="flex items-center gap-4">
-          {adminName ? <span className="hidden text-sm text-sand sm:inline">{adminName}</span> : null}
-          <button
-            type="button"
-            onClick={logout}
-            className="font-mono text-[11px] uppercase tracking-[0.14em] text-metal hover:text-cream"
-          >
+            </li>
+          ))}
+        </ul>
+
+        <div className="admin-nav-meta">
+          {adminName ? <span className="admin-nav-user">{adminName}</span> : null}
+          <button type="button" onClick={logout} className="admin-nav-logout">
             Log out
           </button>
         </div>

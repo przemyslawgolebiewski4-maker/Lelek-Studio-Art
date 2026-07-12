@@ -45,33 +45,33 @@ export default function AdminJournalPage() {
   return (
     <AdminShell
       title="Journal"
-      subtitle="Manage journal posts"
+      subtitle="Manage journal posts shown on /journal and homepage teaser."
       actions={
         <AdminLinkButton href="/admin/journal/new" variant="primary">
           New post
         </AdminLinkButton>
       }
     >
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="text-rust-light">{error}</p> : null}
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="space-y-3">
+      <div className="admin-form-stack">
         {posts.length === 0 && !loading ? (
-          <p className="text-metal">No posts yet.</p>
+          <p className="admin-muted">No posts yet.</p>
         ) : null}
         {posts.map((post) => (
-          <AdminCard key={post._id} className="flex flex-wrap items-center justify-between gap-4">
+          <AdminCard
+            key={post._id}
+            style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16 }}
+          >
             <div>
-              <p className="text-cream">{post.title}</p>
-              <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-metal">
+              <p className="admin-list-item-title">{post.title}</p>
+              <p className="admin-list-item-meta">
                 /journal/{post.slug} · {post.published ? "published" : "draft"}
               </p>
             </div>
-            <div className="flex gap-3">
-              <Link
-                href={`/admin/journal/${post._id}/edit`}
-                className="font-mono text-[11px] uppercase tracking-[0.14em] text-sand hover:text-cream"
-              >
+            <div style={{ display: "flex", gap: 12 }}>
+              <Link href={`/admin/journal/${post._id}/edit`} className="admin-table-action">
                 Edit
               </Link>
               <AdminButton variant="danger" onClick={() => deletePost(post._id)}>

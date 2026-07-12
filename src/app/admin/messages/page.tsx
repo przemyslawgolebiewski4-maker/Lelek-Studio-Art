@@ -59,84 +59,78 @@ export default function AdminMessagesPage() {
   const selected = messages.find((m) => m._id === selectedId) ?? null;
 
   return (
-    <AdminShell title="Messages" subtitle="Contact form inbox">
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="text-rust-light">{error}</p> : null}
+    <AdminShell title="Messages" subtitle="Contact form inbox — same fields as public contact.">
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-2">
+      <div className="admin-grid-sidebar">
+        <div>
           {messages.length === 0 && !loading ? (
-            <p className="text-metal">No messages yet.</p>
+            <p className="admin-muted">No messages yet.</p>
           ) : null}
           {messages.map((msg) => (
             <button
               key={msg._id}
               type="button"
               onClick={() => openMessage(msg._id)}
-              className={`w-full border p-4 text-left transition-colors ${
-                selectedId === msg._id
-                  ? "border-rust bg-peat/60"
-                  : "border-sand/20 bg-peat/30 hover:border-sand/40"
-              }`}
+              className={`admin-list-item ${selectedId === msg._id ? "is-active" : ""}`}
             >
-              <div className="flex items-start justify-between gap-3">
+              <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
                 <div>
-                  <p className={`text-sm ${msg.read ? "text-sand" : "font-medium text-cream"}`}>
+                  <p className={`admin-list-item-title ${msg.read ? "" : "admin-badge unread"}`}>
                     {msg.name}
                   </p>
-                  <p className="text-xs text-metal">{msg.email}</p>
+                  <p className="admin-list-item-meta">{msg.email}</p>
                 </div>
-                {!msg.read ? (
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-rust-light">
-                    New
-                  </span>
-                ) : null}
+                {!msg.read ? <span className="admin-badge unread">New</span> : null}
               </div>
-              <p className="mt-2 truncate text-sm text-metal">
+              <p className="admin-muted" style={{ marginTop: 8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 {msg.subject || msg.message}
               </p>
-              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.1em] text-metal">
+              <p className="admin-list-item-meta" style={{ marginTop: 4 }}>
                 {msg.type} · {new Date(msg.createdAt).toLocaleDateString()}
               </p>
             </button>
           ))}
         </div>
 
-        <AdminCard className="min-h-[320px]">
+        <AdminCard style={{ minHeight: 320 }}>
           {selected ? (
             <div>
-              <div className="flex flex-wrap items-start justify-between gap-3 border-b border-sand/15 pb-4">
-                <div>
-                  <h2 className="font-serif text-2xl text-cream">{selected.name}</h2>
-                  <a href={`mailto:${selected.email}`} className="text-sm text-rust-light hover:text-cream">
-                    {selected.email}
-                  </a>
+              <div className="admin-panel-title">
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: 12 }}>
+                  <div>
+                    <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "var(--text-xl)" }}>
+                      {selected.name}
+                    </h2>
+                    <a href={`mailto:${selected.email}`} className="admin-link" style={{ marginTop: 8 }}>
+                      {selected.email}
+                    </a>
+                  </div>
+                  <span className="admin-badge">{selected.type}</span>
                 </div>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-metal">
-                  {selected.type}
-                </span>
               </div>
               {selected.subject ? (
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
+                <p className="admin-stat-label" style={{ marginTop: 16 }}>
                   Subject: {selected.subject}
                 </p>
               ) : null}
               {selected.company ? (
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
+                <p className="admin-stat-label" style={{ marginTop: 8 }}>
                   Company: {selected.company}
                 </p>
               ) : null}
               {selected.projectType ? (
-                <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-metal">
+                <p className="admin-stat-label" style={{ marginTop: 8 }}>
                   Project: {selected.projectType}
                 </p>
               ) : null}
-              <p className="mt-4 whitespace-pre-wrap text-sm leading-relaxed text-sand">
-                {selected.message}
-              </p>
-              <div className="mt-6 flex gap-3">
+              <p className="admin-message-body">{selected.message}</p>
+              <div style={{ marginTop: 24, display: "flex", gap: 12 }}>
                 {!selected.read ? (
-                  <AdminButton onClick={() => markRead(selected._id, true)}>Mark read</AdminButton>
+                  <AdminButton onClick={() => markRead(selected._id, true)} className="filled">
+                    Mark read
+                  </AdminButton>
                 ) : (
                   <AdminButton variant="ghost" onClick={() => markRead(selected._id, false)}>
                     Mark unread
@@ -145,7 +139,7 @@ export default function AdminMessagesPage() {
               </div>
             </div>
           ) : (
-            <p className="text-metal">Select a message to view.</p>
+            <p className="admin-muted">Select a message to view.</p>
           )}
         </AdminCard>
       </div>

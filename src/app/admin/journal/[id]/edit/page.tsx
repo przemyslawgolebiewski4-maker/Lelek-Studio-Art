@@ -33,10 +33,10 @@ export default function AdminJournalEditPage() {
 
   return (
     <AdminShell title="Edit journal post" subtitle={post?.title}>
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      {error ? <p className="text-rust-light">{error}</p> : null}
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      {error ? <p className="admin-error">{error}</p> : null}
       {post ? (
-        <AdminCard className="max-w-3xl">
+        <AdminCard style={{ maxWidth: 720 }}>
           <JournalPostForm initial={postToForm(post)} postId={post._id} />
         </AdminCard>
       ) : null}

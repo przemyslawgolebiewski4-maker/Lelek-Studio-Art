@@ -104,10 +104,10 @@ export function ProductForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="grid max-w-2xl gap-5">
-      {error ? <p className="text-sm text-rust-light">{error}</p> : null}
+    <form onSubmit={handleSubmit} className="admin-form-stack-lg" style={{ maxWidth: 640 }}>
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="admin-form-row-2">
         <AdminInput
           label="Title"
           value={form.title}
@@ -122,7 +122,7 @@ export function ProductForm({
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="admin-form-row-2">
         <AdminInput
           label="Catalog number"
           value={form.catalog}
@@ -172,7 +172,7 @@ export function ProductForm({
         onChange={(e) => update("images", e.target.value)}
       />
 
-      <div className="grid gap-5 sm:grid-cols-2">
+      <div className="admin-form-row-2">
         <AdminInput
           label="Meta title"
           value={form.metaTitle}
@@ -193,18 +193,17 @@ export function ProductForm({
         onChange={(e) => update("metaDescription", e.target.value)}
       />
 
-      <label className="flex items-center gap-2 text-sm text-cream">
+      <label className="admin-checkbox">
         <input
           type="checkbox"
           checked={form.published}
           onChange={(e) => update("published", e.target.checked)}
-          className="accent-rust"
         />
         Published on site
       </label>
 
-      <div className="flex gap-3 pt-2">
-        <AdminButton type="submit" disabled={loading}>
+      <div style={{ display: "flex", gap: 12 }}>
+        <AdminButton type="submit" disabled={loading} className="filled">
           {loading ? "Saving..." : productId ? "Update product" : "Create product"}
         </AdminButton>
       </div>

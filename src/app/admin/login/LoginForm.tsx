@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AdminInput, AdminButton } from "@/components/admin/AdminShell";
 import { apiPostDirect } from "@/lib/api";
+import "../admin.css";
 
 async function setFrontendSession(token: string) {
   const res = await fetch("/api/auth/session", {
@@ -81,20 +82,20 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-6">
-      <div className="w-full max-w-md border border-sand/20 bg-peat/30 p-8">
-        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-metal">Lelek Studio</p>
-        <h1 className="mt-2 font-serif text-3xl font-light text-cream">Admin login</h1>
-        <p className="mt-2 text-sm text-metal">Sign in with your admin account.</p>
+    <div className="admin-login-wrap">
+      <div className="admin-login-card surface-wabi">
+        <p className="admin-stat-label">Lelek Studio</p>
+        <h1>Admin login</h1>
+        <p className="admin-muted">Sign in with your admin account.</p>
 
         {process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? (
-          <p className="mt-4 border border-rust/40 bg-rust/10 p-3 text-xs text-rust-light">
+          <p className="admin-warning">
             Brak NEXT_PUBLIC_API_URL — ustaw env na Vercel i redeploy.
           </p>
         ) : null}
 
-        <form onSubmit={handleSubmit} className="mt-8 grid gap-4">
-          {error ? <p className="text-sm text-rust-light">{error}</p> : null}
+        <form onSubmit={handleSubmit} className="admin-form-stack" style={{ marginTop: 32 }}>
+          {error ? <p className="admin-error">{error}</p> : null}
           <AdminInput
             label="Email"
             type="email"
@@ -111,7 +112,7 @@ export default function LoginForm() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <AdminButton type="submit" disabled={loading} className="mt-2 w-full justify-center">
+          <AdminButton type="submit" disabled={loading} className="filled" style={{ width: "100%" }}>
             {loading ? "Signing in..." : "Sign in"}
           </AdminButton>
         </form>

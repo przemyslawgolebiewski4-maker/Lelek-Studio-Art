@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAdminSession } from "@/lib/session";
 import { AdminNav } from "@/components/admin/AdminNav";
+import "./admin.css";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -11,7 +12,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const session = await getAdminSession();
 
   return (
-    <div className="min-h-screen bg-ink text-cream">
+    <div className="admin-layout">
       {session ? <AdminNav adminName={session.name} /> : null}
       {children}
     </div>

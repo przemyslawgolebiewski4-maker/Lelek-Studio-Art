@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
   return (
     <AdminShell
       title="Dashboard"
-      subtitle="Overview of your studio site"
+      subtitle="Overview of your studio site — same design system as the public site."
       actions={
         <>
           <AdminLinkButton href="/admin/products/new" variant="primary">
@@ -48,47 +48,51 @@ export default function AdminDashboardPage() {
         </>
       }
     >
-      {loading ? <p className="text-metal">Loading...</p> : null}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {loading ? <p className="admin-muted">Loading...</p> : null}
+      <div className="admin-grid-stats">
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Products</p>
-          <p className="mt-2 font-serif text-4xl text-cream">{productCount}</p>
-          <Link href="/admin/products" className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-rust-light hover:text-cream">
+          <p className="admin-stat-label">Products</p>
+          <p className="admin-stat-value">{productCount}</p>
+          <Link href="/admin/products" className="admin-link">
             Manage →
           </Link>
         </AdminCard>
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Journal</p>
-          <p className="mt-2 font-serif text-4xl text-cream">{journalCount}</p>
-          <Link href="/admin/journal" className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-rust-light hover:text-cream">
+          <p className="admin-stat-label">Journal</p>
+          <p className="admin-stat-value">{journalCount}</p>
+          <Link href="/admin/journal" className="admin-link">
             Manage →
           </Link>
         </AdminCard>
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Messages</p>
-          <p className="mt-2 font-serif text-4xl text-cream">{messageCount}</p>
-          <Link href="/admin/messages" className="mt-4 inline-block font-mono text-[10px] uppercase tracking-[0.14em] text-rust-light hover:text-cream">
+          <p className="admin-stat-label">Messages</p>
+          <p className="admin-stat-value">{messageCount}</p>
+          <Link href="/admin/messages" className="admin-link">
             Inbox →
           </Link>
         </AdminCard>
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Unread</p>
-          <p className="mt-2 font-serif text-4xl text-rust-light">{unreadCount}</p>
+          <p className="admin-stat-label">Unread</p>
+          <p className="admin-stat-value">{unreadCount}</p>
         </AdminCard>
       </div>
 
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="admin-grid-2" style={{ marginTop: 32 }}>
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Content</p>
-          <p className="mt-2 text-sm text-sand">Edit homepage sections, about story, architects block and journal teaser.</p>
-          <Link href="/admin/home" className="btn-text mt-4 inline-block text-rust-light hover:text-cream">
+          <p className="admin-stat-label">Content</p>
+          <p className="admin-muted" style={{ marginTop: 8 }}>
+            Edit homepage sections — hero video, story, elements, architects, journal teaser, find.
+          </p>
+          <Link href="/admin/home" className="admin-link">
             Home sections →
           </Link>
         </AdminCard>
         <AdminCard>
-          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Site settings</p>
-          <p className="mt-2 text-sm text-sand">Site name, tagline, email, Etsy and Instagram links.</p>
-          <Link href="/admin/settings" className="btn-text mt-4 inline-block text-rust-light hover:text-cream">
+          <p className="admin-stat-label">Site settings</p>
+          <p className="admin-muted" style={{ marginTop: 8 }}>
+            Site name, email, Etsy and Instagram links shown in nav and footer.
+          </p>
+          <Link href="/admin/settings" className="admin-link">
             Settings →
           </Link>
         </AdminCard>

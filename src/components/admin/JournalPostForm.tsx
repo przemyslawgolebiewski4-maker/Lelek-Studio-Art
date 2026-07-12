@@ -65,10 +65,10 @@ export function JournalPostForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {error ? <p className="text-rust-light">{error}</p> : null}
+    <form onSubmit={handleSubmit} className="admin-form-stack-lg">
+      {error ? <p className="admin-error">{error}</p> : null}
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="admin-form-row-2">
         <AdminInput
           label="Title"
           value={form.title}
@@ -103,7 +103,7 @@ export function JournalPostForm({
         onChange={(e) => setForm({ ...form, coverImage: e.target.value })}
       />
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="admin-form-row-2">
         <AdminInput
           label="Meta title"
           value={form.metaTitle}
@@ -124,7 +124,7 @@ export function JournalPostForm({
         onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
       />
 
-      <label className="flex items-center gap-2 text-sm text-sand">
+      <label className="admin-checkbox">
         <input
           type="checkbox"
           checked={form.published}
@@ -133,7 +133,7 @@ export function JournalPostForm({
         Published
       </label>
 
-      <AdminButton type="submit" disabled={loading}>
+      <AdminButton type="submit" disabled={loading} className="filled">
         {loading ? "Saving..." : postId ? "Update post" : "Create post"}
       </AdminButton>
     </form>

@@ -33,7 +33,7 @@ export default function EditProductPage() {
   if (loading) {
     return (
       <AdminShell title="Edit product" subtitle="Loading...">
-        <p className="text-metal">Loading...</p>
+        <p className="admin-muted">Loading...</p>
       </AdminShell>
     );
   }
@@ -41,7 +41,7 @@ export default function EditProductPage() {
   if (error || !initial) {
     return (
       <AdminShell title="Edit product" subtitle="Error">
-        <p className="text-rust-light">{error || "Not found"}</p>
+        <p className="admin-error">{error || "Not found"}</p>
       </AdminShell>
     );
   }
