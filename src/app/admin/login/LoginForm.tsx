@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AdminInput, AdminButton } from "@/components/admin/AdminShell";
-import { API_BASE, apiPost } from "@/lib/api";
+import { apiPostDirect } from "@/lib/api";
 
 async function setFrontendSession(token: string) {
   const res = await fetch("/api/auth/session", {
@@ -16,13 +16,10 @@ async function setFrontendSession(token: string) {
 }
 
 function loginErrorMessage(err: unknown): string {
-  if (API_BASE.includes("localhost")) {
-    return "NEXT_PUBLIC_API_URL nie jest ustawione na Vercel. Dodaj URL Railway API i zrób Redeploy.";
-  }
   if (err instanceof TypeError) {
-    return `Nie można połączyć z API (${API_BASE}). Sprawdź URL Railway i CORS (FRONTEND_URL).`;
+    return "Nie można połączyć z API. Sprawdź NEXT_PUBLIC_API_URL na Vercel.";
   }
-  return "Logowanie nie powiodło się. Sprawdź API URL i redeploy Vercel + Railway.";
+  return "Logowanie nie powiodło się. Spróbuj ponownie.";
 }
 
 export default function LoginForm() {
@@ -39,14 +36,14 @@ export default function LoginForm() {
     setError("");
 
     try {
-      const res = await apiPost("/auth/login", { email, password });
+      const res = await apiPostDirect("/auth/login", { email, password });
 
       let data: { ok?: boolean; token?: string; error?: string; code?: string; hint?: string };
       try {
         data = await res.json();
       } catch {
         setError(
-          `API zwróciło nieprawidłową odpowiedź (HTTP ${res.status}). Sprawdź NEXT_PUBLIC_API_URL: ${API_BASE}`,
+          `API zwróciło nieprawidłową odpowiedź (HTTP ${res.status}). Sprawdź NEXT_PUBLIC_API_URL.`,
         );
         setLoading(false);
         return;
@@ -90,10 +87,9 @@ export default function LoginForm() {
         <h1 className="mt-2 font-serif text-3xl font-light text-cream">Admin login</h1>
         <p className="mt-2 text-sm text-metal">Sign in with your admin account.</p>
 
-        {API_BASE.includes("localhost") ? (
+        {process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? (
           <p className="mt-4 border border-rust/40 bg-rust/10 p-3 text-xs text-rust-light">
-            Brak NEXT_PUBLIC_API_URL — frontend próbuje łączyć się z localhost. Ustaw env na Vercel i
-            redeploy.
+            Brak NEXT_PUBLIC_API_URL — ustaw env na Vercel i redeploy.
           </p>
         ) : null}
 
