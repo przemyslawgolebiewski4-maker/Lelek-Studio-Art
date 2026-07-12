@@ -14,6 +14,9 @@ API: **Railway** (`*.up.railway.app` or `api.lelekstudio.com`)
 | `NEXT_PUBLIC_API_URL` | Railway public URL, np. `https://twoj-serwis.up.railway.app` |
 | `NEXT_PUBLIC_SITE_URL` | `https://www.lelekstudio.com` |
 
+**Ważne:** URL musi zawierać `https://` (np. `https://lelek-studio-art-production.up.railway.app`).  
+Bez tego frontend wysyła request na własną domenę Vercel i dostaje HTML zamiast JSON.
+
 **Ważne:** `NEXT_PUBLIC_*` wchodzi w skład buildu. Po dodaniu lub zmianie → **Redeploy** (nie wystarczy sam zapis env).
 
 ### Railway → Variables
