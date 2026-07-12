@@ -52,7 +52,12 @@ export function Hero({ content, elements = [] }: HeroProps) {
           {content.eyebrow ? <div className="hero-eyebrow">{content.eyebrow}</div> : null}
           <h1 className="hero-h1">
             {content.headline}
-            {content.headlineEm ? <em>{content.headlineEm}</em> : null}
+            {content.headlineEm ? (
+              <>
+                {" "}
+                <em>{content.headlineEm}</em>
+              </>
+            ) : null}
           </h1>
           <div className="hero-rule" />
           {content.quote ? (

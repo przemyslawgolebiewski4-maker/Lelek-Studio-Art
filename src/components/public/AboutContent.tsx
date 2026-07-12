@@ -28,7 +28,12 @@ export function AboutContent({ story }: { story: StorySection }) {
           {story.eyebrow ? <div className="story-eyebrow">{story.eyebrow}</div> : null}
           <h1 className="story-h2">
             {story.heading}
-            {story.headingEm ? <em>{story.headingEm}</em> : null}
+            {story.headingEm ? (
+              <>
+                {" "}
+                <em>{story.headingEm}</em>
+              </>
+            ) : null}
           </h1>
           <div className="story-rule" />
           {story.body1 ? <p className="story-body">{story.body1}</p> : null}
