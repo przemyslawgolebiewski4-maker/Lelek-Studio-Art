@@ -5,7 +5,7 @@ export const SITE_NAME = "Lelek Studio Berlin";
 export const DEFAULT_DESCRIPTION =
   "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.";
 
-export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/hero/hero-main.jpg`;
+export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.png`;
 
 export const SEO_KEYWORDS = [
   "ceramics",

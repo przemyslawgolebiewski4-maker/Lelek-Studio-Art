@@ -1,45 +1,60 @@
-# Lelek Studio - Image assets
+# Lelek Studio — Image assets
 
-Replace placeholder files with final photography. Use WebP where possible; keep JPG fallbacks at the paths referenced in `data/content.json`.
+All paths below are served from `/public/images/` and referenced in `backend/data/content.json`, product records, and home sections.
 
-## Hero (`images/hero/`)
+## Quick replace workflow
 
-| File | Min size | Notes |
-|------|----------|--------|
-| `hero-main.jpg` | 1920 x 1080 | Desktop hero |
-| `hero-main-mobile.jpg` | 800 x 1200 | Mobile hero |
+1. Drop new files at the **same paths** (keep filenames — URLs in CMS depend on them).
+2. Run `npm run images:optimize` to resize/compress for web.
+3. Redeploy Vercel (images ship with the frontend build).
 
-## Featured (`images/featured/`)
+To pull current production assets into the repo:
 
-| File | Size |
-|------|------|
-| `feat-1.jpg` through `feat-5.jpg` | 800 x 800 (square) |
+```bash
+npm run images:sync
+```
 
-## Ceramics (`images/ceramics/`)
+Missing files on production use fallbacks from `scripts/image-fallbacks/`.
 
-| File | Size |
-|------|------|
-| `cup-1.jpg`, `cup-2.jpg`, `bowl-1.jpg`, `teapot-1.jpg` | 800 x 800 (square) |
+## Required paths (content.json)
 
-## Vessels (`images/vessels/`)
+| Folder | Files | Min size |
+|--------|-------|----------|
+| `hero/` | `hero-main.jpg`, `hero-main-mobile.jpg` | 1920×1080 / 800×1200 |
+| `process/` | `studio.jpg`, `studio-mobile.jpg` | 1200×800 / 800×533 |
+| `featured/` | `feat-1.jpg` … `feat-5.jpg` | 800×800 |
+| `ceramics/` | `cup-1.jpg`, `cup-2.jpg`, `bowl-1.jpg`, `teapot-1.jpg` | 800×800 |
+| `vessels/` | `vessel-1.jpg` … `vessel-3.jpg` | 800×1000 |
+| `wall/` | `wall-1.jpg` … `wall-3.jpg`, `bookend-1.jpg`, `bookend-2.jpg` | 800×1000 |
 
-| File | Size |
-|------|------|
-| `vessel-1.jpg`, `vessel-2.jpg`, `vessel-3.jpg` | 800 x 1000 (portrait) |
+## Social / SEO
 
-## Wall (`images/wall/`)
+| File | Size | Used by |
+|------|------|---------|
+| `og-image.png` | 1200×630 | Open Graph + Twitter (`src/lib/seo.ts`) |
 
-| File | Size |
-|------|------|
-| `wall-1.jpg`, `wall-2.jpg`, `wall-3.jpg`, `bookend-1.jpg`, `bookend-2.jpg` | 800 x 1000 (portrait) - bookends placeholder until photos added |
+Regenerate from hero:
 
-## Process (`images/process/`)
+```bash
+ffmpeg -y -i public/images/hero/hero-main.jpg \
+  -vf "scale=1200:630:force_original_aspect_ratio=increase,crop=1200:630" \
+  public/images/og-image.png
+```
 
-| File | Size |
-|------|------|
-| `studio.jpg` | 1200 x 800 (landscape, 3:2) |
-| `studio-mobile.jpg` | 800 x 533 (landscape, 3:2) - used below 768px width |
+## Extra library (not wired to content.json yet)
 
-## SEO / social (optional, add to site root or `images/`)
+These studio photos are in the repo for future products or CMS uploads:
 
-- `og-image.png` - 1200 x 630 for Open Graph
+- `functional-1.jpg` … `functional-4.jpg`
+- `inherited-quiet-1.jpg` … `inherited-quiet-6.jpg`
+- `nature-faces-1.jpg` … `nature-faces-3.jpg`
+- `still-form.jpg`, `still-form-1.jpg`, `still-form-2.jpg`
+- `about.jpg`, `hero.jpg` (legacy full-res; prefer `hero/` folder)
+
+When adding a product in Admin → Products, paste the path e.g. `/images/inherited-quiet-4.jpg`.
+
+## Tips
+
+- Prefer JPG for photos; PNG only for `og-image.png`.
+- Keep hero/process under ~200 KB after optimize.
+- Product/detail images: max 1200 px wide is enough for retina.
