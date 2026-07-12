@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { apiPost, apiPatch } from "@/lib/api";
 import type { IProduct } from "@/models/Product";
 import {
   AdminButton,
@@ -86,14 +87,10 @@ export function ProductForm({
     setLoading(true);
     setError("");
 
-    const url = productId ? `/api/admin/products/${productId}` : "/api/admin/products";
-    const method = productId ? "PATCH" : "POST";
-
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formToPayload(form)),
-    });
+    const url = productId ? `/admin/products/${productId}` : "/admin/products";
+    const res = productId
+      ? await apiPatch(url, formToPayload(form))
+      : await apiPost(url, formToPayload(form));
     const data = await res.json();
 
     if (!res.ok || !data.ok) {

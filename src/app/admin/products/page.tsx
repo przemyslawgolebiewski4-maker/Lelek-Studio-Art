@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AdminShell, AdminLinkButton, AdminButton } from "@/components/admin/AdminShell";
+import { apiGet, apiPatch, apiDelete } from "@/lib/api";
 
 type ProductRow = {
   _id: string;
@@ -23,7 +24,7 @@ export default function AdminProductsPage() {
 
   async function loadProducts() {
     setLoading(true);
-    const res = await fetch("/api/admin/products");
+    const res = await apiGet("/admin/products");
     const data = await res.json();
     if (!res.ok || !data.ok) {
       setError(data.error ?? "Failed to load products");
@@ -39,11 +40,7 @@ export default function AdminProductsPage() {
   }, []);
 
   async function togglePublished(id: string, published: boolean) {
-    const res = await fetch(`/api/admin/products/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ published: !published }),
-    });
+    const res = await apiPatch(`/admin/products/${id}`, { published: !published });
     const data = await res.json();
     if (data.ok) {
       setProducts((prev) =>
@@ -54,7 +51,7 @@ export default function AdminProductsPage() {
 
   async function deleteProduct(id: string, title: string) {
     if (!confirm(`Delete "${title}"?`)) return;
-    const res = await fetch(`/api/admin/products/${id}`, { method: "DELETE" });
+    const res = await apiDelete(`/admin/products/${id}`);
     const data = await res.json();
     if (data.ok) {
       setProducts((prev) => prev.filter((p) => p._id !== id));

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { apiPost } from "@/lib/api";
 
 const nav = [
   { href: "/admin", label: "Dashboard" },
@@ -14,7 +15,7 @@ export function AdminNav({ adminName }: { adminName?: string }) {
   const router = useRouter();
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST" });
+    await apiPost("/auth/logout", {});
     router.push("/admin/login");
     router.refresh();
   }

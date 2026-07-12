@@ -1,12 +1,3 @@
-import { connectDB } from "@/lib/mongodb";
-import { HomeSection, Product, Setting } from "@/models";
-
-export async function getSiteSettings() {
-  await connectDB();
-  const rows = await Setting.find().lean();
-  return Object.fromEntries(rows.map((row) => [row.key, row.value]));
-}
-
 export type HomeSectionKey =
   | "hero"
   | "story"
@@ -16,27 +7,42 @@ export type HomeSectionKey =
   | "journal"
   | "find";
 
-export async function getHomeSection(slug: HomeSectionKey) {
-  await connectDB();
-  return HomeSection.findOne({ sectionKey: slug, visible: true }).lean();
-}
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
 
-export async function getFeaturedProducts(limit = 3) {
-  await connectDB();
-  return Product.find({ published: true }).sort({ order: 1 }).limit(limit).lean();
+export async function getSiteSettings() {
+  try {
+    const res = await fetch(`${API_URL}/settings/public`, { next: { revalidate: 60 } });
+    if (!res.ok) return {};
+    return res.json();
+  } catch {
+    return {};
+  }
 }
 
 export async function getPublicHomeData() {
-  await connectDB();
-  const [settings, heroDoc, featured] = await Promise.all([
-    getSiteSettings(),
-    getHomeSection("hero"),
-    getFeaturedProducts(3),
-  ]);
+  try {
+    const [settingsRes, featuredRes, heroRes] = await Promise.all([
+      fetch(`${API_URL}/settings/public`, { next: { revalidate: 60 } }),
+      fetch(`${API_URL}/products/public?limit=6`, { next: { revalidate: 60 } }),
+      fetch(`${API_URL}/sections/hero`, { next: { revalidate: 60 } }),
+    ]);
+    const settings = settingsRes.ok ? await settingsRes.json() : {};
+    const featured = featuredRes.ok ? await featuredRes.json() : [];
+    const hero = heroRes.ok ? await heroRes.json() : {};
+    return { settings, hero, featured };
+  } catch {
+    return { settings: {}, hero: {}, featured: [] };
+  }
+}
 
-  return {
-    settings,
-    hero: (heroDoc?.content ?? {}) as Record<string, string>,
-    featured,
-  };
+export async function getFeaturedProducts(limit = 3) {
+  try {
+    const res = await fetch(`${API_URL}/products/public?limit=${limit}`, {
+      next: { revalidate: 60 },
+    });
+    if (!res.ok) return [];
+    return res.json();
+  } catch {
+    return [];
+  }
 }

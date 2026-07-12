@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AdminInput, AdminButton } from "@/components/admin/AdminShell";
+import { apiPost } from "@/lib/api";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -17,11 +18,7 @@ export default function LoginForm() {
     setLoading(true);
     setError("");
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    const res = await apiPost("/auth/login", { email, password });
     const data = await res.json();
 
     if (!res.ok || !data.ok) {

@@ -1,14 +1,32 @@
-import { connectDB } from "@/lib/mongodb";
-import { Product, Message } from "@/models";
-import { AdminShell, AdminCard, AdminLinkButton } from "@/components/admin/AdminShell";
+"use client";
 
-export default async function AdminDashboardPage() {
-  await connectDB();
-  const [productCount, messageCount, unreadCount] = await Promise.all([
-    Product.countDocuments(),
-    Message.countDocuments(),
-    Message.countDocuments({ read: false }),
-  ]);
+import { useEffect, useState } from "react";
+import { AdminShell, AdminCard, AdminLinkButton } from "@/components/admin/AdminShell";
+import { apiGet } from "@/lib/api";
+
+export default function AdminDashboardPage() {
+  const [productCount, setProductCount] = useState(0);
+  const [messageCount, setMessageCount] = useState(0);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const [productsRes, messagesRes, unreadRes] = await Promise.all([
+        apiGet("/admin/products"),
+        apiGet("/admin/messages"),
+        apiGet("/admin/messages?filter=unread"),
+      ]);
+      const productsData = productsRes.ok ? await productsRes.json() : { products: [] };
+      const messagesData = messagesRes.ok ? await messagesRes.json() : { messages: [] };
+      const unreadData = unreadRes.ok ? await unreadRes.json() : { messages: [] };
+      setProductCount(productsData.products?.length ?? 0);
+      setMessageCount(messagesData.messages?.length ?? 0);
+      setUnreadCount(unreadData.messages?.length ?? 0);
+      setLoading(false);
+    }
+    load();
+  }, []);
 
   return (
     <AdminShell
@@ -25,6 +43,7 @@ export default async function AdminDashboardPage() {
         </>
       }
     >
+      {loading ? <p className="text-metal">Loading...</p> : null}
       <div className="grid gap-4 sm:grid-cols-3">
         <AdminCard>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-metal">Products</p>

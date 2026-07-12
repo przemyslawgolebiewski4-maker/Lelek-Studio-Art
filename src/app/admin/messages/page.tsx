@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminShell, AdminButton, AdminCard } from "@/components/admin/AdminShell";
+import { apiGet, apiPatch } from "@/lib/api";
 
 type MessageRow = {
   _id: string;
@@ -9,7 +10,7 @@ type MessageRow = {
   email: string;
   subject: string;
   message: string;
-  type: "general" | "architect";
+  type: "general" | "architect" | "custom-order";
   read: boolean;
   createdAt: string;
 };
@@ -22,7 +23,7 @@ export default function AdminMessagesPage() {
 
   async function loadMessages() {
     setLoading(true);
-    const res = await fetch("/api/admin/messages");
+    const res = await apiGet("/admin/messages");
     const data = await res.json();
     if (!res.ok || !data.ok) {
       setError(data.error ?? "Failed to load messages");
@@ -38,11 +39,7 @@ export default function AdminMessagesPage() {
   }, []);
 
   async function markRead(id: string, read = true) {
-    const res = await fetch("/api/admin/messages", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, read }),
-    });
+    const res = await apiPatch(`/admin/messages/${id}`, { read });
     const data = await res.json();
     if (data.ok) {
       setMessages((prev) => prev.map((m) => (m._id === id ? { ...m, read } : m)));
