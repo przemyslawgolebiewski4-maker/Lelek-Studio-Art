@@ -41,3 +41,13 @@ export async function getPublicHomeData() {
 export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
   return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
 }
+
+export async function getPublishedProducts(limit = 50): Promise<Product[]> {
+  return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  return serverFetch<Product | null>(`/products/public/${encodeURIComponent(slug)}`, {
+    fallback: null,
+  });
+}

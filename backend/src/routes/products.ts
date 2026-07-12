@@ -9,11 +9,26 @@ productsPublicRouter.get("/products/public", async (req, res) => {
   try {
     await connectDB();
     const limit = Math.min(Number(req.query.limit) || 6, 50);
-    const products = await Product.find({ published: true })
-      .sort({ order: 1 })
-      .limit(limit)
-      .lean();
+    const query: Record<string, unknown> = { published: true };
+    if (typeof req.query.category === "string" && req.query.category) {
+      query.category = req.query.category;
+    }
+    const products = await Product.find(query).sort({ order: 1 }).limit(limit).lean();
     res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+productsPublicRouter.get("/products/public/:slug", async (req, res) => {
+  try {
+    await connectDB();
+    const product = await Product.findOne({ slug: req.params.slug, published: true }).lean();
+    if (!product) {
+      res.status(404).json({ error: "Not found" });
+      return;
+    }
+    res.json(product);
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
