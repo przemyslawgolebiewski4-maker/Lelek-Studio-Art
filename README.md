@@ -39,8 +39,10 @@ GET http://localhost:3001/setup/seed?secret=YOUR_SETUP_SECRET
 
 ### Railway (API)
 1. New project → Deploy from GitHub
-2. Set **Root Directory** to `backend` OR use repo root with `backend/railway.toml`
-3. Env vars: `DATABASE_URL`, `JWT_SECRET`, `SETUP_SECRET`, `RESEND_KEY`, `ADMIN_EMAIL`, `FRONTEND_URL`
+2. Set **Root Directory** to `backend`
+3. Build/start: use defaults (`npm run build` / `npm start`) — **no** `cd backend`
+4. Clear any custom dashboard build commands that contain `cd backend`
+5. Env vars: `DATABASE_URL`, `JWT_SECRET`, `SETUP_SECRET`, `RESEND_KEY`, `ADMIN_EMAIL`, `FRONTEND_URL`
 
 ### Vercel (Frontend)
 1. Connect repo, framework Next.js
