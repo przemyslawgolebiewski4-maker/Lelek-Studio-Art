@@ -20,6 +20,7 @@ export function FeaturedWorks({
       <div className="works-head">
         <h2 className="works-h2">
           {section?.heading ?? "Form, surface"}
+          {" "}
           <em>{section?.headingEm ?? "and presence"}</em>
         </h2>
         <Link href="/collections" className="works-cta">
