@@ -5,6 +5,16 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AdminInput, AdminButton } from "@/components/admin/AdminShell";
 import { apiPost } from "@/lib/api";
 
+async function setFrontendSession(token: string) {
+  const res = await fetch("/api/auth/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ token }),
+  });
+  if (!res.ok) throw new Error("Session failed");
+}
+
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -18,18 +28,25 @@ export default function LoginForm() {
     setLoading(true);
     setError("");
 
-    const res = await apiPost("/auth/login", { email, password });
-    const data = await res.json();
+    try {
+      const res = await apiPost("/auth/login", { email, password });
+      const data = await res.json();
 
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Login failed");
+      if (!res.ok || !data.ok || !data.token) {
+        setError(data.error ?? "Invalid credentials");
+        setLoading(false);
+        return;
+      }
+
+      await setFrontendSession(data.token);
+
+      const from = searchParams.get("from") || "/admin";
+      router.push(from);
+      router.refresh();
+    } catch {
+      setError("Login failed. Check API URL and try again.");
       setLoading(false);
-      return;
     }
-
-    const from = searchParams.get("from") || "/admin";
-    router.push(from);
-    router.refresh();
   }
 
   return (

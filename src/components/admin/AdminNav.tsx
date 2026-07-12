@@ -15,7 +15,10 @@ export function AdminNav({ adminName }: { adminName?: string }) {
   const router = useRouter();
 
   async function logout() {
-    await apiPost("/auth/logout", {});
+    await Promise.all([
+      apiPost("/auth/logout", {}),
+      fetch("/api/auth/session", { method: "DELETE", credentials: "include" }),
+    ]);
     router.push("/admin/login");
     router.refresh();
   }

@@ -1,4 +1,6 @@
-function resolveCookieDomain(): string | undefined {
+function resolveCookieDomain(apiHostname?: string): string | undefined {
+  if (!apiHostname?.endsWith("lelekstudio.com")) return undefined;
+
   const frontendUrl = process.env.FRONTEND_URL;
   if (!frontendUrl) return undefined;
 
@@ -14,14 +16,13 @@ function resolveCookieDomain(): string | undefined {
   return undefined;
 }
 
-export function adminCookieOptions() {
+export function adminCookieOptions(apiHostname?: string) {
   const isProduction = process.env.NODE_ENV === "production";
-  const domain = resolveCookieDomain();
+  const domain = resolveCookieDomain(apiHostname);
 
   return {
     httpOnly: true,
     secure: isProduction,
-    // Shared parent domain (www + api): lax is enough. Railway *.app without domain: none.
     sameSite: (domain ? "lax" : isProduction ? "none" : "lax") as "none" | "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",

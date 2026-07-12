@@ -19,27 +19,27 @@ router.post("/login", async (req, res) => {
     await connectDB();
     const user = await User.findOne({ email });
     if (!user || !isLelekAdmin(user)) {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials", code: "not_admin" });
       return;
     }
 
     const valid = await comparePassword(password, user.passwordHash);
     if (!valid) {
-      res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials", code: "wrong_password" });
       return;
     }
 
     const token = signToken(user._id.toString());
-    res.cookie(COOKIE_NAME, token, adminCookieOptions());
+    res.cookie(COOKIE_NAME, token, adminCookieOptions(req.hostname));
 
-    res.json({ ok: true, name: user.name, email: user.email });
+    res.json({ ok: true, name: user.name, email: user.email, token });
   } catch {
     res.status(401).json({ error: "Invalid credentials" });
   }
 });
 
-router.post("/logout", (_req, res) => {
-  res.clearCookie(COOKIE_NAME, adminCookieOptions());
+router.post("/logout", (req, res) => {
+  res.clearCookie(COOKIE_NAME, adminCookieOptions(req.hostname));
   res.json({ ok: true });
 });
 
