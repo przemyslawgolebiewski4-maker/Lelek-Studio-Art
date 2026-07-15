@@ -44,6 +44,12 @@ export function Footer({
           <Link href="/contact">Contact</Link>
         </li>
         <li>
+          <Link href="/impressum">Impressum</Link>
+        </li>
+        <li>
+          <Link href="/datenschutz">Datenschutz</Link>
+        </li>
+        <li>
           <Link href={artistUrl} target="_blank" rel="noopener noreferrer">
             Art ↗
           </Link>
