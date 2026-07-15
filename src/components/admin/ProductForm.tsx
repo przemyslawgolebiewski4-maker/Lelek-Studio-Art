@@ -11,6 +11,7 @@ import {
   AdminTextarea,
 } from "@/components/admin/AdminShell";
 import { ImageListField } from "@/components/admin/MediaUploadField";
+import { MEDIA_HINTS } from "@/lib/media-hints";
 
 export type ProductFormData = {
   slug: string;
@@ -171,6 +172,7 @@ export function ProductForm({
         value={form.images}
         onChange={(v) => update("images", v)}
         folder="products"
+        hint={MEDIA_HINTS.productGallery}
       />
 
       <div className="admin-form-row-2">

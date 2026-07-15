@@ -177,9 +177,10 @@ type ImageListFieldProps = {
   value: string;
   onChange: (urls: string) => void;
   folder: string;
+  hint?: string;
 };
 
-export function ImageListField({ label, value, onChange, folder }: ImageListFieldProps) {
+export function ImageListField({ label, value, onChange, folder, hint }: ImageListFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -263,6 +264,7 @@ export function ImageListField({ label, value, onChange, folder }: ImageListFiel
         style={{ marginTop: 12, fontStyle: "normal", fontFamily: "var(--font-mono)", fontSize: "12px" }}
       />
 
+      {hint ? <p className="admin-field-hint">{hint}</p> : null}
       {error ? <p className="admin-error" style={{ marginTop: 8 }}>{error}</p> : null}
     </div>
   );

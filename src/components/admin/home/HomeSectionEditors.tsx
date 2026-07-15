@@ -5,6 +5,7 @@ import {
   AdminTextarea,
 } from "@/components/admin/AdminShell";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
+import { MEDIA_HINTS } from "@/lib/media-hints";
 import type { ElementItem } from "@/types/content";
 
 export type HeroFormData = {
@@ -75,13 +76,14 @@ export function HeroSectionEditor({
           value={form.image}
           onChange={(v) => set("image", v)}
           folder="hero"
-          hint="Used when no video, or as video poster."
+          hint={MEDIA_HINTS.heroDesktopImage}
         />
         <MediaUploadField
           label="Mobile image (optional)"
           value={form.imageMobile}
           onChange={(v) => set("imageMobile", v)}
           folder="hero"
+          hint={MEDIA_HINTS.heroMobileImage}
         />
         <MediaUploadField
           label="Desktop video (optional loop)"
@@ -89,7 +91,7 @@ export function HeroSectionEditor({
           onChange={(v) => set("video", v)}
           folder="hero"
           mode="video"
-          hint="Short MP4, muted loop. Overrides desktop image when set."
+          hint={MEDIA_HINTS.heroDesktopVideo}
         />
         <MediaUploadField
           label="Mobile video (optional)"
@@ -97,6 +99,7 @@ export function HeroSectionEditor({
           onChange={(v) => set("videoMobile", v)}
           folder="hero"
           mode="video"
+          hint={MEDIA_HINTS.heroMobileVideo}
         />
         <AdminInput label="Media caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
         <AdminInput label="Alt text (accessibility)" value={form.imageAlt} onChange={(e) => set("imageAlt", e.target.value)} />
@@ -183,10 +186,36 @@ export function StorySectionEditor({
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">Media</h3>
-        <MediaUploadField label="Image" value={form.image} onChange={(v) => set("image", v)} folder="story" />
-        <MediaUploadField label="Mobile image" value={form.imageMobile} onChange={(v) => set("imageMobile", v)} folder="story" />
-        <MediaUploadField label="Video loop (optional)" value={form.video} onChange={(v) => set("video", v)} folder="story" mode="video" />
-        <MediaUploadField label="Mobile video" value={form.videoMobile} onChange={(v) => set("videoMobile", v)} folder="story" mode="video" />
+        <MediaUploadField
+          label="Image"
+          value={form.image}
+          onChange={(v) => set("image", v)}
+          folder="story"
+          hint={MEDIA_HINTS.storyDesktopImage}
+        />
+        <MediaUploadField
+          label="Mobile image"
+          value={form.imageMobile}
+          onChange={(v) => set("imageMobile", v)}
+          folder="story"
+          hint={MEDIA_HINTS.storyMobileImage}
+        />
+        <MediaUploadField
+          label="Video loop (optional)"
+          value={form.video}
+          onChange={(v) => set("video", v)}
+          folder="story"
+          mode="video"
+          hint={MEDIA_HINTS.storyDesktopVideo}
+        />
+        <MediaUploadField
+          label="Mobile video"
+          value={form.videoMobile}
+          onChange={(v) => set("videoMobile", v)}
+          folder="story"
+          mode="video"
+          hint={MEDIA_HINTS.storyMobileVideo}
+        />
         <AdminInput label="Caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
         <AdminInput label="Alt text" value={form.imageAlt} onChange={(e) => set("imageAlt", e.target.value)} />
       </div>

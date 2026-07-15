@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { apiPatch, apiPost } from "@/lib/api";
+import { MEDIA_HINTS } from "@/lib/media-hints";
 import type { JournalPost } from "@/types/content";
 
 export type JournalFormData = {
@@ -103,6 +104,7 @@ export function JournalPostForm({
         value={form.coverImage}
         onChange={(v) => setForm({ ...form, coverImage: v })}
         folder="journal"
+        hint={MEDIA_HINTS.journalCover}
       />
 
       <div className="admin-form-row-2">
