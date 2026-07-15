@@ -25,6 +25,45 @@
   height: 56px;
 }
 
+@media (max-width: 768px) {
+  .admin-layout .admin-nav-inner {
+    height: auto;
+    min-height: 56px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .admin-layout .admin-nav-brand {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .admin-layout .admin-nav-meta {
+    margin-left: auto;
+  }
+
+  .admin-layout .admin-nav-links {
+    flex: 1 1 100%;
+    width: 100%;
+    order: 3;
+    gap: 0;
+    border-top: 1px solid rgba(230, 235, 231, 0.12);
+    padding-top: 4px;
+  }
+
+  .admin-layout .admin-nav-links a {
+    padding: 12px 10px;
+    border-left: none;
+  }
+
+  .admin-layout .admin-nav-links li:first-child a {
+    padding-left: 0;
+  }
+}
+
 .admin-layout .admin-nav-brand {
   font-family: var(--font-serif);
   font-size: 13px;
