@@ -1,168 +1,156 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, type ReactNode } from "react";
 import type { Product, ProductCategory } from "@/types/product";
 
-const CATEGORY_LABELS: Record<Product["category"], string> = {
+export const CATEGORY_LABELS: Record<ProductCategory, string> = {
   ceramics: "Functional ceramic",
   vessels: "Vessels",
   "wall-objects": "Wall objects and Objects",
 };
 
-const CATEGORY_HEADINGS: Record<Product["category"], { line: string; em: string }> = {
-  ceramics: { line: "Made for", em: "everyday ritual" },
-  vessels: { line: "Between use", em: "and form" },
-  "wall-objects": { line: "Shaped by hand,", em: "placed in space" },
+const CATEGORY_ORDER: ProductCategory[] = ["ceramics", "vessels", "wall-objects"];
+
+const CATEGORY_TAB_LABELS: Record<ProductCategory, string> = {
+  ceramics: "Ceramics",
+  vessels: "Vessels",
+  "wall-objects": "Wall objects",
 };
 
-const CATEGORY_INTRO: Record<Product["category"], string> = {
-  ceramics:
-    "Cups and bowls for daily use. Wheel-thrown stoneware with glaze applied by hand — each piece slightly different from the next.",
-  vessels: "Stoneware vessels shaped on the wheel — pieces that hold flowers, objects, or space.",
-  "wall-objects":
-    "Handmade ceramic objects for walls and shelves. Built through intuitive handbuilding — form emerging from the material.",
+const CATEGORY_INDEX: Record<ProductCategory, string> = {
+  ceramics: "01",
+  vessels: "02",
+  "wall-objects": "03",
 };
 
-export function ProductCard({
-  product,
-  portrait = false,
-  dark = false,
-}: {
-  product: Product;
-  portrait?: boolean;
-  dark?: boolean;
-}) {
-  return (
-    <Link href={`/objects/${product.slug}`} className="product-card">
-      <div className={`product-card-img ${portrait ? "portrait" : ""}`}>
-        {product.images[0] ? (
-          <Image
-            src={product.images[0]}
-            alt={product.metaDescription || product.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 600px) 50vw, 220px"
-          />
-        ) : (
-          product.title
-        )}
-      </div>
-      <div className="product-card-body" style={dark ? { background: "var(--B)", color: "var(--W)" } : undefined}>
-        <div className="product-card-title" style={dark ? { color: "var(--W)" } : undefined}>
-          {product.title}
-        </div>
-        <div className="product-card-meta" style={dark ? { color: "var(--W)" } : undefined}>
-          {product.material}
-        </div>
-      </div>
-    </Link>
-  );
+type FilterCat = "all" | ProductCategory;
+
+function formatCatalog(catalog?: string) {
+  if (!catalog) return "-";
+  return catalog;
 }
 
-function CategorySection({
-  category,
-  items,
-  dark = false,
-  etsyUrl,
-}: {
-  category: ProductCategory;
-  items: Product[];
-  dark?: boolean;
-  etsyUrl?: string;
-}) {
-  const heading = CATEGORY_HEADINGS[category];
-
-  return (
-    <section id={category} className="category-sec">
-      <div className={`category-head ${dark ? "dark" : ""}`}>
-        <div className="category-intro">
-          <div className="sec-eyebrow">{CATEGORY_LABELS[category]}</div>
-          <h2 className="category-h2">
-            {heading.line}
-            <em>{heading.em}</em>
-          </h2>
-          <p className="category-body">{CATEGORY_INTRO[category]}</p>
-          {category === "ceramics" && etsyUrl ? (
-            <Link href={etsyUrl} target="_blank" rel="noopener noreferrer" className="link-brutal" style={{ marginTop: 0 }}>
-              Available in my Etsy shop ↗
-            </Link>
-          ) : null}
-          {category === "vessels" && etsyUrl ? (
-            <Link href={etsyUrl} target="_blank" rel="noopener noreferrer" className="link-brutal" style={{ marginTop: 0 }}>
-              Available in my Etsy shop ↗
-            </Link>
-          ) : null}
-          {category === "wall-objects" ? (
-            <Link href="/contact" className="link-brutal" style={{ marginTop: 0 }}>
-              Get in touch
-            </Link>
-          ) : null}
-        </div>
-        <div className="category-grid-wrap">
-          <div className="product-grid">
-            {items.map((product) => (
-              <ProductCard
-                key={String(product._id)}
-                product={product}
-                portrait={category !== "ceramics"}
-                dark={dark}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-export function ProductGrid({
+export function WorksGrid({
   products,
-  etsyUrl = "https://www.etsy.com/shop/LelekStudio",
 }: {
   products: Product[];
+  /** Kept for call-site compatibility; not shown on the Works grid. */
   etsyUrl?: string;
 }) {
-  if (products.length === 0) {
-    return (
-      <div className="page-content">
-        <p className="page-intro">
-          No works published yet. Check back soon or{" "}
-          <Link href="/contact" className="link-brutal" style={{ marginTop: 0 }}>
-            get in touch
-          </Link>
-          .
-        </p>
-      </div>
-    );
-  }
+  const [filter, setFilter] = useState<FilterCat>("all");
 
-  const groups = (
-    [
-      { category: "ceramics" as const, items: products.filter((p) => p.category === "ceramics") },
-      {
-        category: "vessels" as const,
-        items: products.filter((p) => p.category === "vessels"),
-        dark: true,
-      },
-      {
-        category: "wall-objects" as const,
-        items: products.filter((p) => p.category === "wall-objects"),
-      },
-    ] as const
-  ).filter((g) => g.items.length > 0);
+  const counts = {
+    ceramics: products.filter((p) => p.category === "ceramics").length,
+    vessels: products.filter((p) => p.category === "vessels").length,
+    "wall-objects": products.filter((p) => p.category === "wall-objects").length,
+  };
+
+  const groups = CATEGORY_ORDER.map((category) => ({
+    category,
+    items: products.filter((p) => p.category === category),
+  })).filter((g) => g.items.length > 0);
+
+  const showSeparators = filter === "all";
 
   return (
-    <>
-      {groups.map((group) => (
-        <CategorySection
-          key={group.category}
-          category={group.category}
-          items={group.items}
-          dark={"dark" in group ? group.dark : false}
-          etsyUrl={etsyUrl}
-        />
-      ))}
-    </>
+    <div className="works-page">
+      <section className="works-header">
+        <h1 className="works-title">Works</h1>
+        <div className="works-total">{products.length} objects</div>
+      </section>
+
+      {products.length === 0 ? (
+        <div className="works-empty">
+          No works published yet.{" "}
+          <Link href="/contact" className="link-brutal" style={{ marginTop: 0 }}>
+            Get in touch
+          </Link>
+        </div>
+      ) : (
+        <>
+          <div className="works-cats" role="tablist" aria-label="Filter works by category">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={filter === "all"}
+              className={`works-cat-btn${filter === "all" ? " active" : ""}`}
+              onClick={() => setFilter("all")}
+            >
+              All
+              <span className="works-cat-count">{products.length}</span>
+            </button>
+            {CATEGORY_ORDER.map((category) => (
+              <button
+                key={category}
+                type="button"
+                role="tab"
+                aria-selected={filter === category}
+                className={`works-cat-btn${filter === category ? " active" : ""}`}
+                onClick={() => setFilter(category)}
+              >
+                {CATEGORY_TAB_LABELS[category]}
+                <span className="works-cat-count">{counts[category]}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="works-grid">
+            {groups.flatMap((group) => {
+              if (filter !== "all" && filter !== group.category) return [];
+
+              const nodes: ReactNode[] = [];
+
+              if (showSeparators) {
+                nodes.push(
+                  <div key={`cat-${group.category}`} className="works-cat-row" data-cat={group.category}>
+                    <span className="works-cat-label">Category {CATEGORY_INDEX[group.category]}</span>
+                    <span className="works-cat-name">{CATEGORY_LABELS[group.category]}</span>
+                  </div>
+                );
+              }
+
+              for (const product of group.items) {
+                nodes.push(
+                  <Link
+                    key={String(product._id)}
+                    href={`/objects/${product.slug}`}
+                    className="works-item"
+                    data-cat={product.category}
+                  >
+                    <span className="works-item-num">{formatCatalog(product.catalog)}</span>
+                    <div className="works-item-img">
+                      {product.images[0] ? (
+                        <Image
+                          src={product.images[0]}
+                          alt={product.metaDescription || product.title}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 50vw, 25vw"
+                        />
+                      ) : (
+                        product.title
+                      )}
+                    </div>
+                    <div className="works-item-overlay">
+                      <div className="works-item-title">{product.title}</div>
+                      <div className="works-item-meta">{product.material}</div>
+                    </div>
+                  </Link>
+                );
+              }
+
+              return nodes;
+            })}
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
-export { CATEGORY_LABELS };
+/** @deprecated Use WorksGrid - kept for any residual imports */
+export function ProductGrid(props: { products: Product[]; etsyUrl?: string }) {
+  return <WorksGrid {...props} />;
+}
