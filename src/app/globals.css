@@ -1493,71 +1493,6 @@ textarea.form-inp {
   background: var(--W);
 }
 
-.category-sec {
-  border-bottom: 3px solid var(--B);
-}
-
-.category-head {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 0;
-  border-bottom: 3px solid var(--B);
-}
-
-.category-head.dark {
-  background: var(--B);
-  border-bottom-color: var(--W);
-}
-
-.category-intro {
-  padding: 56px 40px;
-  border-right: 3px solid var(--B);
-  background: var(--W);
-}
-
-.category-head.dark .category-intro {
-  border-right-color: var(--W);
-  background: var(--B);
-}
-
-.category-head.dark .category-intro .sec-eyebrow,
-.category-head.dark .category-intro .category-h2,
-.category-head.dark .category-intro .category-body,
-.category-head.dark .category-intro .link-brutal {
-  color: var(--W);
-}
-
-.category-head.dark .category-intro .link-brutal {
-  border-color: var(--W);
-}
-
-.category-h2 {
-  font-family: var(--font-serif);
-  font-size: clamp(28px, 3.5vw, 44px);
-  line-height: 1;
-  color: var(--B);
-  margin-bottom: 12px;
-}
-
-.category-h2 em {
-  font-style: italic;
-  display: block;
-}
-
-.category-body {
-  font-family: var(--font-serif);
-  font-size: var(--text-lg);
-  font-style: italic;
-  line-height: 1.75;
-  color: var(--ink-soft);
-  margin: 20px 0;
-  max-width: 44ch;
-}
-
-.category-grid-wrap {
-  padding: 0;
-}
-
 /* Product detail */
 .product-detail {
   display: grid;
@@ -1570,28 +1505,6 @@ textarea.form-inp {
   background: var(--B);
   border-right: 3px solid var(--B);
   padding: 40px;
-}
-
-.category-head.dark .product-card {
-  border-color: var(--W);
-}
-
-.category-head.dark .product-card-body {
-  background: var(--B);
-}
-
-.category-head.dark .product-card-title,
-.category-head.dark .product-card-meta {
-  color: var(--W);
-}
-
-.category-head.dark .product-card:hover .product-card-body {
-  background: var(--W);
-}
-
-.category-head.dark .product-card:hover .product-card-title,
-.category-head.dark .product-card:hover .product-card-meta {
-  color: var(--B);
 }
 
 .product-detail-hero {
@@ -1718,19 +1631,6 @@ textarea.form-inp {
 
   .story-img {
     min-height: 60vw;
-  }
-
-  .category-head {
-    grid-template-columns: 1fr;
-  }
-
-  .category-intro {
-    border-right: none;
-    border-bottom: 3px solid var(--B);
-  }
-
-  .category-head.dark .category-intro {
-    border-bottom-color: var(--W);
   }
 
   .journal-teaser {
@@ -1860,7 +1760,6 @@ textarea.form-inp {
   .arch,
   .find .fb,
   .works-head,
-  .category-intro,
   .product-detail-text,
   .product-detail-imgs {
     padding-left: 24px;
@@ -1879,5 +1778,277 @@ textarea.form-inp {
 
   .elements {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   WORKS PAGE - CALM BRUTALIST GRID
+   Scoped under .works-page so homepage FeaturedWorks .works-grid is untouched.
+   ============================================================ */
+
+/* Page header */
+.works-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 48px 40px 24px;
+  border-bottom: 3px solid var(--B);
+}
+
+.works-title {
+  font-family: var(--font-serif);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  color: var(--B);
+}
+
+.works-total {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--B);
+  opacity: 0.3;
+  padding-bottom: 8px;
+}
+
+/* Category filter tabs */
+.works-cats {
+  display: flex;
+  border-bottom: 3px solid var(--B);
+  background: var(--W);
+  position: sticky;
+  top: 52px;
+  z-index: 90;
+  overflow-x: auto;
+}
+
+.works-cat-btn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--B);
+  padding: 14px 20px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(11, 10, 8, 0.15);
+  cursor: crosshair;
+  opacity: 0.45;
+  white-space: nowrap;
+  transition: none !important;
+}
+
+.works-cat-btn:hover {
+  background: var(--B);
+  color: var(--W);
+  opacity: 1;
+}
+
+.works-cat-btn.active {
+  background: var(--B);
+  color: var(--W);
+  opacity: 1;
+}
+
+.works-cat-count {
+  font-size: 8px;
+  margin-left: 5px;
+  opacity: 0.5;
+}
+
+/* Main grid (collections page only) */
+.works-page .works-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: none;
+  gap: 0;
+  padding: 0;
+}
+
+/* Category separator row */
+.works-cat-row {
+  grid-column: 1 / -1;
+  background: var(--B);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 3px solid var(--B);
+  border-top: 3px solid var(--B);
+}
+
+.works-cat-row:first-child {
+  border-top: none;
+}
+
+.works-cat-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+
+.works-cat-name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--W);
+  font-weight: 400;
+}
+
+/* Individual tile */
+.works-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  cursor: crosshair;
+  border-right: 1px solid var(--B);
+  border-bottom: 1px solid var(--B);
+  background: var(--W);
+  text-decoration: none;
+  display: block;
+  color: inherit;
+  transition: none !important;
+}
+
+/* Variable border: thick on 4th column among items (ignores separator rows) */
+.works-item:nth-child(4n of .works-item) {
+  border-right: 3px solid var(--B);
+}
+
+/* Variable border: thick bottom on every other group of 4 items */
+.works-item:nth-child(8n + 5 of .works-item),
+.works-item:nth-child(8n + 6 of .works-item),
+.works-item:nth-child(8n + 7 of .works-item),
+.works-item:nth-child(8n of .works-item) {
+  border-bottom: 3px solid var(--B);
+}
+
+/* Catalog number */
+.works-item-num {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--B);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.works-item:hover .works-item-num {
+  color: var(--W);
+  opacity: 0.3;
+}
+
+/* Image area */
+.works-item-img {
+  position: absolute;
+  inset: 0;
+  background: rgba(11, 10, 8, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(11, 10, 8, 0.15);
+}
+
+/* Hover overlay */
+.works-item-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--B);
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  z-index: 3;
+  transition: none !important;
+}
+
+.works-item:hover .works-item-overlay {
+  opacity: 1;
+}
+
+.works-item-title {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  color: var(--W);
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.works-item-meta {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.45;
+}
+
+/* Empty state */
+.works-empty {
+  padding: 80px 40px;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--ink-muted);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .works-page .works-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .works-item:nth-child(4n of .works-item) {
+    border-right: 1px solid var(--B);
+  }
+
+  .works-item:nth-child(3n of .works-item) {
+    border-right: 3px solid var(--B);
+  }
+}
+
+@media (max-width: 768px) {
+  .works-header {
+    padding: 28px 20px 16px;
+  }
+
+  .works-page .works-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .works-item:nth-child(4n of .works-item),
+  .works-item:nth-child(3n of .works-item) {
+    border-right: 1px solid var(--B);
+  }
+
+  .works-item:nth-child(2n of .works-item) {
+    border-right: 3px solid var(--B);
+  }
+
+  .works-cat-row {
+    padding: 12px 20px;
+  }
+
+  .works-cat-name {
+    font-size: 15px;
   }
 }

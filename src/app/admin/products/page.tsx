@@ -94,7 +94,7 @@ export default function AdminProductsPage() {
                     <div className="admin-soft">{product.title}</div>
                     <div className="admin-table-slug">{product.slug}</div>
                   </td>
-                  <td className="admin-muted">{product.catalog || "—"}</td>
+                  <td className="admin-muted">{product.catalog || "-"}</td>
                   <td className="admin-muted">{product.category}</td>
                   <td>
                     <button
