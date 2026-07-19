@@ -2202,3 +2202,53 @@ textarea.form-inp {
     aspect-ratio: 1 / 1;
   }
 }
+
+/* ============================================================
+   PRODUCT SOLD STATE
+   ============================================================ */
+
+.product-sold-state {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-sold-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 28px;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--B);
+  background: transparent;
+  border: 3px solid rgba(11, 10, 8, 0.2);
+  opacity: 0.45;
+  cursor: default;
+  user-select: none;
+  width: fit-content;
+}
+
+.product-sold-link {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--B);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 10, 8, 0.3);
+  padding-bottom: 2px;
+  display: inline-block;
+  opacity: 0.5;
+  transition: none;
+}
+
+.product-sold-link:hover {
+  opacity: 1;
+  background: var(--B);
+  color: var(--W);
+  padding: 4px 8px;
+  border: none;
+}

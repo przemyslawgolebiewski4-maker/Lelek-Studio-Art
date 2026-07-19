@@ -28,6 +28,7 @@ export type ProductFormData = {
   published: boolean;
   order: number;
   homeVisible: boolean;
+  soldOut: boolean;
 };
 
 export function productToForm(product?: Partial<Product>): ProductFormData {
@@ -46,6 +47,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     published: product?.published ?? false,
     order: product?.order ?? 0,
     homeVisible: product?.homeVisible ?? false,
+    soldOut: product?.soldOut ?? false,
   };
 }
 
@@ -68,6 +70,7 @@ export function formToPayload(form: ProductFormData) {
     published: form.published,
     order: form.order,
     homeVisible: form.homeVisible,
+    soldOut: form.soldOut,
   };
 }
 
@@ -217,6 +220,21 @@ export function ProductForm({
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
         Shows product image in the Featured section on the homepage (max 3 products).
+      </p>
+
+      <div className="admin-field-divider" />
+
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.soldOut}
+          onChange={(e) => update("soldOut", e.target.checked)}
+        />
+        Sold out
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Hides the buy/inquire button and shows &quot;Sold&quot; state on the product page.
+        The product remains visible in the catalog.
       </p>
 
       <div style={{ display: "flex", gap: 12 }}>

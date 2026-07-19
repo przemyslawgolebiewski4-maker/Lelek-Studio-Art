@@ -64,6 +64,7 @@ const PRODUCT_FIELDS = [
   "homeVisible",
   "price",
   "nativeCheckout",
+  "soldOut",
 ] as const;
 
 function normalizeSlug(value: unknown): string {

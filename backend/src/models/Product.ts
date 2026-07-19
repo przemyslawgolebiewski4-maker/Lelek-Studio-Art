@@ -22,6 +22,7 @@ const ProductSchema = new Schema(
     homeVisible: { type: Boolean, default: false },
     price: { type: Number, default: null },
     nativeCheckout: { type: Boolean, default: false },
+    soldOut: { type: Boolean, default: false },
   },
   { collection: "products", timestamps: true },
 );

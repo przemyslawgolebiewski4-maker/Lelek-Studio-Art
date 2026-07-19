@@ -56,14 +56,21 @@ export function ProductDetail({ product }: { product: Product }) {
             </>
           ) : null}
           <div style={{ marginTop: 32 }}>
-            {product.etsyUrl ? (
+            {product.soldOut ? (
+              <div className="product-sold-state">
+                <div className="product-sold-btn">Sold</div>
+                <Link href="/contact" className="product-sold-link">
+                  Get in touch for similar pieces
+                </Link>
+              </div>
+            ) : product.etsyUrl ? (
               <Link
                 href={product.etsyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-brutal filled"
               >
-                Available on Etsy ↗
+                Buy now ↗
               </Link>
             ) : (
               <Link href="/contact" className="btn-brutal filled">

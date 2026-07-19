@@ -18,6 +18,7 @@ export interface Product {
   homeVisible?: boolean;
   price?: number | null;
   nativeCheckout?: boolean;
+  soldOut?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
