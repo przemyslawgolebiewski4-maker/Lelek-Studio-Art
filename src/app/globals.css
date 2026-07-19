@@ -2252,3 +2252,22 @@ textarea.form-inp {
   padding: 4px 8px;
   border: none;
 }
+
+.works-item-sold {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 3;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--W);
+  background: rgba(11, 10, 8, 0.55);
+  padding: 3px 8px;
+  pointer-events: none;
+}
+
+.works-item:has(.works-item-sold) .works-item-img {
+  opacity: 0.5;
+}

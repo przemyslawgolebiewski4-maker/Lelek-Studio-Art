@@ -120,6 +120,9 @@ export function WorksGrid({
                     data-cat={product.category}
                   >
                     <span className="works-item-num">{formatCatalog(product.catalog)}</span>
+                    {product.soldOut ? (
+                      <span className="works-item-sold">Sold</span>
+                    ) : null}
                     <div className="works-item-img">
                       {product.images[0] ? (
                         <Image
