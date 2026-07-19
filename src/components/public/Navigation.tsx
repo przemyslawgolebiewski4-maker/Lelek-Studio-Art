@@ -76,7 +76,7 @@ export function Navigation({
         className="nav-shop"
         onClick={() => setOpen(false)}
       >
-        Shop — Etsy ↗
+        Shop - Etsy ↗
       </Link>
 
       <div className={`nav-mobile ${open ? "open" : ""}`}>
@@ -96,7 +96,7 @@ export function Navigation({
           rel="noopener noreferrer"
           onClick={() => setOpen(false)}
         >
-          Shop — Etsy ↗
+          Shop - Etsy ↗
         </Link>
       </div>
     </header>

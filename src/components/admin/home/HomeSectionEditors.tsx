@@ -66,7 +66,7 @@ export function HeroSectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Hero — left media (photo or looped video), right headline and CTAs. Matches the public homepage hero.
+        Hero - left media (photo or looped video), right headline and CTAs. Matches the public homepage hero.
       </p>
 
       <div className="admin-field-group">
@@ -182,7 +182,7 @@ export function StorySectionEditor({
 
   return (
     <div className="admin-form-stack-lg">
-      <p className="admin-muted">Story block below hero — same layout on homepage and /about.</p>
+      <p className="admin-muted">Story block below hero - same layout on homepage and /about.</p>
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">Media</h3>
@@ -253,7 +253,7 @@ export function ElementsSectionEditor({
 
   return (
     <div className="admin-form-stack-lg">
-      <p className="admin-muted">Four elements bar — Earth, Water, Fire, Air. Shown in hero and full-width bar.</p>
+      <p className="admin-muted">Four elements bar - Earth, Water, Fire, Air. Shown in hero and full-width bar.</p>
       {items.map((item, i) => (
         <div key={i} className="admin-form-row-2">
           <AdminInput

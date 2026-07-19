@@ -48,7 +48,7 @@ export function HomeFindSection({
           </Link>
         ) : null}
         <p className="fb-body" style={{ marginTop: 24 }}>
-          Interior projects — {email}
+          Interior projects - {email}
         </p>
         <Link href="/contact" className="fb-link">
           Get in touch

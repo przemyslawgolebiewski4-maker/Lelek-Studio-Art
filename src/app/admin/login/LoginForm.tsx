@@ -90,7 +90,7 @@ export default function LoginForm() {
 
         {process.env.NEXT_PUBLIC_API_URL?.includes("localhost") ? (
           <p className="admin-warning">
-            Brak NEXT_PUBLIC_API_URL — ustaw env na Vercel i redeploy.
+            Brak NEXT_PUBLIC_API_URL - ustaw env na Vercel i redeploy.
           </p>
         ) : null}
 

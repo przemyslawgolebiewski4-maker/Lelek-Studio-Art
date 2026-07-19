@@ -137,7 +137,7 @@ export function MediaUploadField({
               </span>
               <span className="admin-upload-sub">
                 {mode === "video"
-                  ? "MP4 or WebM, max 80 MB — H.264, 720p recommended for faster upload"
+                  ? "MP4 or WebM, max 80 MB - H.264, 720p recommended for faster upload"
                   : "JPG, PNG, WebP"}
               </span>
             </>
@@ -163,7 +163,7 @@ export function MediaUploadField({
         className="admin-field-input admin-url-fallback"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Or paste URL — /images/… or https://…"
+        placeholder="Or paste URL - /images/… or https://…"
       />
 
       {hint ? <p className="admin-field-hint">{hint}</p> : null}
@@ -239,7 +239,7 @@ export function ImageListField({ label, value, onChange, folder, hint }: ImageLi
         {uploading ? (
           <span className="admin-muted">Uploading…</span>
         ) : (
-          <span className="admin-upload-title">Add product images — click or drop multiple files</span>
+          <span className="admin-upload-title">Add product images - click or drop multiple files</span>
         )}
       </div>
 

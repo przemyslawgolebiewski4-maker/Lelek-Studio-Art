@@ -43,7 +43,7 @@ export async function apiUpload(file: File, folder: string) {
   };
 }
 
-/** Direct Railway URL — for login (before session cookie exists) */
+/** Direct Railway URL - for login (before session cookie exists) */
 export async function apiPostDirect(path: string, body: unknown) {
   const base = process.env.NEXT_PUBLIC_API_URL?.trim();
   const url = base

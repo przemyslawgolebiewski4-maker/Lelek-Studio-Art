@@ -59,7 +59,7 @@ export default function AdminMessagesPage() {
   const selected = messages.find((m) => m._id === selectedId) ?? null;
 
   return (
-    <AdminShell title="Messages" subtitle="Contact form inbox — same fields as public contact.">
+    <AdminShell title="Messages" subtitle="Contact form inbox - same fields as public contact.">
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 

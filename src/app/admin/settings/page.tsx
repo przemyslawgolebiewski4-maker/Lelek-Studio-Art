@@ -52,7 +52,7 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <AdminShell title="Site settings" subtitle="Global metadata — maps to nav, footer and SEO.">
+    <AdminShell title="Site settings" subtitle="Global metadata - maps to nav, footer and SEO.">
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 

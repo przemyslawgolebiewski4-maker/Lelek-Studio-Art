@@ -10,7 +10,7 @@ import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { DEFAULT_HERO, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Lelek Studio Berlin — Shaped by hand, guided by instinct",
+  title: "Lelek Studio Berlin - Shaped by hand, guided by instinct",
   description:
     "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.",
 };

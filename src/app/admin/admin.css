@@ -617,7 +617,7 @@
   color: var(--B) !important;
 }
 
-/* ——— Media upload ——— */
+/* --- Media upload --- */
 .admin-upload-input {
   position: absolute;
   width: 0;
@@ -761,7 +761,7 @@
   color: var(--W) !important;
 }
 
-/* ——— Home section editor ——— */
+/* --- Home section editor --- */
 .admin-home-layout {
   display: grid;
   gap: 24px;

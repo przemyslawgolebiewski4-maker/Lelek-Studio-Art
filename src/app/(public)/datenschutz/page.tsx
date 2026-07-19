@@ -75,11 +75,11 @@ export default function DatenschutzPage() {
             Plattformen sind deren jeweilige Betreiber verantwortlich:
           </p>
           <p>
-            - Etsy, Inc. / Etsy Ireland UC — Datenschutzerklärung:{" "}
+            - Etsy, Inc. / Etsy Ireland UC - Datenschutzerklärung:{" "}
             <Link href="https://www.etsy.com/legal/privacy/" target="_blank" rel="noopener noreferrer">
               https://www.etsy.com/legal/privacy/
             </Link>
-            <br />- Instagram (Meta Platforms Ireland Ltd.) — Datenschutzerklärung:{" "}
+            <br />- Instagram (Meta Platforms Ireland Ltd.) - Datenschutzerklärung:{" "}
             <Link
               href="https://privacycenter.instagram.com/policy/"
               target="_blank"

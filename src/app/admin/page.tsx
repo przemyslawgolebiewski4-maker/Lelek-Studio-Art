@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
   return (
     <AdminShell
       title="Dashboard"
-      subtitle="Overview of your studio site — same design system as the public site."
+      subtitle="Overview of your studio site - same design system as the public site."
       actions={
         <>
           <AdminLinkButton href="/admin/products/new" variant="primary">
@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
         <AdminCard>
           <p className="admin-stat-label">Content</p>
           <p className="admin-muted" style={{ marginTop: 8 }}>
-            Edit homepage sections — hero video, story, elements, architects, journal teaser, find.
+            Edit homepage sections - hero video, story, elements, architects, journal teaser, find.
           </p>
           <Link href="/admin/home" className="admin-link">
             Home sections →

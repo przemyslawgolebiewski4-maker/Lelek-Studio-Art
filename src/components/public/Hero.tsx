@@ -29,7 +29,7 @@ type HeroProps = {
 export function Hero({ content, elements = [] }: HeroProps) {
   const image = content.image ?? "/images/hero/hero-main.jpg";
   const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
-  const alt = content.imageAlt ?? "Lelek Studio Berlin — handmade ceramics";
+  const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
 
   return (
     <section className="hero">
@@ -90,7 +90,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
               ))}
             </div>
             <div className="hero-kozodoj">
-              {content.kozodoj ?? "Lelek — kozodoj — the nightjar — Slavic spirit"}
+              {content.kozodoj ?? "Lelek - kozodoj - the nightjar - Slavic spirit"}
             </div>
           </div>
         ) : null}

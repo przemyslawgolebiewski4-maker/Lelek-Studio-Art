@@ -3,7 +3,7 @@
 /* ============================================================
    LELEK DESIGN SYSTEM
    Brutalism (structure) + Wabi-sabi (texture) + Bauhaus (geometry)
-   Binary pair: #0B0A08 / #E6EBE7 (Shikkui Mineral) — instant invert on marked controls only
+   Binary pair: #0B0A08 / #E6EBE7 (Shikkui Mineral) - instant invert on marked controls only
    ============================================================ */
 
 :root {
@@ -136,7 +136,7 @@ img {
   color: var(--ink-soft);
 }
 
-/* Instant invert — only on explicit interactive controls */
+/* Instant invert - only on explicit interactive controls */
 button,
 .inv,
 .hero-btn,

@@ -23,7 +23,7 @@ export function LoopVideo({ src, poster, className, "aria-label": ariaLabel }: L
     }
 
     video.play().catch(() => {
-      /* autoplay blocked — poster remains visible */
+      /* autoplay blocked - poster remains visible */
     });
   }, [src]);
 

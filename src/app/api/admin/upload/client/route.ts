@@ -41,7 +41,7 @@ export async function POST(request: Request) {
         };
       },
       onUploadCompleted: async () => {
-        /* Client receives the blob URL directly — no server-side follow-up needed */
+        /* Client receives the blob URL directly - no server-side follow-up needed */
       },
     });
 

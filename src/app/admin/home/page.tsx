@@ -37,8 +37,8 @@ const SECTION_LABELS: Record<HomeSectionKey, string> = {
 };
 
 const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
-  hero: "First screen — upload photo or short loop video, edit headline and buttons.",
-  story: "Section below hero — studio story with image or video.",
+  hero: "First screen - upload photo or short loop video, edit headline and buttons.",
+  story: "Section below hero - studio story with image or video.",
   elements: "Earth · Water · Fire · Air labels.",
   featured: "Video + product thumbnails. Products marked Visible on Home appear below the video.",
   architects: "B2B call-to-action block.",
@@ -152,7 +152,7 @@ export default function AdminHomePage() {
   return (
     <AdminShell
       title="Homepage"
-      subtitle="Edit each section with live fields — upload images and videos directly."
+      subtitle="Edit each section with live fields - upload images and videos directly."
       actions={
         <Link href="/" target="_blank" className="admin-btn ghost">
           Preview site ↗
@@ -213,7 +213,7 @@ export default function AdminHomePage() {
             <AdminButton onClick={saveSection} disabled={saving} className="filled">
               {saving ? "Saving..." : "Save section"}
             </AdminButton>
-            {saved ? <span className="admin-success">Saved — changes live after revalidate (~1 min)</span> : null}
+            {saved ? <span className="admin-success">Saved - changes live after revalidate (~1 min)</span> : null}
           </div>
         </AdminCard>
       </div>

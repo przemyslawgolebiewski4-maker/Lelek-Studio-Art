@@ -21,17 +21,17 @@ export type HomeSectionKey =
   | "find";
 
 export const DEFAULT_HERO: Record<string, string> = {
-  eyebrow: "Handmade in Berlin — Ceramic Studio",
+  eyebrow: "Handmade in Berlin - Ceramic Studio",
   headline: "Shaped by hand,",
   headlineEm: "guided by instinct",
   subheadline:
-    "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly — by material, process and use.",
+    "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
   quote: "Every grain of sand is different too...",
   image: "/images/hero/hero-main.jpg",
   imageMobile: "/images/hero/hero-main-mobile.jpg",
   video: "",
   videoMobile: "",
-  imageCaption: "Vessel — Clay Stories Berlin",
+  imageCaption: "Vessel - Clay Stories Berlin",
   cta1Text: "View works",
   cta1Url: "/collections",
   cta2Text: "My story",

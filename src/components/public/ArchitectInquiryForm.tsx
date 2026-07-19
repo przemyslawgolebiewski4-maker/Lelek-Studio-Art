@@ -45,7 +45,7 @@ export function ArchitectInquiryForm() {
   if (status === "success") {
     return (
       <p className="story-body">
-        Thank you — your inquiry has been sent. We will reply within a few business days.
+        Thank you - your inquiry has been sent. We will reply within a few business days.
       </p>
     );
   }

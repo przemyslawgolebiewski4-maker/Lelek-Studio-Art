@@ -17,7 +17,7 @@ export function Footer({
   email = "lelekstudio@lelekstudio.com",
   etsyUrl = "https://www.etsy.com/shop/LelekStudio",
   artistUrl = "https://www.p-golebiewski.xyz",
-  lelekMeaning = "Lelek — kozodoj — the nightjar",
+  lelekMeaning = "Lelek - kozodoj - the nightjar",
 }: FooterProps) {
   const year = new Date().getFullYear();
 
@@ -25,7 +25,7 @@ export function Footer({
     <footer className="site-footer">
       <div>
         <div className="foot-l">
-          {siteName} — {location} — {year}
+          {siteName} - {location} - {year}
         </div>
         <div className="foot-lelek">{lelekMeaning}</div>
       </div>

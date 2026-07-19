@@ -31,7 +31,7 @@ export default async function ForArchitectsPage() {
       <section className="page-shell">
         <div className="sec-eyebrow">Project inquiry</div>
         <p className="page-intro">
-          Tell us about your project — wall objects, vessels, or custom dimensions. We reply within
+          Tell us about your project - wall objects, vessels, or custom dimensions. We reply within
           a few business days.
         </p>
         <ArchitectInquiryForm />

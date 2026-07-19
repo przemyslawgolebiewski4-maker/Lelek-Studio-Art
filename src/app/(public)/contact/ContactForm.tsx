@@ -43,7 +43,7 @@ export default function ContactForm() {
           the clay.
         </h1>
         <p className="contact-sub">
-          Wall objects, custom orders, interior projects — or simply to say something. I work
+          Wall objects, custom orders, interior projects - or simply to say something. I work
           intuitively. I will respond the same way.
         </p>
       </div>
@@ -51,7 +51,7 @@ export default function ContactForm() {
       {status === "success" ? (
         <div className="contact-form">
           <p className="contact-sub" style={{ opacity: 0.6 }}>
-            Message sent. Thank you — we will reply soon.
+            Message sent. Thank you - we will reply soon.
           </p>
         </div>
       ) : (
