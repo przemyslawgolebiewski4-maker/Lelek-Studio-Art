@@ -13,6 +13,7 @@ import {
   ElementsSectionEditor,
   TextSectionEditor,
   FindSectionEditor,
+  FeaturedSectionEditor,
 } from "@/components/admin/home/HomeSectionEditors";
 import { apiGet, apiPatch } from "@/lib/api";
 import type { HomeSectionKey } from "@/lib/site";
@@ -39,7 +40,7 @@ const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
   hero: "First screen — upload photo or short loop video, edit headline and buttons.",
   story: "Section below hero — studio story with image or video.",
   elements: "Earth · Water · Fire · Air labels.",
-  featured: "Works grid heading (products come from Products admin).",
+  featured: "Video + product thumbnails. Products marked Visible on Home appear below the video.",
   architects: "B2B call-to-action block.",
   journal: "Journal teaser heading (posts from Journal admin).",
   find: "Studio address and Etsy links.",
@@ -110,18 +111,7 @@ export default function AdminHomePage() {
       case "elements":
         return <ElementsSectionEditor content={draft} onChange={onChange} />;
       case "featured":
-        return (
-          <TextSectionEditor
-            content={draft}
-            onChange={onChange}
-            description={SECTION_DESCRIPTIONS.featured}
-            fields={[
-              { key: "eyebrow", label: "Eyebrow" },
-              { key: "heading", label: "Heading line 1" },
-              { key: "headingEm", label: "Heading line 2 (italic)" },
-            ]}
-          />
-        );
+        return <FeaturedSectionEditor content={draft} onChange={onChange} />;
       case "architects":
         return (
           <TextSectionEditor

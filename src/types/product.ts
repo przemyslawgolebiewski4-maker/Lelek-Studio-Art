@@ -15,6 +15,7 @@ export interface Product {
   metaDescription: string;
   published: boolean;
   order: number;
+  homeVisible?: boolean;
   price?: number | null;
   nativeCheckout?: boolean;
   createdAt?: string;

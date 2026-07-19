@@ -21,8 +21,8 @@ export default async function HomePage() {
   const {
     settings,
     hero,
-    featured,
     featuredSection,
+    homeProducts,
     story,
     elements,
     architects,
@@ -41,9 +41,7 @@ export default async function HomePage() {
       />
       <HomeStorySection story={story} />
       <HomeElementsBar items={elementItems} />
-      {featured.length > 0 ? (
-        <FeaturedWorks products={featured.slice(0, 6)} section={featuredSection} />
-      ) : null}
+      <FeaturedWorks section={featuredSection} homeProducts={homeProducts} />
       <AcquireBar etsyUrl={settings.etsy_url ?? find.etsyUrl} />
       <HomeArchitectsCta section={architects} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />

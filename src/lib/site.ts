@@ -54,6 +54,7 @@ export async function getPublicHomeData() {
     journalPosts,
     find,
     featuredSection,
+    homeProducts,
   ] = await Promise.all([
     serverFetch<Record<string, string>>("/settings/public", { fallback: {} }),
     serverFetch<Product[]>("/products/public?limit=6", { fallback: [] }),
@@ -78,6 +79,7 @@ export async function getPublicHomeData() {
         headingEm: "and presence",
       },
     }),
+    serverFetch<Product[]>("/products/home", { fallback: [] }),
   ]);
 
   return {
@@ -85,6 +87,7 @@ export async function getPublicHomeData() {
     hero,
     featured,
     featuredSection,
+    homeProducts,
     story,
     elements: elements.items ?? [],
     architects,

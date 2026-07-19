@@ -20,6 +20,19 @@ productsPublicRouter.get("/products/public", async (req, res) => {
   }
 });
 
+productsPublicRouter.get("/products/home", async (req, res) => {
+  try {
+    await connectDB();
+    const products = await Product.find({ published: true, homeVisible: true })
+      .sort({ order: 1 })
+      .limit(3)
+      .lean();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch home products" });
+  }
+});
+
 productsPublicRouter.get("/products/public/:slug", async (req, res) => {
   try {
     await connectDB();
@@ -48,6 +61,7 @@ const PRODUCT_FIELDS = [
   "metaDescription",
   "published",
   "order",
+  "homeVisible",
   "price",
   "nativeCheckout",
 ] as const;

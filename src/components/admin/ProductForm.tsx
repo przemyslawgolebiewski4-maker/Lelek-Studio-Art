@@ -27,6 +27,7 @@ export type ProductFormData = {
   metaDescription: string;
   published: boolean;
   order: number;
+  homeVisible: boolean;
 };
 
 export function productToForm(product?: Partial<Product>): ProductFormData {
@@ -44,6 +45,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     metaDescription: product?.metaDescription ?? "",
     published: product?.published ?? false,
     order: product?.order ?? 0,
+    homeVisible: product?.homeVisible ?? false,
   };
 }
 
@@ -65,6 +67,7 @@ export function formToPayload(form: ProductFormData) {
     metaDescription: form.metaDescription,
     published: form.published,
     order: form.order,
+    homeVisible: form.homeVisible,
   };
 }
 
@@ -204,6 +207,17 @@ export function ProductForm({
         />
         Published on site
       </label>
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.homeVisible}
+          onChange={(e) => update("homeVisible", e.target.checked)}
+        />
+        Visible on Home
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Shows product image in the Featured section on the homepage (max 3 products).
+      </p>
 
       <div style={{ display: "flex", gap: 12 }}>
         <AdminButton type="submit" disabled={loading} className="filled">

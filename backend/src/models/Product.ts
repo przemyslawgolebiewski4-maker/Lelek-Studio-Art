@@ -19,6 +19,7 @@ const ProductSchema = new Schema(
     metaDescription: { type: String, default: "" },
     published: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+    homeVisible: { type: Boolean, default: false },
     price: { type: Number, default: null },
     nativeCheckout: { type: Boolean, default: false },
   },

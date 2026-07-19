@@ -64,6 +64,9 @@ export interface FeaturedSection {
   eyebrow?: string;
   heading?: string;
   headingEm?: string;
+  video?: string;
+  videoMobile?: string;
+  videoAlt?: string;
 }
 
 export interface FindSection {

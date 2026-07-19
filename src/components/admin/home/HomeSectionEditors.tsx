@@ -335,3 +335,104 @@ export function FindSectionEditor({
     </div>
   );
 }
+
+export type FeaturedFormData = {
+  eyebrow: string;
+  heading: string;
+  headingEm: string;
+  video: string;
+  videoMobile: string;
+  videoAlt: string;
+};
+
+export function featuredToForm(content: Record<string, unknown>): FeaturedFormData {
+  const c = content as Record<string, string>;
+  return {
+    eyebrow: c.eyebrow ?? "Works",
+    heading: c.heading ?? "Form, surface",
+    headingEm: c.headingEm ?? "and presence",
+    video: c.video ?? "",
+    videoMobile: c.videoMobile ?? "",
+    videoAlt: c.videoAlt ?? "Lelek Studio Berlin - handmade ceramics",
+  };
+}
+
+export function featuredFromForm(form: FeaturedFormData): Record<string, string> {
+  return { ...form };
+}
+
+export function FeaturedSectionEditor({
+  content,
+  onChange,
+}: {
+  content: Record<string, unknown>;
+  onChange: (next: Record<string, unknown>) => void;
+}) {
+  const form = featuredToForm(content);
+  function set<K extends keyof FeaturedFormData>(key: K, value: FeaturedFormData[K]) {
+    onChange(featuredFromForm({ ...form, [key]: value }));
+  }
+
+  return (
+    <div className="admin-form-stack-lg">
+      <p className="admin-muted">
+        Featured Works section. The video plays above 3 product thumbnails.
+        To choose which products appear as thumbnails, enable &quot;Visible on Home&quot;
+        in each product&apos;s edit page (max 3 products shown, sorted by order).
+      </p>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">Heading</h3>
+        <AdminInput
+          label="Heading line 1"
+          value={form.heading}
+          onChange={(e) => set("heading", e.target.value)}
+        />
+        <AdminInput
+          label="Heading line 2 (italic)"
+          value={form.headingEm}
+          onChange={(e) => set("headingEm", e.target.value)}
+        />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">Video</h3>
+        <p className="admin-muted">
+          Autoplay, muted, looped. Recommended: studio process, ceramics in use,
+          cafe or interior context. Max 30s, ratio 16:7 ideal.
+        </p>
+        <MediaUploadField
+          label="Desktop video"
+          value={form.video}
+          onChange={(v) => set("video", v)}
+          folder="featured"
+          mode="video"
+          hint={MEDIA_HINTS.heroDesktopVideo ?? "MP4 or WebM, max 50MB, ratio 16:7"}
+        />
+        <MediaUploadField
+          label="Mobile video (optional)"
+          value={form.videoMobile}
+          onChange={(v) => set("videoMobile", v)}
+          folder="featured"
+          mode="video"
+          hint="Vertical format recommended for mobile, 9:16 or 4:3"
+        />
+        <AdminInput
+          label="Video alt text (accessibility)"
+          value={form.videoAlt}
+          onChange={(e) => set("videoAlt", e.target.value)}
+        />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">Product thumbnails</h3>
+        <p className="admin-muted">
+          The 3 thumbnails below the video are controlled in the Products section.
+          Go to Products, edit any product, and enable &quot;Visible on Home&quot;.
+          Up to 3 published products with that option enabled will appear here,
+          sorted by their order number.
+        </p>
+      </div>
+    </div>
+  );
+}
