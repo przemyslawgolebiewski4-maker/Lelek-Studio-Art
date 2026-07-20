@@ -131,6 +131,7 @@ export function WorksGrid({
                           fill
                           className="object-cover"
                           sizes="(max-width: 768px) 50vw, 25vw"
+                          style={{ objectPosition: product.thumbnailPosition ?? "center" }}
                         />
                       ) : (
                         product.title

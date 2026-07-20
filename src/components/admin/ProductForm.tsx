@@ -11,7 +11,6 @@ import {
   AdminTextarea,
 } from "@/components/admin/AdminShell";
 import { ImageListField } from "@/components/admin/MediaUploadField";
-import { MEDIA_HINTS } from "@/lib/media-hints";
 
 export type ProductFormData = {
   slug: string;
@@ -29,6 +28,7 @@ export type ProductFormData = {
   order: number;
   homeVisible: boolean;
   soldOut: boolean;
+  thumbnailPosition: string;
 };
 
 export function productToForm(product?: Partial<Product>): ProductFormData {
@@ -48,6 +48,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     order: product?.order ?? 0,
     homeVisible: product?.homeVisible ?? false,
     soldOut: product?.soldOut ?? false,
+    thumbnailPosition: product?.thumbnailPosition ?? "center",
   };
 }
 
@@ -71,6 +72,7 @@ export function formToPayload(form: ProductFormData) {
     order: form.order,
     homeVisible: form.homeVisible,
     soldOut: form.soldOut,
+    thumbnailPosition: form.thumbnailPosition,
   };
 }
 
@@ -178,7 +180,9 @@ export function ProductForm({
         value={form.images}
         onChange={(v) => update("images", v)}
         folder="products"
-        hint={MEDIA_HINTS.productGallery}
+        thumbnailPosition={form.thumbnailPosition}
+        onThumbnailPositionChange={(v) => update("thumbnailPosition", v)}
+        hint="First image = catalog thumbnail. Drag to reorder."
       />
 
       <div className="admin-form-row-2">

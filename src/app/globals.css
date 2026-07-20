@@ -2271,3 +2271,99 @@ textarea.form-inp {
 .works-item:has(.works-item-sold) .works-item-img {
   opacity: 0.5;
 }
+
+/* ============================================================
+   ADMIN - IMAGE GALLERY DRAG TO REORDER
+   ============================================================ */
+
+.admin-gallery-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Drag states */
+.admin-gallery-item {
+  cursor: grab;
+  position: relative;
+}
+
+.admin-gallery-item:active {
+  cursor: grabbing;
+}
+
+.admin-gallery-item--dragging {
+  opacity: 0.4;
+}
+
+.admin-gallery-item--dragover {
+  outline: 2px solid var(--B);
+  outline-offset: 2px;
+}
+
+/* Thumbnail badge */
+.admin-gallery-badge {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--W);
+  background: rgba(11, 10, 8, 0.75);
+  padding: 2px 6px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Drag hint icon */
+.admin-gallery-drag-hint {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 12px;
+  color: rgba(11, 10, 8, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Thumbnail position selector */
+.admin-thumb-position {
+  padding: 12px;
+  background: rgba(11, 10, 8, 0.04);
+  border: 0.5px solid rgba(11, 10, 8, 0.12);
+}
+
+.admin-thumb-position-btns {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.admin-thumb-pos-btn {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--B);
+  background: transparent;
+  border: 1px solid rgba(11, 10, 8, 0.2);
+  padding: 5px 10px;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: none;
+}
+
+.admin-thumb-pos-btn:hover {
+  background: var(--B);
+  color: var(--W);
+  opacity: 1;
+}
+
+.admin-thumb-pos-btn.active {
+  background: var(--B);
+  color: var(--W);
+  opacity: 1;
+}

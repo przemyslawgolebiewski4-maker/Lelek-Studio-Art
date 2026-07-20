@@ -19,6 +19,7 @@ export interface Product {
   price?: number | null;
   nativeCheckout?: boolean;
   soldOut?: boolean;
+  thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;
 }

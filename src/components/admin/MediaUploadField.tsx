@@ -178,12 +178,24 @@ type ImageListFieldProps = {
   onChange: (urls: string) => void;
   folder: string;
   hint?: string;
+  thumbnailPosition?: string;
+  onThumbnailPositionChange?: (position: string) => void;
 };
 
-export function ImageListField({ label, value, onChange, folder, hint }: ImageListFieldProps) {
+export function ImageListField({
+  label,
+  value,
+  onChange,
+  folder,
+  hint,
+  thumbnailPosition = "center",
+  onThumbnailPositionChange,
+}: ImageListFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const urls = value
     .split("\n")
@@ -210,20 +222,107 @@ export function ImageListField({ label, value, onChange, folder, hint }: ImageLi
     onChange(urls.filter((_, i) => i !== index).join("\n"));
   }
 
+  function onDragStart(index: number) {
+    setDragIndex(index);
+  }
+
+  function onDragOver(e: React.DragEvent, index: number) {
+    e.preventDefault();
+    setDragOverIndex(index);
+  }
+
+  function onDrop(e: React.DragEvent, dropIndex: number) {
+    e.preventDefault();
+    if (dragIndex === null || dragIndex === dropIndex) {
+      setDragIndex(null);
+      setDragOverIndex(null);
+      return;
+    }
+    const reordered = [...urls];
+    const [moved] = reordered.splice(dragIndex, 1);
+    reordered.splice(dropIndex, 0, moved);
+    onChange(reordered.join("\n"));
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }
+
+  function onDragEnd() {
+    setDragIndex(null);
+    setDragOverIndex(null);
+  }
+
+  const POSITION_OPTIONS = [
+    { value: "center", label: "Center" },
+    { value: "top center", label: "Top" },
+    { value: "bottom center", label: "Bottom" },
+    { value: "center left", label: "Left" },
+    { value: "center right", label: "Right" },
+  ];
+
   return (
     <div className="admin-field">
       <span className="admin-field-label">{label}</span>
 
       {urls.length > 0 ? (
-        <div className="admin-gallery">
-          {urls.map((url, i) => (
-            <div key={`${url}-${i}`} className="admin-gallery-item">
-              <Image src={url} alt="" fill className="object-cover" unoptimized sizes="120px" />
-              <button type="button" className="admin-gallery-remove" onClick={() => removeAt(i)}>
-                ×
-              </button>
+        <div className="admin-gallery-wrap">
+          <div className="admin-gallery">
+            {urls.map((url, i) => (
+              <div
+                key={`${url}-${i}`}
+                className={`admin-gallery-item${dragOverIndex === i ? " admin-gallery-item--dragover" : ""}${dragIndex === i ? " admin-gallery-item--dragging" : ""}`}
+                draggable
+                onDragStart={() => onDragStart(i)}
+                onDragOver={(e) => onDragOver(e, i)}
+                onDrop={(e) => onDrop(e, i)}
+                onDragEnd={onDragEnd}
+              >
+                <Image
+                  src={url}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  unoptimized
+                  sizes="120px"
+                  style={{ objectPosition: i === 0 ? thumbnailPosition : "center" }}
+                />
+                {i === 0 && (
+                  <span className="admin-gallery-badge">Thumbnail</span>
+                )}
+                <button
+                  type="button"
+                  className="admin-gallery-remove"
+                  onClick={() => removeAt(i)}
+                  aria-label="Remove image"
+                >
+                  ×
+                </button>
+                <div className="admin-gallery-drag-hint" aria-hidden="true">⠿</div>
+              </div>
+            ))}
+          </div>
+
+          {onThumbnailPositionChange && (
+            <div className="admin-thumb-position">
+              <span className="admin-field-label" style={{ fontSize: "11px", marginBottom: "6px", display: "block" }}>
+                Thumbnail crop position
+              </span>
+              <div className="admin-thumb-position-btns">
+                {POSITION_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`admin-thumb-pos-btn${thumbnailPosition === opt.value ? " active" : ""}`}
+                    onClick={() => onThumbnailPositionChange(opt.value)}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+              <p className="admin-field-hint" style={{ marginTop: "6px" }}>
+                Controls how the first image is cropped in catalog tiles (1:1 square).
+              </p>
             </div>
-          ))}
+          )}
         </div>
       ) : null}
 
@@ -237,9 +336,11 @@ export function ImageListField({ label, value, onChange, folder, hint }: ImageLi
         }}
       >
         {uploading ? (
-          <span className="admin-muted">Uploading…</span>
+          <span className="admin-muted">Uploading...</span>
         ) : (
-          <span className="admin-upload-title">Add product images - click or drop multiple files</span>
+          <span className="admin-upload-title">
+            Add product images - click or drop multiple files
+          </span>
         )}
       </div>
 
