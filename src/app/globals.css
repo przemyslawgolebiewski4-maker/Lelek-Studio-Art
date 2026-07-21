@@ -141,6 +141,8 @@ button,
 .inv,
 .hero-btn,
 .arch-btn,
+.arch-submit,
+.arch-cancel,
 .nav-shop,
 .site-nav .logo,
 .site-nav .nav-links a,
@@ -162,6 +164,8 @@ button:hover:not(:disabled),
 .inv:hover,
 .hero-btn:hover,
 .arch-btn:hover,
+.arch-submit:hover,
+.arch-cancel:hover,
 .nav-shop:hover,
 .site-nav .logo:hover,
 .site-nav .nav-links a:hover,
@@ -1000,16 +1004,23 @@ button:hover:not(:disabled),
   vertical-align: middle;
 }
 
-/* ============================================================ ARCHITECTS */
+/* ============================================================
+   ARCHITECTS CTA SECTION
+   Two colors only: var(--B) and var(--W)
+   Zero border-radius, zero transitions
+   ============================================================ */
+
 .arch {
   background: var(--B);
   border-bottom: 3px solid var(--W);
   padding: 56px 40px;
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
 }
+
+.arch-left {}
 
 .arch-eyebrow {
   font-size: 9px;
@@ -1038,27 +1049,280 @@ button:hover:not(:disabled),
   font-size: var(--text-lg);
   font-style: italic;
   line-height: 1.75;
-  color: var(--chalk-soft);
+  color: var(--W);
+  opacity: 0.55;
   max-width: 48ch;
+  margin-bottom: 28px;
+}
+
+.arch-points {
+  display: flex;
+  flex-direction: column;
+}
+
+.arch-point {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(230, 235, 231, 0.1);
+}
+
+.arch-point:last-child {
+  border-bottom: 1px solid rgba(230, 235, 231, 0.1);
+}
+
+.arch-point-num {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.22;
+  flex-shrink: 0;
+  width: 20px;
+}
+
+.arch-point-text {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-style: italic;
+  color: var(--W);
+  opacity: 0.5;
+  line-height: 1.4;
+}
+
+.arch-point-text strong {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 1;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.arch-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 4px;
 }
 
 .arch-btn {
+  font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--B);
   background: var(--W);
-  text-decoration: none;
   padding: 14px 28px;
   border: 3px solid var(--W);
-  white-space: nowrap;
-  flex-shrink: 0;
-  display: block;
+  cursor: crosshair;
+  display: inline-block;
+  transition: none;
+  width: fit-content;
 }
 
 .arch-btn:hover {
-  background: var(--B) !important;
-  color: var(--W) !important;
+  background: var(--B);
+  color: var(--W);
+}
+
+.arch-form-wrap {
+  border-left: 3px solid rgba(230, 235, 231, 0.12);
+  padding-left: 28px;
+}
+
+.arch-form-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.3;
+  margin-bottom: 20px;
+}
+
+.arch-field {
+  border-bottom: 2px solid rgba(230, 235, 231, 0.15);
+  display: flex;
+  align-items: center;
+}
+
+.arch-field-textarea {
+  align-items: flex-start;
+}
+
+.arch-field-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.22;
+  width: 70px;
+  flex-shrink: 0;
+  padding: 13px 0;
+  border-right: 1px solid rgba(230, 235, 231, 0.1);
+  margin-right: 14px;
+}
+
+.arch-field-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--W);
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-style: italic;
+  padding: 13px 0;
+  cursor: crosshair;
+  width: 100%;
+  transition: none;
+}
+
+.arch-field-input::placeholder {
+  color: var(--W);
+  opacity: 0.12;
+  font-style: italic;
+}
+
+.arch-field-select {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: crosshair;
+}
+
+.arch-field-select option {
+  background: var(--B);
+  color: var(--W);
+}
+
+.arch-error {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.6;
+  margin-top: 12px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(230, 235, 231, 0.2);
+}
+
+.arch-form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 18px;
+}
+
+.arch-submit {
+  font-family: var(--font-serif);
+  font-size: 17px;
+  font-style: italic;
+  color: var(--W);
+  background: transparent;
+  border: 3px solid var(--W);
+  padding: 10px 22px;
+  cursor: crosshair;
+  transition: none;
+}
+
+.arch-submit:hover:not(:disabled) {
+  background: var(--W);
+  color: var(--B);
+}
+
+.arch-submit:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.arch-cancel {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.25;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(230, 235, 231, 0.15);
+  padding: 3px 0;
+  cursor: crosshair;
+  transition: none;
+}
+
+.arch-cancel:hover {
+  opacity: 0.65;
+}
+
+.arch-success {
+  border-left: 3px solid rgba(230, 235, 231, 0.12);
+  padding-left: 28px;
+}
+
+.arch-success-num {
+  font-family: var(--font-serif);
+  font-size: 52px;
+  font-weight: 300;
+  color: var(--W);
+  opacity: 0.06;
+  line-height: 1;
+  margin-bottom: -6px;
+}
+
+.arch-success-h {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--W);
+  margin-bottom: 10px;
+}
+
+.arch-success-body {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--W);
+  opacity: 0.28;
+  line-height: 1.7;
+}
+
+@media (max-width: 1024px) {
+  .arch {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .arch-form-wrap,
+  .arch-success {
+    border-left: none;
+    padding-left: 0;
+    border-top: 1px solid rgba(230, 235, 231, 0.1);
+    padding-top: 28px;
+  }
+  .arch-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .arch {
+    padding: 40px 20px;
+  }
 }
 
 /* ============================================================ JOURNAL */

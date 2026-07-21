@@ -120,11 +120,19 @@ export default function AdminHomePage() {
             description={SECTION_DESCRIPTIONS.architects}
             fields={[
               { key: "eyebrow", label: "Eyebrow" },
-              { key: "headline", label: "Headline" },
-              { key: "sub", label: "Subtext", multiline: true },
-              { key: "body", label: "Body", multiline: true },
+              { key: "headline", label: "Headline line 1" },
+              { key: "headlineEm", label: "Headline line 2 (italic)" },
+              { key: "sub", label: "Subtext (italic body)", multiline: true },
+              { key: "point1Title", label: "Point 01 - title (uppercase)" },
+              { key: "point1Body", label: "Point 01 - description" },
+              { key: "point2Title", label: "Point 02 - title (uppercase)" },
+              { key: "point2Body", label: "Point 02 - description" },
+              { key: "point3Title", label: "Point 03 - title (uppercase)" },
+              { key: "point3Body", label: "Point 03 - description" },
               { key: "ctaText", label: "Button text" },
-              { key: "ctaUrl", label: "Button link", hint: "e.g. /for-architects" },
+              { key: "formTitle", label: "Form label (above form fields)" },
+              { key: "formSuccessTitle", label: "Success state - title" },
+              { key: "formSuccessBody", label: "Success state - body", multiline: true },
             ]}
           />
         );

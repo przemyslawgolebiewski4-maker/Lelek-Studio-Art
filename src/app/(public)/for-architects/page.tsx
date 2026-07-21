@@ -7,7 +7,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const section = await getArchitectsSection();
   return {
     title: "For Architects",
-    description: section.sub || section.body,
+    description: section.sub,
     alternates: { canonical: `${SITE_URL}/for-architects` },
   };
 }
@@ -22,9 +22,11 @@ export default async function ForArchitectsPage() {
       <section className="arch" style={{ borderBottom: "none" }}>
         <div>
           {section.eyebrow ? <div className="arch-eyebrow">{section.eyebrow}</div> : null}
-          <h1 className="arch-h2">{section.headline}</h1>
+          <h1 className="arch-h2">
+            {section.headline}
+            {section.headlineEm ? <> <em>{section.headlineEm}</em></> : null}
+          </h1>
           {section.sub ? <p className="arch-body">{section.sub}</p> : null}
-          {section.body ? <p className="arch-body">{section.body}</p> : null}
         </div>
       </section>
 

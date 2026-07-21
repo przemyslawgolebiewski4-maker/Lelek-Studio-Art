@@ -130,11 +130,13 @@ export const DEFAULT_STORY: StorySection = {
 
 export const DEFAULT_ARCHITECTS: ArchitectsSection = {
   eyebrow: "For architects & designers",
-  headline: "Looking for something made by hand, not manufactured?",
-  sub: "Ceramics for residential, hospitality, and concept stores.",
-  body: "Wall objects, vessels and functional pieces for contemporary interiors.",
+  headline: "Objects for spaces",
+  headlineEm: "that refuse the ordinary.",
+  sub: "Custom ceramic pieces for residential, hospitality and concept stores. Each object unique. None manufactured.",
   ctaText: "Get in touch",
-  ctaUrl: "/for-architects",
+  formTitle: "Send an inquiry",
+  formSuccessTitle: "Message received.",
+  formSuccessBody: "We will get back to you within 1-2 working days.",
 };
 
 export async function getStorySection(): Promise<StorySection> {

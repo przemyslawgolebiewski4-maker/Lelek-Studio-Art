@@ -38,10 +38,18 @@ export interface StorySection {
 export interface ArchitectsSection {
   eyebrow?: string;
   headline?: string;
+  headlineEm?: string;
   sub?: string;
-  body?: string;
+  point1Title?: string;
+  point1Body?: string;
+  point2Title?: string;
+  point2Body?: string;
+  point3Title?: string;
+  point3Body?: string;
   ctaText?: string;
-  ctaUrl?: string;
+  formTitle?: string;
+  formSuccessTitle?: string;
+  formSuccessBody?: string;
 }
 
 export interface JournalSection {
