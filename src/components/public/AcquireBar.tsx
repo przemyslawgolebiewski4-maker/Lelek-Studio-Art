@@ -7,7 +7,7 @@ type AcquireBarProps = {
 
 export function AcquireBar({
   etsyUrl = "https://www.etsy.com/shop/LelekStudio",
-  label = "Acquire",
+  label = "Express interest",
 }: AcquireBarProps) {
   return (
     <div className="acquire-bar">
@@ -17,7 +17,7 @@ export function AcquireBar({
         rel="noopener noreferrer"
         className="acquire-link"
       >
-        {label} <span>↗</span>
+        {label} <span>→</span>
       </Link>
     </div>
   );
