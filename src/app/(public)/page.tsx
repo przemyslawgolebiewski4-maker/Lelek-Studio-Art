@@ -42,7 +42,10 @@ export default async function HomePage() {
       <HomeStorySection story={story} />
       <HomeElementsBar items={elementItems} />
       <FeaturedWorks section={featuredSection} homeProducts={homeProducts} />
-      <AcquireBar etsyUrl={settings.etsy_url ?? find.etsyUrl} />
+      <AcquireBar
+        etsyUrl={settings.etsy_url ?? find.etsyUrl}
+        label={settings.acquire_label}
+      />
       <HomeArchitectsCta section={architects} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />
       <HomeFindSection section={find} email={settings.email} />
