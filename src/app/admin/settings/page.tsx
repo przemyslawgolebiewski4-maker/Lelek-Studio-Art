@@ -10,7 +10,7 @@ const SETTING_FIELDS: { key: string; label: string; multiline?: boolean }[] = [
   { key: "description", label: "Description", multiline: true },
   { key: "email", label: "Email" },
   { key: "etsy_url", label: "Etsy URL" },
-  { key: "acquire_label", label: "Acquire bar text (e.g. Express interest, Enter shop, Browse objects)" },
+  { key: "acquire_label", label: "Acquire bar text (e.g. The collection, Enter shop, Browse objects)" },
   { key: "instagram", label: "Instagram URL" },
   { key: "instagram_handle", label: "Instagram handle" },
   { key: "artist_url", label: "Artist URL" },

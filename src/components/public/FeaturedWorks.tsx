@@ -27,7 +27,7 @@ export function FeaturedWorks({
           <em>{s.headingEm ?? "and presence"}</em>
         </h2>
         <Link href="/collections" className="works-cta">
-          The collection
+          View all works
         </Link>
       </div>
 
