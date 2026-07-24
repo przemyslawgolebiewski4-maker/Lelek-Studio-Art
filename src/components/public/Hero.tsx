@@ -33,6 +33,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
 
   return (
     <section className="hero">
+
+      {/* Media - full width background */}
       <div className="hero-img">
         <MediaBlock
           image={image}
@@ -47,54 +49,70 @@ export function Hero({ content, elements = [] }: HeroProps) {
         ) : null}
       </div>
 
+      {/* Text overlay */}
       <div className="hero-text surface-wabi">
-        <div className="hero-top">
-          {content.eyebrow ? <div className="hero-eyebrow">{content.eyebrow}</div> : null}
-          <h1 className="hero-h1">
-            {content.headline}
-            {content.headlineEm ? (
-              <>
-                {" "}
-                <em>{content.headlineEm}</em>
-              </>
-            ) : null}
-          </h1>
-          <div className="hero-rule" />
-          {content.quote ? (
-            <p className="hero-quote">&ldquo;{content.quote}&rdquo;</p>
-          ) : content.subheadline ? (
-            <p className="hero-quote">{content.subheadline}</p>
-          ) : null}
-          <div className="hero-btns">
-            {content.cta1Text ? (
-              <Link href={content.cta1Url ?? "/collections"} className="hero-btn filled">
-                {content.cta1Text}
-              </Link>
-            ) : null}
-            {content.cta2Text ? (
-              <Link href={content.cta2Url ?? "/about"} className="hero-btn">
-                {content.cta2Text}
-              </Link>
-            ) : null}
-          </div>
-        </div>
+        <div className="hero-content-grid">
 
-        {elements.length > 0 ? (
-          <div className="hero-bottom">
-            <div className="hero-elements">
-              {elements.map((item) => (
-                <div key={item.number} className="el">
-                  <div className="el-n">{item.number}</div>
-                  <div className="el-name">{item.name}</div>
-                </div>
-              ))}
-            </div>
-            <div className="hero-kozodoj">
-              {content.kozodoj ?? "Lelek - kozodoj - the nightjar - Slavic spirit"}
+          {/* LEFT: eyebrow + headline + quote + buttons */}
+          <div className="hero-top">
+            {content.eyebrow ? (
+              <div className="hero-eyebrow">{content.eyebrow}</div>
+            ) : null}
+            <h1 className="hero-h1">
+              {content.headline}
+              {content.headlineEm ? (
+                <>
+                  {" "}
+                  <em>{content.headlineEm}</em>
+                </>
+              ) : null}
+            </h1>
+            <div className="hero-rule" />
+            {content.quote ? (
+              <p className="hero-quote">&ldquo;{content.quote}&rdquo;</p>
+            ) : content.subheadline ? (
+              <p className="hero-quote">{content.subheadline}</p>
+            ) : null}
+            <div className="hero-btns">
+              {content.cta1Text ? (
+                <Link
+                  href={content.cta1Url ?? "/collections"}
+                  className="hero-btn filled"
+                >
+                  {content.cta1Text}
+                </Link>
+              ) : null}
+              {content.cta2Text ? (
+                <Link
+                  href={content.cta2Url ?? "/about"}
+                  className="hero-btn"
+                >
+                  {content.cta2Text}
+                </Link>
+              ) : null}
             </div>
           </div>
-        ) : null}
+
+          {/* RIGHT: elements + kozodoj */}
+          {elements.length > 0 ? (
+            <div className="hero-bottom">
+              <div className="hero-elements">
+                {elements.map((item) => (
+                  <div key={item.number} className="el">
+                    <div className="el-n">{item.number}</div>
+                    <div className="el-name">{item.name}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="hero-kozodoj">
+                {content.kozodoj ?? "Lelek - kozodoj - the nightjar - Slavic spirit"}
+              </div>
+            </div>
+          ) : null}
+
+        </div>
       </div>
+
     </section>
   );
 }
