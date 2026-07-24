@@ -31,20 +31,47 @@ export function FeaturedWorks({
         </Link>
       </div>
 
-      {/* Video block - full width, 16:7 ratio */}
+      {/* Video block - full width, 1920×840 (16:7) on all devices */}
       {hasVideo && (
         <div className="featured-video-block">
-          <video
-            key={s.video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
-            className="featured-video-el"
-          >
-            <source src={s.video} />
-          </video>
+          {s.videoMobile ? (
+            <>
+              <video
+                key={s.video}
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+                className="featured-video-el featured-video-el--desktop"
+              >
+                <source src={s.video} />
+              </video>
+              <video
+                key={s.videoMobile}
+                autoPlay
+                muted
+                loop
+                playsInline
+                aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+                className="featured-video-el featured-video-el--mobile"
+              >
+                <source src={s.videoMobile} />
+              </video>
+            </>
+          ) : (
+            <video
+              key={s.video}
+              autoPlay
+              muted
+              loop
+              playsInline
+              aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+              className="featured-video-el"
+            >
+              <source src={s.video} />
+            </video>
+          )}
           {/* Scan-line texture - matches rest of site */}
           <div className="featured-video-scan" aria-hidden="true" />
         </div>

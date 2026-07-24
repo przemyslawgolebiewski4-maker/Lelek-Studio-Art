@@ -398,8 +398,8 @@ export function FeaturedSectionEditor({
       <div className="admin-field-group">
         <h3 className="admin-group-title">Video</h3>
         <p className="admin-muted">
-          Autoplay, muted, looped. Recommended: studio process, ceramics in use,
-          cafe or interior context. Max 30s, ratio 16:7 ideal.
+          Autoplay, muted, looped. Source frame: 1920×840 (16:7) on desktop, tablet and mobile.
+          Do not crop differently per device - the same wide frame is shown everywhere.
         </p>
         <MediaUploadField
           label="Desktop video"
@@ -407,7 +407,7 @@ export function FeaturedSectionEditor({
           onChange={(v) => set("video", v)}
           folder="featured"
           mode="video"
-          hint={MEDIA_HINTS.heroDesktopVideo ?? "MP4 or WebM, max 50MB, ratio 16:7"}
+          hint="MP4 or WebM, max 50MB. Exact frame 1920×840 (16:7)."
         />
         <MediaUploadField
           label="Mobile video (optional)"
@@ -415,7 +415,7 @@ export function FeaturedSectionEditor({
           onChange={(v) => set("videoMobile", v)}
           folder="featured"
           mode="video"
-          hint="Vertical format recommended for mobile, 9:16 or 4:3"
+          hint="Optional lighter file for phones - same 1920×840 (16:7) frame, not vertical."
         />
         <AdminInput
           label="Video alt text (accessibility)"

@@ -2321,11 +2321,11 @@ textarea.form-inp {
    FEATURED WORKS - VIDEO + PRODUCT THUMBNAILS
    ============================================================ */
 
-/* Video block */
+/* Video block — Canva source 1920×840 (16:7) on all viewports */
 .featured-video-block {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 1920 / 840;
   background: var(--B);
   overflow: hidden;
   border-bottom: 3px solid var(--B);
@@ -2336,7 +2336,26 @@ textarea.form-inp {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.featured-video-el--desktop {
+  display: block;
+}
+
+.featured-video-el--mobile {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .featured-video-el--desktop {
+    display: none;
+  }
+
+  .featured-video-el--mobile {
+    display: block;
+  }
 }
 
 /* Scan-line texture - matches hero and story sections */
@@ -2444,9 +2463,6 @@ textarea.form-inp {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .featured-video-block {
-    aspect-ratio: 4 / 3;
-  }
   .featured-thumbs {
     grid-template-columns: 1fr 1fr;
   }
@@ -2458,12 +2474,6 @@ textarea.form-inp {
     aspect-ratio: 2 / 1;
     border-right: none;
     border-top: 3px solid var(--B);
-  }
-}
-
-@media (max-width: 480px) {
-  .featured-video-block {
-    aspect-ratio: 1 / 1;
   }
 }
 
