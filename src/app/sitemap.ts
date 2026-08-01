@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/config";
 import { serverFetch } from "@/lib/api-server";
+import { normalizeSlug } from "@/lib/slug";
 import type { Product } from "@/types/product";
 import type { JournalPostSummary } from "@/types/content";
 
@@ -28,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
-    url: `${SITE_URL}/objects/${product.slug}`,
+    url: `${SITE_URL}/objects/${normalizeSlug(product.slug) || product.slug}`,
     lastModified: product.updatedAt ? new Date(product.updatedAt) : now,
     changeFrequency: "monthly",
     priority: 0.8,

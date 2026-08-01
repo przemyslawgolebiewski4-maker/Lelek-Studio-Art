@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import type { FeaturedSection } from "@/types/content";
+import { normalizeSlug } from "@/lib/slug";
 
 export function FeaturedWorks({
   section,
@@ -83,7 +84,7 @@ export function FeaturedWorks({
           {products.map((product, i) => (
             <Link
               key={String(product._id)}
-              href={`/objects/${product.slug}`}
+              href={`/objects/${normalizeSlug(product.slug) || product.slug}`}
               className="featured-thumb"
             >
               <span className="featured-thumb-num">0{i + 1}</span>
