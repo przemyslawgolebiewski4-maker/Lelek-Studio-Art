@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiPost, apiPatch } from "@/lib/api";
-import type { Product } from "@/types/product";
+import type { Product, ProductCategory } from "@/types/product";
+import { CATEGORY_CATALOG_PREFIX, isProductCategory } from "@/lib/categories";
 import {
   AdminButton,
   AdminInput,
@@ -28,6 +29,7 @@ export type ProductFormData = {
   order: number;
   homeVisible: boolean;
   soldOut: boolean;
+  isPhotoReproduction: boolean;
   thumbnailPosition: string;
 };
 
@@ -48,11 +50,13 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     order: product?.order ?? 0,
     homeVisible: product?.homeVisible ?? false,
     soldOut: product?.soldOut ?? false,
+    isPhotoReproduction: product?.isPhotoReproduction ?? false,
     thumbnailPosition: product?.thumbnailPosition ?? "center",
   };
 }
 
 export function formToPayload(form: ProductFormData) {
+  const isPrints = form.category === "prints";
   return {
     slug: form.slug,
     catalog: form.catalog,
@@ -72,8 +76,14 @@ export function formToPayload(form: ProductFormData) {
     order: form.order,
     homeVisible: form.homeVisible,
     soldOut: form.soldOut,
+    isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
     thumbnailPosition: form.thumbnailPosition,
   };
+}
+
+function catalogPrefixHint(category: string): string {
+  if (!isProductCategory(category)) return "e.g. CE-001";
+  return `e.g. ${CATEGORY_CATALOG_PREFIX[category]}-001`;
 }
 
 export function ProductForm({
@@ -90,6 +100,26 @@ export function ProductForm({
 
   function update<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function updateCategory(next: string) {
+    setForm((prev) => {
+      const nextForm = { ...prev, category: next };
+      if (next !== "prints") {
+        nextForm.isPhotoReproduction = false;
+      }
+      // Suggest catalog prefix when empty or only a previous category prefix
+      if (isProductCategory(next)) {
+        const prefix = CATEGORY_CATALOG_PREFIX[next as ProductCategory];
+        const catalog = prev.catalog.trim();
+        const prefixOnly = /^(CE|VE|WO|OB|PR)-?\d*$/i.test(catalog) || catalog === "";
+        if (prefixOnly) {
+          const digits = catalog.replace(/^(CE|VE|WO|OB|PR)-?/i, "") || "";
+          nextForm.catalog = digits ? `${prefix}-${digits.padStart(3, "0")}` : `${prefix}-`;
+        }
+      }
+      return nextForm;
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -137,17 +167,41 @@ export function ProductForm({
           label="Catalog number"
           value={form.catalog}
           onChange={(e) => update("catalog", e.target.value)}
+          placeholder={catalogPrefixHint(form.category)}
         />
         <AdminSelect
           label="Category"
           value={form.category}
-          onChange={(e) => update("category", e.target.value)}
+          onChange={(e) => updateCategory(e.target.value)}
         >
           <option value="ceramics">Ceramics</option>
           <option value="vessels">Vessels</option>
           <option value="wall-objects">Wall objects</option>
+          <option value="prints">Prints</option>
         </AdminSelect>
       </div>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Catalog prefix: CE- / VE- / WO- / OB- / PR- (Courier uppercase).
+      </p>
+
+      {form.category === "prints" ? (
+        <>
+          <label className="admin-checkbox">
+            <input
+              type="checkbox"
+              checked={form.isPhotoReproduction}
+              onChange={(e) => update("isPhotoReproduction", e.target.checked)}
+            />
+            Photo reproduction (LELEK Sentences)
+          </label>
+          <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+            When checked, the public description must include: &quot;This poster reproduces a
+            photograph of an original ceramic piece, hand-shaped by Przemek - not an
+            illustration.&quot; Close Prints descriptions with: &quot;Printed to order. Shipped from
+            Europe.&quot;
+          </p>
+        </>
+      ) : null}
 
       <AdminInput
         label="Material"
@@ -160,6 +214,13 @@ export function ProductForm({
         rows={4}
         value={form.description}
         onChange={(e) => update("description", e.target.value)}
+        placeholder={
+          form.category === "prints"
+            ? form.isPhotoReproduction
+              ? "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration. … Printed to order. Shipped from Europe."
+              : "… Printed to order. Shipped from Europe."
+            : undefined
+        }
       />
 
       <AdminTextarea

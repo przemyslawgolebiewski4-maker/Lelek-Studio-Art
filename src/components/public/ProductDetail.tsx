@@ -1,10 +1,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
-import { CATEGORY_LABELS } from "@/components/public/ProductGrid";
+import { CATEGORY_LABELS } from "@/lib/categories";
+
+const PHOTO_REPRODUCTION_SENTENCE =
+  "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration.";
+
+function displayDescription(product: Product): string | null {
+  const base = (product.description ?? "").trim();
+  if (product.category !== "prints" || !product.isPhotoReproduction) {
+    return base || null;
+  }
+
+  if (base.toLowerCase().includes("this poster reproduces a photograph")) {
+    return base;
+  }
+  return base ? `${base} ${PHOTO_REPRODUCTION_SENTENCE}` : PHOTO_REPRODUCTION_SENTENCE;
+}
 
 export function ProductDetail({ product }: { product: Product }) {
   const [hero, ...rest] = product.images;
+  const description = displayDescription(product);
+  const categoryLabel = CATEGORY_LABELS[product.category] ?? product.category;
 
   return (
     <article>
@@ -40,14 +57,14 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <div className="product-detail-text">
-          <div className="sec-eyebrow">{CATEGORY_LABELS[product.category]}</div>
+          <div className="sec-eyebrow">{categoryLabel}</div>
           <h1>{product.title}</h1>
           {product.material ? (
             <p className="story-sig" style={{ opacity: 1, marginTop: 8 }}>
               {product.material}
             </p>
           ) : null}
-          {product.description ? <p className="story-body">{product.description}</p> : null}
+          {description ? <p className="story-body">{description}</p> : null}
           {product.process ? (
             <>
               <div className="story-rule" />

@@ -4,7 +4,8 @@ import { getPublishedProducts, getSiteSettings } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Works",
-  description: "Handmade ceramics, vessels and wall objects by ceramist Przemyslaw Golebiewski, Berlin.",
+  description:
+    "Ceramics, vessels, wall objects and prints by ceramist Przemyslaw Golebiewski, Berlin.",
   alternates: { canonical: "https://www.lelekstudio.com/collections" },
 };
 

@@ -7,6 +7,10 @@ import { useEffect, useState } from "react";
 const links = [
   { href: "/about", label: "Story" },
   { href: "/collections", label: "Works" },
+  { href: "/collections#ceramics", label: "Ceramics" },
+  { href: "/collections#vessels", label: "Vessels" },
+  { href: "/collections#wall-objects", label: "Wall objects" },
+  { href: "/collections#prints", label: "Prints" },
   { href: "/journal", label: "Journal" },
   { href: "/for-architects", label: "Architects" },
   { href: "/contact", label: "Contact" },
@@ -18,7 +22,12 @@ type NavigationProps = {
 
 function isActive(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
-  return pathname === href || pathname.startsWith(`${href}/`);
+  const pathOnly = href.split("#")[0];
+  if (pathOnly === "/collections") {
+    // Only highlight the Works entry for /collections, not every category hash link
+    return href === "/collections" && (pathname === "/collections" || pathname.startsWith("/objects/"));
+  }
+  return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
 export function Navigation({

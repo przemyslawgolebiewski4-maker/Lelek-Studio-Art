@@ -16,4 +16,6 @@ export const SEO_KEYWORDS = [
   "Przemyslaw Golebiewski",
   "functional ceramics",
   "wall objects",
+  "prints",
+  "ceramic prints",
 ];

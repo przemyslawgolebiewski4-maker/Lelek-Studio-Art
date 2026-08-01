@@ -7,7 +7,7 @@ const ProductSchema = new Schema(
     title: { type: String, required: true },
     category: {
       type: String,
-      enum: ["ceramics", "vessels", "wall-objects"],
+      enum: ["ceramics", "vessels", "wall-objects", "prints"],
       required: true,
     },
     material: { type: String, required: true },
@@ -23,6 +23,8 @@ const ProductSchema = new Schema(
     price: { type: Number, default: null },
     nativeCheckout: { type: Boolean, default: false },
     soldOut: { type: Boolean, default: false },
+    /** Photo reproduction of a ceramic piece (LELEK Sentences series). Prints only. */
+    isPhotoReproduction: { type: Boolean, default: false },
     thumbnailPosition: { type: String, default: "center" },
   },
   { collection: "products", timestamps: true },

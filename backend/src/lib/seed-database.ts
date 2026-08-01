@@ -180,7 +180,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
 
   const featured = legacy.featured.items.slice(0, 3);
   const categories = ["ceramics", "ceramics", "vessels"] as const;
-  const catalogs = ["001", "002", "003"];
+  const catalogs = ["CE-001", "CE-002", "VE-001"];
 
   for (let i = 0; i < featured.length; i++) {
     const item = featured[i];
@@ -197,17 +197,41 @@ export async function seedDatabase(options?: { force?: boolean }) {
         title: item.title,
         category: categories[i],
         material: item.meta,
-        description: `Handmade ${item.meta.toLowerCase()} from Berlin.`,
+        description: `Shaped by hand in Berlin - ${item.meta.toLowerCase()}. One of a kind. Made in Berlin.`,
         images: [item.image],
         metaTitle: `${item.title} | Lelek Studio`,
         metaDescription: item.alt,
         published: true,
         order: i,
         etsyUrl: site.etsy,
+        isPhotoReproduction: false,
       },
       { upsert: true },
     );
   }
+
+  await Product.findOneAndUpdate(
+    { slug: "lelek-sentences-01" },
+    {
+      slug: "lelek-sentences-01",
+      catalog: "PR-001",
+      title: "LELEK Sentences 01",
+      category: "prints",
+      material: "Archival pigment print on paper",
+      description:
+        "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration. A quiet record of form and surface from the studio. Printed to order. Shipped from Europe.",
+      process: "Photographed in natural light, printed on archival paper.",
+      images: ["/images/featured/feat-1.jpg"],
+      metaTitle: "LELEK Sentences 01 | Lelek Studio",
+      metaDescription:
+        "Archival print reproducing a photograph of an original ceramic piece by Przemek - Lelek Studio Berlin.",
+      published: true,
+      order: 10,
+      etsyUrl: site.etsy,
+      isPhotoReproduction: true,
+    },
+    { upsert: true },
+  );
 
   const journalPosts = [
     {

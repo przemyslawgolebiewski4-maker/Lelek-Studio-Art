@@ -1,4 +1,4 @@
-export type ProductCategory = "ceramics" | "vessels" | "wall-objects";
+export type ProductCategory = "ceramics" | "vessels" | "wall-objects" | "prints";
 
 export interface Product {
   _id: string;
@@ -19,6 +19,8 @@ export interface Product {
   price?: number | null;
   nativeCheckout?: boolean;
   soldOut?: boolean;
+  /** Photo reproduction of a ceramic piece (LELEK Sentences). Prints only. */
+  isPhotoReproduction?: boolean;
   thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;

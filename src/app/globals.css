@@ -237,9 +237,10 @@ button:hover:not(:disabled),
   text-transform: uppercase;
   color: var(--chalk-muted);
   text-decoration: none;
-  padding: 18px 14px;
+  padding: 18px 10px;
   display: block;
   border-left: 1px solid rgba(230, 235, 231, 0.1);
+  white-space: nowrap;
 }
 
 .site-nav .nav-links a:hover,
@@ -1990,6 +1991,17 @@ textarea.form-inp {
   }
 }
 
+/* Collapse desktop nav earlier - category anchors expand the link row */
+@media (max-width: 1100px) {
+  .site-nav .nav-links {
+    display: none;
+  }
+
+  .site-nav .nav-toggle {
+    display: flex;
+  }
+}
+
 @media (max-width: 768px) {
   .site-nav {
     padding: 0 20px;
@@ -2197,6 +2209,8 @@ textarea.form-inp {
   gap: 20px;
   border-bottom: 3px solid var(--B);
   border-top: 3px solid var(--B);
+  /* Sticky nav (56px) + category filter bar (~46px) */
+  scroll-margin-top: 110px;
 }
 
 .works-cat-row:first-child {

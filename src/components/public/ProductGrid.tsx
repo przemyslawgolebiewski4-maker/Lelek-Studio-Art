@@ -2,34 +2,29 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { Product, ProductCategory } from "@/types/product";
+import {
+  CATEGORY_ANCHOR,
+  CATEGORY_INDEX,
+  CATEGORY_LABELS,
+  CATEGORY_ORDER,
+  CATEGORY_TAB_LABELS,
+  parseCategoryAnchor,
+} from "@/lib/categories";
 
-export const CATEGORY_LABELS: Record<ProductCategory, string> = {
-  ceramics: "Functional ceramic",
-  vessels: "Vessels",
-  "wall-objects": "Wall objects and Objects",
-};
-
-const CATEGORY_ORDER: ProductCategory[] = ["ceramics", "vessels", "wall-objects"];
-
-const CATEGORY_TAB_LABELS: Record<ProductCategory, string> = {
-  ceramics: "Ceramics",
-  vessels: "Vessels",
-  "wall-objects": "Wall objects",
-};
-
-const CATEGORY_INDEX: Record<ProductCategory, string> = {
-  ceramics: "01",
-  vessels: "02",
-  "wall-objects": "03",
-};
+export { CATEGORY_LABELS };
 
 type FilterCat = "all" | ProductCategory;
 
 function formatCatalog(catalog?: string) {
   if (!catalog) return "-";
   return catalog;
+}
+
+function readHashFilter(): FilterCat {
+  if (typeof window === "undefined") return "all";
+  return parseCategoryAnchor(window.location.hash) ?? "all";
 }
 
 export function WorksGrid({
@@ -41,18 +36,44 @@ export function WorksGrid({
 }) {
   const [filter, setFilter] = useState<FilterCat>("all");
 
-  const counts = {
-    ceramics: products.filter((p) => p.category === "ceramics").length,
-    vessels: products.filter((p) => p.category === "vessels").length,
-    "wall-objects": products.filter((p) => p.category === "wall-objects").length,
-  };
+  useEffect(() => {
+    const applyHash = () => {
+      const next = readHashFilter();
+      setFilter(next);
+      if (next !== "all") {
+        const id = CATEGORY_ANCHOR[next];
+        requestAnimationFrame(() => {
+          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      }
+    };
+
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
+
+  const counts = Object.fromEntries(
+    CATEGORY_ORDER.map((category) => [
+      category,
+      products.filter((p) => p.category === category).length,
+    ]),
+  ) as Record<ProductCategory, number>;
 
   const groups = CATEGORY_ORDER.map((category) => ({
     category,
     items: products.filter((p) => p.category === category),
   })).filter((g) => g.items.length > 0);
 
-  const showSeparators = filter === "all";
+  function selectFilter(next: FilterCat) {
+    setFilter(next);
+    if (next === "all") {
+      const { pathname, search } = window.location;
+      window.history.replaceState(null, "", `${pathname}${search}`);
+      return;
+    }
+    window.location.hash = CATEGORY_ANCHOR[next];
+  }
 
   return (
     <div className="works-page">
@@ -76,7 +97,7 @@ export function WorksGrid({
               role="tab"
               aria-selected={filter === "all"}
               className={`works-cat-btn${filter === "all" ? " active" : ""}`}
-              onClick={() => setFilter("all")}
+              onClick={() => selectFilter("all")}
             >
               All
               <span className="works-cat-count">{products.length}</span>
@@ -88,7 +109,7 @@ export function WorksGrid({
                 role="tab"
                 aria-selected={filter === category}
                 className={`works-cat-btn${filter === category ? " active" : ""}`}
-                onClick={() => setFilter(category)}
+                onClick={() => selectFilter(category)}
               >
                 {CATEGORY_TAB_LABELS[category]}
                 <span className="works-cat-count">{counts[category]}</span>
@@ -101,15 +122,19 @@ export function WorksGrid({
               if (filter !== "all" && filter !== group.category) return [];
 
               const nodes: ReactNode[] = [];
+              const anchor = CATEGORY_ANCHOR[group.category];
 
-              if (showSeparators) {
-                nodes.push(
-                  <div key={`cat-${group.category}`} className="works-cat-row" data-cat={group.category}>
-                    <span className="works-cat-label">Category {CATEGORY_INDEX[group.category]}</span>
-                    <span className="works-cat-name">{CATEGORY_LABELS[group.category]}</span>
-                  </div>
-                );
-              }
+              nodes.push(
+                <div
+                  key={`cat-${group.category}`}
+                  id={anchor}
+                  className="works-cat-row"
+                  data-cat={group.category}
+                >
+                  <span className="works-cat-label">Category {CATEGORY_INDEX[group.category]}</span>
+                  <span className="works-cat-name">{CATEGORY_LABELS[group.category]}</span>
+                </div>
+              );
 
               for (const product of group.items) {
                 nodes.push(

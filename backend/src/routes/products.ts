@@ -47,6 +47,8 @@ productsPublicRouter.get("/products/public/:slug", async (req, res) => {
   }
 });
 
+const PRODUCT_CATEGORIES = ["ceramics", "vessels", "wall-objects", "prints"] as const;
+
 const PRODUCT_FIELDS = [
   "slug",
   "catalog",
@@ -65,6 +67,7 @@ const PRODUCT_FIELDS = [
   "price",
   "nativeCheckout",
   "soldOut",
+  "isPhotoReproduction",
   "thumbnailPosition",
 ] as const;
 
@@ -82,6 +85,21 @@ function pickProductFields(body: Record<string, unknown>) {
   if (typeof data.title === "string") data.title = data.title.trim();
   if (Array.isArray(data.images)) {
     data.images = data.images.filter((item) => typeof item === "string");
+  }
+  if (typeof data.category === "string") {
+    if (!(PRODUCT_CATEGORIES as readonly string[]).includes(data.category)) {
+      delete data.category;
+    }
+  }
+  if (typeof data.isPhotoReproduction === "boolean") {
+    if (data.category !== "prints" && data.category !== undefined) {
+      data.isPhotoReproduction = false;
+    }
+  } else if ("isPhotoReproduction" in data) {
+    data.isPhotoReproduction = Boolean(data.isPhotoReproduction);
+    if (data.category !== "prints" && data.category !== undefined) {
+      data.isPhotoReproduction = false;
+    }
   }
   return data;
 }
@@ -116,9 +134,15 @@ productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
       return;
     }
 
+    const category = (
+      typeof data.category === "string" &&
+      (PRODUCT_CATEGORIES as readonly string[]).includes(data.category)
+        ? data.category
+        : "ceramics"
+    ) as (typeof PRODUCT_CATEGORIES)[number];
+
     const product = await Product.create({
       catalog: "",
-      category: "ceramics",
       material: "",
       description: "",
       process: "",
@@ -129,6 +153,10 @@ productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
       published: false,
       order: 0,
       ...data,
+      category,
+      // Photo reproduction flag applies only to prints
+      isPhotoReproduction:
+        category === "prints" ? Boolean(data.isPhotoReproduction) : false,
     });
     res.status(201).json({ ok: true, product });
   } catch (err) {
@@ -154,6 +182,14 @@ productsAdminRouter.patch("/products/:id", requireAdmin, async (req, res) => {
   try {
     await connectDB();
     const updates = pickProductFields(req.body as Record<string, unknown>);
+    if ("isPhotoReproduction" in updates || updates.category) {
+      const existing = await Product.findById(req.params.id).lean();
+      const nextCategory =
+        typeof updates.category === "string" ? updates.category : existing?.category;
+      if (nextCategory !== "prints") {
+        updates.isPhotoReproduction = false;
+      }
+    }
     const product = await Product.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
