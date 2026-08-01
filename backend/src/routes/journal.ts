@@ -1,16 +1,8 @@
 import { Router } from "express";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
+import { normalizeSlug } from "../lib/slug";
 import { JournalPost } from "../models";
-
-function normalizeSlug(value: unknown): string {
-  if (typeof value !== "string") return "";
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
 
 const POST_FIELDS = [
   "slug",

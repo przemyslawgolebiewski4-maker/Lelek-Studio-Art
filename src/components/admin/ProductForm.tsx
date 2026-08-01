@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { apiPost, apiPatch } from "@/lib/api";
 import type { Product, ProductCategory } from "@/types/product";
 import { CATEGORY_CATALOG_PREFIX, isProductCategory } from "@/lib/categories";
+import { normalizeSlug, slugFromTitle } from "@/lib/slug";
 import {
   AdminButton,
   AdminInput,
@@ -58,7 +59,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
 export function formToPayload(form: ProductFormData) {
   const isPrints = form.category === "prints";
   return {
-    slug: form.slug,
+    slug: normalizeSlug(form.slug) || slugFromTitle(form.title),
     catalog: form.catalog,
     title: form.title,
     category: form.category,
@@ -94,12 +95,24 @@ export function ProductForm({
   productId?: string;
 }) {
   const router = useRouter();
-  const [form, setForm] = useState(initial);
+  const [form, setForm] = useState(() => ({
+    ...initial,
+    slug: normalizeSlug(initial.slug),
+  }));
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [slugTouched, setSlugTouched] = useState(Boolean(initial.slug));
 
   function update<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function updateTitle(title: string) {
+    setForm((prev) => ({
+      ...prev,
+      title,
+      slug: slugTouched ? prev.slug : slugFromTitle(title),
+    }));
   }
 
   function updateCategory(next: string) {
@@ -151,16 +164,26 @@ export function ProductForm({
         <AdminInput
           label="Title"
           value={form.title}
-          onChange={(e) => update("title", e.target.value)}
+          onChange={(e) => updateTitle(e.target.value)}
           required
         />
         <AdminInput
           label="Slug"
           value={form.slug}
-          onChange={(e) => update("slug", e.target.value)}
+          onChange={(e) => {
+            setSlugTouched(true);
+            update("slug", e.target.value);
+          }}
+          onBlur={(e) => {
+            setSlugTouched(true);
+            update("slug", normalizeSlug(e.target.value));
+          }}
           required
         />
       </div>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        URL slug: a-z, 0-9 and hyphens only (e.g. split-face-print).
+      </p>
 
       <div className="admin-form-row-2">
         <AdminInput

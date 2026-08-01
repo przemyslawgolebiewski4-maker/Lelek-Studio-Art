@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./lib/db";
+import { sanitizeProductSlugs } from "./lib/slug";
 
 import authRouter from "./routes/auth";
 import { productsPublicRouter, productsAdminRouter } from "./routes/products";
@@ -58,6 +59,14 @@ app.use("/setup", setupRouter);
 
 async function start() {
   await connectDB();
+  try {
+    const fixed = await sanitizeProductSlugs();
+    if (fixed > 0) {
+      console.log(`Sanitized ${fixed} product slug(s)`);
+    }
+  } catch (err) {
+    console.error("Slug sanitize failed:", err);
+  }
   app.listen(PORT, () => {
     console.log(`Lelek API running on port ${PORT}`);
   });

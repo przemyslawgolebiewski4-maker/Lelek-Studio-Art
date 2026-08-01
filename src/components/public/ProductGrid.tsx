@@ -12,6 +12,7 @@ import {
   CATEGORY_TAB_LABELS,
   parseCategoryAnchor,
 } from "@/lib/categories";
+import { normalizeSlug } from "@/lib/slug";
 
 export { CATEGORY_LABELS };
 
@@ -137,10 +138,11 @@ export function WorksGrid({
               );
 
               for (const product of group.items) {
+                const slug = normalizeSlug(product.slug) || product.slug;
                 nodes.push(
                   <Link
                     key={String(product._id)}
-                    href={`/objects/${product.slug}`}
+                    href={`/objects/${slug}`}
                     className="works-item"
                     data-cat={product.category}
                   >
