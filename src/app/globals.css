@@ -115,6 +115,14 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
+/* Dark forms sit on --B: black outline is invisible - row highlight is the focus cue */
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible,
+.arch-field-input:focus-visible,
+.arch-field-select:focus-visible {
+  outline: none;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -1224,6 +1232,16 @@ button:hover:not(:disabled),
   align-items: center;
 }
 
+.arch-field:focus-within {
+  border-bottom: 2px solid var(--W);
+  background: rgba(230, 235, 231, 0.06);
+}
+
+.arch-field:focus-within .arch-field-label {
+  opacity: 0.5;
+  border-right-color: var(--W);
+}
+
 .arch-field-textarea {
   align-items: flex-start;
 }
@@ -1524,6 +1542,16 @@ button:hover:not(:disabled),
   border-bottom: 3px solid var(--W);
   display: flex;
   align-items: center;
+}
+
+.contact-form .form-row:focus-within {
+  border-bottom-color: var(--W);
+  background: rgba(230, 235, 231, 0.06);
+}
+
+.contact-form .form-row:focus-within .form-lbl {
+  opacity: 0.6;
+  border-right-color: var(--W);
 }
 
 .form-lbl {
