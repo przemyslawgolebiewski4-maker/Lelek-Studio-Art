@@ -25,6 +25,25 @@ const nextConfig = {
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
         ],
       },
+      {
+        source: "/images/(.*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/_next/image(.*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        // HTML documents: always re-check with the edge (no heuristic browser caching)
+        source: "/((?!_next/static|_next/image|images|api).*)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=0, must-revalidate" },
+        ],
+      },
     ];
   },
 };
