@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { ADMIN_COOKIE } from "@/lib/auth-constants";
 import { API_BASE } from "@/lib/config";
 
+const PROXY_TIMEOUT_MS = 10_000;
+
 type RouteContext = { params: Promise<{ path: string[] }> };
 
 async function proxyRequest(request: NextRequest, context: RouteContext) {
@@ -20,6 +22,7 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
     method: request.method,
     headers,
     cache: "no-store",
+    signal: AbortSignal.timeout(PROXY_TIMEOUT_MS),
   };
 
   if (request.method !== "GET" && request.method !== "HEAD") {
@@ -33,8 +36,17 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
       status: res.status,
       headers: { "content-type": res.headers.get("content-type") ?? "application/json" },
     });
-  } catch {
-    return NextResponse.json({ ok: false, error: "API unreachable" }, { status: 502 });
+  } catch (err) {
+    const timedOut = err instanceof Error && err.name === "TimeoutError";
+    return NextResponse.json(
+      {
+        ok: false,
+        error: timedOut
+          ? "The server took too long to respond. Please try again."
+          : "API unreachable",
+      },
+      { status: timedOut ? 504 : 502 },
+    );
   }
 }
 

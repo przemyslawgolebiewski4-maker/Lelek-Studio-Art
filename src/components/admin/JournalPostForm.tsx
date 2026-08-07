@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
-import { apiPatch, apiPost } from "@/lib/api";
+import { apiPatch, apiPost, readApiResult } from "@/lib/api";
 import { MEDIA_HINTS } from "@/lib/media-hints";
 import type { JournalPost } from "@/types/content";
 
@@ -54,11 +54,11 @@ export function JournalPostForm({
     const res = postId
       ? await apiPatch(`/admin/journal/${postId}`, form)
       : await apiPost("/admin/journal", form);
-    const data = await res.json();
+    const data = await readApiResult(res);
 
     setLoading(false);
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to save");
+    if (!data.ok) {
+      setError(data.error);
       return;
     }
 

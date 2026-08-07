@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AdminShell, AdminLinkButton, AdminButton } from "@/components/admin/AdminShell";
-import { apiGet, apiPatch, apiDelete } from "@/lib/api";
+import { apiGet, apiPatch, apiDelete, readApiResult } from "@/lib/api";
 
 type ProductRow = {
   _id: string;
@@ -24,10 +24,11 @@ export default function AdminProductsPage() {
 
   async function loadProducts() {
     setLoading(true);
+    setError("");
     const res = await apiGet("/admin/products");
-    const data = await res.json();
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to load products");
+    const data = await readApiResult<{ products: ProductRow[] }>(res);
+    if (!data.ok) {
+      setError(data.error);
       setLoading(false);
       return;
     }
@@ -41,21 +42,25 @@ export default function AdminProductsPage() {
 
   async function togglePublished(id: string, published: boolean) {
     const res = await apiPatch(`/admin/products/${id}`, { published: !published });
-    const data = await res.json();
+    const data = await readApiResult(res);
     if (data.ok) {
       setProducts((prev) =>
         prev.map((p) => (p._id === id ? { ...p, published: !published } : p)),
       );
+    } else {
+      setError(data.error);
     }
   }
 
   async function deleteProduct(id: string, title: string) {
     if (!confirm(`Delete "${title}"?`)) return;
     const res = await apiDelete(`/admin/products/${id}`);
-    const data = await res.json();
+    const data = await readApiResult(res);
     if (data.ok) {
       setProducts((prev) => prev.filter((p) => p._id !== id));
       router.refresh();
+    } else {
+      setError(data.error);
     }
   }
 

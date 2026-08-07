@@ -15,7 +15,7 @@ import {
   FindSectionEditor,
   FeaturedSectionEditor,
 } from "@/components/admin/home/HomeSectionEditors";
-import { apiGet, apiPatch } from "@/lib/api";
+import { apiGet, apiPatch, readApiResult } from "@/lib/api";
 import type { HomeSectionKey } from "@/lib/site";
 
 type SectionRow = {
@@ -58,10 +58,11 @@ export default function AdminHomePage() {
 
   async function loadSections() {
     setLoading(true);
+    setError("");
     const res = await apiGet("/admin/sections");
-    const data = await res.json();
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to load sections");
+    const data = await readApiResult<{ sections: SectionRow[] }>(res);
+    if (!data.ok) {
+      setError(data.error);
       setLoading(false);
       return;
     }
@@ -87,10 +88,10 @@ export default function AdminHomePage() {
     setSaving(true);
     setError("");
     const res = await apiPatch(`/admin/sections/${selectedKey}`, { content: draft, visible });
-    const data = await res.json();
+    const data = await readApiResult(res);
     setSaving(false);
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to save");
+    if (!data.ok) {
+      setError(data.error);
       return;
     }
     setSaved(true);

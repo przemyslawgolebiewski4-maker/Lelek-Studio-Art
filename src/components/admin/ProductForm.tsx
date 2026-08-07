@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiPost, apiPatch } from "@/lib/api";
+import { apiPost, apiPatch, readApiResult } from "@/lib/api";
 import type { Product, ProductCategory } from "@/types/product";
 import { CATEGORY_CATALOG_PREFIX, isProductCategory } from "@/lib/categories";
 import { normalizeSlug, slugFromTitle } from "@/lib/slug";
@@ -144,10 +144,10 @@ export function ProductForm({
     const res = productId
       ? await apiPatch(url, formToPayload(form))
       : await apiPost(url, formToPayload(form));
-    const data = await res.json();
+    const data = await readApiResult(res);
 
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Save failed");
+    if (!data.ok) {
+      setError(data.error);
       setLoading(false);
       return;
     }

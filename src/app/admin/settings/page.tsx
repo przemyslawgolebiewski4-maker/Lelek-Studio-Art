@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AdminShell, AdminCard, AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
-import { apiGet, apiPatch } from "@/lib/api";
+import { apiGet, apiPatch, readApiResult, readPlainJson } from "@/lib/api";
 
 const SETTING_FIELDS: { key: string; label: string; multiline?: boolean }[] = [
   { key: "site_name", label: "Site name" },
@@ -26,13 +26,17 @@ export default function AdminSettingsPage() {
 
   useEffect(() => {
     async function load() {
+      setLoading(true);
+      setError("");
+      // GET /admin/settings returns a plain settings map (no { ok: true } envelope)
       const res = await apiGet("/admin/settings");
-      const data = await res.json();
-      if (res.ok) {
-        setSettings(data);
-      } else {
-        setError(data.error ?? "Failed to load settings");
+      const data = await readPlainJson<Record<string, string>>(res);
+      if (!data.ok) {
+        setError(data.error);
+        setLoading(false);
+        return;
       }
+      setSettings(data.data);
       setLoading(false);
     }
     load();
@@ -42,10 +46,10 @@ export default function AdminSettingsPage() {
     setSaving(true);
     setError("");
     const res = await apiPatch("/admin/settings", { settings });
-    const data = await res.json();
+    const data = await readApiResult<{ settings?: Record<string, string> }>(res);
     setSaving(false);
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to save");
+    if (!data.ok) {
+      setError(data.error);
       return;
     }
     setSettings(data.settings ?? settings);

@@ -8,7 +8,7 @@ import {
   AdminLinkButton,
   AdminButton,
 } from "@/components/admin/AdminShell";
-import { apiDelete, apiGet } from "@/lib/api";
+import { apiDelete, apiGet, readApiResult } from "@/lib/api";
 import type { JournalPost } from "@/types/content";
 
 export default function AdminJournalPage() {
@@ -18,10 +18,11 @@ export default function AdminJournalPage() {
 
   async function loadPosts() {
     setLoading(true);
+    setError("");
     const res = await apiGet("/admin/journal");
-    const data = await res.json();
-    if (!res.ok || !data.ok) {
-      setError(data.error ?? "Failed to load posts");
+    const data = await readApiResult<{ posts: JournalPost[] }>(res);
+    if (!data.ok) {
+      setError(data.error);
       setLoading(false);
       return;
     }
@@ -36,9 +37,11 @@ export default function AdminJournalPage() {
   async function deletePost(id: string) {
     if (!confirm("Delete this post?")) return;
     const res = await apiDelete(`/admin/journal/${id}`);
-    const data = await res.json();
+    const data = await readApiResult(res);
     if (data.ok) {
       setPosts((prev) => prev.filter((p) => p._id !== id));
+    } else {
+      setError(data.error);
     }
   }
 
