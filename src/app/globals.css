@@ -397,6 +397,17 @@ button:hover:not(:disabled),
   pointer-events: none;
 }
 
+/*
+  Hero media is full-bleed under the CTA overlay. Keep "00" at top-left
+  so it never collides with the button row at the bottom (desktop + mobile).
+*/
+.media-frame-hero .bauhaus-index {
+  top: clamp(16px, 3vw, 28px);
+  bottom: auto;
+  left: clamp(16px, 3vw, 28px);
+  font-size: clamp(40px, 6vw, 72px);
+}
+
 /* ============================================================ HERO */
 
 .hero {
@@ -552,6 +563,10 @@ button:hover:not(:disabled),
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 6;
+  margin-top: 4px;
+  padding-bottom: 4px;
 }
 
 /* Buttons on dark background - inverted from current */
