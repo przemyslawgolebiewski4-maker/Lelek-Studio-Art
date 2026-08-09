@@ -34,7 +34,9 @@ export function Footer({
           </Link>
         </li>
         <li>
-          <a href={shopUrl}>Shop</a>
+          <a href={shopUrl} target="_blank" rel="noopener noreferrer">
+            Shop
+          </a>
         </li>
         <li>
           <Link href="/contact">Contact</Link>

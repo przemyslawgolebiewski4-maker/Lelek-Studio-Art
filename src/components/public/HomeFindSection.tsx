@@ -47,7 +47,12 @@ export function HomeFindSection({
         <div className="fb-ey">Online</div>
         <div className="fb-h3">{onlineHeading}</div>
         <p className="fb-body">{onlineDescription}</p>
-        <a href={shopUrl} className="fb-link">
+        <a
+          href={shopUrl}
+          className="fb-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           {onlineCta}
         </a>
         <p className="fb-body" style={{ marginTop: 24 }}>
