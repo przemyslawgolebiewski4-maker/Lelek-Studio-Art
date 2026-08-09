@@ -18,7 +18,6 @@ export default async function PublicLayout({ children }: { children: React.React
         instagram={settings.instagram}
         email={settings.email}
         shopUrl={SHOP_URL}
-        artistUrl={settings.artist_url}
       />
     </>
   );
