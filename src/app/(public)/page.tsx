@@ -22,7 +22,7 @@ export const revalidate = 60;
 const HERO_COPY = {
   eyebrow: "Design through material.",
   subheadline: "Ceramic objects, vessels, prints.",
-  brandline: "LELEK — Berlin.",
+  brandline: "LELEK - Berlin.",
   quote: "",
   headline: "",
   headlineEm: "",

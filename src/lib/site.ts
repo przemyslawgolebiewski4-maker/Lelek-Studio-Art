@@ -28,7 +28,7 @@ export const DEFAULT_HERO: Record<string, string> = {
   headline: "",
   headlineEm: "",
   subheadline: "Ceramic objects, vessels, prints.",
-  brandline: "LELEK — Berlin.",
+  brandline: "LELEK - Berlin.",
   quote: "",
   image: "/images/hero/hero-main.jpg",
   imageMobile: "/images/hero/hero-main-mobile.jpg",

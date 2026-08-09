@@ -37,7 +37,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
   const eyebrow = content.eyebrow || "Design through material.";
   const subline = content.subheadline || "Ceramic objects, vessels, prints.";
-  const brandline = content.brandline || "LELEK — Berlin.";
+  const brandline = content.brandline || "LELEK - Berlin.";
 
   return (
     <section className="hero">
