@@ -15,12 +15,22 @@ export const SITE_URL = normalizeUrl(
   "https://www.lelekstudio.com",
 );
 
-/** Shop destination for nav/CTAs (purchasing lives off this site). */
-// TEMPORARY: points to Etsy until Shopify store is live - swap to shop.lelekstudio.com when ready
+/**
+ * Env fallback for the shop destination (nav / CTAs / footer).
+ * Prefer resolveShopUrl(settings) so Admin → Settings → shop_url wins when set.
+ */
+// TEMPORARY default: Etsy until Shopify store is live
 export const SHOP_URL = normalizeUrl(
   process.env.NEXT_PUBLIC_SHOP_URL ?? "",
   "https://lelekstudio.etsy.com",
 );
+
+/** Settings `shop_url` when present; otherwise NEXT_PUBLIC_SHOP_URL / hardcoded default. */
+export function resolveShopUrl(settings?: Record<string, string> | null): string {
+  const fromSettings = settings?.shop_url?.trim() ?? "";
+  if (fromSettings) return normalizeUrl(fromSettings, SHOP_URL);
+  return SHOP_URL;
+}
 
 export const API_FETCH_TIMEOUT_MS = 5_000;
 export const DEFAULT_REVALIDATE = 60;

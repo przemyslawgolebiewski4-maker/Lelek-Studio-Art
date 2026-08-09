@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { AboutContent } from "@/components/public/AboutContent";
-import { getOriginalProducts, getStorySection } from "@/lib/site";
+import { getOriginalProducts, getSiteSettings, getStorySection } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, resolveShopUrl } from "@/lib/config";
 import { normalizeSlug } from "@/lib/slug";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -18,10 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  const [story, originals] = await Promise.all([
+  const [story, originals, settings] = await Promise.all([
     getStorySection(),
     getOriginalProducts(50),
+    getSiteSettings(),
   ]);
+  const shopUrl = resolveShopUrl(settings);
 
   const personOrgLd = {
     "@context": "https://schema.org",
@@ -75,7 +77,7 @@ export default async function AboutPage() {
   return (
     <>
       <JsonLd data={personOrgLd} />
-      <AboutContent story={story} originals={originals} />
+      <AboutContent story={story} originals={originals} shopUrl={shopUrl} />
     </>
   );
 }

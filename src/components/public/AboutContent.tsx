@@ -9,9 +9,14 @@ import { SHOP_URL } from "@/lib/config";
 type AboutContentProps = {
   story: StorySection;
   originals: Product[];
+  shopUrl?: string;
 };
 
-export function AboutContent({ story, originals }: AboutContentProps) {
+export function AboutContent({
+  story,
+  originals,
+  shopUrl = SHOP_URL,
+}: AboutContentProps) {
   const image = story.image ?? "/images/process/studio.jpg";
   const imageMobile = story.imageMobile ?? image;
   const alt = story.imageAlt || "Lelek Studio";
@@ -54,7 +59,7 @@ export function AboutContent({ story, originals }: AboutContentProps) {
           {story.signature ? <p className="story-sig">{story.signature}</p> : null}
 
           <div className="cta-row">
-            <a href={SHOP_URL} className="cta-btn filled">
+            <a href={shopUrl} className="cta-btn filled">
               {shopLabel}
             </a>
             <Link href="/for-architects" className="cta-btn">

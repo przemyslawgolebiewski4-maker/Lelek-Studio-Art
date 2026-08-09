@@ -9,6 +9,7 @@ const PUBLIC_KEYS = [
   "site_name",
   "tagline",
   "description",
+  "shop_url",
   "etsy_url",
   "instagram",
   "instagram_handle",
@@ -26,6 +27,25 @@ const PUBLIC_KEYS = [
   "impressum_body",
   "datenschutz_body",
 ];
+
+/** Seeded default when shop_url is missing in Mongo (matches frontend env fallback). */
+const DEFAULT_SHOP_URL =
+  (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || "https://lelekstudio.etsy.com")
+    .trim()
+    .replace(/\/+$/, "") || "https://lelekstudio.etsy.com";
+
+async function ensureShopUrlSetting(): Promise<string> {
+  const existing = await Setting.findOne({ key: "shop_url" }).lean();
+  if (existing && typeof existing.value === "string" && existing.value.trim()) {
+    return existing.value.trim();
+  }
+  await Setting.findOneAndUpdate(
+    { key: "shop_url" },
+    { key: "shop_url", value: DEFAULT_SHOP_URL },
+    { upsert: true },
+  );
+  return DEFAULT_SHOP_URL;
+}
 
 const PUBLIC_SECTION_KEYS = [
   "hero",
@@ -47,8 +67,10 @@ function isPublicSectionKey(key: string): key is PublicSectionKey {
 settingsPublicRouter.get("/settings/public", async (_req, res) => {
   try {
     await connectDB();
+    const shopUrl = await ensureShopUrlSetting();
     const rows = await Setting.find({ key: { $in: PUBLIC_KEYS } }).lean();
     const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
+    if (!settings.shop_url) settings.shop_url = shopUrl;
     res.json(settings);
   } catch (err) {
     res.status(500).json({ error: String(err) });
@@ -89,6 +111,7 @@ export const settingsAdminRouter = Router();
 settingsAdminRouter.get("/settings", requireAdmin, async (_req, res) => {
   try {
     await connectDB();
+    await ensureShopUrlSetting();
     const rows = await Setting.find().lean();
     res.json(Object.fromEntries(rows.map((row) => [row.key, row.value])));
   } catch (err) {

@@ -5,6 +5,7 @@ import { SHOP_URL } from "@/lib/config";
 type HomeFindSectionProps = {
   section: FindSection;
   email?: string;
+  /** From Settings shop_url (env fallback). */
   shopUrl?: string;
 };
 

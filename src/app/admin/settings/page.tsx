@@ -57,8 +57,14 @@ const FIELD_GROUPS: FieldGroup[] = [
   {
     title: "Shop links",
     description:
-      "Etsy URL is stored here for legacy references. The primary Shop button uses NEXT_PUBLIC_SHOP_URL (currently temporary Etsy) - that env var is set in Vercel, not here.",
+      "Primary Shop URL drives nav, footer, About CTA, Find Online block, and Organization sameAs. If empty, the site falls back to NEXT_PUBLIC_SHOP_URL.",
     fields: [
+      {
+        key: "shop_url",
+        label: "Shop URL (primary)",
+        kind: "text",
+        hint: "Temporary default is Etsy until Shopify is live - change to https://shop.lelekstudio.com when ready. No deploy needed.",
+      },
       { key: "etsy_url", label: "Etsy URL (legacy / reference)", kind: "text" },
       {
         key: "acquire_label",
@@ -142,18 +148,6 @@ export default function AdminSettingsPage() {
       {error ? <p className="admin-error">{error}</p> : null}
 
       <AdminCard className="admin-form-stack-lg" style={{ maxWidth: 720 }}>
-        <div
-          className="admin-field-group"
-          style={{ background: "rgba(11,10,8,0.04)", padding: 12 }}
-        >
-          <h3 className="admin-group-title">Shop URL (environment)</h3>
-          <p className="admin-muted" style={{ marginBottom: 0 }}>
-            Primary Shop links use <code>NEXT_PUBLIC_SHOP_URL</code> (temporary Etsy until Shopify
-            is live). That value is set in Vercel project env vars - not editable here. Swap to{" "}
-            <code>https://shop.lelekstudio.com</code> when the store is ready.
-          </p>
-        </div>
-
         {FIELD_GROUPS.map((group) => (
           <div key={group.title} className="admin-field-group">
             <h3 className="admin-group-title">{group.title}</h3>

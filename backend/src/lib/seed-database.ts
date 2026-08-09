@@ -61,11 +61,17 @@ export async function seedDatabase(options?: { force?: boolean }) {
   const legacy = loadLegacyContent();
   const site = legacy.site;
 
+  const defaultShopUrl =
+    (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || site.etsy || "https://lelekstudio.etsy.com")
+      .trim()
+      .replace(/\/+$/, "") || "https://lelekstudio.etsy.com";
+
   const settings = [
     ["site_name", site.name],
     ["tagline", site.tagline],
     ["description", site.description],
     ["email", site.email],
+    ["shop_url", defaultShopUrl],
     ["etsy_url", site.etsy],
     ["instagram", site.instagram],
     ["instagram_handle", site.instagramHandle],

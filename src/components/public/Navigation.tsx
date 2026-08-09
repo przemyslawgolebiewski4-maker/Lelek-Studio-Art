@@ -3,22 +3,21 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-// TEMPORARY: points to Etsy until Shopify store is live - swap to shop.lelekstudio.com when ready
-const SHOP_URL =
-  process.env.NEXT_PUBLIC_SHOP_URL?.trim() || "https://lelekstudio.etsy.com";
+import { SHOP_URL } from "@/lib/config";
 
 type NavLink =
   | { href: string; label: string; external?: false }
   | { href: string; label: string; external: true };
 
-const links: NavLink[] = [
-  { href: SHOP_URL, label: "Shop", external: true },
-  { href: "/journal", label: "Process" },
-  { href: "/about", label: "About" },
-  { href: "/for-architects", label: "Trade" },
-  { href: "/contact", label: "Contact" },
-];
+function buildLinks(shopUrl: string): NavLink[] {
+  return [
+    { href: shopUrl, label: "Shop", external: true },
+    { href: "/journal", label: "Process" },
+    { href: "/about", label: "About" },
+    { href: "/for-architects", label: "Trade" },
+    { href: "/contact", label: "Contact" },
+  ];
+}
 
 function isActive(pathname: string, href: string, external?: boolean) {
   if (external) return false;
@@ -27,9 +26,10 @@ function isActive(pathname: string, href: string, external?: boolean) {
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
-export function Navigation() {
+export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const links = buildLinks(shopUrl);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";

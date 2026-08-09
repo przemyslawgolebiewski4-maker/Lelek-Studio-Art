@@ -465,6 +465,7 @@ export function SignpostSectionEditor({
       <p className="admin-muted">
         Wayfinding below the hero. Exactly four cards by design (Shop / About / Process / Trade) -
         matching the fixed destinations. Reorder with Move up / Move down; labels and links stay editable.
+        Tip: keep the Shop card link in sync with Admin → Settings → Shop URL (or paste that URL here).
       </p>
       <AdminTextarea
         label="Intro paragraph"
@@ -768,7 +769,7 @@ export function FindSectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Homepage Find block + footer brand tagline. Online shop link uses NEXT_PUBLIC_SHOP_URL (see Settings).
+        Homepage Find block + footer brand tagline. Online shop destination uses Admin → Settings → Shop URL.
       </p>
       <div className="admin-field-group">
         <h3 className="admin-group-title">Find us</h3>
@@ -804,7 +805,9 @@ export function FindSectionEditor({
           onChange={(e) => set("onlineCtaLabel", e.target.value)}
           placeholder="Visit shop ↗"
         />
-        <p className="admin-muted">Shop destination URL is NEXT_PUBLIC_SHOP_URL (env) - not edited here.</p>
+        <p className="admin-muted">
+          Shop destination URL is edited in Admin → Settings → Shop URL (not here).
+        </p>
       </div>
       <AdminInput
         label="Brand tagline (footer - e.g. Lelek - kozodoj - the nightjar)"

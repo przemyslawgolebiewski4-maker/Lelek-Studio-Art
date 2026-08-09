@@ -6,7 +6,7 @@ import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
-import { SITE_URL, SHOP_URL } from "@/lib/config";
+import { SITE_URL, resolveShopUrl } from "@/lib/config";
 import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -32,8 +32,20 @@ export default async function HomePage() {
   } = await getPublicHomeData();
 
   const elementItems = elements;
+  const shopUrl = resolveShopUrl(settings);
   // CMS wins when set; DEFAULT_HERO fills empty fields (editable in /admin/home → Hero)
-  const heroContent = { ...DEFAULT_HERO, ...hero };
+  const heroContent = {
+    ...DEFAULT_HERO,
+    ...hero,
+    cta1Url: (hero.cta1Url as string | undefined)?.trim() || shopUrl,
+  };
+
+  const signpostSection = signpost ?? {
+    ...DEFAULT_SIGNPOST,
+    cards: DEFAULT_SIGNPOST.cards?.map((card, i) =>
+      i === 0 ? { ...card, href: shopUrl } : card,
+    ),
+  };
 
   const extraSameAs = (settings.same_as_urls || "")
     .split("\n")
@@ -51,7 +63,7 @@ export default async function HomePage() {
     logo: logoUrl,
     sameAs: [
       settings.instagram || "https://www.instagram.com/lelek.studio.berlin/",
-      SHOP_URL,
+      shopUrl,
       ...extraSameAs,
     ].filter(Boolean),
     address: {
@@ -65,7 +77,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={orgLd} />
       <Hero content={heroContent} elements={elementItems} />
-      <Signpost section={signpost ?? DEFAULT_SIGNPOST} />
+      <Signpost section={signpostSection} shopUrl={shopUrl} />
       <HomeStorySection story={story} />
       <HomeElementsBar
         items={elementItems}
@@ -75,7 +87,7 @@ export default async function HomePage() {
         }
       />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />
-      <HomeFindSection section={find} email={settings.email} shopUrl={SHOP_URL} />
+      <HomeFindSection section={find} email={settings.email} shopUrl={shopUrl} />
     </>
   );
 }

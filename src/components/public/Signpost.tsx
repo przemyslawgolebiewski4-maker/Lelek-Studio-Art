@@ -1,37 +1,47 @@
 import Link from "next/link";
 import type { SignpostSection } from "@/types/content";
+import { SHOP_URL } from "@/lib/config";
 
-const DEFAULT_CARDS = [
-  {
-    label: "Shop",
-    description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
-    href: process.env.NEXT_PUBLIC_SHOP_URL || "/contact",
-  },
-  {
-    label: "About",
-    description: "The studio story and one-of-a-kind Originals for collectors.",
-    href: "/about",
-  },
-  {
-    label: "Process",
-    description: "Notes on material, making and life in the Berlin studio.",
-    href: "/journal",
-  },
-  {
-    label: "Trade",
-    description: "Commissions for hospitality, offices and private spaces.",
-    href: "/for-architects",
-  },
-];
+function defaultCards(shopUrl: string) {
+  return [
+    {
+      label: "Shop",
+      description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
+      href: shopUrl,
+    },
+    {
+      label: "About",
+      description: "The studio story and one-of-a-kind Originals for collectors.",
+      href: "/about",
+    },
+    {
+      label: "Process",
+      description: "Notes on material, making and life in the Berlin studio.",
+      href: "/journal",
+    },
+    {
+      label: "Trade",
+      description: "Commissions for hospitality, offices and private spaces.",
+      href: "/for-architects",
+    },
+  ];
+}
 
-export function Signpost({ section }: { section: SignpostSection }) {
+export function Signpost({
+  section,
+  shopUrl = SHOP_URL,
+}: {
+  section: SignpostSection;
+  shopUrl?: string;
+}) {
+  const fallback = defaultCards(shopUrl);
   const cards =
     section.cards && section.cards.length > 0
       ? section.cards.slice(0, 4)
-      : DEFAULT_CARDS;
+      : fallback.slice();
 
   while (cards.length < 4) {
-    cards.push(DEFAULT_CARDS[cards.length]!);
+    cards.push(fallback[cards.length]!);
   }
 
   const intro =
