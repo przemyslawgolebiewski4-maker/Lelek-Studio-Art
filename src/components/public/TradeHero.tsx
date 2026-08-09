@@ -21,7 +21,7 @@ export function TradeHero({ section }: { section: ArchitectsSection }) {
     <section className="trade-hero">
       <div className="trade-hero-media">
         <MediaBlock
-          image={image || "/images/process/studio.jpg"}
+          image={image}
           imageMobile={section.heroImageMobile || image}
           video={video}
           videoMobile={section.heroVideoMobile}

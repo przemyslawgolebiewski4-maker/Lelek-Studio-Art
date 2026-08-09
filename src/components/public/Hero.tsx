@@ -32,8 +32,11 @@ type HeroProps = {
 };
 
 export function Hero({ content, elements = [] }: HeroProps) {
-  const image = content.image ?? "/images/hero/hero-main.jpg";
-  const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
+  // Only Admin-set media - no hardcoded /images/hero fallbacks under video
+  const image = content.image?.trim() || "";
+  const imageMobile = content.imageMobile?.trim() || "";
+  const video = content.video?.trim() || "";
+  const videoMobile = content.videoMobile?.trim() || "";
   const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
   const eyebrow = content.eyebrow || "Design through material.";
   const subline = content.subheadline || "Ceramic objects, vessels, prints.";
@@ -45,8 +48,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
         <MediaBlock
           image={image}
           imageMobile={imageMobile}
-          video={content.video}
-          videoMobile={content.videoMobile}
+          video={video}
+          videoMobile={videoMobile}
           alt={alt}
           variant="hero"
         />

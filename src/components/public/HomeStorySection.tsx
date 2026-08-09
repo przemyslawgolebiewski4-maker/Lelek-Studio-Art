@@ -4,25 +4,30 @@ import { MediaBlock } from "@/components/public/MediaBlock";
 
 /** Homepage teaser - only body1. Full story lives on /about. */
 export function HomeStorySection({ story }: { story: StorySection }) {
-  const image = story.image ?? "/images/process/studio.jpg";
-  const imageMobile = story.imageMobile ?? image;
+  const image = story.image?.trim() || "";
+  const imageMobile = story.imageMobile?.trim() || "";
+  const video = story.video?.trim() || "";
+  const videoMobile = story.videoMobile?.trim() || "";
   const alt = story.imageAlt ?? "Lelek Studio";
+  const hasMedia = Boolean(image || video);
 
   return (
     <section id="story" className="story">
-      <div className="story-img">
-        <MediaBlock
-          image={image}
-          imageMobile={imageMobile}
-          video={story.video}
-          videoMobile={story.videoMobile}
-          alt={alt}
-          variant="story"
-        />
-        {story.imageCaption ? (
-          <div className="story-img-label">{story.imageCaption}</div>
-        ) : null}
-      </div>
+      {hasMedia ? (
+        <div className="story-img">
+          <MediaBlock
+            image={image}
+            imageMobile={imageMobile}
+            video={video}
+            videoMobile={videoMobile}
+            alt={alt}
+            variant="story"
+          />
+          {story.imageCaption ? (
+            <div className="story-img-label">{story.imageCaption}</div>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="story-text surface-wabi">
         <div className="story-num">01</div>

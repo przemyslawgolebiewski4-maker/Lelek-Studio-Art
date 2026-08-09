@@ -17,29 +17,34 @@ export function AboutContent({
   originals,
   shopUrl = SHOP_URL,
 }: AboutContentProps) {
-  const image = story.image ?? "/images/process/studio.jpg";
-  const imageMobile = story.imageMobile ?? image;
+  const image = story.image?.trim() || "";
+  const imageMobile = story.imageMobile?.trim() || "";
+  const video = story.video?.trim() || "";
+  const videoMobile = story.videoMobile?.trim() || "";
   const alt = story.imageAlt || "Lelek Studio";
   const gallery = (story.gallery ?? []).filter((g) => g.image);
   const shopLabel = story.ctaShopLabel || "Shop the collections";
   const tradeLabel = story.ctaTradeLabel || "Designing a space?";
+  const hasMedia = Boolean(image || video);
 
   return (
     <article>
       <div className="story">
-        <div className="story-img">
-          <MediaBlock
-            image={image}
-            imageMobile={imageMobile}
-            video={story.video}
-            videoMobile={story.videoMobile}
-            alt={alt}
-            variant="story"
-          />
-          {story.imageCaption ? (
-            <div className="story-img-label">{story.imageCaption}</div>
-          ) : null}
-        </div>
+        {hasMedia ? (
+          <div className="story-img">
+            <MediaBlock
+              image={image}
+              imageMobile={imageMobile}
+              video={video}
+              videoMobile={videoMobile}
+              alt={alt}
+              variant="story"
+            />
+            {story.imageCaption ? (
+              <div className="story-img-label">{story.imageCaption}</div>
+            ) : null}
+          </div>
+        ) : null}
 
         <div className="story-text surface-wabi">
           {story.eyebrow ? <div className="story-eyebrow">{story.eyebrow}</div> : null}
