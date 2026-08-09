@@ -113,7 +113,7 @@ export function HeroSectionEditor({
           Public hero shows only eyebrow, brand line (as the main heading), and subline - not the legacy headline/quote fields.
         </p>
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
-        <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK — Berlin." />
+        <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
         <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
       </div>
 

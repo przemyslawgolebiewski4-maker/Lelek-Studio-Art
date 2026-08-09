@@ -91,7 +91,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
         headlineEm: "",
         quote: "",
         subheadline: "Ceramic objects, vessels, prints.",
-        brandline: "LELEK — Berlin.",
+        brandline: "LELEK - Berlin.",
         image: legacy.hero.image,
         imageMobile: legacy.hero.imageMobile,
         imageAlt: legacy.hero.imageAlt,
