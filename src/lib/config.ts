@@ -19,7 +19,7 @@ export const SITE_URL = normalizeUrl(
  * Env fallback for the shop destination (nav / CTAs / footer).
  * Prefer resolveShopUrl(settings) so Admin → Settings → shop_url wins when set.
  */
-// TEMPORARY default: Etsy until Shopify store is live
+// TEMPORARY: Etsy until Shopify store is live - swap when shop.lelekstudio.com resolves.
 export const SHOP_URL = normalizeUrl(
   process.env.NEXT_PUBLIC_SHOP_URL ?? "",
   "https://lelekstudio.etsy.com",

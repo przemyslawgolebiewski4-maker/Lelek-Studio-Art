@@ -29,6 +29,7 @@ const PUBLIC_KEYS = [
 ];
 
 /** Seeded default when shop_url is missing in Mongo (matches frontend env fallback). */
+// TEMPORARY: Etsy until Shopify store is live - swap when shop.lelekstudio.com resolves.
 const DEFAULT_SHOP_URL =
   (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || "https://lelekstudio.etsy.com")
     .trim()
