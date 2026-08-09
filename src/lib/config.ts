@@ -15,10 +15,11 @@ export const SITE_URL = normalizeUrl(
   "https://www.lelekstudio.com",
 );
 
-/** Shopify storefront URL (purchasing lives off this site). */
+/** Shop destination for nav/CTAs (purchasing lives off this site). */
+// TEMPORARY: points to Etsy until Shopify store is live - swap to shop.lelekstudio.com when ready
 export const SHOP_URL = normalizeUrl(
   process.env.NEXT_PUBLIC_SHOP_URL ?? "",
-  "https://shop.lelekstudio.com",
+  "https://lelekstudio.etsy.com",
 );
 
 export const API_FETCH_TIMEOUT_MS = 5_000;

@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
+// TEMPORARY: points to Etsy until Shopify store is live - swap to shop.lelekstudio.com when ready
 const SHOP_URL =
-  process.env.NEXT_PUBLIC_SHOP_URL?.trim() || "https://shop.lelekstudio.com";
+  process.env.NEXT_PUBLIC_SHOP_URL?.trim() || "https://lelekstudio.etsy.com";
 
 type NavLink =
   | { href: string; label: string; external?: false }
