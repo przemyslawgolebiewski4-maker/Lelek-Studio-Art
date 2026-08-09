@@ -15,6 +15,8 @@ const ProductSchema = new Schema(
     process: { type: String, default: "" },
     etsyUrl: { type: String, default: "" },
     images: { type: [String], default: [] },
+    /** Alt text for the primary (first) gallery image - used on Originals cards and product pages. */
+    imageAlt: { type: String, default: "" },
     metaTitle: { type: String, default: "" },
     metaDescription: { type: String, default: "" },
     published: { type: Boolean, default: false },
@@ -25,6 +27,8 @@ const ProductSchema = new Schema(
     soldOut: { type: Boolean, default: false },
     /** Photo reproduction of a ceramic piece (LELEK Sentences series). Prints only. */
     isPhotoReproduction: { type: Boolean, default: false },
+    /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
+    isOriginal: { type: Boolean, default: false },
     thumbnailPosition: { type: String, default: "center" },
   },
   { collection: "products", timestamps: true },

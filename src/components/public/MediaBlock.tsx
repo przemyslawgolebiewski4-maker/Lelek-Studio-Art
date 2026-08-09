@@ -21,34 +21,44 @@ export function MediaBlock({
   const mobileImage = imageMobile ?? image;
   const mobileVideo = videoMobile ?? video;
   const frameClass = variant === "hero" ? "media-frame media-frame-hero" : "media-frame media-frame-story";
+  const isHero = variant === "hero";
 
   return (
     <div className={frameClass}>
       <div className="media-frame-inner">
         {video ? (
           <>
+            {/* Poster images are the LCP element; video loads with preload=metadata */}
+            <Image
+              src={image}
+              alt={alt}
+              fill
+              className="media-image media-poster hidden md:block"
+              sizes={isHero ? "58vw" : "50vw"}
+              priority={isHero}
+            />
+            <Image
+              src={mobileImage}
+              alt={alt}
+              fill
+              className="media-image media-poster md:hidden"
+              sizes="100vw"
+              priority={isHero}
+            />
             <LoopVideo
               src={video}
               poster={image}
-              className="media-video hidden md:block"
+              className="media-video media-video-over hidden md:block"
               aria-label={alt}
             />
             {mobileVideo ? (
               <LoopVideo
                 src={mobileVideo}
                 poster={mobileImage}
-                className="media-video md:hidden"
+                className="media-video media-video-over md:hidden"
                 aria-label={alt}
               />
-            ) : (
-              <Image
-                src={mobileImage}
-                alt={alt}
-                fill
-                className="media-image md:hidden"
-                sizes="100vw"
-              />
-            )}
+            ) : null}
           </>
         ) : (
           <>
@@ -58,22 +68,22 @@ export function MediaBlock({
               fill
               className="media-image md:hidden"
               sizes="100vw"
-              priority={variant === "hero"}
+              priority={isHero}
             />
             <Image
               src={image}
               alt={alt}
               fill
               className="media-image hidden md:block"
-              sizes={variant === "hero" ? "58vw" : "50vw"}
-              priority={variant === "hero"}
+              sizes={isHero ? "58vw" : "50vw"}
+              priority={isHero}
             />
           </>
         )}
         <div className="media-grain" aria-hidden="true" />
       </div>
       <div className="bauhaus-mark" aria-hidden="true" />
-      {variant === "hero" ? (
+      {isHero ? (
         <div className="bauhaus-index" aria-hidden="true">
           00
         </div>

@@ -3,38 +3,33 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SHOP_URL } from "@/lib/config";
 
-const links = [
-  { href: "/about", label: "Story" },
-  { href: "/collections", label: "Works" },
-  { href: "/collections#ceramics", label: "Ceramics" },
-  { href: "/collections#vessels", label: "Vessels" },
-  { href: "/collections#wall-objects", label: "Wall objects" },
-  { href: "/collections#prints", label: "Prints" },
-  { href: "/journal", label: "Journal" },
-  { href: "/for-architects", label: "Architects" },
-  { href: "/contact", label: "Contact" },
-];
+type NavLink =
+  | { href: string; label: string; external?: false }
+  | { href: string; label: string; external: true };
 
-type NavigationProps = {
-  etsyUrl?: string;
-};
+function buildLinks(shopUrl: string): NavLink[] {
+  return [
+    { href: shopUrl, label: "Shop", external: true },
+    { href: "/journal", label: "Process" },
+    { href: "/about", label: "About" },
+    { href: "/for-architects", label: "Trade" },
+    { href: "/contact", label: "Contact" },
+  ];
+}
 
-function isActive(pathname: string, href: string) {
+function isActive(pathname: string, href: string, external?: boolean) {
+  if (external) return false;
   if (href === "/") return pathname === "/";
   const pathOnly = href.split("#")[0];
-  if (pathOnly === "/collections") {
-    // Only highlight the Works entry for /collections, not every category hash link
-    return href === "/collections" && (pathname === "/collections" || pathname.startsWith("/objects/"));
-  }
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
-export function Navigation({
-  etsyUrl = "https://www.etsy.com/shop/LelekStudio",
-}: NavigationProps) {
+export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const links = buildLinks(shopUrl);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -56,12 +51,16 @@ export function Navigation({
       <ul className="nav-links">
         {links.map((link) => (
           <li key={link.href}>
-            <Link
-              href={link.href}
-              className={isActive(pathname, link.href) ? "is-active" : undefined}
-            >
-              {link.label}
-            </Link>
+            {link.external ? (
+              <a href={link.href}>{link.label}</a>
+            ) : (
+              <Link
+                href={link.href}
+                className={isActive(pathname, link.href) ? "is-active" : undefined}
+              >
+                {link.label}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -78,35 +77,23 @@ export function Navigation({
         <span />
       </button>
 
-      <Link
-        href={etsyUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="nav-shop"
-        onClick={() => setOpen(false)}
-      >
-        Shop - Etsy ↗
-      </Link>
-
       <div className={`nav-mobile ${open ? "open" : ""}`}>
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={isActive(pathname, link.href) ? "is-active" : undefined}
-            onClick={() => setOpen(false)}
-          >
-            {link.label}
-          </Link>
-        ))}
-        <Link
-          href={etsyUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => setOpen(false)}
-        >
-          Shop - Etsy ↗
-        </Link>
+        {links.map((link) =>
+          link.external ? (
+            <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+              {link.label}
+            </a>
+          ) : (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={isActive(pathname, link.href) ? "is-active" : undefined}
+              onClick={() => setOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ),
+        )}
       </div>
     </header>
   );

@@ -14,6 +14,7 @@ type ProductRow = {
   category: string;
   published: boolean;
   order: number;
+  isOriginal?: boolean;
 };
 
 export default function AdminProductsPage() {
@@ -77,7 +78,24 @@ export default function AdminProductsPage() {
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 
-      {!loading && products.length === 0 ? <p className="admin-muted">No products yet.</p> : null}
+      {!loading && products.length === 0 ? (
+        <div className="admin-form-stack">
+          <p className="admin-list-item-title">No products yet</p>
+          <p className="admin-muted" style={{ marginBottom: 12 }}>
+            Add a piece, then flag Originals for the About page (inquiry only).
+          </p>
+          <AdminLinkButton href="/admin/products/new" variant="primary">
+            Create first product
+          </AdminLinkButton>
+        </div>
+      ) : null}
+
+      {!loading && products.length > 0 && !products.some((p) => p.isOriginal) ? (
+        <p className="admin-muted" style={{ marginBottom: 16 }}>
+          No Originals flagged yet - open a product and enable &quot;Original (About / Originals)&quot;
+          so it appears on /about#originals.
+        </p>
+      ) : null}
 
       {products.length > 0 ? (
         <div className="admin-table-wrap">
@@ -88,6 +106,7 @@ export default function AdminProductsPage() {
                 <th>Catalog</th>
                 <th>Category</th>
                 <th>Published</th>
+                <th>Original</th>
                 <th>Order</th>
                 <th>Actions</th>
               </tr>
@@ -107,9 +126,10 @@ export default function AdminProductsPage() {
                       onClick={() => togglePublished(product._id, product.published)}
                       className={`admin-table-action ${product.published ? "" : "admin-muted"}`}
                     >
-                      {product.published ? "Published" : "Draft"}
+                      {product.published ? "LIVE" : "Draft"}
                     </button>
                   </td>
+                  <td className="admin-muted">{product.isOriginal ? "Yes" : "-"}</td>
                   <td className="admin-muted">{product.order}</td>
                   <td>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>

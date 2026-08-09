@@ -37,7 +37,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="product-detail-hero">
               <Image
                 src={hero}
-                alt={product.metaDescription || product.title}
+                alt={product.imageAlt || product.metaDescription || product.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -80,6 +80,10 @@ export function ProductDetail({ product }: { product: Product }) {
                   Get in touch for similar pieces
                 </Link>
               </div>
+            ) : product.isOriginal ? (
+              <Link href="/contact" className="btn-brutal filled">
+                Inquire →
+              </Link>
             ) : product.etsyUrl ? (
               <Link
                 href={product.etsyUrl}

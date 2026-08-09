@@ -11,6 +11,8 @@ export interface Product {
   process: string;
   etsyUrl: string;
   images: string[];
+  /** Alt text for the primary gallery image (Originals cards + product detail). */
+  imageAlt?: string;
   metaTitle: string;
   metaDescription: string;
   published: boolean;
@@ -21,6 +23,8 @@ export interface Product {
   soldOut?: boolean;
   /** Photo reproduction of a ceramic piece (LELEK Sentences). Prints only. */
   isPhotoReproduction?: boolean;
+  /** One-of-a-kind piece shown in About / Originals (inquiry only). */
+  isOriginal?: boolean;
   thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;

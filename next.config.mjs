@@ -13,6 +13,9 @@ const nextConfig = {
   async redirects() {
     return [
       { source: "/sitemap_lelek.xml", destination: "/sitemap.xml", permanent: true },
+      // Legacy Works catalog → About / Originals (Task 6 / SEO Part 7)
+      { source: "/collections", destination: "/about#originals", permanent: true },
+      { source: "/collections/:path*", destination: "/about#originals", permanent: true },
     ];
   },
   async headers() {

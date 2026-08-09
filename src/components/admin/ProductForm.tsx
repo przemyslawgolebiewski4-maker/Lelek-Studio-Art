@@ -12,6 +12,7 @@ import {
   AdminSelect,
   AdminTextarea,
 } from "@/components/admin/AdminShell";
+import { AdminSeoInput, AdminSeoTextarea } from "@/components/admin/AdminFieldHelpers";
 import { ImageListField } from "@/components/admin/MediaUploadField";
 
 export type ProductFormData = {
@@ -24,6 +25,7 @@ export type ProductFormData = {
   process: string;
   etsyUrl: string;
   images: string;
+  imageAlt: string;
   metaTitle: string;
   metaDescription: string;
   published: boolean;
@@ -31,6 +33,7 @@ export type ProductFormData = {
   homeVisible: boolean;
   soldOut: boolean;
   isPhotoReproduction: boolean;
+  isOriginal: boolean;
   thumbnailPosition: string;
 };
 
@@ -45,6 +48,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     process: product?.process ?? "",
     etsyUrl: product?.etsyUrl ?? "",
     images: (product?.images ?? []).join("\n"),
+    imageAlt: product?.imageAlt ?? "",
     metaTitle: product?.metaTitle ?? "",
     metaDescription: product?.metaDescription ?? "",
     published: product?.published ?? false,
@@ -52,6 +56,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     homeVisible: product?.homeVisible ?? false,
     soldOut: product?.soldOut ?? false,
     isPhotoReproduction: product?.isPhotoReproduction ?? false,
+    isOriginal: product?.isOriginal ?? false,
     thumbnailPosition: product?.thumbnailPosition ?? "center",
   };
 }
@@ -71,6 +76,7 @@ export function formToPayload(form: ProductFormData) {
       .split("\n")
       .map((s) => s.trim())
       .filter(Boolean),
+    imageAlt: form.imageAlt,
     metaTitle: form.metaTitle,
     metaDescription: form.metaDescription,
     published: form.published,
@@ -78,6 +84,7 @@ export function formToPayload(form: ProductFormData) {
     homeVisible: form.homeVisible,
     soldOut: form.soldOut,
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
+    isOriginal: form.isOriginal,
     thumbnailPosition: form.thumbnailPosition,
   };
 }
@@ -266,28 +273,33 @@ export function ProductForm({
         folder="products"
         thumbnailPosition={form.thumbnailPosition}
         onThumbnailPositionChange={(v) => update("thumbnailPosition", v)}
-        hint="First image = catalog thumbnail. Drag to reorder."
+        hint="First image = catalog thumbnail / Originals card. Drag to reorder."
       />
+      <AdminInput
+        label="Primary image alt text"
+        value={form.imageAlt}
+        onChange={(e) => update("imageAlt", e.target.value)}
+        placeholder={form.title || "Describe the primary product image"}
+      />
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Used on the Originals card and product detail hero. Falls back to meta description, then title.
+      </p>
 
-      <div className="admin-form-row-2">
-        <AdminInput
-          label="Meta title"
-          value={form.metaTitle}
-          onChange={(e) => update("metaTitle", e.target.value)}
-        />
-        <AdminInput
-          label="Sort order"
-          type="number"
-          value={form.order}
-          onChange={(e) => update("order", Number(e.target.value))}
-        />
-      </div>
-
-      <AdminTextarea
+      <AdminSeoInput
+        label="Meta title"
+        value={form.metaTitle}
+        onChange={(v) => update("metaTitle", v)}
+      />
+      <AdminSeoTextarea
         label="Meta description"
-        rows={2}
         value={form.metaDescription}
-        onChange={(e) => update("metaDescription", e.target.value)}
+        onChange={(v) => update("metaDescription", v)}
+      />
+      <AdminInput
+        label="Sort order"
+        type="number"
+        value={form.order}
+        onChange={(e) => update("order", Number(e.target.value))}
       />
 
       <label className="admin-checkbox">
@@ -296,7 +308,9 @@ export function ProductForm({
           checked={form.published}
           onChange={(e) => update("published", e.target.checked)}
         />
-        Published on site
+        {form.published
+          ? "Live on the public site (published)"
+          : "Draft - not visible on the public site"}
       </label>
       <label className="admin-checkbox">
         <input
@@ -304,10 +318,25 @@ export function ProductForm({
           checked={form.homeVisible}
           onChange={(e) => update("homeVisible", e.target.checked)}
         />
-        Visible on Home
+        Visible on Home (Featured)
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Shows product image in the Featured section on the homepage (max 3 products).
+        Shows product image in the Featured section on the homepage (max 3 products). Featured is
+        currently off the homepage composition - keep for when that section returns.
+      </p>
+
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.isOriginal}
+          onChange={(e) => update("isOriginal", e.target.checked)}
+        />
+        Original (About / Originals)
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Shows this piece in the Originals section on the About page, without a price, with an
+        Inquire link. Card uses title, catalog number, first gallery image, and the primary image
+        alt above. Must also be Published to appear publicly.
       </p>
 
       <div className="admin-field-divider" />

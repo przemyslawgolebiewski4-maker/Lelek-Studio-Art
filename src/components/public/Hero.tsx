@@ -1,13 +1,18 @@
 import Link from "next/link";
 import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
+import { SHOP_URL } from "@/lib/config";
 
 export type HeroContent = {
   eyebrow?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   headline?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   headlineEm?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   quote?: string;
   subheadline?: string;
+  brandline?: string;
   image?: string;
   imageMobile?: string;
   video?: string;
@@ -30,11 +35,12 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const image = content.image ?? "/images/hero/hero-main.jpg";
   const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
   const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
+  const eyebrow = content.eyebrow || "Design through material.";
+  const subline = content.subheadline || "Ceramic objects, vessels, prints.";
+  const brandline = content.brandline || "LELEK - Berlin.";
 
   return (
     <section className="hero">
-
-      {/* Media - full width background */}
       <div className="hero-img">
         <MediaBlock
           image={image}
@@ -49,51 +55,33 @@ export function Hero({ content, elements = [] }: HeroProps) {
         ) : null}
       </div>
 
-      {/* Text overlay */}
       <div className="hero-text surface-wabi">
         <div className="hero-content-grid">
-
-          {/* LEFT: eyebrow + headline + quote + buttons */}
           <div className="hero-top">
-            {content.eyebrow ? (
-              <div className="hero-eyebrow">{content.eyebrow}</div>
-            ) : null}
-            <h1 className="hero-h1">
-              {content.headline}
-              {content.headlineEm ? (
-                <>
-                  {" "}
-                  <em>{content.headlineEm}</em>
-                </>
-              ) : null}
-            </h1>
+            <div className="hero-eyebrow">{eyebrow}</div>
+            <h1 className="hero-h1 hero-brand">{brandline}</h1>
             <div className="hero-rule" />
-            {content.quote ? (
-              <p className="hero-quote">&ldquo;{content.quote}&rdquo;</p>
-            ) : content.subheadline ? (
-              <p className="hero-quote">{content.subheadline}</p>
-            ) : null}
+            <p className="hero-quote hero-subline">{subline}</p>
             <div className="hero-btns">
               {content.cta1Text ? (
-                <Link
-                  href={content.cta1Url ?? "/collections"}
-                  className="hero-btn filled"
-                >
-                  {content.cta1Text}
-                </Link>
+                /^https?:\/\//i.test(content.cta1Url ?? "") ? (
+                  <a href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                    {content.cta1Text}
+                  </a>
+                ) : (
+                  <Link href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                    {content.cta1Text}
+                  </Link>
+                )
               ) : null}
               {content.cta2Text ? (
-                <Link
-                  href={content.cta2Url ?? "/about"}
-                  className="hero-btn"
-                >
+                <Link href={content.cta2Url ?? "/about"} className="hero-btn">
                   {content.cta2Text}
                 </Link>
               ) : null}
             </div>
           </div>
 
-          {/* RIGHT: elements + kozodoj */}
           {elements.length > 0 ? (
             <div className="hero-bottom">
               <div className="hero-elements">
@@ -109,10 +97,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
               </div>
             </div>
           ) : null}
-
         </div>
       </div>
-
     </section>
   );
 }

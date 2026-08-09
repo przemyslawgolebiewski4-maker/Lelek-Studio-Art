@@ -1,20 +1,99 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AdminShell, AdminCard, AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
+import {
+  AdminShell,
+  AdminCard,
+  AdminButton,
+  AdminInput,
+  AdminTextarea,
+} from "@/components/admin/AdminShell";
+import { AdminSeoTextarea } from "@/components/admin/AdminFieldHelpers";
 import { apiGet, apiPatch, readApiResult, readPlainJson } from "@/lib/api";
 
-const SETTING_FIELDS: { key: string; label: string; multiline?: boolean }[] = [
-  { key: "site_name", label: "Site name" },
-  { key: "tagline", label: "Tagline" },
-  { key: "description", label: "Description", multiline: true },
-  { key: "email", label: "Email" },
-  { key: "etsy_url", label: "Etsy URL" },
-  { key: "acquire_label", label: "Acquire bar text (e.g. The collection, Enter shop, Browse objects)" },
-  { key: "instagram", label: "Instagram URL" },
-  { key: "instagram_handle", label: "Instagram handle" },
-  { key: "artist_url", label: "Artist URL" },
-  { key: "location", label: "Location" },
+type FieldDef =
+  | { key: string; label: string; kind: "text" | "textarea"; hint?: string }
+  | { key: string; label: string; kind: "seo-desc"; hint?: string };
+
+type FieldGroup = {
+  title: string;
+  description?: string;
+  fields: FieldDef[];
+};
+
+const FIELD_GROUPS: FieldGroup[] = [
+  {
+    title: "Identity & SEO defaults",
+    description: "Used in the footer, document title fallbacks, and Organization JSON-LD.",
+    fields: [
+      { key: "site_name", label: "Site name", kind: "text" },
+      { key: "tagline", label: "Tagline", kind: "text" },
+      { key: "description", label: "Default meta description", kind: "seo-desc" },
+      { key: "location", label: "Location (footer)", kind: "text" },
+      {
+        key: "organization_logo",
+        label: "Organization logo URL (JSON-LD)",
+        kind: "text",
+        hint: "Absolute or site-relative URL. Falls back to /images/og-image.png when empty.",
+      },
+      {
+        key: "same_as_urls",
+        label: "sameAs URLs (one per line)",
+        kind: "textarea",
+        hint: "Extra profile URLs for Organization schema. Instagram and shop URL are added automatically.",
+      },
+    ],
+  },
+  {
+    title: "Contact & social",
+    description: "Email and Instagram appear in the footer and contact page.",
+    fields: [
+      { key: "email", label: "Contact email", kind: "text" },
+      { key: "instagram", label: "Instagram URL", kind: "text" },
+      { key: "instagram_handle", label: "Instagram handle (display)", kind: "text" },
+      { key: "artist_url", label: "Artist URL (optional)", kind: "text" },
+    ],
+  },
+  {
+    title: "Shop links",
+    description:
+      "Primary Shop URL drives nav, footer, About CTA, Find Online block, and Organization sameAs. If empty, the site falls back to NEXT_PUBLIC_SHOP_URL.",
+    fields: [
+      {
+        key: "shop_url",
+        label: "Shop URL (primary)",
+        kind: "text",
+        hint: "Temporary default is Etsy until Shopify is live - change to https://shop.lelekstudio.com when ready. No deploy needed.",
+      },
+      { key: "etsy_url", label: "Etsy URL (legacy / reference)", kind: "text" },
+      {
+        key: "acquire_label",
+        label: "Acquire bar text (legacy, unused on current homepage)",
+        kind: "text",
+      },
+    ],
+  },
+  {
+    title: "Contact page copy",
+    description: "Heading lines and form messages on /contact. Empty fields use site defaults.",
+    fields: [
+      { key: "contact_heading_1", label: "Heading line 1", kind: "text" },
+      { key: "contact_heading_2", label: "Heading line 2", kind: "text" },
+      { key: "contact_heading_3", label: "Heading line 3", kind: "text" },
+      { key: "contact_sub", label: "Supporting paragraph", kind: "textarea" },
+      { key: "contact_success", label: "Success message after send", kind: "text" },
+      { key: "contact_form_note", label: "Form note (under submit)", kind: "textarea" },
+    ],
+  },
+  {
+    title: "Legal pages",
+    description:
+      "Impressum is plain text (paragraphs separated by blank lines). Datenschutz supports Markdown headings.",
+    fields: [
+      { key: "impressum_body", label: "Impressum body", kind: "textarea" },
+      { key: "datenschutz_body", label: "Datenschutz body (Markdown)", kind: "textarea" },
+    ],
+  },
 ];
 
 export default function AdminSettingsPage() {
@@ -28,7 +107,6 @@ export default function AdminSettingsPage() {
     async function load() {
       setLoading(true);
       setError("");
-      // GET /admin/settings returns a plain settings map (no { ok: true } envelope)
       const res = await apiGet("/admin/settings");
       const data = await readPlainJson<Record<string, string>>(res);
       if (!data.ok) {
@@ -41,6 +119,11 @@ export default function AdminSettingsPage() {
     }
     load();
   }, []);
+
+  function setField(key: string, value: string) {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+    setSaved(false);
+  }
 
   async function save() {
     setSaving(true);
@@ -57,41 +140,71 @@ export default function AdminSettingsPage() {
   }
 
   return (
-    <AdminShell title="Site settings" subtitle="Global metadata - maps to nav, footer and SEO.">
+    <AdminShell
+      title="Site settings"
+      subtitle="Global identity, contact copy, legal text, and SEO defaults. Homepage sections live under Homepage."
+    >
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 
-      <AdminCard className="admin-form-stack-lg" style={{ maxWidth: 640 }}>
-        {SETTING_FIELDS.map(({ key, label, multiline }) =>
-          multiline ? (
-            <AdminTextarea
-              key={key}
-              label={label}
-              rows={4}
-              value={settings[key] ?? ""}
-              onChange={(e) => {
-                setSettings({ ...settings, [key]: e.target.value });
-                setSaved(false);
-              }}
-            />
-          ) : (
-            <AdminInput
-              key={key}
-              label={label}
-              value={settings[key] ?? ""}
-              onChange={(e) => {
-                setSettings({ ...settings, [key]: e.target.value });
-                setSaved(false);
-              }}
-            />
-          ),
-        )}
+      <AdminCard className="admin-form-stack-lg" style={{ maxWidth: 720 }}>
+        {FIELD_GROUPS.map((group) => (
+          <div key={group.title} className="admin-field-group">
+            <h3 className="admin-group-title">{group.title}</h3>
+            {group.description ? <p className="admin-muted">{group.description}</p> : null}
+            {group.fields.map((field) => {
+              const value = settings[field.key] ?? "";
+              if (field.kind === "seo-desc") {
+                return (
+                  <AdminSeoTextarea
+                    key={field.key}
+                    label={field.label}
+                    value={value}
+                    onChange={(v) => setField(field.key, v)}
+                    rows={field.key === "description" ? 3 : 2}
+                  />
+                );
+              }
+              if (field.kind === "textarea") {
+                const rows =
+                  field.key === "impressum_body" || field.key === "datenschutz_body"
+                    ? 14
+                    : field.key === "same_as_urls"
+                      ? 4
+                      : 3;
+                return (
+                  <div key={field.key}>
+                    <AdminTextarea
+                      label={field.label}
+                      rows={rows}
+                      value={value}
+                      onChange={(e) => setField(field.key, e.target.value)}
+                    />
+                    {field.hint ? <p className="admin-muted">{field.hint}</p> : null}
+                  </div>
+                );
+              }
+              return (
+                <div key={field.key}>
+                  <AdminInput
+                    label={field.label}
+                    value={value}
+                    onChange={(e) => setField(field.key, e.target.value)}
+                  />
+                  {field.hint ? <p className="admin-muted">{field.hint}</p> : null}
+                </div>
+              );
+            })}
+          </div>
+        ))}
 
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <AdminButton onClick={save} disabled={saving} className="filled">
             {saving ? "Saving..." : "Save settings"}
           </AdminButton>
-          {saved ? <span className="admin-success">Saved</span> : null}
+          {saved ? (
+            <span className="admin-success">Saved - live after revalidate (~1 min)</span>
+          ) : null}
         </div>
       </AdminCard>
     </AdminShell>

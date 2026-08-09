@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { StorySection } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 
+/** Homepage teaser - only body1. Full story lives on /about. */
 export function HomeStorySection({ story }: { story: StorySection }) {
   const image = story.image ?? "/images/process/studio.jpg";
   const imageMobile = story.imageMobile ?? image;
@@ -37,9 +38,6 @@ export function HomeStorySection({ story }: { story: StorySection }) {
         </h2>
         <div className="story-rule" />
         {story.body1 ? <p className="story-body">{story.body1}</p> : null}
-        {story.body2 ? <p className="story-body">{story.body2}</p> : null}
-        {story.body3 ? <p className="story-body">{story.body3}</p> : null}
-        {story.signature ? <p className="story-sig">{story.signature}</p> : null}
         <Link href="/about" className="story-link">
           Read more
         </Link>

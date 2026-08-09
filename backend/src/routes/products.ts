@@ -2,6 +2,7 @@ import { Router } from "express";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
 import { normalizeSlug } from "../lib/slug";
+import { triggerRevalidate } from "../lib/revalidate";
 import { Product } from "../models";
 
 export const productsPublicRouter = Router();
@@ -66,6 +67,7 @@ const PRODUCT_FIELDS = [
   "process",
   "etsyUrl",
   "images",
+  "imageAlt",
   "metaTitle",
   "metaDescription",
   "published",
@@ -75,6 +77,7 @@ const PRODUCT_FIELDS = [
   "nativeCheckout",
   "soldOut",
   "isPhotoReproduction",
+  "isOriginal",
   "thumbnailPosition",
 ] as const;
 
@@ -102,6 +105,9 @@ function pickProductFields(body: Record<string, unknown>) {
     if (data.category !== "prints" && data.category !== undefined) {
       data.isPhotoReproduction = false;
     }
+  }
+  if ("isOriginal" in data) {
+    data.isOriginal = Boolean(data.isOriginal);
   }
   return data;
 }
@@ -160,6 +166,7 @@ productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
       isPhotoReproduction:
         category === "prints" ? Boolean(data.isPhotoReproduction) : false,
     });
+    void triggerRevalidate(["/", "/about", `/objects/${product.slug}`]);
     res.status(201).json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -200,6 +207,7 @@ productsAdminRouter.patch("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/", "/about", `/objects/${product.slug}`]);
     res.json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -214,6 +222,7 @@ productsAdminRouter.delete("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/", "/about"]);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

@@ -338,6 +338,14 @@ button:hover:not(:disabled),
   opacity: 0.92;
 }
 
+.media-video-over {
+  z-index: 1;
+}
+
+.media-poster {
+  z-index: 0;
+}
+
 .media-grain {
   position: absolute;
   inset: 0;
@@ -387,6 +395,17 @@ button:hover:not(:disabled),
   color: rgba(230, 235, 231, 0.07);
   z-index: 2;
   pointer-events: none;
+}
+
+/*
+  Hero media is full-bleed under the CTA overlay. Keep "00" at top-left
+  so it never collides with the button row at the bottom (desktop + mobile).
+*/
+.media-frame-hero .bauhaus-index {
+  top: clamp(16px, 3vw, 28px);
+  bottom: auto;
+  left: clamp(16px, 3vw, 28px);
+  font-size: clamp(40px, 6vw, 72px);
 }
 
 /* ============================================================ HERO */
@@ -544,6 +563,10 @@ button:hover:not(:disabled),
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 6;
+  margin-top: 4px;
+  padding-bottom: 4px;
 }
 
 /* Buttons on dark background - inverted from current */
@@ -814,11 +837,27 @@ button:hover:not(:disabled),
   flex-shrink: 0;
 }
 
+.elements .elem-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
 .elements .elem-name {
   font-family: var(--font-serif);
   font-size: 15px;
   font-style: italic;
   color: var(--W);
+}
+
+.elements .elem-desc {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: var(--W);
+  opacity: 0.45;
 }
 
 /* ============================================================ WORKS */
@@ -1132,6 +1171,22 @@ button:hover:not(:disabled),
   opacity: 0.55;
   max-width: 48ch;
   margin-bottom: 28px;
+}
+
+.arch.trade-intro {
+  grid-template-columns: 1fr;
+  max-width: none;
+}
+
+.arch-closing {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--W);
+  opacity: 0.55;
+  max-width: 52ch;
+  margin: 28px 0 0;
 }
 
 .arch-points {
@@ -2736,4 +2791,328 @@ textarea.form-inp {
   background: var(--B);
   color: var(--W);
   opacity: 1;
+}
+
+/* ============================================================
+   Signpost / wayfinding (below hero)
+   ============================================================ */
+
+.signpost-section {
+  background: var(--W);
+  border-bottom: var(--border-heavy);
+  padding: clamp(32px, 5vw, 64px) var(--space-page);
+}
+
+.signpost-intro {
+  max-width: 720px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.signpost-body {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.trade-signal {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--B);
+  text-decoration: none;
+  border-bottom: 1px solid var(--B);
+  padding-bottom: 2px;
+}
+
+.trade-signal:hover {
+  background: var(--B);
+  color: var(--W);
+  border-bottom-color: var(--B);
+}
+
+.signpost {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: var(--border-heavy);
+}
+
+.signpost-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(20px, 2.5vw, 32px);
+  border-right: var(--border-heavy);
+  text-decoration: none;
+  color: var(--B);
+  background: var(--W);
+  min-height: 160px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.signpost-card:last-child {
+  border-right: none;
+}
+
+.signpost-card:hover {
+  background: var(--B);
+  color: var(--W);
+}
+
+.signpost-card-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.signpost-card-desc {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.45;
+}
+
+.hero-h1.hero-brand {
+  font-family: var(--font-serif);
+  letter-spacing: 0.02em;
+}
+
+.hero-subline {
+  quotes: none;
+}
+
+.elements-wrap {
+  border-bottom: var(--border-heavy);
+}
+
+.elements-scope {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 14px var(--space-page) 0;
+  margin: 0;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+/* About CTAs on light story panel (not hero dark overlay) */
+.cta-btn {
+  font-family: var(--font-sans);
+  font-size: var(--text-ui);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border: 3px solid var(--B);
+  color: var(--B);
+  background: transparent;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+  min-height: 44px;
+  line-height: 1.2;
+  cursor: crosshair;
+}
+
+.cta-btn:hover {
+  background: var(--B);
+  color: var(--W);
+}
+
+.cta-btn.filled {
+  background: var(--B);
+  color: var(--W);
+  border-color: var(--B);
+}
+
+.cta-btn.filled:hover {
+  background: var(--W);
+  color: var(--B);
+}
+
+.about-gallery {
+  border-bottom: var(--border-heavy);
+  padding: clamp(24px, 4vw, 48px) var(--space-page);
+  background: var(--B);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+
+.gallery-item {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--W);
+  overflow: hidden;
+}
+
+.originals-section {
+  padding: clamp(40px, 6vw, 80px) var(--space-page);
+  border-bottom: var(--border-heavy);
+  background: var(--W);
+}
+
+.originals-header {
+  max-width: 640px;
+  margin-bottom: clamp(28px, 4vw, 48px);
+}
+
+.originals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  border: var(--border-heavy);
+}
+
+.originals-item {
+  display: flex;
+  flex-direction: column;
+  background: var(--W);
+  border-right: 1px solid rgba(11, 10, 8, 0.14);
+  border-bottom: 1px solid rgba(11, 10, 8, 0.14);
+}
+
+.originals-item-media {
+  position: relative;
+  aspect-ratio: 1;
+  display: block;
+  background: var(--B);
+}
+
+.originals-item-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+}
+
+.originals-catalog {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.originals-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  color: var(--B);
+  text-decoration: none;
+}
+
+.originals-title:hover {
+  text-decoration: underline;
+}
+
+.originals-inquire {
+  font-family: var(--font-mono);
+  font-size: var(--text-ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--B);
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.originals-inquire:hover {
+  background: var(--B);
+  color: var(--W);
+  align-self: flex-start;
+}
+
+.originals-empty {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  color: var(--ink-soft);
+}
+
+.trade-hero {
+  border-bottom: var(--border-heavy);
+  background: var(--B);
+}
+
+.trade-hero--empty {
+  background: var(--W);
+  padding: clamp(24px, 4vw, 40px) var(--space-page);
+}
+
+.trade-hero-media {
+  position: relative;
+  min-height: clamp(240px, 40vw, 420px);
+}
+
+.trade-hero-media .media-frame-story {
+  position: relative;
+  width: 100%;
+  height: clamp(240px, 40vw, 420px);
+  border: none;
+  transform: none;
+}
+
+.trade-hero-caption {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  color: var(--chalk-soft);
+  padding: 16px var(--space-page) 24px;
+  margin: 0;
+  background: var(--B);
+}
+
+.trade-hero--empty .trade-hero-caption {
+  color: var(--ink-soft);
+  padding: 0;
+}
+
+@media (max-width: 900px) {
+  .signpost {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .signpost-card:nth-child(2) {
+    border-right: none;
+  }
+
+  .signpost-card:nth-child(1),
+  .signpost-card:nth-child(2) {
+    border-bottom: var(--border-heavy);
+  }
+
+  .gallery,
+  .originals-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .signpost {
+    grid-template-columns: 1fr;
+  }
+
+  .signpost-card {
+    border-right: none;
+    border-bottom: var(--border-heavy);
+  }
+
+  .signpost-card:last-child {
+    border-bottom: none;
+  }
+
+  .gallery,
+  .originals-grid {
+    grid-template-columns: 1fr;
+  }
 }

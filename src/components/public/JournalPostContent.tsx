@@ -22,7 +22,7 @@ export function JournalPostContent({ post }: { post: JournalPost }) {
           <div className="product-detail-hero" style={{ maxWidth: 900, margin: "0 auto" }}>
             <Image
               src={post.coverImage}
-              alt={post.title}
+              alt={post.coverImageAlt || post.title}
               fill
               className="object-cover"
               sizes="900px"

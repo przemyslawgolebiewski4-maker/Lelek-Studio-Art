@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
+import { triggerRevalidate } from "../lib/revalidate";
 import { Setting, HomeSection } from "../models";
 
 export const settingsPublicRouter = Router();
@@ -9,17 +10,49 @@ const PUBLIC_KEYS = [
   "site_name",
   "tagline",
   "description",
+  "shop_url",
   "etsy_url",
   "instagram",
   "instagram_handle",
   "email",
   "artist_url",
   "location",
+  "organization_logo",
+  "same_as_urls",
+  "contact_heading_1",
+  "contact_heading_2",
+  "contact_heading_3",
+  "contact_sub",
+  "contact_success",
+  "contact_form_note",
+  "impressum_body",
+  "datenschutz_body",
 ];
+
+/** Seeded default when shop_url is missing in Mongo (matches frontend env fallback). */
+// TEMPORARY: Etsy until Shopify store is live - swap when shop.lelekstudio.com resolves.
+const DEFAULT_SHOP_URL =
+  (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || "https://lelekstudio.etsy.com")
+    .trim()
+    .replace(/\/+$/, "") || "https://lelekstudio.etsy.com";
+
+async function ensureShopUrlSetting(): Promise<string> {
+  const existing = await Setting.findOne({ key: "shop_url" }).lean();
+  if (existing && typeof existing.value === "string" && existing.value.trim()) {
+    return existing.value.trim();
+  }
+  await Setting.findOneAndUpdate(
+    { key: "shop_url" },
+    { key: "shop_url", value: DEFAULT_SHOP_URL },
+    { upsert: true },
+  );
+  return DEFAULT_SHOP_URL;
+}
 
 const PUBLIC_SECTION_KEYS = [
   "hero",
   "story",
+  "signpost",
   "elements",
   "featured",
   "architects",
@@ -36,8 +69,10 @@ function isPublicSectionKey(key: string): key is PublicSectionKey {
 settingsPublicRouter.get("/settings/public", async (_req, res) => {
   try {
     await connectDB();
+    const shopUrl = await ensureShopUrlSetting();
     const rows = await Setting.find({ key: { $in: PUBLIC_KEYS } }).lean();
     const settings = Object.fromEntries(rows.map((row) => [row.key, row.value]));
+    if (!settings.shop_url) settings.shop_url = shopUrl;
     res.json(settings);
   } catch (err) {
     res.status(500).json({ error: String(err) });
@@ -78,6 +113,7 @@ export const settingsAdminRouter = Router();
 settingsAdminRouter.get("/settings", requireAdmin, async (_req, res) => {
   try {
     await connectDB();
+    await ensureShopUrlSetting();
     const rows = await Setting.find().lean();
     res.json(Object.fromEntries(rows.map((row) => [row.key, row.value])));
   } catch (err) {
@@ -96,6 +132,7 @@ settingsAdminRouter.patch("/settings", requireAdmin, async (req, res) => {
         await Setting.findOneAndUpdate({ key }, { key, value }, { upsert: true });
       }
       const rows = await Setting.find().lean();
+      void triggerRevalidate(["/", "/contact", "/impressum", "/datenschutz", "/about"]);
       res.json({ ok: true, settings: Object.fromEntries(rows.map((row) => [row.key, row.value])) });
       return;
     }
@@ -111,6 +148,7 @@ settingsAdminRouter.patch("/settings", requireAdmin, async (req, res) => {
       { key, value },
       { upsert: true, new: true },
     ).lean();
+    void triggerRevalidate(["/", "/contact", "/impressum", "/datenschutz", "/about"]);
     res.json({ ok: true, setting });
   } catch (err) {
     res.status(500).json({ error: String(err) });
@@ -154,6 +192,13 @@ settingsAdminRouter.patch("/sections/:key", requireAdmin, async (req, res) => {
       { $set: update },
       { new: true, upsert: true, runValidators: true },
     ).lean();
+    const paths =
+      sectionKey === "architects"
+        ? ["/", "/for-architects"]
+        : sectionKey === "story"
+          ? ["/", "/about"]
+          : ["/"];
+    void triggerRevalidate(paths);
     res.json({ ok: true, section });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

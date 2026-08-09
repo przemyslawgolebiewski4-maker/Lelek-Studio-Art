@@ -7,6 +7,7 @@ const JournalPostSchema = new Schema(
     excerpt: { type: String, default: "" },
     body: { type: String, default: "" },
     coverImage: { type: String, default: "" },
+    coverImageAlt: { type: String, default: "" },
     metaTitle: { type: String, default: "" },
     metaDescription: { type: String, default: "" },
     published: { type: Boolean, default: false },

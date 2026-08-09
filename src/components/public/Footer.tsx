@@ -5,8 +5,7 @@ type FooterProps = {
   location?: string;
   instagram?: string;
   email?: string;
-  etsyUrl?: string;
-  artistUrl?: string;
+  shopUrl?: string;
   lelekMeaning?: string;
 };
 
@@ -15,8 +14,7 @@ export function Footer({
   location = "Berlin",
   instagram = "https://www.instagram.com/lelek.studio.berlin/",
   email = "lelekstudio@lelekstudio.com",
-  etsyUrl = "https://www.etsy.com/shop/LelekStudio",
-  artistUrl = "https://www.p-golebiewski.xyz",
+  shopUrl = "https://lelekstudio.etsy.com",
   lelekMeaning = "Lelek - kozodoj - the nightjar",
 }: FooterProps) {
   const year = new Date().getFullYear();
@@ -36,9 +34,7 @@ export function Footer({
           </Link>
         </li>
         <li>
-          <Link href={etsyUrl} target="_blank" rel="noopener noreferrer">
-            Etsy
-          </Link>
+          <a href={shopUrl}>Shop</a>
         </li>
         <li>
           <Link href="/contact">Contact</Link>
@@ -50,9 +46,7 @@ export function Footer({
           <Link href="/datenschutz">Datenschutz</Link>
         </li>
         <li>
-          <Link href={artistUrl} target="_blank" rel="noopener noreferrer">
-            Art ↗
-          </Link>
+          <Link href="/about">Art</Link>
         </li>
         <li>
           <Link href={`mailto:${email}`}>{email}</Link>

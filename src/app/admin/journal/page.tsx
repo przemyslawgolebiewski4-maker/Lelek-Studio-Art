@@ -60,7 +60,15 @@ export default function AdminJournalPage() {
 
       <div className="admin-form-stack">
         {posts.length === 0 && !loading ? (
-          <p className="admin-muted">No posts yet.</p>
+          <AdminCard>
+            <p className="admin-list-item-title">No journal posts yet</p>
+            <p className="admin-muted" style={{ marginBottom: 12 }}>
+              Write the first Process note - material, making, or life in the Berlin studio.
+            </p>
+            <AdminLinkButton href="/admin/journal/new" variant="primary">
+              Create first post
+            </AdminLinkButton>
+          </AdminCard>
         ) : null}
         {posts.map((post) => (
           <AdminCard
@@ -70,7 +78,10 @@ export default function AdminJournalPage() {
             <div>
               <p className="admin-list-item-title">{post.title}</p>
               <p className="admin-list-item-meta">
-                /journal/{post.slug} · {post.published ? "published" : "draft"}
+                /journal/{post.slug} ·{" "}
+                <span style={{ color: post.published ? "#2a5a3a" : "#8a2b2b" }}>
+                  {post.published ? "LIVE on site" : "Draft - not public"}
+                </span>
               </p>
             </div>
             <div style={{ display: "flex", gap: 12 }}>
