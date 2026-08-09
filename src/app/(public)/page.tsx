@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/public/Hero";
-import { FeaturedWorks } from "@/components/public/FeaturedWorks";
-import { AcquireBar } from "@/components/public/AcquireBar";
 import { HomeStorySection } from "@/components/public/HomeStorySection";
 import { HomeElementsBar } from "@/components/public/HomeElementsBar";
-import { HomeArchitectsCta } from "@/components/public/HomeArchitectsCta";
 import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
@@ -21,23 +18,35 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
+/** Canonical hero copy - overrides stale CMS headline/quote. */
+const HERO_COPY = {
+  eyebrow: "Design through material.",
+  subheadline: "Ceramic objects, vessels, prints.",
+  brandline: "LELEK — Berlin.",
+  quote: "",
+  headline: "",
+  headlineEm: "",
+} as const;
+
 export default async function HomePage() {
   const {
     settings,
     hero,
-    featuredSection,
-    homeProducts,
     story,
     signpost,
     elements,
     elementsSection,
-    architects,
     journalSection,
     journalPosts,
     find,
   } = await getPublicHomeData();
 
   const elementItems = elements;
+  const heroContent = {
+    ...(Object.keys(hero).length > 0 ? hero : DEFAULT_HERO),
+    ...HERO_COPY,
+  };
+
   const orgLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -59,10 +68,7 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={orgLd} />
-      <Hero
-        content={Object.keys(hero).length > 0 ? hero : DEFAULT_HERO}
-        elements={elementItems}
-      />
+      <Hero content={heroContent} elements={elementItems} />
       <Signpost section={signpost ?? DEFAULT_SIGNPOST} />
       <HomeStorySection story={story} />
       <HomeElementsBar
@@ -72,14 +78,8 @@ export default async function HomePage() {
           "Ceramics process, below - Mire & Silt collections only"
         }
       />
-      <FeaturedWorks section={featuredSection} homeProducts={homeProducts} />
-      <AcquireBar
-        etsyUrl={settings.etsy_url ?? find.etsyUrl ?? SHOP_URL}
-        label={settings.acquire_label}
-      />
-      <HomeArchitectsCta section={architects} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />
-      <HomeFindSection section={find} email={settings.email} />
+      <HomeFindSection section={find} email={settings.email} shopUrl={SHOP_URL} />
     </>
   );
 }

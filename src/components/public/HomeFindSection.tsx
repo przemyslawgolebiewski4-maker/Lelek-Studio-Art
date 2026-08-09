@@ -1,16 +1,19 @@
 import Link from "next/link";
 import type { FindSection } from "@/types/content";
+import { SHOP_URL } from "@/lib/config";
 
 type HomeFindSectionProps = {
   section: FindSection;
   email?: string;
   studioInstagramUrl?: string;
+  shopUrl?: string;
 };
 
 export function HomeFindSection({
   section,
   email = "lelekstudio@lelekstudio.com",
   studioInstagramUrl = "https://www.instagram.com/claystories.berlin/",
+  shopUrl = SHOP_URL,
 }: HomeFindSectionProps) {
   return (
     <section id="find" className="find">
@@ -33,20 +36,13 @@ export function HomeFindSection({
 
       <div className="fb dark">
         <div className="fb-ey">Online</div>
-        <div className="fb-h3">Etsy shop</div>
+        <div className="fb-h3">Shop</div>
         <p className="fb-body">
-          Functional ceramics available worldwide. New pieces added after each firing.
+          Ceramic objects, vessels, prints and wearable pieces - available on the LELEK shop.
         </p>
-        {section.etsyUrl ? (
-          <Link
-            href={section.etsyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="fb-link"
-          >
-            Visit Etsy shop ↗
-          </Link>
-        ) : null}
+        <a href={shopUrl} className="fb-link">
+          Visit shop ↗
+        </a>
         <p className="fb-body" style={{ marginTop: 24 }}>
           Interior projects - {email}
         </p>

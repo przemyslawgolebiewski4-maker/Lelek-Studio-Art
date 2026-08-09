@@ -5,8 +5,11 @@ import { SHOP_URL } from "@/lib/config";
 
 export type HeroContent = {
   eyebrow?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   headline?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   headlineEm?: string;
+  /** @deprecated Not rendered - kept for CMS backward compatibility */
   quote?: string;
   subheadline?: string;
   brandline?: string;
@@ -32,7 +35,9 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const image = content.image ?? "/images/hero/hero-main.jpg";
   const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
   const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
-  const brandline = content.brandline || content.kozodoj;
+  const eyebrow = content.eyebrow || "Design through material.";
+  const subline = content.subheadline || "Ceramic objects, vessels, prints.";
+  const brandline = content.brandline || "LELEK — Berlin.";
 
   return (
     <section className="hero">
@@ -53,25 +58,10 @@ export function Hero({ content, elements = [] }: HeroProps) {
       <div className="hero-text surface-wabi">
         <div className="hero-content-grid">
           <div className="hero-top">
-            {content.eyebrow ? (
-              <div className="hero-eyebrow">{content.eyebrow}</div>
-            ) : null}
-            <h1 className="hero-h1">
-              {content.headline}
-              {content.headlineEm ? (
-                <>
-                  {" "}
-                  <em>{content.headlineEm}</em>
-                </>
-              ) : null}
-            </h1>
+            <div className="hero-eyebrow">{eyebrow}</div>
+            <h1 className="hero-h1 hero-brand">{brandline}</h1>
             <div className="hero-rule" />
-            {content.quote ? (
-              <p className="hero-quote">&ldquo;{content.quote}&rdquo;</p>
-            ) : content.subheadline ? (
-              <p className="hero-quote">{content.subheadline}</p>
-            ) : null}
-            {brandline ? <p className="hero-brandline">{brandline}</p> : null}
+            <p className="hero-quote hero-subline">{subline}</p>
             <div className="hero-btns">
               {content.cta1Text ? (
                 /^https?:\/\//i.test(content.cta1Url ?? "") ? (

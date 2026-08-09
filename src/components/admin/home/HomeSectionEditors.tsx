@@ -109,12 +109,12 @@ export function HeroSectionEditor({
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">Text</h3>
+        <p className="admin-muted">
+          Public hero shows only eyebrow, brand line (as the main heading), and subline - not the legacy headline/quote fields.
+        </p>
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
-        <AdminInput label="Headline line 1" value={form.headline} onChange={(e) => set("headline", e.target.value)} />
-        <AdminInput label="Headline line 2 (italic)" value={form.headlineEm} onChange={(e) => set("headlineEm", e.target.value)} />
-        <AdminTextarea label="Quote" rows={2} value={form.quote} onChange={(e) => set("quote", e.target.value)} />
-        <AdminTextarea label="Subline (if no quote)" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
-        <AdminInput label="Brand line" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
+        <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK — Berlin." />
+        <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
       </div>
 
       <div className="admin-field-group">
@@ -568,7 +568,10 @@ export function FindSectionEditor({
       <AdminInput label="Studio name" value={c.studioName ?? ""} onChange={(e) => set("studioName", e.target.value)} />
       <AdminTextarea label="Studio address" rows={3} value={c.studioAddress ?? ""} onChange={(e) => set("studioAddress", e.target.value)} />
       <AdminInput label="Studio Instagram handle" value={c.studioInstagram ?? ""} onChange={(e) => set("studioInstagram", e.target.value)} />
-      <AdminInput label="Etsy shop URL" value={c.etsyUrl ?? ""} onChange={(e) => set("etsyUrl", e.target.value)} />
+      <p className="admin-muted">
+        The Online block on the homepage links to the Shopify storefront (NEXT_PUBLIC_SHOP_URL), not Etsy.
+      </p>
+      <AdminInput label="Legacy Etsy URL (optional)" value={c.etsyUrl ?? ""} onChange={(e) => set("etsyUrl", e.target.value)} />
       <AdminInput label="Lelek meaning (footer)" value={c.lelekMeaning ?? ""} onChange={(e) => set("lelekMeaning", e.target.value)} />
     </div>
   );

@@ -25,10 +25,10 @@ export type HomeSectionKey =
 
 export const DEFAULT_HERO: Record<string, string> = {
   eyebrow: "Design through material.",
-  headline: "Shaped by hand,",
-  headlineEm: "guided by instinct",
+  headline: "",
+  headlineEm: "",
   subheadline: "Ceramic objects, vessels, prints.",
-  brandline: "LELEK - Berlin.",
+  brandline: "LELEK — Berlin.",
   quote: "",
   image: "/images/hero/hero-main.jpg",
   imageMobile: "/images/hero/hero-main-mobile.jpg",

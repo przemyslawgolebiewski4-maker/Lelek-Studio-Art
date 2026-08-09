@@ -2828,13 +2828,13 @@ textarea.form-inp {
   line-height: 1.45;
 }
 
-.hero-brandline {
-  font-family: var(--font-mono);
-  font-size: var(--text-ui);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  margin: 12px 0 0;
-  color: var(--ink-muted);
+.hero-h1.hero-brand {
+  font-family: var(--font-serif);
+  letter-spacing: 0.02em;
+}
+
+.hero-subline {
+  quotes: none;
 }
 
 .elements-wrap {
