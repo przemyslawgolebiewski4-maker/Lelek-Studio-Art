@@ -2873,6 +2873,40 @@ textarea.form-inp {
   margin-top: 28px;
 }
 
+/* About CTAs on light story panel (not hero dark overlay) */
+.cta-btn {
+  font-family: var(--font-sans);
+  font-size: var(--text-ui);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+  border: 3px solid var(--B);
+  color: var(--B);
+  background: transparent;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+  min-height: 44px;
+  line-height: 1.2;
+  cursor: crosshair;
+}
+
+.cta-btn:hover {
+  background: var(--B);
+  color: var(--W);
+}
+
+.cta-btn.filled {
+  background: var(--B);
+  color: var(--W);
+  border-color: var(--B);
+}
+
+.cta-btn.filled:hover {
+  background: var(--W);
+  color: var(--B);
+}
+
 .about-gallery {
   border-bottom: var(--border-heavy);
   padding: clamp(24px, 4vw, 48px) var(--space-page);

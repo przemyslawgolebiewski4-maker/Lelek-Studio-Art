@@ -54,10 +54,10 @@ export function AboutContent({ story, originals }: AboutContentProps) {
           {story.signature ? <p className="story-sig">{story.signature}</p> : null}
 
           <div className="cta-row">
-            <a href={SHOP_URL} className="hero-btn filled">
+            <a href={SHOP_URL} className="cta-btn filled">
               {shopLabel}
             </a>
-            <Link href="/for-architects" className="hero-btn">
+            <Link href="/for-architects" className="cta-btn">
               {tradeLabel}
             </Link>
           </div>
