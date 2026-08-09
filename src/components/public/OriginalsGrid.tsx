@@ -27,9 +27,14 @@ export function OriginalsGrid({
     <div className="originals-grid">
       {products.map((product) => {
         const slug = normalizeSlug(product.slug) || product.slug;
+        const sold = Boolean(product.soldOut);
         return (
-          <article key={String(product._id)} className="originals-item">
+          <article
+            key={String(product._id)}
+            className={`originals-item${sold ? " is-sold" : ""}`}
+          >
             <Link href={`/objects/${slug}`} className="originals-item-media">
+              {sold ? <span className="originals-item-sold">Sold</span> : null}
               {product.images[0] ? (
                 <Image
                   src={product.images[0]}
@@ -46,9 +51,13 @@ export function OriginalsGrid({
               <Link href={`/objects/${slug}`} className="originals-title">
                 {product.title}
               </Link>
-              <Link href={inquireHref} className="originals-inquire">
-                Inquire →
-              </Link>
+              {sold ? (
+                <span className="originals-sold-label">Sold</span>
+              ) : (
+                <Link href={inquireHref} className="originals-inquire">
+                  Inquire →
+                </Link>
+              )}
             </div>
           </article>
         );
