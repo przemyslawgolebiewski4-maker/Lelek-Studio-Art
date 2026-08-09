@@ -183,6 +183,16 @@ export const DEFAULT_ARCHITECTS: ArchitectsSection = {
   headline: "Objects for spaces",
   headlineEm: "that refuse the ordinary.",
   sub: "Custom ceramic pieces for residential, hospitality and concept stores. Each object unique. None manufactured.",
+  point1Title: "Wall objects",
+  point1Body:
+    "Handbuilt ceramic pieces for walls. Each exists once. Available for residential and hospitality projects.",
+  point2Title: "Vessels and objects",
+  point2Body: "Sculptural forms for shelves, tables and surfaces. Selected, not configured.",
+  point3Title: "Functional ceramics",
+  point3Body:
+    "Cups, bowls and tea objects available to order. The only category produced in series.",
+  closingNote:
+    "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
   ctaText: "Get in touch",
   formTitle: "Send an inquiry",
   formSuccessTitle: "Message received.",

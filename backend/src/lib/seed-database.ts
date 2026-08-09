@@ -183,6 +183,17 @@ export async function seedDatabase(options?: { force?: boolean }) {
         headline: "Looking for something made by hand, not manufactured?",
         sub: "Ceramics for residential, hospitality, and concept stores.",
         body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
+        point1Title: "Wall objects",
+        point1Body:
+          "Handbuilt ceramic pieces for walls. Each exists once. Available for residential and hospitality projects.",
+        point2Title: "Vessels and objects",
+        point2Body:
+          "Sculptural forms for shelves, tables and surfaces. Selected, not configured.",
+        point3Title: "Functional ceramics",
+        point3Body:
+          "Cups, bowls and tea objects available to order. The only category produced in series.",
+        closingNote:
+          "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
         ctaText: "Get in touch",
         ctaUrl: "/for-architects",
         heroImage: "",

@@ -58,6 +58,8 @@ export interface ArchitectsSection {
   point2Body?: string;
   point3Title?: string;
   point3Body?: string;
+  /** Closing note below the three points on /for-architects */
+  closingNote?: string;
   ctaText?: string;
   formTitle?: string;
   formSuccessTitle?: string;

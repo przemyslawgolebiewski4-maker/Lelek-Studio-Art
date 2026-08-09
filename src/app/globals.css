@@ -1157,6 +1157,27 @@ button:hover:not(:disabled),
   margin-bottom: 28px;
 }
 
+.arch.trade-intro {
+  grid-template-columns: 1fr;
+  max-width: none;
+}
+
+.arch-closing {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--W);
+  opacity: 0.55;
+  max-width: 52ch;
+  margin: 28px 0 0;
+}
+
+.arch-point-text strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
 .arch-points {
   display: flex;
   flex-direction: column;

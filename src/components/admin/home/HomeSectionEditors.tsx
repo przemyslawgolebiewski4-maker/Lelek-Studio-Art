@@ -495,12 +495,18 @@ export function TradeSectionEditor({
         <AdminInput label="Headline line 1" value={c.headline ?? ""} onChange={(e) => set("headline", e.target.value)} />
         <AdminInput label="Headline line 2 (italic)" value={c.headlineEm ?? ""} onChange={(e) => set("headlineEm", e.target.value)} />
         <AdminTextarea label="Subtext" rows={3} value={c.sub ?? ""} onChange={(e) => set("sub", e.target.value)} />
-        <AdminInput label="Point 01 - title" value={c.point1Title ?? ""} onChange={(e) => set("point1Title", e.target.value)} />
-        <AdminInput label="Point 01 - description" value={c.point1Body ?? ""} onChange={(e) => set("point1Body", e.target.value)} />
-        <AdminInput label="Point 02 - title" value={c.point2Title ?? ""} onChange={(e) => set("point2Title", e.target.value)} />
-        <AdminInput label="Point 02 - description" value={c.point2Body ?? ""} onChange={(e) => set("point2Body", e.target.value)} />
-        <AdminInput label="Point 03 - title" value={c.point3Title ?? ""} onChange={(e) => set("point3Title", e.target.value)} />
-        <AdminInput label="Point 03 - description" value={c.point3Body ?? ""} onChange={(e) => set("point3Body", e.target.value)} />
+        <AdminInput label="Point 01 - title" value={c.point1Title ?? ""} onChange={(e) => set("point1Title", e.target.value)} placeholder="Wall objects" />
+        <AdminTextarea label="Point 01 - description" rows={2} value={c.point1Body ?? ""} onChange={(e) => set("point1Body", e.target.value)} />
+        <AdminInput label="Point 02 - title" value={c.point2Title ?? ""} onChange={(e) => set("point2Title", e.target.value)} placeholder="Vessels and objects" />
+        <AdminTextarea label="Point 02 - description" rows={2} value={c.point2Body ?? ""} onChange={(e) => set("point2Body", e.target.value)} />
+        <AdminInput label="Point 03 - title" value={c.point3Title ?? ""} onChange={(e) => set("point3Title", e.target.value)} placeholder="Functional ceramics" />
+        <AdminTextarea label="Point 03 - description" rows={2} value={c.point3Body ?? ""} onChange={(e) => set("point3Body", e.target.value)} />
+        <AdminTextarea
+          label="Closing note (below points)"
+          rows={3}
+          value={c.closingNote ?? ""}
+          onChange={(e) => set("closingNote", e.target.value)}
+        />
         <AdminInput label="Button text" value={c.ctaText ?? ""} onChange={(e) => set("ctaText", e.target.value)} />
         <AdminInput label="Form label" value={c.formTitle ?? ""} onChange={(e) => set("formTitle", e.target.value)} />
         <AdminInput label="Success title" value={c.formSuccessTitle ?? ""} onChange={(e) => set("formSuccessTitle", e.target.value)} />
