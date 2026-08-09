@@ -3,7 +3,26 @@
 import { useState } from "react";
 import { apiPost } from "@/lib/api";
 
-export default function ContactForm() {
+export type ContactCopy = {
+  headingLine1?: string;
+  headingLine2?: string;
+  headingLine3?: string;
+  sub?: string;
+  successMessage?: string;
+  formNote?: string;
+};
+
+const DEFAULTS: Required<ContactCopy> = {
+  headingLine1: "Connect",
+  headingLine2: "with",
+  headingLine3: "the clay.",
+  sub: "Wall objects, custom orders, interior projects - or simply to say something. I work intuitively. I will respond the same way.",
+  successMessage: "Message sent. Thank you - we will reply soon.",
+  formNote: "lelekstudio@lelekstudio.com\nClay Stories Berlin",
+};
+
+export default function ContactForm({ copy }: { copy?: ContactCopy }) {
+  const c = { ...DEFAULTS, ...copy };
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -36,22 +55,19 @@ export default function ContactForm() {
     <section className="contact">
       <div className="contact-head">
         <h1 className="contact-h">
-          Connect
+          {c.headingLine1}
           <br />
-          with
+          {c.headingLine2}
           <br />
-          the clay.
+          {c.headingLine3}
         </h1>
-        <p className="contact-sub">
-          Wall objects, custom orders, interior projects - or simply to say something. I work
-          intuitively. I will respond the same way.
-        </p>
+        <p className="contact-sub">{c.sub}</p>
       </div>
 
       {status === "success" ? (
         <div className="contact-form">
           <p className="contact-sub" style={{ opacity: 0.6 }}>
-            Message sent. Thank you - we will reply soon.
+            {c.successMessage}
           </p>
         </div>
       ) : (
@@ -108,10 +124,8 @@ export default function ContactForm() {
             <button type="submit" className="form-submit" disabled={status === "loading"}>
               {status === "loading" ? "Sending..." : "Send it →"}
             </button>
-            <div className="form-note">
-              lelekstudio@lelekstudio.com
-              <br />
-              Clay Stories Berlin
+            <div className="form-note" style={{ whiteSpace: "pre-line" }}>
+              {c.formNote}
             </div>
           </div>
         </form>

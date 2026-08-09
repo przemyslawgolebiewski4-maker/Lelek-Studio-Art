@@ -17,7 +17,12 @@ export function HomeElementsBar({
           <div key={item.number} className="elem">
             <span className="elem-n">{item.number}</span>
             <div className="elem-dash" />
-            <div className="elem-name">{item.name}</div>
+            <div className="elem-text">
+              <div className="elem-name">{item.name}</div>
+              {item.description ? (
+                <div className="elem-desc">{item.description}</div>
+              ) : null}
+            </div>
           </div>
         ))}
       </div>

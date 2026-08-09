@@ -45,9 +45,9 @@ const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
   story: "Homepage teaser (paragraph 1) + full About page (all paragraphs, gallery, CTAs).",
   elements: "Earth · Water · Fire · Air labels and ceramics scope note.",
   featured: "Video + product thumbnails. Products marked Visible on Home appear below the video.",
-  architects: "Trade page hero media + homepage architects CTA.",
-  journal: "Journal teaser heading (posts from Journal admin).",
-  find: "Studio address and shop links.",
+  architects: "Full Trade page (/for-architects): hero, intro, points, form copy.",
+  journal: "Journal teaser heading on the homepage (posts from Journal admin).",
+  find: "Homepage Find block + footer brand tagline. Shop URL is env-based.",
 };
 
 export default function AdminHomePage() {
@@ -193,17 +193,24 @@ export default function AdminHomePage() {
                 </p>
               ) : null}
             </div>
-            <label className="admin-checkbox">
-              <input
-                type="checkbox"
-                checked={visible}
-                onChange={(e) => {
-                  setVisible(e.target.checked);
-                  setSaved(false);
-                }}
-              />
-              Visible on site
-            </label>
+            <div>
+              <label className="admin-checkbox">
+                <input
+                  type="checkbox"
+                  checked={visible}
+                  onChange={(e) => {
+                    setVisible(e.target.checked);
+                    setSaved(false);
+                  }}
+                />
+                {visible
+                  ? "Visible on site (will be live after Save)"
+                  : "Hidden from site (section not served publicly)"}
+              </label>
+              <p className="admin-muted" style={{ marginTop: 6, marginBottom: 0 }}>
+                Toggle alone does nothing until you click Save. Unsaved edits are not live.
+              </p>
+            </div>
           </div>
 
           {renderEditor()}
@@ -212,7 +219,11 @@ export default function AdminHomePage() {
             <AdminButton onClick={saveSection} disabled={saving} className="filled">
               {saving ? "Saving..." : "Save section"}
             </AdminButton>
-            {saved ? <span className="admin-success">Saved - changes live after revalidate (~1 min)</span> : null}
+            {saved ? (
+              <span className="admin-success">
+                Saved - {visible ? "live after revalidate (~1 min)" : "section stays hidden"}
+              </span>
+            ) : null}
           </div>
         </AdminCard>
       </div>

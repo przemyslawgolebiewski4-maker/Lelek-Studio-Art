@@ -15,6 +15,8 @@ const ProductSchema = new Schema(
     process: { type: String, default: "" },
     etsyUrl: { type: String, default: "" },
     images: { type: [String], default: [] },
+    /** Alt text for the primary (first) gallery image - used on Originals cards and product pages. */
+    imageAlt: { type: String, default: "" },
     metaTitle: { type: String, default: "" },
     metaDescription: { type: String, default: "" },
     published: { type: Boolean, default: false },

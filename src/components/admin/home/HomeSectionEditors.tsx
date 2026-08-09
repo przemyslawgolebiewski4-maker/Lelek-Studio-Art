@@ -4,17 +4,16 @@ import {
   AdminInput,
   AdminTextarea,
 } from "@/components/admin/AdminShell";
+import { AdminReorderControls, moveItem } from "@/components/admin/AdminFieldHelpers";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { MEDIA_HINTS } from "@/lib/media-hints";
 import type { ElementItem } from "@/types/content";
 
 export type HeroFormData = {
   eyebrow: string;
-  headline: string;
-  headlineEm: string;
-  quote: string;
   subheadline: string;
   brandline: string;
+  kozodoj: string;
   image: string;
   imageMobile: string;
   video: string;
@@ -31,11 +30,9 @@ export function heroToForm(content: Record<string, unknown>): HeroFormData {
   const c = content as Record<string, string>;
   return {
     eyebrow: c.eyebrow ?? "",
-    headline: c.headline ?? "",
-    headlineEm: c.headlineEm ?? "",
-    quote: c.quote ?? "",
     subheadline: c.subheadline ?? "",
     brandline: c.brandline ?? "",
+    kozodoj: c.kozodoj ?? "",
     image: c.image ?? "",
     imageMobile: c.imageMobile ?? "",
     video: c.video ?? "",
@@ -68,17 +65,23 @@ export function HeroSectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Hero - left media (photo or looped video), right headline and CTAs. Matches the public homepage hero.
+        Fields follow the public hero top-to-bottom: media first, then eyebrow / brand / subline, then CTAs.
+        Save this section to publish - the &quot;Visible on site&quot; toggle above controls whether the live homepage uses this content.
       </p>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Media</h3>
+        <h3 className="admin-group-title">1. Media (poster / video)</h3>
         <MediaUploadField
-          label="Desktop image"
+          label="Desktop image (poster / LCP)"
           value={form.image}
           onChange={(v) => set("image", v)}
           folder="hero"
           hint={MEDIA_HINTS.heroDesktopImage}
+        />
+        <AdminInput
+          label="Alt text for desktop / poster image"
+          value={form.imageAlt}
+          onChange={(e) => set("imageAlt", e.target.value)}
         />
         <MediaUploadField
           label="Mobile image (optional)"
@@ -104,21 +107,23 @@ export function HeroSectionEditor({
           hint={MEDIA_HINTS.heroMobileVideo}
         />
         <AdminInput label="Media caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
-        <AdminInput label="Alt text (accessibility)" value={form.imageAlt} onChange={(e) => set("imageAlt", e.target.value)} />
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Text</h3>
-        <p className="admin-muted">
-          Public hero shows only eyebrow, brand line (as the main heading), and subline - not the legacy headline/quote fields.
-        </p>
+        <h3 className="admin-group-title">2. Text (as on the page)</h3>
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
         <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
         <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
+        <AdminInput
+          label="Kozodoj line (under elements, if elements shown)"
+          value={form.kozodoj}
+          onChange={(e) => set("kozodoj", e.target.value)}
+          placeholder="Lelek - kozodoj - the nightjar - Slavic spirit"
+        />
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Buttons</h3>
+        <h3 className="admin-group-title">3. Buttons</h3>
         <div className="admin-form-row-2">
           <AdminInput label="Primary CTA text" value={form.cta1Text} onChange={(e) => set("cta1Text", e.target.value)} />
           <AdminInput label="Primary CTA link" value={form.cta1Url} onChange={(e) => set("cta1Url", e.target.value)} />
@@ -150,6 +155,9 @@ export type StoryFormData = {
   imageCaption: string;
   ctaShopLabel: string;
   ctaTradeLabel: string;
+  originalsEyebrow: string;
+  originalsHeading: string;
+  originalsIntro: string;
   gallery: StoryGalleryItem[];
 };
 
@@ -174,6 +182,11 @@ export function storyToForm(content: Record<string, unknown>): StoryFormData {
     imageCaption: c.imageCaption ?? "",
     ctaShopLabel: c.ctaShopLabel ?? "Shop the collections",
     ctaTradeLabel: c.ctaTradeLabel ?? "Designing a space?",
+    originalsEyebrow: c.originalsEyebrow ?? "Originals",
+    originalsHeading: c.originalsHeading ?? "One-of-a-kind pieces",
+    originalsIntro:
+      c.originalsIntro ??
+      "Sculptural and statement works available by inquiry - not sold through the shop.",
     gallery: rawGallery.map((g) => ({ image: g.image ?? "", alt: g.alt ?? "" })),
   };
 }
@@ -227,6 +240,11 @@ export function StorySectionEditor({
           folder="story"
           hint={MEDIA_HINTS.storyDesktopImage}
         />
+        <AdminInput
+          label="Alt text for image / poster"
+          value={form.imageAlt}
+          onChange={(e) => set("imageAlt", e.target.value)}
+        />
         <MediaUploadField
           label="Mobile image"
           value={form.imageMobile}
@@ -251,38 +269,71 @@ export function StorySectionEditor({
           hint={MEDIA_HINTS.storyMobileVideo}
         />
         <AdminInput label="Caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
-        <AdminInput label="Alt text" value={form.imageAlt} onChange={(e) => set("imageAlt", e.target.value)} />
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Copy</h3>
+        <h3 className="admin-group-title">Bio copy</h3>
+        <p className="admin-muted">
+          Paragraph 1 also appears as the homepage Story teaser. Paragraphs 2-3 and the signature appear only on /about.
+        </p>
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} />
         <AdminInput label="Heading" value={form.heading} onChange={(e) => set("heading", e.target.value)} />
         <AdminInput label="Heading emphasis (italic)" value={form.headingEm} onChange={(e) => set("headingEm", e.target.value)} />
-        <AdminTextarea label="Paragraph 1 (homepage teaser + about)" rows={3} value={form.body1} onChange={(e) => set("body1", e.target.value)} />
-        <AdminTextarea label="Paragraph 2 (about only)" rows={3} value={form.body2} onChange={(e) => set("body2", e.target.value)} />
-        <AdminTextarea label="Paragraph 3 (about only)" rows={3} value={form.body3} onChange={(e) => set("body3", e.target.value)} />
+        <AdminTextarea label="Paragraph 1 (homepage teaser + About)" rows={3} value={form.body1} onChange={(e) => set("body1", e.target.value)} />
+        <AdminTextarea label="Paragraph 2 (About only)" rows={3} value={form.body2} onChange={(e) => set("body2", e.target.value)} />
+        <AdminTextarea label="Paragraph 3 (About only)" rows={3} value={form.body3} onChange={(e) => set("body3", e.target.value)} />
         <AdminInput label="Signature" value={form.signature} onChange={(e) => set("signature", e.target.value)} />
       </div>
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">About CTAs</h3>
-        <p className="admin-muted">Links stay fixed (Shop URL env / Trade page). Edit labels only.</p>
+        <p className="admin-muted">
+          Both buttons render on /about. Hrefs stay fixed (Shop URL from env / /for-architects). Edit labels only.
+        </p>
         <AdminInput
-          label="Shop button label"
+          label='Primary CTA label (default: "Shop the collections")'
           value={form.ctaShopLabel}
           onChange={(e) => set("ctaShopLabel", e.target.value)}
         />
         <AdminInput
-          label="Trade button label"
+          label='Secondary CTA label (default: "Designing a space?")'
           value={form.ctaTradeLabel}
           onChange={(e) => set("ctaTradeLabel", e.target.value)}
         />
       </div>
 
       <div className="admin-field-group">
+        <h3 className="admin-group-title">Originals section chrome</h3>
+        <p className="admin-muted">
+          Heading block above the Originals product grid on /about. Pieces themselves are managed under
+          Products (flag &quot;Original&quot;).
+        </p>
+        <AdminInput
+          label="Eyebrow"
+          value={form.originalsEyebrow}
+          onChange={(e) => set("originalsEyebrow", e.target.value)}
+        />
+        <AdminInput
+          label="Heading"
+          value={form.originalsHeading}
+          onChange={(e) => set("originalsHeading", e.target.value)}
+        />
+        <AdminTextarea
+          label="Intro"
+          rows={2}
+          value={form.originalsIntro}
+          onChange={(e) => set("originalsIntro", e.target.value)}
+        />
+      </div>
+
+      <div className="admin-field-group">
         <h3 className="admin-group-title">About gallery</h3>
-        <p className="admin-muted">Sculpture / original-work photos. Each image needs its own alt text.</p>
+        <p className="admin-muted">
+          Sculpture / original-work photos. Alt text sits under each image. Reorder with Move up / Move down.
+        </p>
+        {form.gallery.length === 0 ? (
+          <p className="admin-muted">No gallery images yet - add the first photo below.</p>
+        ) : null}
         {form.gallery.map((item, i) => (
           <div key={i} className="admin-field-group" style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}>
             <MediaUploadField
@@ -292,13 +343,16 @@ export function StorySectionEditor({
               folder="story"
             />
             <AdminInput
-              label={`Alt text ${i + 1}`}
+              label={`Alt text for image ${i + 1}`}
               value={item.alt}
               onChange={(e) => updateGallery(i, { alt: e.target.value })}
             />
-            <button type="button" className="admin-btn ghost" onClick={() => removeGalleryItem(i)}>
-              Remove image
-            </button>
+            <AdminReorderControls
+              index={i}
+              total={form.gallery.length}
+              onMove={(from, to) => set("gallery", moveItem(form.gallery, from, to))}
+              onRemove={() => removeGalleryItem(i)}
+            />
           </div>
         ))}
         <button type="button" className="admin-btn" onClick={addGalleryItem}>
@@ -318,7 +372,11 @@ export function ElementsSectionEditor({
 }) {
   const items = ((content.items as ElementItem[]) ?? []).slice(0, 4);
   while (items.length < 4) {
-    items.push({ number: ["I.", "II.", "III.", "IV."][items.length] ?? "", name: "" });
+    items.push({
+      number: ["I.", "II.", "III.", "IV."][items.length] ?? "",
+      name: "",
+      description: "",
+    });
   }
   const scopeNote =
     typeof content.scopeNote === "string"
@@ -332,23 +390,41 @@ export function ElementsSectionEditor({
 
   return (
     <div className="admin-form-stack-lg">
-      <p className="admin-muted">Four elements bar - Earth, Water, Fire, Air. Shown in hero and full-width bar.</p>
+      <p className="admin-muted">
+        Fixed four slots (Earth / Water / Fire / Air) matching the public bar. Use &quot;Visible on site&quot;
+        above to show or hide this section on the homepage after you Save.
+      </p>
       <AdminInput
         label="Scope note (above bar)"
         value={scopeNote}
         onChange={(e) => onChange({ ...content, items, scopeNote: e.target.value })}
       />
       {items.map((item, i) => (
-        <div key={i} className="admin-form-row-2">
+        <div key={i} className="admin-field-group" style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}>
+          <h3 className="admin-group-title">Element {i + 1}</h3>
+          <div className="admin-form-row-2">
+            <AdminInput
+              label="Number / index"
+              value={item.number}
+              onChange={(e) => updateItem(i, { number: e.target.value })}
+            />
+            <AdminInput
+              label="Label (e.g. Earth)"
+              value={item.name}
+              onChange={(e) => updateItem(i, { name: e.target.value })}
+            />
+          </div>
           <AdminInput
-            label={`Element ${i + 1} number`}
-            value={item.number}
-            onChange={(e) => updateItem(i, { number: e.target.value })}
+            label="Short description (optional)"
+            value={item.description ?? ""}
+            onChange={(e) => updateItem(i, { description: e.target.value })}
           />
-          <AdminInput
-            label={`Element ${i + 1} name`}
-            value={item.name}
-            onChange={(e) => updateItem(i, { name: e.target.value })}
+          <AdminReorderControls
+            index={i}
+            total={items.length}
+            onMove={(from, to) =>
+              onChange({ ...content, items: moveItem(items, from, to), scopeNote })
+            }
           />
         </div>
       ))}
@@ -387,7 +463,8 @@ export function SignpostSectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Wayfinding block directly below the hero - intro, Trade signal line, and four destination cards.
+        Wayfinding below the hero. Exactly four cards by design (Shop / About / Process / Trade) -
+        matching the fixed destinations. Reorder with Move up / Move down; labels and links stay editable.
       </p>
       <AdminTextarea
         label="Intro paragraph"
@@ -424,10 +501,51 @@ export function SignpostSectionEditor({
             value={card.href}
             onChange={(e) => updateCard(i, { href: e.target.value })}
           />
+          <AdminReorderControls
+            index={i}
+            total={cards.length}
+            onMove={(from, to) =>
+              onChange({ intro, tradeSignal, tradeHref, cards: moveItem(cards, from, to) })
+            }
+          />
         </div>
       ))}
     </div>
   );
+}
+
+type TradePoint = { title: string; body: string };
+
+function tradePointsFromContent(content: Record<string, unknown>): TradePoint[] {
+  const c = content as Record<string, string>;
+  if (Array.isArray(content.points) && content.points.length > 0) {
+    return (content.points as TradePoint[]).map((p) => ({
+      title: p.title ?? "",
+      body: p.body ?? "",
+    }));
+  }
+  return [
+    { title: c.point1Title ?? "", body: c.point1Body ?? "" },
+    { title: c.point2Title ?? "", body: c.point2Body ?? "" },
+    { title: c.point3Title ?? "", body: c.point3Body ?? "" },
+  ];
+}
+
+function tradeContentWithPoints(
+  content: Record<string, unknown>,
+  points: TradePoint[],
+): Record<string, unknown> {
+  // Keep legacy keys in sync so older public fallbacks still work
+  return {
+    ...content,
+    points,
+    point1Title: points[0]?.title ?? "",
+    point1Body: points[0]?.body ?? "",
+    point2Title: points[1]?.title ?? "",
+    point2Body: points[1]?.body ?? "",
+    point3Title: points[2]?.title ?? "",
+    point3Body: points[2]?.body ?? "",
+  };
 }
 
 export function TradeSectionEditor({
@@ -438,23 +556,36 @@ export function TradeSectionEditor({
   onChange: (next: Record<string, unknown>) => void;
 }) {
   const c = content as Record<string, string>;
+  const points = tradePointsFromContent(content);
+
   function set(key: string, value: string) {
     onChange({ ...content, [key]: value });
+  }
+
+  function updatePoint(index: number, patch: Partial<TradePoint>) {
+    const next = points.map((p, i) => (i === index ? { ...p, ...patch } : p));
+    onChange(tradeContentWithPoints(content, next));
   }
 
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Trade page (/for-architects) hero media + caption, plus the homepage architects CTA copy.
+        Order matches /for-architects: hero media → intro → service points → closing note → inquiry form.
+        Empty point fields fall back to seeded defaults on the public page.
       </p>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Trade page hero</h3>
+        <h3 className="admin-group-title">1. Trade page hero</h3>
         <MediaUploadField
           label="Hero image"
           value={c.heroImage ?? ""}
           onChange={(v) => set("heroImage", v)}
           folder="architects"
+        />
+        <AdminInput
+          label="Alt text for hero image"
+          value={c.heroImageAlt ?? ""}
+          onChange={(e) => set("heroImageAlt", e.target.value)}
         />
         <MediaUploadField
           label="Hero image mobile"
@@ -476,11 +607,6 @@ export function TradeSectionEditor({
           folder="architects"
           mode="video"
         />
-        <AdminInput
-          label="Hero alt text"
-          value={c.heroImageAlt ?? ""}
-          onChange={(e) => set("heroImageAlt", e.target.value)}
-        />
         <AdminTextarea
           label="Hero caption"
           rows={2}
@@ -490,25 +616,96 @@ export function TradeSectionEditor({
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">Trade / architects copy</h3>
+        <h3 className="admin-group-title">2. Intro</h3>
         <AdminInput label="Eyebrow" value={c.eyebrow ?? ""} onChange={(e) => set("eyebrow", e.target.value)} />
         <AdminInput label="Headline line 1" value={c.headline ?? ""} onChange={(e) => set("headline", e.target.value)} />
         <AdminInput label="Headline line 2 (italic)" value={c.headlineEm ?? ""} onChange={(e) => set("headlineEm", e.target.value)} />
-        <AdminTextarea label="Subtext" rows={3} value={c.sub ?? ""} onChange={(e) => set("sub", e.target.value)} />
-        <AdminInput label="Point 01 - title" value={c.point1Title ?? ""} onChange={(e) => set("point1Title", e.target.value)} placeholder="Wall objects" />
-        <AdminTextarea label="Point 01 - description" rows={2} value={c.point1Body ?? ""} onChange={(e) => set("point1Body", e.target.value)} />
-        <AdminInput label="Point 02 - title" value={c.point2Title ?? ""} onChange={(e) => set("point2Title", e.target.value)} placeholder="Vessels and objects" />
-        <AdminTextarea label="Point 02 - description" rows={2} value={c.point2Body ?? ""} onChange={(e) => set("point2Body", e.target.value)} />
-        <AdminInput label="Point 03 - title" value={c.point3Title ?? ""} onChange={(e) => set("point3Title", e.target.value)} placeholder="Functional ceramics" />
-        <AdminTextarea label="Point 03 - description" rows={2} value={c.point3Body ?? ""} onChange={(e) => set("point3Body", e.target.value)} />
         <AdminTextarea
-          label="Closing note (below points)"
+          label='Intro paragraph (e.g. "Objects already made...")'
+          rows={3}
+          value={c.sub ?? ""}
+          onChange={(e) => set("sub", e.target.value)}
+        />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">3. Service points</h3>
+        <p className="admin-muted">
+          Typically three points (01 / 02 / 03). Add, remove, or reorder with Move up / Move down.
+        </p>
+        {points.length === 0 ? (
+          <p className="admin-muted">No points yet - add the first service point below.</p>
+        ) : null}
+        {points.map((point, i) => (
+          <div
+            key={i}
+            className="admin-field-group"
+            style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}
+          >
+            <h3 className="admin-group-title">
+              Point {String(i + 1).padStart(2, "0")}
+            </h3>
+            <AdminInput
+              label="Title"
+              value={point.title}
+              onChange={(e) => updatePoint(i, { title: e.target.value })}
+              placeholder={i === 0 ? "Wall objects" : undefined}
+            />
+            <AdminTextarea
+              label="Description"
+              rows={2}
+              value={point.body}
+              onChange={(e) => updatePoint(i, { body: e.target.value })}
+            />
+            <AdminReorderControls
+              index={i}
+              total={points.length}
+              onMove={(from, to) =>
+                onChange(tradeContentWithPoints(content, moveItem(points, from, to)))
+              }
+              onRemove={() =>
+                onChange(
+                  tradeContentWithPoints(
+                    content,
+                    points.filter((_, idx) => idx !== i),
+                  ),
+                )
+              }
+            />
+          </div>
+        ))}
+        <button
+          type="button"
+          className="admin-btn"
+          onClick={() =>
+            onChange(tradeContentWithPoints(content, [...points, { title: "", body: "" }]))
+          }
+        >
+          Add point
+        </button>
+        <AdminTextarea
+          label="Closing collaboration note"
           rows={3}
           value={c.closingNote ?? ""}
           onChange={(e) => set("closingNote", e.target.value)}
         />
-        <AdminInput label="Button text" value={c.ctaText ?? ""} onChange={(e) => set("ctaText", e.target.value)} />
-        <AdminInput label="Form label" value={c.formTitle ?? ""} onChange={(e) => set("formTitle", e.target.value)} />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">4. Project inquiry form</h3>
+        <AdminInput
+          label="Form section eyebrow"
+          value={c.formEyebrow ?? ""}
+          onChange={(e) => set("formEyebrow", e.target.value)}
+          placeholder="Project inquiry"
+        />
+        <AdminTextarea
+          label="Form intro text"
+          rows={3}
+          value={c.formIntro ?? ""}
+          onChange={(e) => set("formIntro", e.target.value)}
+          placeholder="Tell us about your project - wall objects, vessels, or custom dimensions..."
+        />
         <AdminInput label="Success title" value={c.formSuccessTitle ?? ""} onChange={(e) => set("formSuccessTitle", e.target.value)} />
         <AdminTextarea label="Success body" rows={2} value={c.formSuccessBody ?? ""} onChange={(e) => set("formSuccessBody", e.target.value)} />
       </div>
@@ -570,15 +767,50 @@ export function FindSectionEditor({
 
   return (
     <div className="admin-form-stack-lg">
-      <p className="admin-muted">Find us / Etsy block at bottom of homepage.</p>
-      <AdminInput label="Studio name" value={c.studioName ?? ""} onChange={(e) => set("studioName", e.target.value)} />
-      <AdminTextarea label="Studio address" rows={3} value={c.studioAddress ?? ""} onChange={(e) => set("studioAddress", e.target.value)} />
-      <AdminInput label="Studio Instagram handle" value={c.studioInstagram ?? ""} onChange={(e) => set("studioInstagram", e.target.value)} />
       <p className="admin-muted">
-        The Online block on the homepage links to the Shopify storefront (NEXT_PUBLIC_SHOP_URL), not Etsy.
+        Homepage Find block + footer brand tagline. Online shop link uses NEXT_PUBLIC_SHOP_URL (see Settings).
       </p>
-      <AdminInput label="Legacy Etsy URL (optional)" value={c.etsyUrl ?? ""} onChange={(e) => set("etsyUrl", e.target.value)} />
-      <AdminInput label="Lelek meaning (footer)" value={c.lelekMeaning ?? ""} onChange={(e) => set("lelekMeaning", e.target.value)} />
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">Find us</h3>
+        <AdminInput label="Studio name" value={c.studioName ?? ""} onChange={(e) => set("studioName", e.target.value)} />
+        <AdminTextarea label="Studio address" rows={3} value={c.studioAddress ?? ""} onChange={(e) => set("studioAddress", e.target.value)} />
+        <AdminTextarea
+          label="Open days note"
+          rows={2}
+          value={c.openDaysNote ?? ""}
+          onChange={(e) => set("openDaysNote", e.target.value)}
+          placeholder="Available during open days and selected sales events..."
+        />
+        <AdminInput label="Instagram handle (display)" value={c.studioInstagram ?? ""} onChange={(e) => set("studioInstagram", e.target.value)} />
+        <AdminInput label="Instagram URL" value={c.studioInstagramUrl ?? ""} onChange={(e) => set("studioInstagramUrl", e.target.value)} />
+      </div>
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">Online / Shop block</h3>
+        <AdminInput
+          label="Online heading"
+          value={c.onlineHeading ?? ""}
+          onChange={(e) => set("onlineHeading", e.target.value)}
+          placeholder="Shop"
+        />
+        <AdminTextarea
+          label="Online description"
+          rows={3}
+          value={c.onlineDescription ?? ""}
+          onChange={(e) => set("onlineDescription", e.target.value)}
+        />
+        <AdminInput
+          label="Online CTA label"
+          value={c.onlineCtaLabel ?? ""}
+          onChange={(e) => set("onlineCtaLabel", e.target.value)}
+          placeholder="Visit shop ↗"
+        />
+        <p className="admin-muted">Shop destination URL is NEXT_PUBLIC_SHOP_URL (env) - not edited here.</p>
+      </div>
+      <AdminInput
+        label="Brand tagline (footer - e.g. Lelek - kozodoj - the nightjar)"
+        value={c.lelekMeaning ?? ""}
+        onChange={(e) => set("lelekMeaning", e.target.value)}
+      />
     </div>
   );
 }

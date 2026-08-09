@@ -18,16 +18,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 60;
 
-/** Canonical hero copy - overrides stale CMS headline/quote. */
-const HERO_COPY = {
-  eyebrow: "Design through material.",
-  subheadline: "Ceramic objects, vessels, prints.",
-  brandline: "LELEK - Berlin.",
-  quote: "",
-  headline: "",
-  headlineEm: "",
-} as const;
-
 export default async function HomePage() {
   const {
     settings,
@@ -42,25 +32,31 @@ export default async function HomePage() {
   } = await getPublicHomeData();
 
   const elementItems = elements;
-  const heroContent = {
-    ...(Object.keys(hero).length > 0 ? hero : DEFAULT_HERO),
-    ...HERO_COPY,
-  };
+  // CMS wins when set; DEFAULT_HERO fills empty fields (editable in /admin/home → Hero)
+  const heroContent = { ...DEFAULT_HERO, ...hero };
+
+  const extraSameAs = (settings.same_as_urls || "")
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
+  const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
 
   const orgLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "LELEK",
+    name: settings.site_name || "LELEK",
     alternateName: "Lelek Studio Berlin",
     url: SITE_URL,
-    logo: `${SITE_URL}/images/og-image.png`,
+    logo: logoUrl,
     sameAs: [
       settings.instagram || "https://www.instagram.com/lelek.studio.berlin/",
       SHOP_URL,
+      ...extraSameAs,
     ].filter(Boolean),
     address: {
       "@type": "PostalAddress",
-      addressLocality: "Berlin",
+      addressLocality: settings.location || "Berlin",
       addressCountry: "DE",
     },
   };

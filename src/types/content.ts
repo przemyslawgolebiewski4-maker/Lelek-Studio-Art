@@ -45,6 +45,10 @@ export interface StorySection {
   /** About CTA labels (hrefs are env/fixed) */
   ctaShopLabel?: string;
   ctaTradeLabel?: string;
+  /** Originals section chrome on /about (product cards come from Products flagged isOriginal) */
+  originalsEyebrow?: string;
+  originalsHeading?: string;
+  originalsIntro?: string;
 }
 
 export interface ArchitectsSection {
@@ -52,6 +56,8 @@ export interface ArchitectsSection {
   headline?: string;
   headlineEm?: string;
   sub?: string;
+  /** Preferred repeatable points list (falls back to point1Title/Body …) */
+  points?: { title: string; body: string }[];
   point1Title?: string;
   point1Body?: string;
   point2Title?: string;
@@ -62,6 +68,8 @@ export interface ArchitectsSection {
   closingNote?: string;
   ctaText?: string;
   formTitle?: string;
+  formEyebrow?: string;
+  formIntro?: string;
   formSuccessTitle?: string;
   formSuccessBody?: string;
   /** Trade page hero media */
@@ -83,6 +91,8 @@ export interface JournalSection {
 export interface ElementItem {
   number: string;
   name: string;
+  /** Optional short description under the element name */
+  description?: string;
 }
 
 export interface ElementsSection {
@@ -117,6 +127,20 @@ export interface FindSection {
   studioName?: string;
   studioAddress?: string;
   studioInstagram?: string;
+  studioInstagramUrl?: string;
+  openDaysNote?: string;
+  onlineHeading?: string;
+  onlineDescription?: string;
+  onlineCtaLabel?: string;
   etsyUrl?: string;
   lelekMeaning?: string;
+}
+
+export interface ContactSection {
+  headingLine1?: string;
+  headingLine2?: string;
+  headingLine3?: string;
+  sub?: string;
+  successMessage?: string;
+  formNote?: string;
 }

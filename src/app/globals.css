@@ -837,11 +837,27 @@ button:hover:not(:disabled),
   flex-shrink: 0;
 }
 
+.elements .elem-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
 .elements .elem-name {
   font-family: var(--font-serif);
   font-size: 15px;
   font-style: italic;
   color: var(--W);
+}
+
+.elements .elem-desc {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  color: var(--W);
+  opacity: 0.45;
 }
 
 /* ============================================================ WORKS */

@@ -66,6 +66,7 @@ const PRODUCT_FIELDS = [
   "process",
   "etsyUrl",
   "images",
+  "imageAlt",
   "metaTitle",
   "metaDescription",
   "published",

@@ -37,7 +37,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="product-detail-hero">
               <Image
                 src={hero}
-                alt={product.metaDescription || product.title}
+                alt={product.imageAlt || product.metaDescription || product.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"

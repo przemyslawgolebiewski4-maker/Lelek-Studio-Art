@@ -19,23 +19,40 @@ export const revalidate = 60;
 export default async function ForArchitectsPage() {
   const section = await getArchitectsSection();
 
-  const points = [
-    {
-      num: "01",
-      title: section.point1Title || DEFAULT_ARCHITECTS.point1Title!,
-      body: section.point1Body || DEFAULT_ARCHITECTS.point1Body!,
-    },
-    {
-      num: "02",
-      title: section.point2Title || DEFAULT_ARCHITECTS.point2Title!,
-      body: section.point2Body || DEFAULT_ARCHITECTS.point2Body!,
-    },
-    {
-      num: "03",
-      title: section.point3Title || DEFAULT_ARCHITECTS.point3Title!,
-      body: section.point3Body || DEFAULT_ARCHITECTS.point3Body!,
-    },
+  const rawPoints =
+    section.points && section.points.length > 0
+      ? section.points
+      : [
+          {
+            title: section.point1Title || DEFAULT_ARCHITECTS.point1Title!,
+            body: section.point1Body || DEFAULT_ARCHITECTS.point1Body!,
+          },
+          {
+            title: section.point2Title || DEFAULT_ARCHITECTS.point2Title!,
+            body: section.point2Body || DEFAULT_ARCHITECTS.point2Body!,
+          },
+          {
+            title: section.point3Title || DEFAULT_ARCHITECTS.point3Title!,
+            body: section.point3Body || DEFAULT_ARCHITECTS.point3Body!,
+          },
+        ];
+
+  const defaultTitles = [
+    DEFAULT_ARCHITECTS.point1Title!,
+    DEFAULT_ARCHITECTS.point2Title!,
+    DEFAULT_ARCHITECTS.point3Title!,
   ];
+  const defaultBodies = [
+    DEFAULT_ARCHITECTS.point1Body!,
+    DEFAULT_ARCHITECTS.point2Body!,
+    DEFAULT_ARCHITECTS.point3Body!,
+  ];
+
+  const points = rawPoints.map((p, i) => ({
+    num: String(i + 1).padStart(2, "0"),
+    title: p.title || defaultTitles[i] || `Point ${i + 1}`,
+    body: p.body || defaultBodies[i] || "",
+  }));
 
   const closingNote = section.closingNote || DEFAULT_ARCHITECTS.closingNote!;
 
@@ -89,10 +106,10 @@ export default async function ForArchitectsPage() {
       </section>
 
       <section className="page-shell">
-        <div className="sec-eyebrow">Project inquiry</div>
+        <div className="sec-eyebrow">{section.formEyebrow || "Project inquiry"}</div>
         <p className="page-intro">
-          Tell us about your project - wall objects, vessels, or custom dimensions. We reply within
-          a few business days.
+          {section.formIntro ||
+            "Tell us about your project - wall objects, vessels, or custom dimensions. We reply within a few business days."}
         </p>
         <ArchitectInquiryForm />
       </section>

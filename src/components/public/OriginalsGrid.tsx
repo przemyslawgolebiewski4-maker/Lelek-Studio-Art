@@ -33,7 +33,7 @@ export function OriginalsGrid({
               {product.images[0] ? (
                 <Image
                   src={product.images[0]}
-                  alt={product.metaDescription || product.title}
+                  alt={product.imageAlt || product.metaDescription || product.title}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 50vw, 33vw"

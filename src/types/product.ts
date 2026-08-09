@@ -11,6 +11,8 @@ export interface Product {
   process: string;
   etsyUrl: string;
   images: string[];
+  /** Alt text for the primary gallery image (Originals cards + product detail). */
+  imageAlt?: string;
   metaTitle: string;
   metaDescription: string;
   published: boolean;

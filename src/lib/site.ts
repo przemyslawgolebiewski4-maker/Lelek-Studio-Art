@@ -176,6 +176,10 @@ export const DEFAULT_STORY: StorySection = {
   gallery: [],
   ctaShopLabel: "Shop the collections",
   ctaTradeLabel: "Designing a space?",
+  originalsEyebrow: "Originals",
+  originalsHeading: "One-of-a-kind pieces",
+  originalsIntro:
+    "Sculptural and statement works available by inquiry - not sold through the shop.",
 };
 
 export const DEFAULT_ARCHITECTS: ArchitectsSection = {

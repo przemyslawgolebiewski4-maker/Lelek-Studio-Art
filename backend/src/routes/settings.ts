@@ -15,6 +15,16 @@ const PUBLIC_KEYS = [
   "email",
   "artist_url",
   "location",
+  "organization_logo",
+  "same_as_urls",
+  "contact_heading_1",
+  "contact_heading_2",
+  "contact_heading_3",
+  "contact_sub",
+  "contact_success",
+  "contact_form_note",
+  "impressum_body",
+  "datenschutz_body",
 ];
 
 const PUBLIC_SECTION_KEYS = [

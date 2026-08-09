@@ -84,12 +84,13 @@ export function AboutContent({ story, originals }: AboutContentProps) {
 
       <section id="originals" className="originals-section">
         <div className="originals-header">
-          <div className="sec-eyebrow">Originals</div>
+          <div className="sec-eyebrow">{story.originalsEyebrow || "Originals"}</div>
           <h2 className="page-h1" style={{ fontSize: "var(--text-2xl)" }}>
-            One-of-a-kind pieces
+            {story.originalsHeading || "One-of-a-kind pieces"}
           </h2>
           <p className="page-intro">
-            Sculptural and statement works available by inquiry - not sold through the shop.
+            {story.originalsIntro ||
+              "Sculptural and statement works available by inquiry - not sold through the shop."}
           </p>
         </div>
         <OriginalsGrid products={originals} inquireHref="/contact" />
