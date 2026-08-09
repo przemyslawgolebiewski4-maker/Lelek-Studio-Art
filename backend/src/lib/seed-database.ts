@@ -6,6 +6,7 @@ import { HomeSection, Product, Setting, JournalPost } from "../models";
 type HomeSectionKey =
   | "hero"
   | "story"
+  | "signpost"
   | "elements"
   | "featured"
   | "architects"
@@ -85,20 +86,21 @@ export async function seedDatabase(options?: { force?: boolean }) {
       sectionKey: "hero",
       order: 0,
       content: {
-        eyebrow: legacy.hero.eyebrow,
+        eyebrow: "Design through material.",
         headline: legacy.hero.headline,
         headlineEm: legacy.hero.headlineEm,
         quote: legacy.hero.quote,
-        subheadline: legacy.hero.subheadline,
+        subheadline: "Ceramic objects, vessels, prints.",
+        brandline: "LELEK - Berlin.",
         image: legacy.hero.image,
         imageMobile: legacy.hero.imageMobile,
         imageAlt: legacy.hero.imageAlt,
         video: "",
         videoMobile: "",
         imageCaption: "Vessel - Clay Stories Berlin",
-        cta1Text: "View works",
-        cta1Url: "/collections",
-        cta2Text: "My story",
+        cta1Text: "Shop",
+        cta1Url: "/contact",
+        cta2Text: "About",
         cta2Url: "/about",
       },
     },
@@ -119,16 +121,54 @@ export async function seedDatabase(options?: { force?: boolean }) {
         imageCaption: legacy.story.imageCaption,
         video: "",
         videoMobile: "",
+        gallery: [],
+        ctaShopLabel: "Shop the collections",
+        ctaTradeLabel: "Designing a space?",
+      },
+    },
+    {
+      sectionKey: "signpost",
+      order: 2,
+      content: {
+        intro:
+          "LELEK works across ceramics, sculpture and print. Originals for collectors. Stoneware, fine art posters and wearable pieces for everyday use.",
+        tradeSignal: "Designing a space? Let's talk",
+        tradeHref: "/for-architects",
+        cards: [
+          {
+            label: "Shop",
+            description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
+            href: "https://shop.lelekstudio.com",
+          },
+          {
+            label: "About",
+            description: "The studio story and one-of-a-kind Originals for collectors.",
+            href: "/about",
+          },
+          {
+            label: "Process",
+            description: "Notes on material, making and life in the Berlin studio.",
+            href: "/journal",
+          },
+          {
+            label: "Trade",
+            description: "Commissions for hospitality, offices and private spaces.",
+            href: "/for-architects",
+          },
+        ],
       },
     },
     {
       sectionKey: "elements",
-      order: 2,
-      content: { items: legacy.elements },
+      order: 3,
+      content: {
+        items: legacy.elements,
+        scopeNote: "Ceramics process, below - Mire & Silt collections only",
+      },
     },
     {
       sectionKey: "featured",
-      order: 3,
+      order: 4,
       content: {
         eyebrow: legacy.featured.eyebrow,
         heading: legacy.featured.heading,
@@ -137,7 +177,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
     },
     {
       sectionKey: "architects",
-      order: 4,
+      order: 5,
       content: {
         eyebrow: "For architects & designers",
         headline: "Looking for something made by hand, not manufactured?",
@@ -145,11 +185,18 @@ export async function seedDatabase(options?: { force?: boolean }) {
         body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
         ctaText: "Get in touch",
         ctaUrl: "/for-architects",
+        heroImage: "",
+        heroImageMobile: "",
+        heroVideo: "",
+        heroVideoMobile: "",
+        heroImageAlt: "Ceramic wall objects and vessels for spaces",
+        heroCaption:
+          "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.",
       },
     },
     {
       sectionKey: "journal",
-      order: 5,
+      order: 6,
       content: {
         eyebrow: "Journal",
         heading: "Stories from",
@@ -159,7 +206,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
     },
     {
       sectionKey: "find",
-      order: 6,
+      order: 7,
       content: {
         studioName: site.studioName,
         studioAddress: site.studioAddress,

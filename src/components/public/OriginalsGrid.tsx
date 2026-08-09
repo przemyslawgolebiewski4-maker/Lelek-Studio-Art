@@ -1,0 +1,58 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { Product } from "@/types/product";
+import { normalizeSlug } from "@/lib/slug";
+
+type OriginalsGridProps = {
+  products: Product[];
+  inquireHref?: string;
+};
+
+export function OriginalsGrid({
+  products,
+  inquireHref = "/contact",
+}: OriginalsGridProps) {
+  if (products.length === 0) {
+    return (
+      <div className="originals-empty">
+        No Originals listed yet.{" "}
+        <Link href={inquireHref} className="link-brutal" style={{ marginTop: 0 }}>
+          Inquire
+        </Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="originals-grid">
+      {products.map((product) => {
+        const slug = normalizeSlug(product.slug) || product.slug;
+        return (
+          <article key={String(product._id)} className="originals-item">
+            <Link href={`/objects/${slug}`} className="originals-item-media">
+              {product.images[0] ? (
+                <Image
+                  src={product.images[0]}
+                  alt={product.metaDescription || product.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  style={{ objectPosition: product.thumbnailPosition ?? "center" }}
+                />
+              ) : null}
+            </Link>
+            <div className="originals-item-meta">
+              <span className="originals-catalog">{product.catalog || "-"}</span>
+              <Link href={`/objects/${slug}`} className="originals-title">
+                {product.title}
+              </Link>
+              <Link href={inquireHref} className="originals-inquire">
+                Inquire →
+              </Link>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}

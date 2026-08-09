@@ -5,6 +5,8 @@ export interface JournalPost {
   excerpt: string;
   body?: string;
   coverImage: string;
+  /** SEO/accessibility alt for the cover image - editable in admin, not derived from title alone. */
+  coverImageAlt?: string;
   metaTitle: string;
   metaDescription: string;
   published: boolean;
@@ -17,6 +19,11 @@ export type JournalPostSummary = Omit<JournalPost, "body">;
 
 export interface HomeSectionContent {
   [key: string]: unknown;
+}
+
+export interface GalleryImage {
+  image: string;
+  alt: string;
 }
 
 export interface StorySection {
@@ -33,6 +40,11 @@ export interface StorySection {
   videoMobile?: string;
   imageAlt?: string;
   imageCaption?: string;
+  /** About page sculpture / originals photo gallery */
+  gallery?: GalleryImage[];
+  /** About CTA labels (hrefs are env/fixed) */
+  ctaShopLabel?: string;
+  ctaTradeLabel?: string;
 }
 
 export interface ArchitectsSection {
@@ -50,6 +62,13 @@ export interface ArchitectsSection {
   formTitle?: string;
   formSuccessTitle?: string;
   formSuccessBody?: string;
+  /** Trade page hero media */
+  heroImage?: string;
+  heroImageMobile?: string;
+  heroVideo?: string;
+  heroVideoMobile?: string;
+  heroImageAlt?: string;
+  heroCaption?: string;
 }
 
 export interface JournalSection {
@@ -66,6 +85,21 @@ export interface ElementItem {
 
 export interface ElementsSection {
   items?: ElementItem[];
+  /** One-line note above the Earth/Water/Fire/Air bar */
+  scopeNote?: string;
+}
+
+export interface SignpostCard {
+  label: string;
+  description: string;
+  href: string;
+}
+
+export interface SignpostSection {
+  intro?: string;
+  tradeSignal?: string;
+  tradeHref?: string;
+  cards?: SignpostCard[];
 }
 
 export interface FeaturedSection {

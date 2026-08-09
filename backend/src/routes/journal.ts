@@ -10,6 +10,7 @@ const POST_FIELDS = [
   "excerpt",
   "body",
   "coverImage",
+  "coverImageAlt",
   "metaTitle",
   "metaDescription",
   "published",

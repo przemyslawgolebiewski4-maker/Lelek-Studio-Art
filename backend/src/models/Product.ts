@@ -25,6 +25,8 @@ const ProductSchema = new Schema(
     soldOut: { type: Boolean, default: false },
     /** Photo reproduction of a ceramic piece (LELEK Sentences series). Prints only. */
     isPhotoReproduction: { type: Boolean, default: false },
+    /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
+    isOriginal: { type: Boolean, default: false },
     thumbnailPosition: { type: String, default: "center" },
   },
   { collection: "products", timestamps: true },

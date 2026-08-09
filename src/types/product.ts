@@ -21,6 +21,8 @@ export interface Product {
   soldOut?: boolean;
   /** Photo reproduction of a ceramic piece (LELEK Sentences). Prints only. */
   isPhotoReproduction?: boolean;
+  /** One-of-a-kind piece shown in About / Originals (inquiry only). */
+  isOriginal?: boolean;
   thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;

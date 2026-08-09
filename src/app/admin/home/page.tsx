@@ -14,6 +14,8 @@ import {
   TextSectionEditor,
   FindSectionEditor,
   FeaturedSectionEditor,
+  SignpostSectionEditor,
+  TradeSectionEditor,
 } from "@/components/admin/home/HomeSectionEditors";
 import { apiGet, apiPatch, readApiResult } from "@/lib/api";
 import type { HomeSectionKey } from "@/lib/site";
@@ -28,22 +30,24 @@ type SectionRow = {
 
 const SECTION_LABELS: Record<HomeSectionKey, string> = {
   hero: "Hero",
-  story: "Story",
+  signpost: "Signpost",
+  story: "Story / About",
   elements: "Elements",
   featured: "Featured works",
-  architects: "Architects",
+  architects: "Trade",
   journal: "Journal teaser",
   find: "Find us",
 };
 
 const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
-  hero: "First screen - upload photo or short loop video, edit headline and buttons.",
-  story: "Section below hero - studio story with image or video.",
-  elements: "Earth · Water · Fire · Air labels.",
+  hero: "First screen - upload photo or short loop video, edit eyebrow, subline, brand line and buttons.",
+  signpost: "Wayfinding below hero - intro, Trade signal, four destination cards.",
+  story: "Homepage teaser (paragraph 1) + full About page (all paragraphs, gallery, CTAs).",
+  elements: "Earth · Water · Fire · Air labels and ceramics scope note.",
   featured: "Video + product thumbnails. Products marked Visible on Home appear below the video.",
-  architects: "B2B call-to-action block.",
+  architects: "Trade page hero media + homepage architects CTA.",
   journal: "Journal teaser heading (posts from Journal admin).",
-  find: "Studio address and Etsy links.",
+  find: "Studio address and shop links.",
 };
 
 export default function AdminHomePage() {
@@ -76,7 +80,13 @@ export default function AdminHomePage() {
 
   useEffect(() => {
     const section = sections.find((s) => s.sectionKey === selectedKey);
-    if (!section) return;
+    if (!section) {
+      setDraft({});
+      setVisible(true);
+      setSaved(false);
+      setError("");
+      return;
+    }
     setDraft(section.content as Record<string, unknown>);
     setVisible(section.visible);
     setSaved(false);
@@ -107,6 +117,8 @@ export default function AdminHomePage() {
     switch (selectedKey) {
       case "hero":
         return <HeroSectionEditor content={draft} onChange={onChange} />;
+      case "signpost":
+        return <SignpostSectionEditor content={draft} onChange={onChange} />;
       case "story":
         return <StorySectionEditor content={draft} onChange={onChange} />;
       case "elements":
@@ -114,29 +126,7 @@ export default function AdminHomePage() {
       case "featured":
         return <FeaturedSectionEditor content={draft} onChange={onChange} />;
       case "architects":
-        return (
-          <TextSectionEditor
-            content={draft}
-            onChange={onChange}
-            description={SECTION_DESCRIPTIONS.architects}
-            fields={[
-              { key: "eyebrow", label: "Eyebrow" },
-              { key: "headline", label: "Headline line 1" },
-              { key: "headlineEm", label: "Headline line 2 (italic)" },
-              { key: "sub", label: "Subtext (italic body)", multiline: true },
-              { key: "point1Title", label: "Point 01 - title (uppercase)" },
-              { key: "point1Body", label: "Point 01 - description" },
-              { key: "point2Title", label: "Point 02 - title (uppercase)" },
-              { key: "point2Body", label: "Point 02 - description" },
-              { key: "point3Title", label: "Point 03 - title (uppercase)" },
-              { key: "point3Body", label: "Point 03 - description" },
-              { key: "ctaText", label: "Button text" },
-              { key: "formTitle", label: "Form label (above form fields)" },
-              { key: "formSuccessTitle", label: "Success state - title" },
-              { key: "formSuccessBody", label: "Success state - body", multiline: true },
-            ]}
-          />
-        );
+        return <TradeSectionEditor content={draft} onChange={onChange} />;
       case "journal":
         return (
           <TextSectionEditor

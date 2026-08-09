@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
+import { SHOP_URL } from "@/lib/config";
 
 export type HeroContent = {
   eyebrow?: string;
@@ -8,6 +9,7 @@ export type HeroContent = {
   headlineEm?: string;
   quote?: string;
   subheadline?: string;
+  brandline?: string;
   image?: string;
   imageMobile?: string;
   video?: string;
@@ -30,11 +32,10 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const image = content.image ?? "/images/hero/hero-main.jpg";
   const imageMobile = content.imageMobile ?? "/images/hero/hero-main-mobile.jpg";
   const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
+  const brandline = content.brandline || content.kozodoj;
 
   return (
     <section className="hero">
-
-      {/* Media - full width background */}
       <div className="hero-img">
         <MediaBlock
           image={image}
@@ -49,11 +50,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
         ) : null}
       </div>
 
-      {/* Text overlay */}
       <div className="hero-text surface-wabi">
         <div className="hero-content-grid">
-
-          {/* LEFT: eyebrow + headline + quote + buttons */}
           <div className="hero-top">
             {content.eyebrow ? (
               <div className="hero-eyebrow">{content.eyebrow}</div>
@@ -73,27 +71,27 @@ export function Hero({ content, elements = [] }: HeroProps) {
             ) : content.subheadline ? (
               <p className="hero-quote">{content.subheadline}</p>
             ) : null}
+            {brandline ? <p className="hero-brandline">{brandline}</p> : null}
             <div className="hero-btns">
               {content.cta1Text ? (
-                <Link
-                  href={content.cta1Url ?? "/collections"}
-                  className="hero-btn filled"
-                >
-                  {content.cta1Text}
-                </Link>
+                /^https?:\/\//i.test(content.cta1Url ?? "") ? (
+                  <a href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                    {content.cta1Text}
+                  </a>
+                ) : (
+                  <Link href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                    {content.cta1Text}
+                  </Link>
+                )
               ) : null}
               {content.cta2Text ? (
-                <Link
-                  href={content.cta2Url ?? "/about"}
-                  className="hero-btn"
-                >
+                <Link href={content.cta2Url ?? "/about"} className="hero-btn">
                   {content.cta2Text}
                 </Link>
               ) : null}
             </div>
           </div>
 
-          {/* RIGHT: elements + kozodoj */}
           {elements.length > 0 ? (
             <div className="hero-bottom">
               <div className="hero-elements">
@@ -109,10 +107,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
               </div>
             </div>
           ) : null}
-
         </div>
       </div>
-
     </section>
   );
 }

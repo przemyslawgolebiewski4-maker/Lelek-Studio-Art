@@ -1,4 +1,5 @@
 import { serverFetch } from "@/lib/api-server";
+import { SHOP_URL } from "@/lib/config";
 import type { Product } from "@/types/product";
 import type {
   ArchitectsSection,
@@ -8,12 +9,14 @@ import type {
   JournalPost,
   JournalPostSummary,
   JournalSection,
+  SignpostSection,
   StorySection,
 } from "@/types/content";
 
 export type HomeSectionKey =
   | "hero"
   | "story"
+  | "signpost"
   | "elements"
   | "featured"
   | "architects"
@@ -21,21 +24,51 @@ export type HomeSectionKey =
   | "find";
 
 export const DEFAULT_HERO: Record<string, string> = {
-  eyebrow: "Handmade in Berlin - Ceramic Studio",
+  eyebrow: "Design through material.",
   headline: "Shaped by hand,",
   headlineEm: "guided by instinct",
-  subheadline:
-    "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
-  quote: "Every grain of sand is different too...",
+  subheadline: "Ceramic objects, vessels, prints.",
+  brandline: "LELEK - Berlin.",
+  quote: "",
   image: "/images/hero/hero-main.jpg",
   imageMobile: "/images/hero/hero-main-mobile.jpg",
   video: "",
   videoMobile: "",
   imageCaption: "Vessel - Clay Stories Berlin",
-  cta1Text: "View works",
-  cta1Url: "/collections",
-  cta2Text: "My story",
+  imageAlt: "Lelek Studio Berlin - handmade ceramics",
+  cta1Text: "Shop",
+  cta1Url: SHOP_URL,
+  cta2Text: "About",
   cta2Url: "/about",
+};
+
+export const DEFAULT_SIGNPOST: SignpostSection = {
+  intro:
+    "LELEK works across ceramics, sculpture and print. Originals for collectors. Stoneware, fine art posters and wearable pieces for everyday use.",
+  tradeSignal: "Designing a space? Let's talk",
+  tradeHref: "/for-architects",
+  cards: [
+    {
+      label: "Shop",
+      description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
+      href: SHOP_URL,
+    },
+    {
+      label: "About",
+      description: "The studio story and one-of-a-kind Originals for collectors.",
+      href: "/about",
+    },
+    {
+      label: "Process",
+      description: "Notes on material, making and life in the Berlin studio.",
+      href: "/journal",
+    },
+    {
+      label: "Trade",
+      description: "Commissions for hospitality, offices and private spaces.",
+      href: "/for-architects",
+    },
+  ],
 };
 
 export async function getSiteSettings(): Promise<Record<string, string>> {
@@ -48,6 +81,7 @@ export async function getPublicHomeData() {
     featured,
     hero,
     story,
+    signpost,
     elements,
     architects,
     journalSection,
@@ -60,7 +94,13 @@ export async function getPublicHomeData() {
     serverFetch<Product[]>("/products/public?limit=6", { fallback: [] }),
     serverFetch<Record<string, string>>("/sections/hero", { fallback: DEFAULT_HERO }),
     serverFetch<StorySection>("/sections/story", { fallback: DEFAULT_STORY }),
-    serverFetch<ElementsSection>("/sections/elements", { fallback: { items: [] } }),
+    serverFetch<SignpostSection>("/sections/signpost", { fallback: DEFAULT_SIGNPOST }),
+    serverFetch<ElementsSection>("/sections/elements", {
+      fallback: {
+        items: [],
+        scopeNote: "Ceramics process, below - Mire & Silt collections only",
+      },
+    }),
     serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS }),
     serverFetch<JournalSection>("/sections/journal", {
       fallback: {
@@ -89,6 +129,8 @@ export async function getPublicHomeData() {
     featuredSection,
     homeProducts,
     story,
+    signpost,
+    elementsSection: elements,
     elements: elements.items ?? [],
     architects,
     journalSection,
@@ -103,6 +145,11 @@ export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
 
 export async function getPublishedProducts(limit = 50): Promise<Product[]> {
   return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
+}
+
+export async function getOriginalProducts(limit = 50): Promise<Product[]> {
+  const products = await getPublishedProducts(limit);
+  return products.filter((p) => p.isOriginal);
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -126,6 +173,9 @@ export const DEFAULT_STORY: StorySection = {
   imageMobile: "/images/process/studio-mobile.jpg",
   imageAlt: "Przemyslaw Golebiewski at the wheel, Clay Stories Berlin",
   imageCaption: "Clay Stories Berlin",
+  gallery: [],
+  ctaShopLabel: "Shop the collections",
+  ctaTradeLabel: "Designing a space?",
 };
 
 export const DEFAULT_ARCHITECTS: ArchitectsSection = {
@@ -137,6 +187,9 @@ export const DEFAULT_ARCHITECTS: ArchitectsSection = {
   formTitle: "Send an inquiry",
   formSuccessTitle: "Message received.",
   formSuccessBody: "We will get back to you within 1-2 working days.",
+  heroCaption:
+    "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.",
+  heroImageAlt: "Ceramic wall objects and vessels for spaces",
 };
 
 export async function getStorySection(): Promise<StorySection> {

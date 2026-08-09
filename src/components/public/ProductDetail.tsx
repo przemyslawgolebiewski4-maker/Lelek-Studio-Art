@@ -80,6 +80,10 @@ export function ProductDetail({ product }: { product: Product }) {
                   Get in touch for similar pieces
                 </Link>
               </div>
+            ) : product.isOriginal ? (
+              <Link href="/contact" className="btn-brutal filled">
+                Inquire →
+              </Link>
             ) : product.etsyUrl ? (
               <Link
                 href={product.etsyUrl}

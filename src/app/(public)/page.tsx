@@ -7,12 +7,16 @@ import { HomeElementsBar } from "@/components/public/HomeElementsBar";
 import { HomeArchitectsCta } from "@/components/public/HomeArchitectsCta";
 import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
-import { DEFAULT_HERO, getPublicHomeData } from "@/lib/site";
+import { Signpost } from "@/components/public/Signpost";
+import { JsonLd } from "@/lib/json-ld";
+import { SITE_URL, SHOP_URL } from "@/lib/config";
+import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: { absolute: "Lelek Studio Berlin - Shaped by hand, guided by instinct" },
   description:
     "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.",
+  alternates: { canonical: `${SITE_URL}/` },
 };
 
 export const revalidate = 60;
@@ -24,7 +28,9 @@ export default async function HomePage() {
     featuredSection,
     homeProducts,
     story,
+    signpost,
     elements,
+    elementsSection,
     architects,
     journalSection,
     journalPosts,
@@ -32,18 +38,43 @@ export default async function HomePage() {
   } = await getPublicHomeData();
 
   const elementItems = elements;
+  const orgLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "LELEK",
+    alternateName: "Lelek Studio Berlin",
+    url: SITE_URL,
+    logo: `${SITE_URL}/images/og-image.png`,
+    sameAs: [
+      settings.instagram || "https://www.instagram.com/lelek.studio.berlin/",
+      SHOP_URL,
+    ].filter(Boolean),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Berlin",
+      addressCountry: "DE",
+    },
+  };
 
   return (
     <>
+      <JsonLd data={orgLd} />
       <Hero
         content={Object.keys(hero).length > 0 ? hero : DEFAULT_HERO}
         elements={elementItems}
       />
+      <Signpost section={signpost ?? DEFAULT_SIGNPOST} />
       <HomeStorySection story={story} />
-      <HomeElementsBar items={elementItems} />
+      <HomeElementsBar
+        items={elementItems}
+        scopeNote={
+          elementsSection.scopeNote ||
+          "Ceramics process, below - Mire & Silt collections only"
+        }
+      />
       <FeaturedWorks section={featuredSection} homeProducts={homeProducts} />
       <AcquireBar
-        etsyUrl={settings.etsy_url ?? find.etsyUrl}
+        etsyUrl={settings.etsy_url ?? find.etsyUrl ?? SHOP_URL}
         label={settings.acquire_label}
       />
       <HomeArchitectsCta section={architects} />

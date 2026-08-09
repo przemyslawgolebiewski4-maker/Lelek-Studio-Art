@@ -6,7 +6,7 @@ const HomeSectionSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      enum: ["hero", "story", "elements", "featured", "architects", "journal", "find"],
+      enum: ["hero", "story", "signpost", "elements", "featured", "architects", "journal", "find"],
     },
     order: { type: Number, default: 0 },
     visible: { type: Boolean, default: true },

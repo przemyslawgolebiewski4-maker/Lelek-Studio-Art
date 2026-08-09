@@ -20,6 +20,7 @@ const PUBLIC_KEYS = [
 const PUBLIC_SECTION_KEYS = [
   "hero",
   "story",
+  "signpost",
   "elements",
   "featured",
   "architects",

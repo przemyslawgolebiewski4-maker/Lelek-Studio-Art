@@ -15,6 +15,12 @@ export const SITE_URL = normalizeUrl(
   "https://www.lelekstudio.com",
 );
 
+/** Shopify storefront URL (purchasing lives off this site). */
+export const SHOP_URL = normalizeUrl(
+  process.env.NEXT_PUBLIC_SHOP_URL ?? "",
+  "https://shop.lelekstudio.com",
+);
+
 export const API_FETCH_TIMEOUT_MS = 5_000;
 export const DEFAULT_REVALIDATE = 60;
 

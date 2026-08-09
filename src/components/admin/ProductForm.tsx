@@ -31,6 +31,7 @@ export type ProductFormData = {
   homeVisible: boolean;
   soldOut: boolean;
   isPhotoReproduction: boolean;
+  isOriginal: boolean;
   thumbnailPosition: string;
 };
 
@@ -52,6 +53,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     homeVisible: product?.homeVisible ?? false,
     soldOut: product?.soldOut ?? false,
     isPhotoReproduction: product?.isPhotoReproduction ?? false,
+    isOriginal: product?.isOriginal ?? false,
     thumbnailPosition: product?.thumbnailPosition ?? "center",
   };
 }
@@ -78,6 +80,7 @@ export function formToPayload(form: ProductFormData) {
     homeVisible: form.homeVisible,
     soldOut: form.soldOut,
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
+    isOriginal: form.isOriginal,
     thumbnailPosition: form.thumbnailPosition,
   };
 }
@@ -308,6 +311,18 @@ export function ProductForm({
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
         Shows product image in the Featured section on the homepage (max 3 products).
+      </p>
+
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.isOriginal}
+          onChange={(e) => update("isOriginal", e.target.checked)}
+        />
+        Original (About / Originals)
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        One-of-a-kind piece listed on About under Originals. Inquiry only - no price on this site.
       </p>
 
       <div className="admin-field-divider" />

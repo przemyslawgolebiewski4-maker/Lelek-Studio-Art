@@ -14,6 +14,7 @@ export type JournalFormData = {
   excerpt: string;
   body: string;
   coverImage: string;
+  coverImageAlt: string;
   metaTitle: string;
   metaDescription: string;
   published: boolean;
@@ -27,6 +28,7 @@ export function postToForm(post?: Partial<JournalPost>): JournalFormData {
     excerpt: post?.excerpt ?? "",
     body: post?.body ?? "",
     coverImage: post?.coverImage ?? "",
+    coverImageAlt: post?.coverImageAlt ?? "",
     metaTitle: post?.metaTitle ?? "",
     metaDescription: post?.metaDescription ?? "",
     published: post?.published ?? false,
@@ -98,6 +100,9 @@ export function JournalPostForm({
         value={form.body}
         onChange={(e) => setForm({ ...form, body: e.target.value })}
       />
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Insert images as ![description](url) - the description becomes SEO alt text.
+      </p>
 
       <MediaUploadField
         label="Cover image"
@@ -106,6 +111,15 @@ export function JournalPostForm({
         folder="journal"
         hint={MEDIA_HINTS.journalCover}
       />
+      <AdminInput
+        label="Cover image alt text"
+        value={form.coverImageAlt}
+        onChange={(e) => setForm({ ...form, coverImageAlt: e.target.value })}
+        placeholder={form.title || "Describe the cover image"}
+      />
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Defaults to the post title if left empty - prefer a real description of the image.
+      </p>
 
       <div className="admin-form-row-2">
         <AdminInput

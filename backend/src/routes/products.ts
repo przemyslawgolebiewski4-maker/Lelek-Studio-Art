@@ -75,6 +75,7 @@ const PRODUCT_FIELDS = [
   "nativeCheckout",
   "soldOut",
   "isPhotoReproduction",
+  "isOriginal",
   "thumbnailPosition",
 ] as const;
 
@@ -102,6 +103,9 @@ function pickProductFields(body: Record<string, unknown>) {
     if (data.category !== "prints" && data.category !== undefined) {
       data.isPhotoReproduction = false;
     }
+  }
+  if ("isOriginal" in data) {
+    data.isOriginal = Boolean(data.isOriginal);
   }
   return data;
 }
