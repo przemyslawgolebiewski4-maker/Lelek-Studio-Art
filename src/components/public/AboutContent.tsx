@@ -59,7 +59,12 @@ export function AboutContent({
           {story.signature ? <p className="story-sig">{story.signature}</p> : null}
 
           <div className="cta-row">
-            <a href={shopUrl} className="cta-btn filled">
+            <a
+              href={shopUrl}
+              className="cta-btn filled"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {shopLabel}
             </a>
             <Link href="/for-architects" className="cta-btn">

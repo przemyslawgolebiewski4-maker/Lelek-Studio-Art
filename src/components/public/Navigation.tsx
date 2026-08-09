@@ -52,7 +52,9 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
         {links.map((link) => (
           <li key={link.href}>
             {link.external ? (
-              <a href={link.href}>{link.label}</a>
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                {link.label}
+              </a>
             ) : (
               <Link
                 href={link.href}
@@ -80,7 +82,13 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
       <div className={`nav-mobile ${open ? "open" : ""}`}>
         {links.map((link) =>
           link.external ? (
-            <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setOpen(false)}
+            >
               {link.label}
             </a>
           ) : (
