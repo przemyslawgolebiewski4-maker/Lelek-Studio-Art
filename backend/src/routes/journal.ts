@@ -2,6 +2,7 @@ import { Router } from "express";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
 import { normalizeSlug } from "../lib/slug";
+import { triggerRevalidate } from "../lib/revalidate";
 import { JournalPost } from "../models";
 
 const POST_FIELDS = [
@@ -82,6 +83,7 @@ journalAdminRouter.post("/journal", requireAdmin, async (req, res) => {
       return;
     }
     const post = await JournalPost.create(data);
+    void triggerRevalidate(["/", "/journal", `/journal/${post.slug}`]);
     res.status(201).json({ ok: true, post });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -100,6 +102,7 @@ journalAdminRouter.patch("/journal/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/", "/journal", `/journal/${post.slug}`]);
     res.json({ ok: true, post });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -114,6 +117,7 @@ journalAdminRouter.delete("/journal/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/", "/journal"]);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

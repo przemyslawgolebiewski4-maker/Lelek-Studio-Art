@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
+import { triggerRevalidate } from "../lib/revalidate";
 import { Setting, HomeSection } from "../models";
 
 export const settingsPublicRouter = Router();
@@ -131,6 +132,7 @@ settingsAdminRouter.patch("/settings", requireAdmin, async (req, res) => {
         await Setting.findOneAndUpdate({ key }, { key, value }, { upsert: true });
       }
       const rows = await Setting.find().lean();
+      void triggerRevalidate(["/", "/contact", "/impressum", "/datenschutz", "/about"]);
       res.json({ ok: true, settings: Object.fromEntries(rows.map((row) => [row.key, row.value])) });
       return;
     }
@@ -146,6 +148,7 @@ settingsAdminRouter.patch("/settings", requireAdmin, async (req, res) => {
       { key, value },
       { upsert: true, new: true },
     ).lean();
+    void triggerRevalidate(["/", "/contact", "/impressum", "/datenschutz", "/about"]);
     res.json({ ok: true, setting });
   } catch (err) {
     res.status(500).json({ error: String(err) });
@@ -189,6 +192,13 @@ settingsAdminRouter.patch("/sections/:key", requireAdmin, async (req, res) => {
       { $set: update },
       { new: true, upsert: true, runValidators: true },
     ).lean();
+    const paths =
+      sectionKey === "architects"
+        ? ["/", "/for-architects"]
+        : sectionKey === "story"
+          ? ["/", "/about"]
+          : ["/"];
+    void triggerRevalidate(paths);
     res.json({ ok: true, section });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
