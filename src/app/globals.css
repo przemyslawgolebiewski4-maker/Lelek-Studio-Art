@@ -4,11 +4,24 @@
    LELEK DESIGN SYSTEM
    Brutalism (structure) + Wabi-sabi (texture) + Bauhaus (geometry)
    Binary pair: #0B0A08 / #E6EBE7 (Shikkui Mineral) - instant invert on marked controls only
+   Accent: Oxide Rose (third color) - sparingly, on top of the binary pair
    ============================================================ */
 
 :root {
   --B: #0b0a08;
   --W: #e6ebe7;
+
+  /* Oxide Rose #B76E79 - accent color, use sparingly.
+     WCAG contrast: 5.20:1 on Volcanic Black (safe for any text size).
+     WCAG contrast: 3.16:1 on Shikkui Mineral (safe ONLY for large text
+     24px+/18.66px+ bold, thick borders, button backgrounds - NEVER
+     for small body text, captions, or meta-labels on light background).
+     Derived from LELEK's Iron Oxide glaze family - not arbitrary. */
+  --accent: #b76e79;
+  --color-accent: var(--accent);
+  /* Darkened Oxide Rose for small text on Shikkui Mineral (4.50:1). */
+  --accent-safe: #945962;
+  --color-accent-safe: var(--accent-safe);
 
   --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-serif: "Times New Roman", Times, serif;
@@ -42,9 +55,32 @@
   --color-W: var(--W);
   --color-black: var(--B);
   --color-white: var(--W);
+  --color-accent: var(--accent);
+  --color-accent-safe: var(--accent-safe);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+}
+
+/* Accent usage variants (WCAG-aware) */
+.accent-bold {
+  color: var(--accent);
+}
+
+.accent-safe {
+  color: var(--accent-safe);
+}
+
+.bg-accent {
+  background-color: var(--accent);
+}
+
+.bg-accent-safe {
+  background-color: var(--accent-safe);
+}
+
+.border-accent {
+  border-color: var(--accent);
 }
 
 * {
@@ -198,9 +234,9 @@ button:hover:not(:disabled),
 }
 
 .site-nav .nav-shop:hover {
-  background: var(--B) !important;
-  color: var(--W) !important;
-  border-color: var(--W) !important;
+  background: var(--accent) !important;
+  color: var(--B) !important;
+  border-color: var(--accent) !important;
 }
 
 /* ============================================================ NAV */
@@ -267,23 +303,59 @@ button:hover:not(:disabled),
   font-size: var(--text-ui);
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--B);
-  background: var(--W);
+  /* Dark nav (--B): pure accent is 5.20:1 - safe for small UI text */
+  color: var(--accent);
+  background: transparent;
   text-decoration: none;
   padding: 9px 18px;
-  border: 3px solid var(--W);
+  border: 3px solid var(--accent);
   font-weight: 500;
 }
 
 @media (max-width: 768px) {
   .site-nav .nav-shop {
-    display: none;
+    display: inline-block;
+    margin: 8px 0;
   }
 }
 
+.site-nav .nav-links a.nav-shop {
+  color: var(--accent);
+  border-left: 1px solid rgba(230, 235, 231, 0.1);
+  border-top: none;
+  border-right: none;
+  border-bottom: 3px solid var(--accent);
+  padding: 18px 10px;
+  background: transparent;
+  font-weight: 500;
+}
+
+.site-nav .nav-links a.nav-shop:hover {
+  background: var(--accent) !important;
+  color: var(--B) !important;
+  border-bottom-color: var(--accent);
+}
+
+.nav-mobile a.nav-shop,
+.site-nav .nav-mobile.open a.nav-shop {
+  color: var(--accent);
+  border: 3px solid var(--accent);
+  display: inline-block;
+  padding: 10px 16px;
+  margin-top: 8px;
+}
+
+.nav-mobile a.nav-shop:hover,
+.site-nav .nav-mobile.open a.nav-shop:hover {
+  background: var(--accent) !important;
+  color: var(--B) !important;
+  border-color: var(--accent) !important;
+}
+
 .site-nav .nav-shop:hover {
-  background: var(--B) !important;
-  color: var(--W) !important;
+  background: var(--accent) !important;
+  color: var(--B) !important;
+  border-color: var(--accent) !important;
 }
 
 .site-nav .nav-toggle {
@@ -825,15 +897,17 @@ button:hover:not(:disabled),
   font-size: 8px;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--W);
-  opacity: 0.22;
+  /* Oxide Rose on Volcanic Black — 5.20:1, safe at any size */
+  color: var(--accent);
+  opacity: 1;
   flex-shrink: 0;
 }
 
 .elements .elem-dash {
   width: 12px;
   height: 1px;
-  background: rgba(230, 235, 231, 0.12);
+  background: var(--accent);
+  opacity: 0.55;
   flex-shrink: 0;
 }
 
@@ -1105,7 +1179,8 @@ button:hover:not(:disabled),
   font-family: var(--font-serif);
   font-size: clamp(40px, 7vw, 96px);
   font-style: italic;
-  color: var(--W);
+  /* Large text on Volcanic Black — pure accent is 5.20:1 */
+  color: var(--accent);
   text-decoration: none;
   padding: 16px 40px;
   line-height: 1;
@@ -1799,6 +1874,12 @@ textarea.form-inp {
 .find .fb.dark .fb-link {
   color: var(--W);
   border-color: var(--W);
+}
+
+/* Shop CTA in Find / Online — accent border on dark (small text uses chalk, not accent) */
+.find .fb.dark .fb-link.find-shop-cta {
+  color: var(--W);
+  border-bottom: 3px solid var(--accent);
 }
 
 .find .fb-link:hover {

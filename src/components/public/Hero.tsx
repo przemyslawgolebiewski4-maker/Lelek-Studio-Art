@@ -62,7 +62,18 @@ export function Hero({ content, elements = [] }: HeroProps) {
         <div className="hero-content-grid">
           <div className="hero-top">
             <div className="hero-eyebrow">{eyebrow}</div>
-            <h1 className="hero-h1 hero-brand">{brandline}</h1>
+            <h1 className="hero-h1 hero-brand">
+              {brandline.includes(" - ") ? (
+                <>
+                  {brandline.slice(0, brandline.lastIndexOf(" - ") + 3)}
+                  <span className="accent-bold">
+                    {brandline.slice(brandline.lastIndexOf(" - ") + 3)}
+                  </span>
+                </>
+              ) : (
+                brandline
+              )}
+            </h1>
             <div className="hero-rule" />
             <p className="hero-quote hero-subline">{subline}</p>
             <div className="hero-btns">

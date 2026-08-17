@@ -49,7 +49,7 @@ export function HomeFindSection({
         <p className="fb-body">{onlineDescription}</p>
         <a
           href={shopUrl}
-          className="fb-link"
+          className="fb-link find-shop-cta"
           target="_blank"
           rel="noopener noreferrer"
         >

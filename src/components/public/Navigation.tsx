@@ -52,7 +52,12 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
         {links.map((link) => (
           <li key={link.href}>
             {link.external ? (
-              <a href={link.href} target="_blank" rel="noopener noreferrer">
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nav-shop"
+              >
                 {link.label}
               </a>
             ) : (
@@ -87,6 +92,7 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
+              className="nav-shop"
               onClick={() => setOpen(false)}
             >
               {link.label}
