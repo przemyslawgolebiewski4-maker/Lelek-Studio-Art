@@ -31,11 +31,26 @@ async function proxyRequest(request: NextRequest, context: RouteContext) {
 
   try {
     const res = await fetch(url, init);
+    const contentType = res.headers.get("content-type") ?? "application/json";
+    const isBinary =
+      contentType.startsWith("image/") ||
+      contentType.includes("octet-stream") ||
+      contentType.includes("application/pdf");
+
+    const headers = new Headers();
+    headers.set("content-type", contentType);
+    const disposition = res.headers.get("content-disposition");
+    if (disposition) headers.set("content-disposition", disposition);
+    const cacheControl = res.headers.get("cache-control");
+    if (cacheControl) headers.set("cache-control", cacheControl);
+
+    if (isBinary) {
+      const body = await res.arrayBuffer();
+      return new NextResponse(body, { status: res.status, headers });
+    }
+
     const body = await res.text();
-    return new NextResponse(body, {
-      status: res.status,
-      headers: { "content-type": res.headers.get("content-type") ?? "application/json" },
-    });
+    return new NextResponse(body, { status: res.status, headers });
   } catch (err) {
     const timedOut = err instanceof Error && err.name === "TimeoutError";
     return NextResponse.json(

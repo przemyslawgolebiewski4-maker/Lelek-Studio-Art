@@ -109,6 +109,14 @@ function pickProductFields(body: Record<string, unknown>) {
   if ("isOriginal" in data) {
     data.isOriginal = Boolean(data.isOriginal);
   }
+  if ("price" in data) {
+    if (data.price === null || data.price === "" || data.price === undefined) {
+      data.price = null;
+    } else {
+      const n = Number(data.price);
+      data.price = Number.isFinite(n) ? n : null;
+    }
+  }
   return data;
 }
 

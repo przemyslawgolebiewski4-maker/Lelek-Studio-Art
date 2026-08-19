@@ -35,6 +35,8 @@ export type ProductFormData = {
   isPhotoReproduction: boolean;
   isOriginal: boolean;
   thumbnailPosition: string;
+  /** EUR — required for pop-up /reserve pricing; null = not set */
+  price: string;
 };
 
 export function productToForm(product?: Partial<Product>): ProductFormData {
@@ -58,11 +60,17 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     isPhotoReproduction: product?.isPhotoReproduction ?? false,
     isOriginal: product?.isOriginal ?? false,
     thumbnailPosition: product?.thumbnailPosition ?? "center",
+    price:
+      product?.price != null && Number.isFinite(Number(product.price))
+        ? String(product.price)
+        : "",
   };
 }
 
 export function formToPayload(form: ProductFormData) {
   const isPrints = form.category === "prints";
+  const priceRaw = form.price.trim().replace(",", ".");
+  const priceNum = priceRaw === "" ? null : Number(priceRaw);
   return {
     slug: normalizeSlug(form.slug) || slugFromTitle(form.title),
     catalog: form.catalog,
@@ -86,6 +94,7 @@ export function formToPayload(form: ProductFormData) {
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
     isOriginal: form.isOriginal,
     thumbnailPosition: form.thumbnailPosition,
+    price: priceNum != null && Number.isFinite(priceNum) ? priceNum : null,
   };
 }
 
@@ -214,6 +223,21 @@ export function ProductForm({
         Catalog prefix: CE- / VE- / WO- / OB- / PR- (Courier uppercase).
       </p>
 
+      <AdminInput
+        label="Price (EUR)"
+        type="number"
+        min={0}
+        step="0.01"
+        value={form.price}
+        onChange={(e) => update("price", e.target.value)}
+        placeholder="e.g. 31"
+        disabled={form.isOriginal}
+      />
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Used on pop-up /reserve pages and settlement totals. Leave empty if not for sale here.
+        Originals stay inquiry-only (price cleared when Original is checked).
+      </p>
+
       {form.category === "prints" ? (
         <>
           <label className="admin-checkbox">
@@ -329,7 +353,14 @@ export function ProductForm({
         <input
           type="checkbox"
           checked={form.isOriginal}
-          onChange={(e) => update("isOriginal", e.target.checked)}
+          onChange={(e) => {
+            const checked = e.target.checked;
+            setForm((prev) => ({
+              ...prev,
+              isOriginal: checked,
+              price: checked ? "" : prev.price,
+            }));
+          }}
         />
         Original (About / Originals)
       </label>

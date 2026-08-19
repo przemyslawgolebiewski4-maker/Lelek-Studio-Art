@@ -198,6 +198,78 @@ locationsAdminRouter.get("/locations/:id/products", requireAdmin, async (req, re
   }
 });
 
+/**
+ * GET /admin/locations/:locationId/products/:productId/qr
+ * PNG QR (error correction H) linking to SITE_URL/reserve/{catalog}.
+ */
+locationsAdminRouter.get(
+  "/locations/:locationId/products/:productId/qr",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      await connectDB();
+      const { locationId, productId } = req.params;
+      if (!isValidObjectId(locationId) || !isValidObjectId(productId)) {
+        res.status(400).json({ ok: false, error: "Invalid location or product id" });
+        return;
+      }
+
+      const product = await Product.findById(productId).lean();
+      if (!product) {
+        res.status(404).json({ ok: false, error: "Product not found" });
+        return;
+      }
+
+      const catalog =
+        typeof product.catalog === "string" ? product.catalog.trim() : "";
+      if (!catalog) {
+        res.status(400).json({
+          ok: false,
+          error: "Product has no catalog code — set catalog before generating a QR label.",
+        });
+        return;
+      }
+
+      if (!product.locationId || String(product.locationId) !== String(locationId)) {
+        res.status(400).json({
+          ok: false,
+          error: "Product is not assigned to this location.",
+        });
+        return;
+      }
+
+      const siteUrl = (
+        process.env.FRONTEND_URL ||
+        process.env.SITE_URL ||
+        "https://www.lelekstudio.com"
+      )
+        .trim()
+        .replace(/\/+$/, "");
+      const targetUrl = `${siteUrl}/reserve/${encodeURIComponent(catalog)}`;
+
+      const QRCode = (await import("qrcode")).default;
+      const png = await QRCode.toBuffer(targetUrl, {
+        type: "png",
+        errorCorrectionLevel: "H",
+        margin: 1,
+        width: 512,
+        color: { dark: "#0B0A08", light: "#FFFFFF" },
+      });
+
+      const safeName = catalog.replace(/[^a-zA-Z0-9_-]+/g, "-");
+      res.setHeader("Content-Type", "image/png");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${safeName}-qr.png"`,
+      );
+      res.setHeader("Cache-Control", "private, no-store");
+      res.send(png);
+    } catch (err) {
+      res.status(500).json({ ok: false, error: String(err) });
+    }
+  },
+);
+
 /** GET /admin/locations/:id/summary — sold totals + commission */
 locationsAdminRouter.get("/locations/:id/summary", requireAdmin, async (req, res) => {
   try {

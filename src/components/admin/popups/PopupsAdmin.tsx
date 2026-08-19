@@ -16,9 +16,12 @@ import type {
   LocationSummary,
   ProductOption,
 } from "@/types/exhibition";
+import { LabelSheet, type LabelSheetItem } from "@/components/admin/popups/LabelSheet";
 
-function formatEuro(n: number) {
-  return `€${n.toFixed(2)}`;
+function formatEuro(n: unknown) {
+  const v = typeof n === "number" ? n : Number(n);
+  if (!Number.isFinite(v)) return "—";
+  return `€${v.toFixed(2)}`;
 }
 
 function formatDateRange(start: string, end: string) {
@@ -127,6 +130,11 @@ export function PopupsAdmin() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [confirmPickupId, setConfirmPickupId] = useState<string | null>(null);
   const [busyProductId, setBusyProductId] = useState<string | null>(null);
+  /** Selected product ids for label sheet, scoped by locationId */
+  const [selectedByLocation, setSelectedByLocation] = useState<Record<string, string[]>>({});
+  const [labelSheet, setLabelSheet] = useState<LabelSheetItem[] | null>(null);
+  const [editPrice, setEditPrice] = useState("");
+  const [editLocationId, setEditLocationId] = useState<string | null>(null);
 
   const loadAll = useCallback(async () => {
     setLoading(true);
@@ -250,12 +258,56 @@ export function PopupsAdmin() {
   async function saveEditProduct() {
     if (!editProduct) return;
     setSavingEdit(true);
+    const priceRaw = editPrice.trim().replace(",", ".");
+    const priceNum = priceRaw === "" ? null : Number(priceRaw);
+    if (priceRaw !== "" && !Number.isFinite(priceNum)) {
+      setError("Price must be a number");
+      setSavingEdit(false);
+      return;
+    }
+    const priceRes = await apiPatch(`/admin/products/${editProduct._id}`, {
+      price: priceNum,
+    });
+    const priceData = await readApiResult(priceRes);
+    if (!priceData.ok) {
+      setError(priceData.error);
+      setSavingEdit(false);
+      return;
+    }
     const ok = await patchExhibition(editProduct._id, {
       exhibitionStatus: editStatus,
       revolutPaymentLink: editLink.trim() || null,
     });
     setSavingEdit(false);
     if (ok) setEditProduct(null);
+  }
+
+  function toggleSelected(locationId: string, productId: string) {
+    setSelectedByLocation((prev) => {
+      const current = prev[locationId] ?? [];
+      const next = current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId];
+      return { ...prev, [locationId]: next };
+    });
+  }
+
+  function openLabelSheet(locationId: string, products: ExhibitionProduct[]) {
+    const selected = selectedByLocation[locationId] ?? [];
+    const items: LabelSheetItem[] = products
+      .filter((p) => selected.includes(p._id))
+      .map((p) => ({
+        productId: p._id,
+        locationId,
+        catalogCode: (p.catalog || "").trim(),
+        title: p.title,
+      }))
+      .filter((p) => p.catalogCode);
+    if (items.length === 0) {
+      setError("Select at least one product with a catalog code to print labels.");
+      return;
+    }
+    setLabelSheet(items);
   }
 
   async function changeStatus(productId: string, status: ExhibitionStatus) {
@@ -291,6 +343,11 @@ export function PopupsAdmin() {
         </AdminButton>
       }
     >
+      {labelSheet ? (
+        <LabelSheet items={labelSheet} onClose={() => setLabelSheet(null)} />
+      ) : null}
+
+      <div className={labelSheet ? "no-print" : undefined}>
       {loading ? <p className="admin-muted">Loading...</p> : null}
       {error ? <p className="admin-error">{error}</p> : null}
 
@@ -414,6 +471,13 @@ export function PopupsAdmin() {
               >
                 + Add item
               </AdminButton>
+              <AdminButton
+                variant="ghost"
+                onClick={() => openLabelSheet(location._id, products)}
+                disabled={(selectedByLocation[location._id] ?? []).length === 0}
+              >
+                Print selected as label sheet
+              </AdminButton>
             </div>
 
             {addForLocationId === location._id ? (
@@ -458,6 +522,9 @@ export function PopupsAdmin() {
               <table className="admin-table popup-table">
                 <thead>
                   <tr>
+                    <th className="popup-check-col">
+                      <span className="sr-only">Select</span>
+                    </th>
                     <th>Item</th>
                     <th>Price</th>
                     <th>Status</th>
@@ -468,7 +535,7 @@ export function PopupsAdmin() {
                 <tbody>
                   {products.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="admin-muted">
+                      <td colSpan={6} className="admin-muted">
                         No items assigned yet.
                       </td>
                     </tr>
@@ -477,8 +544,25 @@ export function PopupsAdmin() {
                     const status = product.exhibitionStatus ?? null;
                     const thumb = product.images?.[0];
                     const busy = busyProductId === product._id;
+                    const checked = (selectedByLocation[location._id] ?? []).includes(
+                      product._id,
+                    );
                     return (
                       <tr key={product._id}>
+                        <td className="popup-check-col">
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            disabled={!product.catalog?.trim()}
+                            title={
+                              product.catalog?.trim()
+                                ? "Select for label sheet"
+                                : "Catalog code required for QR label"
+                            }
+                            onChange={() => toggleSelected(location._id, product._id)}
+                            aria-label={`Select ${product.title} for labels`}
+                          />
+                        </td>
                         <td>
                           <div className="popup-item-cell">
                             {thumb ? (
@@ -497,9 +581,7 @@ export function PopupsAdmin() {
                             </div>
                           </div>
                         </td>
-                        <td className="popup-mono">
-                          {product.price != null ? formatEuro(product.price) : "—"}
-                        </td>
+                        <td className="popup-mono">{formatEuro(product.price)}</td>
                         <td>
                           <div className="popup-status-cell">
                             <span
@@ -584,10 +666,16 @@ export function PopupsAdmin() {
                               aria-label="Edit exhibition fields"
                               onClick={() => {
                                 setEditProduct(product);
+                                setEditLocationId(location._id);
                                 setEditLink(product.revolutPaymentLink ?? "");
                                 setEditStatus(
                                   (product.exhibitionStatus as ExhibitionStatus) ||
                                     "available",
+                                );
+                                setEditPrice(
+                                  product.price != null && Number.isFinite(Number(product.price))
+                                    ? String(product.price)
+                                    : "",
                                 );
                               }}
                             >
@@ -634,6 +722,15 @@ export function PopupsAdmin() {
           <div className="popup-modal">
             <AdminCard className="admin-form-stack" style={{ maxWidth: 480 }}>
               <p className="admin-list-item-title">Edit · {editProduct.title}</p>
+              <AdminInput
+                label="Price (EUR)"
+                type="number"
+                min={0}
+                step="0.01"
+                value={editPrice}
+                onChange={(e) => setEditPrice(e.target.value)}
+                placeholder="e.g. 31"
+              />
               <AdminSelect
                 label="Exhibition status"
                 value={editStatus}
@@ -652,6 +749,15 @@ export function PopupsAdmin() {
                 <AdminButton variant="primary" disabled={savingEdit} onClick={saveEditProduct}>
                   {savingEdit ? "Saving..." : "Save"}
                 </AdminButton>
+                {editLocationId && editProduct.catalog?.trim() ? (
+                  <a
+                    className="admin-btn ghost"
+                    href={`/api/proxy/admin/locations/${editLocationId}/products/${editProduct._id}/qr`}
+                    download
+                  >
+                    Download QR PNG
+                  </a>
+                ) : null}
                 <AdminButton
                   variant="ghost"
                   onClick={() =>
@@ -679,6 +785,7 @@ export function PopupsAdmin() {
       <div className="popup-note">
         Pickup authorized stays off until you flip it manually — buyers should not collect
         until commission with the location is settled.
+      </div>
       </div>
     </AdminShell>
   );
