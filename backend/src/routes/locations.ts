@@ -308,6 +308,13 @@ locationsAdminRouter.post("/locations/:id/items", requireAdmin, async (req, res)
       });
       return;
     }
+    if (typeof product.price !== "number" || !Number.isFinite(product.price)) {
+      res.status(400).json({
+        ok: false,
+        error: "Product has no price. Set Price (EUR) on the product before adding it to a pop-up.",
+      });
+      return;
+    }
 
     const allocated = await allocateInstanceCodes(product.catalog, product.title);
     const revolut =

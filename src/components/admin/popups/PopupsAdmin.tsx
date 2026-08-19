@@ -198,6 +198,16 @@ export function PopupsAdmin() {
     [catalog],
   );
 
+  const selectedAddProduct = useMemo(
+    () => availableForAdd.find((p) => p._id === addProductId) ?? null,
+    [availableForAdd, addProductId],
+  );
+
+  const selectedAddPrice =
+    selectedAddProduct?.price != null && Number.isFinite(Number(selectedAddProduct.price))
+      ? Number(selectedAddProduct.price)
+      : null;
+
   const instanceCountByCatalog = useMemo(() => {
     const map = new Map<string, number>();
     for (const bundle of bundles) {
@@ -252,6 +262,15 @@ export function PopupsAdmin() {
 
   async function addItemToLocation() {
     if (!addForLocationId || !addProductId) return;
+    const product = availableForAdd.find((p) => p._id === addProductId);
+    const priceOk =
+      product?.price != null && Number.isFinite(Number(product.price));
+    if (!priceOk) {
+      setError(
+        "This product has no price. Set Price (EUR) on the Products page before adding it to a pop-up.",
+      );
+      return;
+    }
     setSavingAdd(true);
     setError("");
     const res = await apiPost(`/admin/locations/${addForLocationId}/items`, {
@@ -501,7 +520,8 @@ export function PopupsAdmin() {
                 <p className="admin-list-item-title">Add piece to {location.name}</p>
                 <p className="admin-muted">
                   Creates a new physical instance (e.g. CE-001-01, then CE-001-02). Same design can
-                  have many units at one or more locations.
+                  have many units at one or more locations. Price always comes from the product —
+                  not per instance.
                 </p>
                 <AdminSelect
                   label="Published product (design)"
@@ -512,15 +532,43 @@ export function PopupsAdmin() {
                   {availableForAdd.map((p) => {
                     const cat = (p.catalog || "").toUpperCase();
                     const n = instanceCountByCatalog.get(cat) ?? 0;
+                    const priceLabel =
+                      p.price != null && Number.isFinite(Number(p.price))
+                        ? ` · ${formatEuro(p.price)}`
+                        : " · no price";
                     return (
                       <option key={p._id} value={p._id}>
                         {cat ? `${cat} — ` : ""}
                         {p.title}
+                        {priceLabel}
                         {n > 0 ? ` (${n} instance${n === 1 ? "" : "s"} already)` : ""}
                       </option>
                     );
                   })}
                 </AdminSelect>
+
+                {selectedAddProduct && addForLocationId === location._id ? (
+                  <div className="popup-inherited-price">
+                    {selectedAddPrice != null ? (
+                      <>
+                        <div className="popup-inherited-price-value">
+                          Price inherited from {(selectedAddProduct.catalog || "").toUpperCase() || "product"}:{" "}
+                          <b>{formatEuro(selectedAddPrice)}</b>
+                        </div>
+                        <p className="admin-muted" style={{ marginTop: 6 }}>
+                          Edit this on the Products page to change it for all instances of this
+                          design.
+                        </p>
+                      </>
+                    ) : (
+                      <p className="admin-error" style={{ marginBottom: 0 }}>
+                        No price on this product. Open Products → set Price (EUR) before adding to a
+                        pop-up.
+                      </p>
+                    )}
+                  </div>
+                ) : null}
+
                 <AdminInput
                   label="Revolut Payment Link"
                   value={addRevolutLink}
@@ -530,7 +578,7 @@ export function PopupsAdmin() {
                 <div className="admin-shell-actions">
                   <AdminButton
                     variant="primary"
-                    disabled={savingAdd || !addProductId}
+                    disabled={savingAdd || !addProductId || selectedAddPrice == null}
                     onClick={addItemToLocation}
                   >
                     {savingAdd ? "Saving..." : "Create instance at location"}
@@ -749,9 +797,9 @@ export function PopupsAdmin() {
           />
           <div className="popup-modal">
             <AdminCard className="admin-form-stack" style={{ maxWidth: 480 }}>
-              <p className="admin-list-item-title">Edit · {editProduct.title}</p>
+              <p className="admin-list-item-title">Edit · {editProduct.displayLabel || editProduct.title}</p>
               <AdminInput
-                label="Price (EUR)"
+                label="Price (EUR) — shared by all instances of this design"
                 type="number"
                 min={0}
                 step="0.01"
@@ -759,6 +807,10 @@ export function PopupsAdmin() {
                 onChange={(e) => setEditPrice(e.target.value)}
                 placeholder="e.g. 31"
               />
+              <p className="admin-muted" style={{ marginTop: "-8px" }}>
+                Saves on the parent Product ({(editProduct.catalogCode || editProduct.catalog || "").toUpperCase() || "catalog"}).
+                Exhibition items do not store their own price.
+              </p>
               <AdminSelect
                 label="Exhibition status"
                 value={editStatus}

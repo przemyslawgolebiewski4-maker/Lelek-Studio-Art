@@ -1382,3 +1382,20 @@
     page-break-inside: avoid;
   }
 }
+
+.popup-inherited-price {
+  border: 1px dashed rgba(11, 10, 8, 0.25);
+  padding: 14px 16px;
+  background: rgba(11, 10, 8, 0.03);
+}
+
+.popup-inherited-price-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.04em;
+  color: var(--B);
+}
+
+.popup-inherited-price-value b {
+  font-size: 16px;
+}
