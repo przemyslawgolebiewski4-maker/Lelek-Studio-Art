@@ -3226,3 +3226,307 @@ textarea.form-inp {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================ RESERVE (QR buyer page) */
+.reserve-root {
+  min-height: 100vh;
+  background: #2b2b2b;
+}
+
+.reserve-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  background: #2b2b2b;
+}
+
+.reserve-phone {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: var(--W);
+  color: var(--B);
+  border-left: 3px solid var(--B);
+  border-right: 3px solid var(--B);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 480px) {
+  .reserve-phone {
+    border-left: none;
+    border-right: none;
+    max-width: none;
+  }
+}
+
+.reserve-header {
+  padding: 16px 18px;
+  border-bottom: 3px solid var(--B);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.reserve-logo {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--B);
+  text-decoration: none;
+}
+
+.reserve-logo b {
+  font-weight: 700;
+}
+
+.reserve-loc-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  text-align: right;
+}
+
+.reserve-state {
+  flex: 1;
+}
+
+.reserve-photo {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: rgba(11, 10, 8, 0.08);
+  overflow: hidden;
+}
+
+.reserve-photo-img {
+  object-fit: cover;
+}
+
+.reserve-photo-fallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(155deg, #a5654a, #3a1f14 100%);
+}
+
+.reserve-photo-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  background: var(--B);
+  color: var(--W);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  padding: 5px 10px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.reserve-photo.is-unavailable .reserve-photo-img {
+  filter: grayscale(60%) brightness(0.75);
+}
+
+.reserve-photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: rgba(11, 10, 8, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reserve-photo-stamp {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--W);
+  border: 2px solid var(--W);
+  padding: 8px 16px;
+}
+
+.reserve-body {
+  padding: 22px 20px 28px;
+}
+
+.reserve-body-center {
+  text-align: center;
+  padding-top: 26px;
+}
+
+.reserve-cat {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 8px;
+}
+
+.reserve-title {
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 10px;
+  line-height: 1.2;
+  color: var(--B);
+}
+
+.reserve-body-center .reserve-title {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.reserve-price {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 18px;
+  color: var(--B);
+}
+
+.reserve-btn-pay {
+  display: block;
+  width: 100%;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 16px;
+  background: var(--B);
+  color: var(--W);
+  border: 3px solid var(--B);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-decoration: none;
+}
+
+.reserve-btn-pay:hover {
+  background: var(--W);
+  color: var(--B);
+}
+
+.reserve-pay-icons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+.reserve-desc {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.reserve-desc b {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--B);
+  font-weight: 600;
+}
+
+.reserve-exhib-note {
+  border-top: 1px solid var(--ink-faint);
+  padding-top: 16px;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.reserve-exhib-note b {
+  color: var(--B);
+  font-weight: 600;
+}
+
+.reserve-unavailable-copy {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  max-width: 30ch;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reserve-contact-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.reserve-contact-btn {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 14px;
+  border: 2px solid var(--B);
+  text-align: center;
+  text-decoration: none;
+  color: var(--B);
+  background: transparent;
+}
+
+.reserve-contact-btn.primary {
+  background: var(--B);
+  color: var(--W);
+}
+
+.reserve-contact-btn:hover {
+  background: var(--B);
+  color: var(--W);
+}
+
+.reserve-contact-btn.primary:hover {
+  background: var(--W);
+  color: var(--B);
+}
+
+.reserve-similar {
+  font-size: 11px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--ink-faint);
+  padding-top: 16px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.reserve-similar a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+.reserve-not-found .reserve-body {
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.reserve-footer {
+  margin-top: auto;
+  padding: 14px 20px;
+  border-top: 1px solid rgba(11, 10, 8, 0.15);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}

@@ -20,7 +20,7 @@ reservePublicRouter.get("/public/reserve/:catalogCode", async (req, res) => {
     }
 
     const product = await Product.findOne({
-      catalog: catalogCode,
+      catalog: { $regex: `^${catalogCode.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" },
       locationId: { $ne: null },
     }).lean();
 
@@ -45,6 +45,8 @@ reservePublicRouter.get("/public/reserve/:catalogCode", async (req, res) => {
     const responseData: Record<string, unknown> = {
       title: product.title,
       catalogCode: product.catalog,
+      category: product.category ?? "",
+      material: product.material ?? "",
       price: product.price,
       imageUrl: Array.isArray(product.images) && product.images[0] ? product.images[0] : "",
       description: product.description ?? "",
