@@ -39,9 +39,6 @@ export type ExhibitionProduct = {
   revolutPaymentLink?: string | null;
   soldAt?: string | null;
   pickupAuthorized?: boolean;
-  /** Buyer intent only — never unlocks pickupAuthorized */
-  pickupPreference?: "immediate" | "later" | null;
-  pickupPreferenceSetAt?: string | null;
 };
 
 export type ProductOption = {

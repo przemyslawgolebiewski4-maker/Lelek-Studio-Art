@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { ReservePublicData } from "@/lib/reserve";
+import { INSTAGRAM_URL } from "@/lib/config";
 import {
   ReserveAvailable,
   ReserveNotFound,
@@ -37,7 +38,7 @@ type PageProps = { params: Promise<{ state: string }> };
 export default async function ReservePreviewPage({ params }: PageProps) {
   const { state } = await params;
   const email = "lelekstudio@lelekstudio.com";
-  const instagramUrl = "https://www.instagram.com/lelek.studio.berlin/";
+  const instagramUrl = INSTAGRAM_URL;
 
   if (state === "404" || state === "not-found") {
     return (

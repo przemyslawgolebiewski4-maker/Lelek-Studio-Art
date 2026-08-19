@@ -35,6 +35,15 @@ export function resolveShopUrl(settings?: Record<string, string> | null): string
 export const API_FETCH_TIMEOUT_MS = 5_000;
 export const DEFAULT_REVALIDATE = 60;
 
+/** Official LELEK Instagram profile. Rewrites the retired lelek.studio.berlin handle. */
+export const INSTAGRAM_URL = "https://www.instagram.com/lelek.berlin/";
+
+export function resolveInstagramUrl(raw?: string | null): string {
+  const url = (raw ?? "").trim() || INSTAGRAM_URL;
+  if (/instagram\.com\/lelek\.studio\.berlin\/?/i.test(url)) return INSTAGRAM_URL;
+  return url;
+}
+
 export function shouldSkipApiFetch(): boolean {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
   if (!apiUrl) return true;

@@ -10,7 +10,7 @@ const ExhibitionItemSchema = new Schema(
     locationId: { type: Schema.Types.ObjectId, ref: "Location", required: true, index: true },
     /** Denormalized Product.catalog (uppercase), used for per-design sequencing */
     catalogCode: { type: String, required: true, index: true },
-    /** Unique URL token, e.g. CE-001-01 — server-generated only */
+    /** Unique URL token, e.g. CE-001-01 - server-generated only */
     instanceCode: { type: String, required: true, unique: true },
     sequence: { type: Number, required: true, min: 1, max: 99 },
     /** Admin-only label, e.g. "CE-001 · Soft Drip Cup #01" */
@@ -24,19 +24,6 @@ const ExhibitionItemSchema = new Schema(
     revolutPaymentLink: { type: String, default: null },
     soldAt: { type: Date, default: null },
     pickupAuthorized: { type: Boolean, default: false },
-    /**
-     * Buyer-stated pickup intent captured BEFORE payment redirect.
-     * INFORMATIONAL ONLY — must never unlock pickupAuthorized, change
-     * exhibitionStatus, or bypass the admin "settle first" safeguard.
-     * Values: "immediate" | "later" | null (unset).
-     */
-    pickupPreference: {
-      type: String,
-      enum: ["immediate", "later"],
-      default: null,
-    },
-    /** When the buyer last set pickupPreference (intent signal only). */
-    pickupPreferenceSetAt: { type: Date, default: null },
   },
   { collection: "exhibition_items", timestamps: true },
 );

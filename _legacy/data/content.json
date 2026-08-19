@@ -4,8 +4,8 @@
     "tagline": "Shaped by hand, guided by instinct",
     "description": "Lelek Studio is the ceramic practice of Przemyslaw Golebiewski - a self-taught ceramist from rural Poland, working in Berlin. Handmade functional ceramics, vessels and wall objects shaped by intuition, earth, water, fire and air.",
     "url": "https://www.lelekstudio.com",
-    "instagram": "https://www.instagram.com/lelek.studio.berlin/",
-    "instagramHandle": "@lelek.studio.berlin",
+    "instagram": "https://www.instagram.com/lelek.berlin/",
+    "instagramHandle": "@lelek.berlin",
     "email": "lelekstudio@lelekstudio.com",
     "etsy": "https://www.etsy.com/shop/LelekStudio",
     "artistUrl": "https://www.p-golebiewski.xyz",
@@ -220,7 +220,7 @@
   "slot": {
     "visible": false,
     "label": "Upcoming",
-    "text": "New series dropping soon - follow @lelek.studio.berlin"
+    "text": "New series dropping soon - follow @lelek.berlin"
   },
   "process": {
     "eyebrow": "Process",

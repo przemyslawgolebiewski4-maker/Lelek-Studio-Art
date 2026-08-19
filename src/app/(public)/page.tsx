@@ -6,7 +6,7 @@ import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
-import { SITE_URL, resolveShopUrl } from "@/lib/config";
+import { SITE_URL, resolveShopUrl, resolveInstagramUrl } from "@/lib/config";
 import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -62,7 +62,7 @@ export default async function HomePage() {
     url: SITE_URL,
     logo: logoUrl,
     sameAs: [
-      settings.instagram || "https://www.instagram.com/lelek.studio.berlin/",
+      resolveInstagramUrl(settings.instagram),
       shopUrl,
       ...extraSameAs,
     ].filter(Boolean),

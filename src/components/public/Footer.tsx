@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { INSTAGRAM_URL } from "@/lib/config";
 
 type FooterProps = {
   siteName?: string;
@@ -12,7 +13,7 @@ type FooterProps = {
 export function Footer({
   siteName = "Lelek Studio",
   location = "Berlin",
-  instagram = "https://www.instagram.com/lelek.studio.berlin/",
+  instagram = INSTAGRAM_URL,
   email = "lelekstudio@lelekstudio.com",
   shopUrl = "https://lelekstudio.etsy.com",
   lelekMeaning = "Lelek - kozodoj - the nightjar",

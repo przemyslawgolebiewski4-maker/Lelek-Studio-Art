@@ -43,14 +43,6 @@ function statusLabel(status: ExhibitionStatus | null | undefined) {
   return "—";
 }
 
-function pickupPreferenceLabel(
-  preference: ExhibitionProduct["pickupPreference"],
-): string | null {
-  if (preference === "immediate") return "Wants pickup: today";
-  if (preference === "later") return "Wants pickup: later";
-  return null;
-}
-
 function exportSettlementCsv(
   location: AdminLocation,
   products: ExhibitionProduct[],
@@ -673,12 +665,6 @@ export function PopupsAdmin() {
                             >
                               {statusLabel(status)}
                             </span>
-                            {(status === "reserved" || status === "sold") &&
-                            pickupPreferenceLabel(product.pickupPreference) ? (
-                              <span className="popup-pickup-pref">
-                                {pickupPreferenceLabel(product.pickupPreference)}
-                              </span>
-                            ) : null}
                             <select
                               className="popup-status-select"
                               aria-label={`Status for ${product.title}`}
@@ -699,9 +685,9 @@ export function PopupsAdmin() {
                           {status === "sold" ? (
                             confirmPickupId === product._id ? (
                               <div className="popup-confirm">
-                                <span className="popup-toggle-label">
-                                  Confirm — settled with location?
-                                </span>
+                <span className="popup-toggle-label">
+                  Confirm - settled with location?
+                </span>
                                 <div className="popup-confirm-actions">
                                   <button
                                     type="button"
@@ -721,27 +707,34 @@ export function PopupsAdmin() {
                                 </div>
                               </div>
                             ) : (
-                              <div className="popup-toggle-wrap">
-                                <button
-                                  type="button"
-                                  className={`popup-toggle${product.pickupAuthorized ? " on" : ""}`}
-                                  aria-pressed={Boolean(product.pickupAuthorized)}
-                                  aria-label="Pickup authorized"
-                                  disabled={busy}
-                                  onClick={() =>
-                                    setPickupAuthorized(
-                                      product._id,
-                                      !product.pickupAuthorized,
-                                    )
-                                  }
-                                >
-                                  <span className="popup-toggle-dot" />
-                                </button>
-                                <span className="popup-toggle-label">
-                                  {product.pickupAuthorized
-                                    ? "Yes"
-                                    : "No — settle first"}
-                                </span>
+                              <div className="popup-pickup-cell">
+                                <div className="popup-toggle-wrap">
+                                  <button
+                                    type="button"
+                                    className={`popup-toggle${product.pickupAuthorized ? " on" : ""}`}
+                                    aria-pressed={Boolean(product.pickupAuthorized)}
+                                    aria-label="Pickup authorized"
+                                    disabled={busy}
+                                    onClick={() =>
+                                      setPickupAuthorized(
+                                        product._id,
+                                        !product.pickupAuthorized,
+                                      )
+                                    }
+                                  >
+                                    <span className="popup-toggle-dot" />
+                                  </button>
+                                  <span className="popup-toggle-label">
+                                    {product.pickupAuthorized
+                                      ? "Yes"
+                                      : "No - settle first"}
+                                  </span>
+                                </div>
+                                <p className="popup-pickup-help">
+                                  This is a tracking reminder for your own settlement
+                                  records - it does not control whether the location
+                                  physically releases the item.
+                                </p>
                               </div>
                             )
                           ) : (

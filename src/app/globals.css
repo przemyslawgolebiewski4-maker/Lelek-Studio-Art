@@ -3448,45 +3448,31 @@ textarea.form-inp {
   cursor: pointer;
 }
 
-.reserve-btn-pay:hover:not(:disabled) {
+.reserve-btn-pay:hover {
   background: var(--W);
   color: var(--B);
 }
 
-.reserve-btn-pay:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.reserve-pickup {
-  border: none;
+.reserve-pickup-copy {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--ink-muted);
   margin: 0 0 16px;
-  padding: 0;
 }
 
-.reserve-pickup-legend {
-  font-family: var(--font-sans);
-  font-size: 12.5px;
+.reserve-pickup-copy p {
+  margin: 0 0 0.75em;
+}
+
+.reserve-pickup-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.reserve-pickup-copy a {
   color: var(--B);
-  margin-bottom: 10px;
-  padding: 0;
-}
-
-.reserve-pickup-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-family: var(--font-sans);
-  font-size: 12.5px;
-  line-height: 1.45;
-  color: var(--ink-soft);
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-.reserve-pickup-option input {
-  margin-top: 2px;
-  accent-color: var(--B);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .reserve-legal-note {
@@ -3499,20 +3485,6 @@ textarea.form-inp {
 }
 
 .reserve-legal-note a {
-  color: var(--B);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.reserve-instagram-aside {
-  font-family: var(--font-sans);
-  font-size: 11.5px;
-  line-height: 1.55;
-  color: var(--ink-muted);
-  margin: 0 0 16px;
-}
-
-.reserve-instagram-aside a {
   color: var(--B);
   text-decoration: underline;
   text-underline-offset: 2px;

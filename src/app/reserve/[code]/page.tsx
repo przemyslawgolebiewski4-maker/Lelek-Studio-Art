@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/lib/config";
+import { SITE_URL, INSTAGRAM_URL, resolveInstagramUrl } from "@/lib/config";
 import { DEFAULT_OG_IMAGE, SITE_NAME } from "@/lib/seo";
 import { getSiteSettings } from "@/lib/site";
 import { fetchReserveByCode } from "@/lib/reserve";
@@ -62,9 +62,7 @@ export default async function ReservePage({ params }: PageProps) {
   ]);
 
   const email = settings.email?.trim() || "lelekstudio@lelekstudio.com";
-  const instagramUrl =
-    settings.instagram?.trim() ||
-    "https://www.instagram.com/lelek.studio.berlin/";
+  const instagramUrl = resolveInstagramUrl(settings.instagram) || INSTAGRAM_URL;
 
   if (!data) {
     return (
