@@ -3308,6 +3308,41 @@ textarea.form-inp {
   gap: 12px;
 }
 
+.reserve-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.reserve-lang {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--ink-faint);
+}
+
+.reserve-lang-btn {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  background: transparent;
+  color: var(--ink-muted);
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.reserve-lang-btn.is-active {
+  background: var(--B);
+  color: var(--W);
+}
+
+.reserve-lang-btn:hover:not(.is-active) {
+  color: var(--B);
+}
+
 .reserve-logo {
   font-family: var(--font-serif);
   font-size: 16px;

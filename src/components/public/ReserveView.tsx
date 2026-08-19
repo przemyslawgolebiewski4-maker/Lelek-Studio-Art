@@ -1,22 +1,43 @@
+"use client";
+
+import {
+  createContext,
+  useContext,
+  useState,
+  startTransition,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_URL } from "@/lib/config";
 import { isProductCategory, CATEGORY_TAB_LABELS } from "@/lib/categories";
 import type { ReservePublicData } from "@/lib/reserve";
+import {
+  RESERVE_COPY,
+  RESERVE_LANGS,
+  formatReserveDate,
+  type ReserveLang,
+} from "@/lib/reserve-i18n";
+
+type ReserveLangContextValue = {
+  lang: ReserveLang;
+  setLang: (lang: ReserveLang) => void;
+  t: (typeof RESERVE_COPY)[ReserveLang];
+};
+
+const ReserveLangContext = createContext<ReserveLangContextValue | null>(null);
+
+function useReserveLang() {
+  const ctx = useContext(ReserveLangContext);
+  if (!ctx) {
+    throw new Error("useReserveLang must be used within ReserveShell");
+  }
+  return ctx;
+}
 
 function formatEuro(price: number | null) {
   if (price == null || Number.isNaN(price)) return null;
   return `€${price.toFixed(2)}`;
-}
-
-function formatDisplayDate(iso: string) {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
 }
 
 function categoryLabel(category?: string) {
@@ -65,6 +86,25 @@ function ProductPhoto({
   );
 }
 
+function LangToggle() {
+  const { lang, setLang, t } = useReserveLang();
+  return (
+    <div className="reserve-lang" role="group" aria-label={t.langLabel}>
+      {RESERVE_LANGS.map((code) => (
+        <button
+          key={code}
+          type="button"
+          className={`reserve-lang-btn${lang === code ? " is-active" : ""}`}
+          aria-pressed={lang === code}
+          onClick={() => startTransition(() => setLang(code))}
+        >
+          {code.toUpperCase()}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export function ReserveAvailable({
   data,
   instagramUrl,
@@ -72,8 +112,9 @@ export function ReserveAvailable({
   data: ReservePublicData;
   instagramUrl: string;
 }) {
+  const { lang, t } = useReserveLang();
   const price = formatEuro(data.price);
-  const until = formatDisplayDate(data.exhibitionEndDate);
+  const until = formatReserveDate(data.exhibitionEndDate, lang);
   const showPay =
     data.exhibitionStatus === "available" && Boolean(data.revolutPaymentLink);
 
@@ -90,51 +131,43 @@ export function ReserveAvailable({
         {showPay ? (
           <div className="reserve-pickup-copy">
             <p>
-              This piece will be on display here through{" "}
-              {until ?? "the end of this exhibition"}. Please keep your payment
-              confirmation - you&apos;ll need it to collect.
+              {t.displayThrough(until ?? t.displayThroughFallback)}{" "}
+              {t.keepConfirmation}
             </p>
+            <p>{t.wantToday}</p>
             <p>
-              Want it today instead? Just show your payment confirmation to a member
-              of staff and they can hand it over right away.
-            </p>
-            <p>
-              More pop-ups coming - follow{" "}
+              {t.morePopupsBefore}
               <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
                 @lelek.berlin
-              </a>{" "}
-              on Instagram to see where this collection shows up next.
+              </a>
+              {t.morePopupsAfter}
             </p>
           </div>
         ) : null}
 
         {showPay ? (
           <a href={data.revolutPaymentLink!} className="reserve-btn-pay">
-            Reserve and pay now
+            {t.payCta}
           </a>
         ) : null}
 
-        {showPay ? (
-          <div className="reserve-pay-icons">Card · Apple Pay · Google Pay</div>
-        ) : null}
+        {showPay ? <div className="reserve-pay-icons">{t.payIcons}</div> : null}
 
         {showPay ? (
           <p className="reserve-legal-note">
-            By paying you agree to our{" "}
-            <Link href="/widerrufsrecht">Return Policy</Link> and{" "}
-            <Link href="/impressum">Impressum</Link>.
+            {t.legalBefore}
+            <Link href="/widerrufsrecht">{t.returnPolicy}</Link>
+            {t.legalAnd}
+            <Link href="/impressum">{t.impressum}</Link>.
           </p>
         ) : null}
 
         <div className="reserve-desc">
-          <b>This piece is on display only here.</b>
+          <b>{t.displayOnlyHere}</b>
           {data.description ? <span> {data.description}</span> : null}
         </div>
 
-        <div className="reserve-exhib-note">
-          Once you scan and pay for this QR code, the piece is reserved exclusively
-          for you - no one else can buy it.
-        </div>
+        <div className="reserve-exhib-note">{t.reservedExclusive}</div>
       </div>
     </div>
   );
@@ -149,7 +182,9 @@ export function ReserveUnavailable({
   instagramUrl: string;
   email: string;
 }) {
-  const label = data.exhibitionStatus === "reserved" ? "Reserved" : "Sold";
+  const { t } = useReserveLang();
+  const label =
+    data.exhibitionStatus === "reserved" ? t.stampReserved : t.stampSold;
   const cat = categoryLabel(data.category);
   const meta = [cat, data.catalogCode].filter(Boolean).join(" · ");
 
@@ -158,11 +193,8 @@ export function ReserveUnavailable({
       <ProductPhoto data={data} unavailableLabel={label} />
       <div className="reserve-body reserve-body-center">
         {meta ? <div className="reserve-cat">{meta}</div> : null}
-        <h1 className="reserve-title">This piece is no longer available</h1>
-        <p className="reserve-unavailable-copy">
-          Someone was faster. If you&apos;d like something similar, or want to know
-          when the next piece arrives - get in touch.
-        </p>
+        <h1 className="reserve-title">{t.unavailableTitle}</h1>
+        <p className="reserve-unavailable-copy">{t.unavailableCopy}</p>
         <div className="reserve-contact-row">
           <a
             href={instagramUrl}
@@ -177,7 +209,7 @@ export function ReserveUnavailable({
           </a>
         </div>
         <div className="reserve-similar">
-          <Link href={SITE_URL}>See the full collection → lelekstudio.com</Link>
+          <Link href={SITE_URL}>{t.seeCollection}</Link>
         </div>
       </div>
     </div>
@@ -185,17 +217,15 @@ export function ReserveUnavailable({
 }
 
 export function ReserveNotFound({ code }: { code: string }) {
+  const { t } = useReserveLang();
   return (
     <div className="reserve-state reserve-not-found">
       <div className="reserve-body reserve-body-center">
-        <div className="reserve-cat">Reserve</div>
-        <h1 className="reserve-title">We couldn&apos;t find this piece</h1>
-        <p className="reserve-unavailable-copy">
-          It may no longer be part of an active exhibition
-          {code ? `, or the code “${code}” is incorrect` : ""}.
-        </p>
+        <div className="reserve-cat">{t.notFoundEyebrow}</div>
+        <h1 className="reserve-title">{t.notFoundTitle}</h1>
+        <p className="reserve-unavailable-copy">{t.notFoundCopy(code)}</p>
         <a href={SITE_URL} className="reserve-btn-pay">
-          Go to lelekstudio.com
+          {t.goHome}
         </a>
       </div>
     </div>
@@ -209,24 +239,36 @@ export function ReserveShell({
 }: {
   locationName?: string;
   code: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
+  const [lang, setLang] = useState<ReserveLang>("en");
+  const value: ReserveLangContextValue = {
+    lang,
+    setLang,
+    t: RESERVE_COPY[lang],
+  };
+
   return (
-    <div className="reserve-page">
-      <div className="reserve-phone">
-        <header className="reserve-header">
-          <Link href={SITE_URL} className="reserve-logo">
-            <b>LELEK</b>
-          </Link>
-          {locationName ? (
-            <div className="reserve-loc-tag">{locationName}</div>
-          ) : null}
-        </header>
-        {children}
-        <footer className="reserve-footer">
-          lelekstudio.com/reserve/{(code || "").toLowerCase()}
-        </footer>
+    <ReserveLangContext.Provider value={value}>
+      <div className="reserve-page" lang={lang}>
+        <div className="reserve-phone">
+          <header className="reserve-header">
+            <Link href={SITE_URL} className="reserve-logo">
+              <b>LELEK</b>
+            </Link>
+            <div className="reserve-header-right">
+              {locationName ? (
+                <div className="reserve-loc-tag">{locationName}</div>
+              ) : null}
+              <LangToggle />
+            </div>
+          </header>
+          {children}
+          <footer className="reserve-footer">
+            lelekstudio.com/reserve/{(code || "").toLowerCase()}
+          </footer>
+        </div>
       </div>
-    </div>
+    </ReserveLangContext.Provider>
   );
 }
