@@ -80,7 +80,7 @@ export default async function ReservePage({ params }: PageProps) {
         locationName={data.locationName}
         code={data.instanceCode || data.catalogCode || code}
       >
-        <ReserveAvailable data={data} />
+        <ReserveAvailable data={data} instagramUrl={instagramUrl} />
       </ReserveShell>
     );
   }

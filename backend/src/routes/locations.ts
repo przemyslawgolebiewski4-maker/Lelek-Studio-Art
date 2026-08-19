@@ -117,6 +117,8 @@ function enrichItem(
     revolutPaymentLink?: string | null;
     soldAt?: Date | null;
     pickupAuthorized?: boolean;
+    pickupPreference?: string | null;
+    pickupPreferenceSetAt?: Date | null;
     createdAt?: Date;
     updatedAt?: Date;
   },
@@ -134,6 +136,11 @@ function enrichItem(
     revolutPaymentLink: item.revolutPaymentLink ?? null,
     soldAt: item.soldAt ?? null,
     pickupAuthorized: Boolean(item.pickupAuthorized),
+    pickupPreference:
+      item.pickupPreference === "immediate" || item.pickupPreference === "later"
+        ? item.pickupPreference
+        : null,
+    pickupPreferenceSetAt: item.pickupPreferenceSetAt ?? null,
     createdAt: item.createdAt,
     updatedAt: item.updatedAt,
     // Product snapshot for admin table / labels
@@ -499,6 +506,17 @@ locationsAdminRouter.patch("/exhibition-items/:id", requireAdmin, async (req, re
 
     if ("pickupAuthorized" in body) {
       updates.pickupAuthorized = Boolean(body.pickupAuthorized);
+    }
+
+    // pickupPreference is buyer-intent only — admin must not set it via this route,
+    // and it must never be wired to pickupAuthorized / exhibitionStatus here.
+    if ("pickupPreference" in body || "pickupPreferenceSetAt" in body) {
+      res.status(400).json({
+        ok: false,
+        error:
+          "pickupPreference is buyer intent only and cannot be set from admin. It never unlocks pickupAuthorized.",
+      });
+      return;
     }
 
     if (Object.keys(updates).length === 0) {

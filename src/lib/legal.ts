@@ -1,39 +1,50 @@
-/** Default legal copy - used when Settings fields are empty. */
+/** Default legal copy — used when Settings fields are empty (Datenschutz).
+ *  Impressum and Widerrufsbelehrung pages render structured JSX from these
+ *  constants so the drafted wording cannot be silently overridden by stale CMS text.
+ */
 
-export const DEFAULT_IMPRESSUM = `Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)
+export const DEFAULT_IMPRESSUM = `Angaben gemäß § 5 DDG
 
-Przemyslaw Golebiewski
-Lelek Studio
+Przemysław Gołębiewski
+handelnd unter „LELEK"
 Sewanstraße 128
 10319 Berlin
 Deutschland
 
-Kontakt:
+Kontakt
 E-Mail: lelekstudio@lelekstudio.com
-Telefon: +49 155 10227825
+Kontaktformular: /contact
 
-Umsatzsteuer-Identifikationsnummer:
-wird derzeit beim Bundeszentralamt für Steuern beantragt (Stand: 15.07.2026)
+Umsatzsteuer-Identifikationsnummer gemäß § 27a UStG
+DE463889135
 
-Hinweis gemäß § 19 UStG:
-Als Kleinunternehmer im Sinne des § 19 UStG wird auf Rechnungen keine Umsatzsteuer ausgewiesen.
+Kleinunternehmerregelung
+Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.
 
-Verantwortlich für den Inhalt nach § 18 Abs. 2 Medienstaatsvertrag (MStV):
-Przemyslaw Golebiewski, Anschrift wie oben
+Streitschlichtung
+Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: https://ec.europa.eu/consumers/odr/
+Unsere E-Mail-Adresse finden Sie oben im Impressum.
+Wir sind nicht bereit und nicht verpflichtet, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.`;
 
-EU-Streitschlichtung:
-Die Europäische Kommission stellte vormals eine Plattform zur Online-Streitbeilegung (OS) bereit; diese wurde zum 20. Juli 2025 eingestellt. Wir sind nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
+export const DEFAULT_WIDERRUFSBELEHRUNG = `Widerrufsrecht
+Sie haben das Recht, binnen dreißig Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.
 
-Haftung für Inhalte:
-Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+Die Widerrufsfrist beträgt dreißig Tage ab dem Tag, an dem Sie oder ein von Ihnen benannter Dritter, der nicht der Beförderer ist, die Waren in Besitz genommen haben bzw. hat.
 
-Haftung für Links:
-Unser Angebot enthält Links zu externen Websites Dritter (u. a. Etsy, Instagram), auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.
+Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Przemysław Gołębiewski, LELEK, Sewanstraße 128, 10319 Berlin, lelekstudio@lelekstudio.com) mittels einer eindeutigen Erklärung (z.B. per Post versandter Brief oder E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.
 
-Urheberrecht:
-Die durch den Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten (Texte, Fotografien der Keramikarbeiten) unterliegen dem deutschen Urheberrecht. Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+Zur Wahrung der Widerrufsfrist reicht es aus, dass Sie die Mitteilung über die Ausübung des Widerrufsrechts vor Ablauf der Widerrufsfrist absenden.
 
-Stand: 15.07.2026`;
+Folgen des Widerrufs
+Wenn Sie diesen Vertrag widerrufen, erstatten wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag, an dem die Mitteilung über Ihren Widerruf bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen wurde ausdrücklich etwas anderes vereinbart.
+
+Wir können die Rückzahlung verweigern, bis wir die Waren zurückerhalten haben oder bis Sie den Nachweis erbracht haben, dass Sie die Waren zurückgesandt haben, je nachdem, welches der frühere Zeitpunkt ist.
+
+Sie haben die Waren unverzüglich und in jedem Fall spätestens binnen vierzehn Tagen an uns zurückzusenden. Die Frist ist gewahrt, wenn Sie die Waren vor Ablauf der Frist von vierzehn Tagen absenden.
+
+Sie tragen die unmittelbaren Kosten der Rücksendung der Waren.
+
+Sie müssen für einen etwaigen Wertverlust der Waren nur aufkommen, wenn dieser Wertverlust auf einen zur Prüfung der Beschaffenheit, Eigenschaften und Funktionsweise der Waren nicht notwendigen Umgang mit ihnen zurückzuführen ist.`;
 
 export const DEFAULT_DATENSCHUTZ = `## 1. Verantwortlicher
 

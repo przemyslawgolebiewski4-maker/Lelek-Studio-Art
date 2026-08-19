@@ -67,7 +67,7 @@ export default async function ReservePreviewPage({ params }: PageProps) {
       locationName={DEMO.locationName}
       code={DEMO.instanceCode || DEMO.catalogCode}
     >
-      <ReserveAvailable data={DEMO} />
+      <ReserveAvailable data={DEMO} instagramUrl={instagramUrl} />
     </ReserveShell>
   );
 }

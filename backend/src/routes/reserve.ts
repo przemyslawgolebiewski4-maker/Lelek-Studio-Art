@@ -20,6 +20,8 @@ const reserveRateLimit = rateLimit({
   },
 });
 
+const PICKUP_PREFERENCES = new Set(["immediate", "later"]);
+
 /**
  * GET /public/reserve/:instanceCode
  * Buyer-facing reservation payload. Matches ExhibitionItem.instanceCode exactly
@@ -81,6 +83,70 @@ reservePublicRouter.get(
       });
 
       res.json(payload);
+    } catch (err) {
+      res.status(500).json({ error: String(err) });
+    }
+  },
+);
+
+/**
+ * POST /public/reserve/:instanceCode/pickup-preference
+ * Records buyer pickup intent before Revolut redirect.
+ * Does NOT touch pickupAuthorized, exhibitionStatus, soldAt, or payment fields.
+ */
+reservePublicRouter.post(
+  "/public/reserve/:instanceCode/pickup-preference",
+  reserveRateLimit,
+  async (req, res) => {
+    try {
+      const raw =
+        typeof req.params.instanceCode === "string" ? req.params.instanceCode.trim() : "";
+      const instanceCode = raw.toUpperCase();
+
+      if (!INSTANCE_CODE_RE.test(instanceCode)) {
+        logSecurityEvent("pickup_pref_invalid_code", {
+          ip: clientIp(req),
+          code: raw.slice(0, 64),
+        });
+        res.status(404).json({ error: "Not found" });
+        return;
+      }
+
+      const preference =
+        typeof req.body?.preference === "string" ? req.body.preference.trim() : "";
+      if (!PICKUP_PREFERENCES.has(preference)) {
+        res.status(400).json({
+          error: "preference must be 'immediate' or 'later'",
+        });
+        return;
+      }
+
+      await connectDB();
+
+      // Only these two fields — never pickupAuthorized / exhibitionStatus
+      const item = await ExhibitionItem.findOneAndUpdate(
+        { instanceCode },
+        {
+          $set: {
+            pickupPreference: preference,
+            pickupPreferenceSetAt: new Date(),
+          },
+        },
+        { new: true, projection: { instanceCode: 1, pickupPreference: 1, pickupPreferenceSetAt: 1 } },
+      ).lean();
+
+      if (!item) {
+        logSecurityEvent("pickup_pref_miss", { ip: clientIp(req), instanceCode });
+        res.status(404).json({ error: "Not found" });
+        return;
+      }
+
+      res.json({
+        ok: true,
+        instanceCode: item.instanceCode,
+        pickupPreference: item.pickupPreference,
+        pickupPreferenceSetAt: item.pickupPreferenceSetAt,
+      });
     } catch (err) {
       res.status(500).json({ error: String(err) });
     }

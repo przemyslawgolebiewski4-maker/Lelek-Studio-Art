@@ -24,6 +24,19 @@ const ExhibitionItemSchema = new Schema(
     revolutPaymentLink: { type: String, default: null },
     soldAt: { type: Date, default: null },
     pickupAuthorized: { type: Boolean, default: false },
+    /**
+     * Buyer-stated pickup intent captured BEFORE payment redirect.
+     * INFORMATIONAL ONLY — must never unlock pickupAuthorized, change
+     * exhibitionStatus, or bypass the admin "settle first" safeguard.
+     * Values: "immediate" | "later" | null (unset).
+     */
+    pickupPreference: {
+      type: String,
+      enum: ["immediate", "later"],
+      default: null,
+    },
+    /** When the buyer last set pickupPreference (intent signal only). */
+    pickupPreferenceSetAt: { type: Date, default: null },
   },
   { collection: "exhibition_items", timestamps: true },
 );

@@ -15,6 +15,9 @@ const STATIC_ROUTES: {
   { path: "/contact", priority: 0.7, changeFrequency: "monthly" },
   { path: "/for-architects", priority: 0.7, changeFrequency: "monthly" },
   { path: "/journal", priority: 0.6, changeFrequency: "weekly" },
+  { path: "/impressum", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/widerrufsrecht", priority: 0.3, changeFrequency: "yearly" },
+  { path: "/datenschutz", priority: 0.3, changeFrequency: "yearly" },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

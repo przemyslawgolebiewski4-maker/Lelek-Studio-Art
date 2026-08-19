@@ -45,6 +45,9 @@ export function Footer({
           <Link href="/impressum">Impressum</Link>
         </li>
         <li>
+          <Link href="/widerrufsrecht">Widerrufsrecht</Link>
+        </li>
+        <li>
           <Link href="/datenschutz">Datenschutz</Link>
         </li>
         <li>

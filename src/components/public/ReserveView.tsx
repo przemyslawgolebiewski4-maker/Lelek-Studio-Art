@@ -1,8 +1,13 @@
+"use client";
+
+import { useState, startTransition } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_URL } from "@/lib/config";
 import { isProductCategory, CATEGORY_TAB_LABELS } from "@/lib/categories";
 import type { ReservePublicData } from "@/lib/reserve";
+
+type PickupPreference = "immediate" | "later";
 
 function formatEuro(price: number | null) {
   if (price == null || Number.isNaN(price)) return null;
@@ -29,6 +34,13 @@ function photoTag(data: ReservePublicData) {
   const parts = [data.catalogCode].filter(Boolean);
   if (data.material?.trim()) parts.push(data.material.trim());
   return parts.join(" · ");
+}
+
+function publicApiBase(): string {
+  const base = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!base) return "http://localhost:3001";
+  if (/^https?:\/\//i.test(base)) return base.replace(/\/+$/, "");
+  return `https://${base.replace(/\/+$/, "")}`;
 }
 
 function ProductPhoto({
@@ -65,11 +77,39 @@ function ProductPhoto({
   );
 }
 
-export function ReserveAvailable({ data }: { data: ReservePublicData }) {
+export function ReserveAvailable({
+  data,
+  instagramUrl,
+}: {
+  data: ReservePublicData;
+  instagramUrl: string;
+}) {
   const price = formatEuro(data.price);
   const until = formatDisplayDate(data.exhibitionEndDate);
   const showPay =
     data.exhibitionStatus === "available" && Boolean(data.revolutPaymentLink);
+  const instanceCode = (data.instanceCode || data.catalogCode || "").trim();
+
+  const [preference, setPreference] = useState<PickupPreference | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  async function goToPayment() {
+    if (!preference || !data.revolutPaymentLink || !instanceCode) return;
+    setSubmitting(true);
+    try {
+      await fetch(
+        `${publicApiBase()}/public/reserve/${encodeURIComponent(instanceCode)}/pickup-preference`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ preference }),
+        },
+      );
+    } catch {
+      /* Intent is best-effort — still open Revolut so payment is not blocked */
+    }
+    window.location.href = data.revolutPaymentLink;
+  }
 
   return (
     <div className="reserve-state">
@@ -82,19 +122,68 @@ export function ReserveAvailable({ data }: { data: ReservePublicData }) {
         {price ? <div className="reserve-price">{price}</div> : null}
 
         {showPay ? (
-          <a href={data.revolutPaymentLink!} className="reserve-btn-pay">
-            Reserve and pay now
-          </a>
+          <fieldset className="reserve-pickup">
+            <legend className="reserve-pickup-legend">
+              Will you collect this piece today, or later?
+            </legend>
+            <label className="reserve-pickup-option">
+              <input
+                type="radio"
+                name="pickup-preference"
+                value="immediate"
+                checked={preference === "immediate"}
+                onChange={() => startTransition(() => setPreference("immediate"))}
+              />
+              <span>I&apos;ll take it with me today</span>
+            </label>
+            <label className="reserve-pickup-option">
+              <input
+                type="radio"
+                name="pickup-preference"
+                value="later"
+                checked={preference === "later"}
+                onChange={() => startTransition(() => setPreference("later"))}
+              />
+              <span>I&apos;ll come back for it another time</span>
+            </label>
+          </fieldset>
+        ) : null}
+
+        {showPay ? (
+          <button
+            type="button"
+            className="reserve-btn-pay"
+            disabled={!preference || submitting}
+            onClick={goToPayment}
+          >
+            {submitting ? "Opening payment…" : "Reserve and pay now"}
+          </button>
         ) : null}
 
         {showPay ? (
           <div className="reserve-pay-icons">Card · Apple Pay · Google Pay</div>
         ) : null}
 
+        {showPay ? (
+          <p className="reserve-legal-note">
+            By paying you agree to our{" "}
+            <Link href="/widerrufsrecht">Return Policy</Link> and{" "}
+            <Link href="/impressum">Impressum</Link>.
+          </p>
+        ) : null}
+
         <div className="reserve-desc">
           <b>This piece is on display only here.</b>
           {data.description ? <span> {data.description}</span> : null}
         </div>
+
+        <p className="reserve-instagram-aside">
+          More pop-ups coming — follow{" "}
+          <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
+            @lelek.berlin
+          </a>{" "}
+          on Instagram to see where this collection shows up next.
+        </p>
 
         <div className="reserve-exhib-note">
           {until ? (

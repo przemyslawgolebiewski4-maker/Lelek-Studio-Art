@@ -43,6 +43,14 @@ function statusLabel(status: ExhibitionStatus | null | undefined) {
   return "—";
 }
 
+function pickupPreferenceLabel(
+  preference: ExhibitionProduct["pickupPreference"],
+): string | null {
+  if (preference === "immediate") return "Wants pickup: today";
+  if (preference === "later") return "Wants pickup: later";
+  return null;
+}
+
 function exportSettlementCsv(
   location: AdminLocation,
   products: ExhibitionProduct[],
@@ -665,6 +673,12 @@ export function PopupsAdmin() {
                             >
                               {statusLabel(status)}
                             </span>
+                            {(status === "reserved" || status === "sold") &&
+                            pickupPreferenceLabel(product.pickupPreference) ? (
+                              <span className="popup-pickup-pref">
+                                {pickupPreferenceLabel(product.pickupPreference)}
+                              </span>
+                            ) : null}
                             <select
                               className="popup-status-select"
                               aria-label={`Status for ${product.title}`}
