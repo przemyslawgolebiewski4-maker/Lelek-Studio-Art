@@ -30,6 +30,16 @@ const ProductSchema = new Schema(
     /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
     isOriginal: { type: Boolean, default: false },
     thumbnailPosition: { type: String, default: "center" },
+    /** Pop-up / consignment exhibition fields (optional — most products are not in a pop-up). */
+    locationId: { type: Schema.Types.ObjectId, ref: "Location", default: null },
+    exhibitionStatus: {
+      type: String,
+      enum: ["available", "reserved", "sold", null],
+      default: null,
+    },
+    revolutPaymentLink: { type: String, default: null },
+    soldAt: { type: Date, default: null },
+    pickupAuthorized: { type: Boolean, default: false },
   },
   { collection: "products", timestamps: true },
 );
