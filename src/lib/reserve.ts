@@ -5,6 +5,7 @@ export type ReserveExhibitionStatus = "available" | "reserved" | "sold";
 export type ReservePublicData = {
   title: string;
   catalogCode: string;
+  instanceCode?: string;
   category?: string;
   material?: string;
   price: number | null;
@@ -17,11 +18,11 @@ export type ReservePublicData = {
   revolutPaymentLink?: string | null;
 };
 
-/** Fetch buyer reserve payload. Returns null on 404 / miss / offline API. Never caches. */
+/** Fetch buyer reserve payload by instanceCode (e.g. CE-001-01). Never caches. */
 export async function fetchReserveByCode(
-  catalogCode: string,
+  instanceCode: string,
 ): Promise<ReservePublicData | null> {
-  const code = catalogCode.trim();
+  const code = instanceCode.trim();
   if (!code || shouldSkipApiFetch()) return null;
 
   try {

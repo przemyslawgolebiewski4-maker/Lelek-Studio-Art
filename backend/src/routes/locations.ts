@@ -1,12 +1,27 @@
 import { Router } from "express";
+import rateLimit from "express-rate-limit";
 import mongoose from "mongoose";
 import { connectDB } from "../lib/db";
-import { requireAdmin } from "../lib/auth";
-import { Location, Product } from "../models";
+import { requireAdmin, COOKIE_NAME } from "../lib/auth";
+import { ExhibitionItem, Location, Product } from "../models";
+import { allocateInstanceCodes, normalizeCatalogCode } from "../lib/instance-code";
+import { clientIp, logSecurityEvent } from "../lib/security-log";
 
 export const locationsAdminRouter = Router();
 
 const EXHIBITION_STATUSES = ["available", "reserved", "sold"] as const;
+
+const qrRateLimit = rateLimit({
+  windowMs: 60_000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { ok: false, error: "Too many QR requests — try again shortly." },
+  handler: (req, res, _next, options) => {
+    logSecurityEvent("qr_rate_limited", { ip: clientIp(req), path: req.path });
+    res.status(options.statusCode).json(options.message);
+  },
+});
 
 function isValidObjectId(id: unknown): id is string {
   return typeof id === "string" && mongoose.Types.ObjectId.isValid(id);
@@ -80,15 +95,65 @@ function pickLocationFields(body: Record<string, unknown>, partial: boolean) {
   return { data };
 }
 
+type LeanProduct = {
+  _id: mongoose.Types.ObjectId;
+  title: string;
+  catalog: string;
+  price: number | null;
+  images: string[];
+  published: boolean;
+};
+
+function enrichItem(
+  item: {
+    _id: mongoose.Types.ObjectId;
+    productId: mongoose.Types.ObjectId;
+    locationId: mongoose.Types.ObjectId;
+    catalogCode: string;
+    instanceCode: string;
+    sequence: number;
+    displayLabel: string;
+    exhibitionStatus: string;
+    revolutPaymentLink?: string | null;
+    soldAt?: Date | null;
+    pickupAuthorized?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
+  },
+  product: LeanProduct | undefined,
+) {
+  return {
+    _id: item._id,
+    productId: item.productId,
+    locationId: item.locationId,
+    catalogCode: item.catalogCode,
+    instanceCode: item.instanceCode,
+    sequence: item.sequence,
+    displayLabel: item.displayLabel,
+    exhibitionStatus: item.exhibitionStatus,
+    revolutPaymentLink: item.revolutPaymentLink ?? null,
+    soldAt: item.soldAt ?? null,
+    pickupAuthorized: Boolean(item.pickupAuthorized),
+    createdAt: item.createdAt,
+    updatedAt: item.updatedAt,
+    // Product snapshot for admin table / labels
+    title: product?.title ?? item.displayLabel,
+    catalog: product?.catalog ?? item.catalogCode,
+    price: product?.price ?? null,
+    images: product?.images ?? [],
+    published: product?.published ?? false,
+  };
+}
+
 /** GET /admin/locations — list all locations with item counts */
 locationsAdminRouter.get("/locations", requireAdmin, async (_req, res) => {
   try {
     await connectDB();
     const locations = await Location.find().sort({ startDate: -1 }).lean();
-    const counts = await Product.aggregate<{ _id: mongoose.Types.ObjectId; count: number }>([
-      { $match: { locationId: { $ne: null } } },
-      { $group: { _id: "$locationId", count: { $sum: 1 } } },
-    ]);
+    const counts = await ExhibitionItem.aggregate<{
+      _id: mongoose.Types.ObjectId;
+      count: number;
+    }>([{ $group: { _id: "$locationId", count: { $sum: 1 } } }]);
     const countById = new Map(counts.map((row) => [String(row._id), row.count]));
     res.json({
       ok: true,
@@ -102,7 +167,6 @@ locationsAdminRouter.get("/locations", requireAdmin, async (_req, res) => {
   }
 });
 
-/** POST /admin/locations — create a location */
 locationsAdminRouter.post("/locations", requireAdmin, async (req, res) => {
   try {
     await connectDB();
@@ -118,7 +182,6 @@ locationsAdminRouter.post("/locations", requireAdmin, async (req, res) => {
   }
 });
 
-/** PATCH /admin/locations/:id — update a location */
 locationsAdminRouter.patch("/locations/:id", requireAdmin, async (req, res) => {
   try {
     await connectDB();
@@ -149,7 +212,6 @@ locationsAdminRouter.patch("/locations/:id", requireAdmin, async (req, res) => {
   }
 });
 
-/** DELETE /admin/locations/:id — delete only if no products assigned */
 locationsAdminRouter.delete("/locations/:id", requireAdmin, async (req, res) => {
   try {
     await connectDB();
@@ -157,11 +219,11 @@ locationsAdminRouter.delete("/locations/:id", requireAdmin, async (req, res) => 
       res.status(400).json({ ok: false, error: "Invalid location id" });
       return;
     }
-    const assigned = await Product.countDocuments({ locationId: req.params.id });
+    const assigned = await ExhibitionItem.countDocuments({ locationId: req.params.id });
     if (assigned > 0) {
       res.status(409).json({
         ok: false,
-        error: `Cannot delete location: ${assigned} product(s) are still assigned. Reassign or clear them first.`,
+        error: `Cannot delete location: ${assigned} exhibition item(s) are still assigned. Remove them first.`,
       });
       return;
     }
@@ -176,7 +238,7 @@ locationsAdminRouter.delete("/locations/:id", requireAdmin, async (req, res) => 
   }
 });
 
-/** GET /admin/locations/:id/products — products at this location */
+/** GET /admin/locations/:id/products — exhibition items at location (enriched) */
 locationsAdminRouter.get("/locations/:id/products", requireAdmin, async (req, res) => {
   try {
     await connectDB();
@@ -189,52 +251,122 @@ locationsAdminRouter.get("/locations/:id/products", requireAdmin, async (req, re
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    const products = await Product.find({ locationId: req.params.id })
-      .sort({ order: 1, createdAt: -1 })
+    const items = await ExhibitionItem.find({ locationId: req.params.id })
+      .sort({ createdAt: -1 })
       .lean();
-    res.json({ ok: true, location, products });
+    const productIds = items.map((i) => i.productId);
+    const products = await Product.find({ _id: { $in: productIds } }).lean();
+    const byId = new Map(products.map((p) => [String(p._id), p as LeanProduct]));
+    const enriched = items.map((item) => enrichItem(item, byId.get(String(item.productId))));
+    res.json({ ok: true, location, products: enriched, items: enriched });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
   }
 });
 
 /**
- * GET /admin/locations/:locationId/products/:productId/qr
- * PNG QR (error correction H) linking to SITE_URL/reserve/{catalog}.
+ * POST /admin/locations/:id/items
+ * Create a new physical instance of a product at this location.
+ * Body: { productId, revolutPaymentLink? } — instanceCode is server-generated.
+ */
+locationsAdminRouter.post("/locations/:id/items", requireAdmin, async (req, res) => {
+  try {
+    await connectDB();
+    if (!isValidObjectId(req.params.id)) {
+      res.status(400).json({ ok: false, error: "Invalid location id" });
+      return;
+    }
+    const location = await Location.findById(req.params.id).lean();
+    if (!location) {
+      res.status(404).json({ ok: false, error: "Location not found" });
+      return;
+    }
+
+    const body = req.body as Record<string, unknown>;
+    if ("instanceCode" in body || "sequence" in body || "displayLabel" in body) {
+      res.status(400).json({
+        ok: false,
+        error: "instanceCode / sequence / displayLabel are server-generated and cannot be set by the client.",
+      });
+      return;
+    }
+
+    if (!isValidObjectId(body.productId)) {
+      res.status(400).json({ ok: false, error: "productId is required" });
+      return;
+    }
+
+    const product = await Product.findById(body.productId).lean();
+    if (!product) {
+      res.status(404).json({ ok: false, error: "Product not found" });
+      return;
+    }
+    if (!normalizeCatalogCode(product.catalog || "")) {
+      res.status(400).json({
+        ok: false,
+        error: "Product catalog must match CE-001 format before creating an instance.",
+      });
+      return;
+    }
+
+    const allocated = await allocateInstanceCodes(product.catalog, product.title);
+    const revolut =
+      typeof body.revolutPaymentLink === "string" ? body.revolutPaymentLink.trim() || null : null;
+
+    const item = await ExhibitionItem.create({
+      productId: product._id,
+      locationId: location._id,
+      catalogCode: allocated.catalogCode,
+      instanceCode: allocated.instanceCode,
+      sequence: allocated.sequence,
+      displayLabel: allocated.displayLabel,
+      exhibitionStatus: "available",
+      revolutPaymentLink: revolut,
+      soldAt: null,
+      pickupAuthorized: false,
+    });
+
+    res.status(201).json({
+      ok: true,
+      item: enrichItem(item.toObject(), product as LeanProduct),
+    });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+
+/**
+ * GET /admin/locations/:locationId/items/:itemId/qr
+ * PNG QR → FRONTEND_URL/reserve/{instanceCode}
  */
 locationsAdminRouter.get(
-  "/locations/:locationId/products/:productId/qr",
+  "/locations/:locationId/items/:itemId/qr",
+  (req, res, next) => {
+    const token =
+      req.cookies?.[COOKIE_NAME] ?? req.headers.authorization?.replace("Bearer ", "");
+    if (!token) {
+      logSecurityEvent("qr_unauthenticated", { ip: clientIp(req), path: req.path });
+    }
+    next();
+  },
+  qrRateLimit,
   requireAdmin,
   async (req, res) => {
     try {
       await connectDB();
-      const { locationId, productId } = req.params;
-      if (!isValidObjectId(locationId) || !isValidObjectId(productId)) {
-        res.status(400).json({ ok: false, error: "Invalid location or product id" });
+      const { locationId, itemId } = req.params;
+      if (!isValidObjectId(locationId) || !isValidObjectId(itemId)) {
+        res.status(400).json({ ok: false, error: "Invalid location or item id" });
         return;
       }
 
-      const product = await Product.findById(productId).lean();
-      if (!product) {
-        res.status(404).json({ ok: false, error: "Product not found" });
+      const item = await ExhibitionItem.findById(itemId).lean();
+      if (!item) {
+        res.status(404).json({ ok: false, error: "Exhibition item not found" });
         return;
       }
-
-      const catalog =
-        typeof product.catalog === "string" ? product.catalog.trim() : "";
-      if (!catalog) {
-        res.status(400).json({
-          ok: false,
-          error: "Product has no catalog code — set catalog before generating a QR label.",
-        });
-        return;
-      }
-
-      if (!product.locationId || String(product.locationId) !== String(locationId)) {
-        res.status(400).json({
-          ok: false,
-          error: "Product is not assigned to this location.",
-        });
+      if (String(item.locationId) !== String(locationId)) {
+        res.status(400).json({ ok: false, error: "Item is not assigned to this location." });
         return;
       }
 
@@ -245,7 +377,7 @@ locationsAdminRouter.get(
       )
         .trim()
         .replace(/\/+$/, "");
-      const targetUrl = `${siteUrl}/reserve/${encodeURIComponent(catalog)}`;
+      const targetUrl = `${siteUrl}/reserve/${encodeURIComponent(item.instanceCode)}`;
 
       const QRCode = (await import("qrcode")).default;
       const png = await QRCode.toBuffer(targetUrl, {
@@ -256,12 +388,9 @@ locationsAdminRouter.get(
         color: { dark: "#0B0A08", light: "#FFFFFF" },
       });
 
-      const safeName = catalog.replace(/[^a-zA-Z0-9_-]+/g, "-");
+      const safeName = item.instanceCode.replace(/[^a-zA-Z0-9_-]+/g, "-");
       res.setHeader("Content-Type", "image/png");
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename="${safeName}-qr.png"`,
-      );
+      res.setHeader("Content-Disposition", `attachment; filename="${safeName}-qr.png"`);
       res.setHeader("Cache-Control", "private, no-store");
       res.send(png);
     } catch (err) {
@@ -270,7 +399,6 @@ locationsAdminRouter.get(
   },
 );
 
-/** GET /admin/locations/:id/summary — sold totals + commission */
 locationsAdminRouter.get("/locations/:id/summary", requireAdmin, async (req, res) => {
   try {
     await connectDB();
@@ -284,110 +412,99 @@ locationsAdminRouter.get("/locations/:id/summary", requireAdmin, async (req, res
       return;
     }
 
-    const sold = await Product.find({
+    const soldItems = await ExhibitionItem.find({
       locationId: req.params.id,
       exhibitionStatus: "sold",
     })
-      .select("price")
+      .select("productId")
       .lean();
 
-    const soldCount = sold.length;
-    const soldTotal = sold.reduce((sum, p) => sum + (typeof p.price === "number" ? p.price : 0), 0);
+    const productIds = soldItems.map((i) => i.productId);
+    const products = await Product.find({ _id: { $in: productIds } })
+      .select("price")
+      .lean();
+    const priceById = new Map(
+      products.map((p) => [String(p._id), typeof p.price === "number" ? p.price : 0]),
+    );
+
+    const soldCount = soldItems.length;
+    const soldTotal = soldItems.reduce(
+      (sum, i) => sum + (priceById.get(String(i.productId)) ?? 0),
+      0,
+    );
     const commissionOwed = soldTotal * (location.commissionPercent / 100);
     const netForPrzemek = soldTotal - commissionOwed;
 
-    res.json({
-      ok: true,
-      soldCount,
-      soldTotal,
-      commissionOwed,
-      netForPrzemek,
-    });
+    res.json({ ok: true, soldCount, soldTotal, commissionOwed, netForPrzemek });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
   }
 });
 
-const EXHIBITION_FIELDS = [
-  "locationId",
-  "exhibitionStatus",
-  "revolutPaymentLink",
-  "pickupAuthorized",
-] as const;
-
 /**
- * PATCH /admin/products/:id/exhibition
- * Updates exhibition fields. soldAt is set server-side when status becomes "sold".
+ * PATCH /admin/exhibition-items/:id
+ * Update status / payment link / pickup. Rejects client instanceCode overrides.
  */
-locationsAdminRouter.patch("/products/:id/exhibition", requireAdmin, async (req, res) => {
+locationsAdminRouter.patch("/exhibition-items/:id", requireAdmin, async (req, res) => {
   try {
     await connectDB();
     if (!isValidObjectId(req.params.id)) {
-      res.status(400).json({ ok: false, error: "Invalid product id" });
+      res.status(400).json({ ok: false, error: "Invalid item id" });
       return;
     }
 
     const body = req.body as Record<string, unknown>;
-    const updates: Record<string, unknown> = {};
-
-    for (const key of EXHIBITION_FIELDS) {
-      if (!(key in body)) continue;
-
-      if (key === "locationId") {
-        if (body.locationId === null || body.locationId === "") {
-          updates.locationId = null;
-        } else if (isValidObjectId(body.locationId)) {
-          const loc = await Location.findById(body.locationId).lean();
-          if (!loc) {
-            res.status(400).json({ ok: false, error: "locationId does not match a location" });
-            return;
-          }
-          updates.locationId = body.locationId;
-        } else {
-          res.status(400).json({ ok: false, error: "locationId must be a valid id or null" });
-          return;
-        }
-      } else if (key === "exhibitionStatus") {
-        if (body.exhibitionStatus === null) {
-          updates.exhibitionStatus = null;
-        } else if (
-          typeof body.exhibitionStatus === "string" &&
-          (EXHIBITION_STATUSES as readonly string[]).includes(body.exhibitionStatus)
-        ) {
-          updates.exhibitionStatus = body.exhibitionStatus;
-        } else {
-          res.status(400).json({
-            ok: false,
-            error: "exhibitionStatus must be available, reserved, sold, or null",
-          });
-          return;
-        }
-      } else if (key === "revolutPaymentLink") {
-        if (body.revolutPaymentLink === null) {
-          updates.revolutPaymentLink = null;
-        } else if (typeof body.revolutPaymentLink === "string") {
-          updates.revolutPaymentLink = body.revolutPaymentLink.trim() || null;
-        } else {
-          res.status(400).json({ ok: false, error: "revolutPaymentLink must be a string or null" });
-          return;
-        }
-      } else if (key === "pickupAuthorized") {
-        updates.pickupAuthorized = Boolean(body.pickupAuthorized);
-      }
-    }
-
-    if (Object.keys(updates).length === 0) {
-      res.status(400).json({ ok: false, error: "No valid exhibition fields to update" });
+    if ("instanceCode" in body || "sequence" in body || "displayLabel" in body || "catalogCode" in body) {
+      res.status(400).json({
+        ok: false,
+        error: "instanceCode / sequence / displayLabel / catalogCode cannot be changed by the client.",
+      });
       return;
     }
 
-    const existing = await Product.findById(req.params.id).lean();
+    const updates: Record<string, unknown> = {};
+
+    if ("exhibitionStatus" in body) {
+      if (
+        typeof body.exhibitionStatus === "string" &&
+        (EXHIBITION_STATUSES as readonly string[]).includes(body.exhibitionStatus)
+      ) {
+        updates.exhibitionStatus = body.exhibitionStatus;
+      } else {
+        res.status(400).json({
+          ok: false,
+          error: "exhibitionStatus must be available, reserved, or sold",
+        });
+        return;
+      }
+    }
+
+    if ("revolutPaymentLink" in body) {
+      if (body.revolutPaymentLink === null) {
+        updates.revolutPaymentLink = null;
+      } else if (typeof body.revolutPaymentLink === "string") {
+        updates.revolutPaymentLink = body.revolutPaymentLink.trim() || null;
+      } else {
+        res.status(400).json({ ok: false, error: "revolutPaymentLink must be a string or null" });
+        return;
+      }
+    }
+
+    if ("pickupAuthorized" in body) {
+      updates.pickupAuthorized = Boolean(body.pickupAuthorized);
+    }
+
+    if (Object.keys(updates).length === 0) {
+      res.status(400).json({ ok: false, error: "No valid fields to update" });
+      return;
+    }
+
+    const existing = await ExhibitionItem.findById(req.params.id).lean();
     if (!existing) {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
 
-    // soldAt: set server-side when becoming sold; clear when leaving sold
     if ("exhibitionStatus" in updates) {
       if (updates.exhibitionStatus === "sold" && existing.exhibitionStatus !== "sold") {
         updates.soldAt = new Date();
@@ -396,16 +513,36 @@ locationsAdminRouter.patch("/products/:id/exhibition", requireAdmin, async (req,
       }
     }
 
-    const product = await Product.findByIdAndUpdate(req.params.id, updates, {
+    const item = await ExhibitionItem.findByIdAndUpdate(req.params.id, updates, {
       new: true,
       runValidators: true,
     }).lean();
-
-    if (!product) {
+    if (!item) {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    res.json({ ok: true, product });
+
+    const product = await Product.findById(item.productId).lean();
+    res.json({ ok: true, item: enrichItem(item, product as LeanProduct | undefined) });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: String(err) });
+  }
+});
+
+/** DELETE /admin/exhibition-items/:id — remove piece from location */
+locationsAdminRouter.delete("/exhibition-items/:id", requireAdmin, async (req, res) => {
+  try {
+    await connectDB();
+    if (!isValidObjectId(req.params.id)) {
+      res.status(400).json({ ok: false, error: "Invalid item id" });
+      return;
+    }
+    const item = await ExhibitionItem.findByIdAndDelete(req.params.id);
+    if (!item) {
+      res.status(404).json({ ok: false, error: "Not found" });
+      return;
+    }
+    res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
   }

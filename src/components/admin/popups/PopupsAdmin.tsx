@@ -8,7 +8,7 @@ import {
   AdminInput,
   AdminSelect,
 } from "@/components/admin/AdminShell";
-import { apiGet, apiPost, apiPatch, readApiResult } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, apiDelete, readApiResult } from "@/lib/api";
 import type {
   AdminLocation,
   ExhibitionProduct,
@@ -59,8 +59,8 @@ function exportSettlementCsv(
     [],
     ["Catalog", "Title", "Price", "Status", "Pickup authorized", "Sold at"],
     ...products.map((p) => [
-      p.catalog || "",
-      p.title,
+      p.instanceCode || p.catalog || "",
+      p.displayLabel || p.title,
       p.price != null ? String(p.price) : "",
       p.exhibitionStatus || "",
       p.pickupAuthorized ? "yes" : "no",
@@ -194,9 +194,21 @@ export function PopupsAdmin() {
   }, [loadAll]);
 
   const availableForAdd = useMemo(
-    () => catalog.filter((p) => p.published && !p.locationId),
+    () => catalog.filter((p) => p.published && Boolean(p.catalog?.trim())),
     [catalog],
   );
+
+  const instanceCountByCatalog = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const bundle of bundles) {
+      for (const p of bundle.products) {
+        const key = (p.catalogCode || p.catalog || "").toUpperCase();
+        if (!key) continue;
+        map.set(key, (map.get(key) ?? 0) + 1);
+      }
+    }
+    return map;
+  }, [bundles]);
 
   async function createLocation() {
     setSavingLocation(true);
@@ -221,13 +233,13 @@ export function PopupsAdmin() {
     await loadAll();
   }
 
-  async function patchExhibition(
-    productId: string,
+  async function patchItem(
+    itemId: string,
     body: Record<string, unknown>,
   ): Promise<boolean> {
-    setBusyProductId(productId);
+    setBusyProductId(itemId);
     setError("");
-    const res = await apiPatch(`/admin/products/${productId}/exhibition`, body);
+    const res = await apiPatch(`/admin/exhibition-items/${itemId}`, body);
     const data = await readApiResult(res);
     setBusyProductId(null);
     if (!data.ok) {
@@ -241,18 +253,21 @@ export function PopupsAdmin() {
   async function addItemToLocation() {
     if (!addForLocationId || !addProductId) return;
     setSavingAdd(true);
-    const ok = await patchExhibition(addProductId, {
-      locationId: addForLocationId,
-      exhibitionStatus: "available",
+    setError("");
+    const res = await apiPost(`/admin/locations/${addForLocationId}/items`, {
+      productId: addProductId,
       revolutPaymentLink: addRevolutLink.trim() || null,
-      pickupAuthorized: false,
     });
+    const data = await readApiResult(res);
     setSavingAdd(false);
-    if (ok) {
-      setAddForLocationId(null);
-      setAddProductId("");
-      setAddRevolutLink("");
+    if (!data.ok) {
+      setError(data.error);
+      return;
     }
+    setAddForLocationId(null);
+    setAddProductId("");
+    setAddRevolutLink("");
+    await loadAll();
   }
 
   async function saveEditProduct() {
@@ -265,7 +280,7 @@ export function PopupsAdmin() {
       setSavingEdit(false);
       return;
     }
-    const priceRes = await apiPatch(`/admin/products/${editProduct._id}`, {
+    const priceRes = await apiPatch(`/admin/products/${editProduct.productId}`, {
       price: priceNum,
     });
     const priceData = await readApiResult(priceRes);
@@ -274,7 +289,7 @@ export function PopupsAdmin() {
       setSavingEdit(false);
       return;
     }
-    const ok = await patchExhibition(editProduct._id, {
+    const ok = await patchItem(editProduct._id, {
       exhibitionStatus: editStatus,
       revolutPaymentLink: editLink.trim() || null,
     });
@@ -282,12 +297,12 @@ export function PopupsAdmin() {
     if (ok) setEditProduct(null);
   }
 
-  function toggleSelected(locationId: string, productId: string) {
+  function toggleSelected(locationId: string, itemId: string) {
     setSelectedByLocation((prev) => {
       const current = prev[locationId] ?? [];
-      const next = current.includes(productId)
-        ? current.filter((id) => id !== productId)
-        : [...current, productId];
+      const next = current.includes(itemId)
+        ? current.filter((id) => id !== itemId)
+        : [...current, itemId];
       return { ...prev, [locationId]: next };
     });
   }
@@ -297,36 +312,37 @@ export function PopupsAdmin() {
     const items: LabelSheetItem[] = products
       .filter((p) => selected.includes(p._id))
       .map((p) => ({
-        productId: p._id,
+        itemId: p._id,
         locationId,
-        catalogCode: (p.catalog || "").trim(),
+        instanceCode: p.instanceCode,
+        displayLabel: p.displayLabel,
         title: p.title,
       }))
-      .filter((p) => p.catalogCode);
+      .filter((p) => p.instanceCode);
     if (items.length === 0) {
-      setError("Select at least one product with a catalog code to print labels.");
+      setError("Select at least one exhibition item with an instance code to print labels.");
       return;
     }
     setLabelSheet(items);
   }
 
-  async function changeStatus(productId: string, status: ExhibitionStatus) {
-    await patchExhibition(productId, { exhibitionStatus: status });
+  async function changeStatus(itemId: string, status: ExhibitionStatus) {
+    await patchItem(itemId, { exhibitionStatus: status });
   }
 
-  async function setPickupAuthorized(productId: string, value: boolean) {
+  async function setPickupAuthorized(itemId: string, value: boolean) {
     if (value) {
-      setConfirmPickupId(productId);
+      setConfirmPickupId(itemId);
       return;
     }
-    await patchExhibition(productId, { pickupAuthorized: false });
+    await patchItem(itemId, { pickupAuthorized: false });
   }
 
   async function confirmPickupOn() {
     if (!confirmPickupId) return;
     const id = confirmPickupId;
     setConfirmPickupId(null);
-    await patchExhibition(id, { pickupAuthorized: true });
+    await patchItem(id, { pickupAuthorized: true });
   }
 
   return (
@@ -482,20 +498,28 @@ export function PopupsAdmin() {
 
             {addForLocationId === location._id ? (
               <AdminCard className="admin-form-stack popup-form-card">
-                <p className="admin-list-item-title">Add item to {location.name}</p>
+                <p className="admin-list-item-title">Add piece to {location.name}</p>
+                <p className="admin-muted">
+                  Creates a new physical instance (e.g. CE-001-01, then CE-001-02). Same design can
+                  have many units at one or more locations.
+                </p>
                 <AdminSelect
-                  label="Published product"
+                  label="Published product (design)"
                   value={addProductId}
                   onChange={(e) => setAddProductId(e.target.value)}
                 >
                   <option value="">Select a product…</option>
-                  {availableForAdd.map((p) => (
-                    <option key={p._id} value={p._id}>
-                      {p.catalog ? `${p.catalog} — ` : ""}
-                      {p.title}
-                      {p.locationId === location._id ? " (already here)" : ""}
-                    </option>
-                  ))}
+                  {availableForAdd.map((p) => {
+                    const cat = (p.catalog || "").toUpperCase();
+                    const n = instanceCountByCatalog.get(cat) ?? 0;
+                    return (
+                      <option key={p._id} value={p._id}>
+                        {cat ? `${cat} — ` : ""}
+                        {p.title}
+                        {n > 0 ? ` (${n} instance${n === 1 ? "" : "s"} already)` : ""}
+                      </option>
+                    );
+                  })}
                 </AdminSelect>
                 <AdminInput
                   label="Revolut Payment Link"
@@ -509,7 +533,7 @@ export function PopupsAdmin() {
                     disabled={savingAdd || !addProductId}
                     onClick={addItemToLocation}
                   >
-                    {savingAdd ? "Saving..." : "Assign to location"}
+                    {savingAdd ? "Saving..." : "Create instance at location"}
                   </AdminButton>
                   <AdminButton variant="ghost" onClick={() => setAddForLocationId(null)}>
                     Cancel
@@ -553,14 +577,14 @@ export function PopupsAdmin() {
                           <input
                             type="checkbox"
                             checked={checked}
-                            disabled={!product.catalog?.trim()}
+                            disabled={!product.instanceCode?.trim()}
                             title={
-                              product.catalog?.trim()
+                              product.instanceCode?.trim()
                                 ? "Select for label sheet"
-                                : "Catalog code required for QR label"
+                                : "Instance code required for QR label"
                             }
                             onChange={() => toggleSelected(location._id, product._id)}
-                            aria-label={`Select ${product.title} for labels`}
+                            aria-label={`Select ${product.displayLabel || product.title} for labels`}
                           />
                         </td>
                         <td>
@@ -576,8 +600,12 @@ export function PopupsAdmin() {
                               <div className="popup-item-thumb popup-item-thumb-empty" />
                             )}
                             <div>
-                              <div className="admin-soft">{product.title}</div>
-                              <div className="popup-item-code">{product.catalog || "—"}</div>
+                              <div className="admin-soft">
+                                {product.displayLabel || product.title}
+                              </div>
+                              <div className="popup-item-code">
+                                {product.instanceCode || product.catalogCode || "—"}
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -749,10 +777,10 @@ export function PopupsAdmin() {
                 <AdminButton variant="primary" disabled={savingEdit} onClick={saveEditProduct}>
                   {savingEdit ? "Saving..." : "Save"}
                 </AdminButton>
-                {editLocationId && editProduct.catalog?.trim() ? (
+                {editLocationId && editProduct.instanceCode?.trim() ? (
                   <a
                     className="admin-btn ghost"
-                    href={`/api/proxy/admin/locations/${editLocationId}/products/${editProduct._id}/qr`}
+                    href={`/api/proxy/admin/locations/${editLocationId}/items/${editProduct._id}/qr`}
                     download
                   >
                     Download QR PNG
@@ -761,13 +789,14 @@ export function PopupsAdmin() {
                 <AdminButton
                   variant="ghost"
                   onClick={() =>
-                    patchExhibition(editProduct._id, {
-                      locationId: null,
-                      exhibitionStatus: null,
-                      revolutPaymentLink: null,
-                      pickupAuthorized: false,
-                    }).then((ok) => {
-                      if (ok) setEditProduct(null);
+                    apiDelete(`/admin/exhibition-items/${editProduct._id}`).then(async (res) => {
+                      const data = await readApiResult(res);
+                      if (data.ok) {
+                        setEditProduct(null);
+                        await loadAll();
+                      } else {
+                        setError(data.error);
+                      }
                     })
                   }
                 >

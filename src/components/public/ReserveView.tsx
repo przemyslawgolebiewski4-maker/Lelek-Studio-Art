@@ -195,7 +195,7 @@ export function ReserveShell({
         </header>
         {children}
         <footer className="reserve-footer">
-          lelekstudio.com/reserve/{code.toLowerCase()}
+          lelekstudio.com/reserve/{(code || "").toLowerCase()}
         </footer>
       </div>
     </div>

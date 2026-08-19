@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import { connectDB } from "./lib/db";
 import { sanitizeProductSlugs } from "./lib/slug";
+import { migrateProductExhibitionsToItems } from "./lib/migrate-exhibition-items";
 
 import authRouter from "./routes/auth";
 import { productsPublicRouter, productsAdminRouter } from "./routes/products";
@@ -23,6 +26,27 @@ const allowedOrigins = new Set([
   process.env.FRONTEND_URL ?? "http://localhost:3000",
 ]);
 
+// Security headers (API + admin). HSTS only meaningful behind HTTPS (Railway/Vercel).
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // JSON API — CSP is enforced on the Next frontend
+    crossOriginResourcePolicy: { policy: "cross-origin" }, // QR PNGs fetched via frontend proxy
+    frameguard: { action: "deny" },
+    hsts: {
+      maxAge: 60 * 60 * 24 * 365,
+      includeSubDomains: true,
+      preload: false,
+    },
+  }),
+);
+
+/*
+  CORS is an allowlist — never *.
+  Admin routes use credentials (cookie); browsers require an exact origin match.
+  Public reserve is called same-site from Next → Railway; still restricted to the
+  same allowlist so random sites cannot call the API with cookies from a victim.
+  *.vercel.app is included for preview deployments of the admin.
+*/
 app.use(
   cors({
     origin(origin, callback) {
@@ -62,6 +86,13 @@ app.use("/contact", contactRouter);
 app.use("/setup", setupRouter);
 
 async function start() {
+  const secret = process.env.JWT_SECRET ?? "";
+  if (secret.length < 64) {
+    console.warn(
+      `[security] JWT_SECRET length is ${secret.length} (project convention: >= 64). Set a stronger secret in Railway.`,
+    );
+  }
+
   await connectDB();
   try {
     const fixed = await sanitizeProductSlugs();
@@ -70,6 +101,14 @@ async function start() {
     }
   } catch (err) {
     console.error("Slug sanitize failed:", err);
+  }
+  try {
+    const migrated = await migrateProductExhibitionsToItems();
+    if (migrated > 0) {
+      console.log(`Migrated ${migrated} product exhibition row(s) → ExhibitionItem`);
+    }
+  } catch (err) {
+    console.error("Exhibition item migration failed:", err);
   }
   app.listen(PORT, () => {
     console.log(`Lelek API running on port ${PORT}`);

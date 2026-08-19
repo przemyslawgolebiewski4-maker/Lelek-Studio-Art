@@ -21,14 +21,20 @@ export type LocationSummary = {
   netForPrzemek: number;
 };
 
+/** Physical piece at a location (ExhibitionItem + product snapshot) */
 export type ExhibitionProduct = {
   _id: string;
+  productId: string;
+  locationId?: string | null;
+  catalogCode: string;
+  instanceCode: string;
+  sequence: number;
+  displayLabel: string;
   title: string;
   catalog: string;
   price: number | null;
   images: string[];
   published: boolean;
-  locationId?: string | null;
   exhibitionStatus?: ExhibitionStatus | null;
   revolutPaymentLink?: string | null;
   soldAt?: string | null;
@@ -40,7 +46,6 @@ export type ProductOption = {
   title: string;
   catalog: string;
   published: boolean;
-  locationId?: string | null;
   price?: number | null;
   images?: string[];
 };

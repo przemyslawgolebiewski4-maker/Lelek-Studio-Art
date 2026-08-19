@@ -76,14 +76,20 @@ export default async function ReservePage({ params }: PageProps) {
 
   if (data.exhibitionStatus === "available") {
     return (
-      <ReserveShell locationName={data.locationName} code={data.catalogCode || code}>
+      <ReserveShell
+        locationName={data.locationName}
+        code={data.instanceCode || data.catalogCode || code}
+      >
         <ReserveAvailable data={data} />
       </ReserveShell>
     );
   }
 
   return (
-    <ReserveShell locationName={data.locationName} code={data.catalogCode || code}>
+    <ReserveShell
+      locationName={data.locationName}
+      code={data.instanceCode || data.catalogCode || code}
+    >
       <ReserveUnavailable data={data} instagramUrl={instagramUrl} email={email} />
     </ReserveShell>
   );

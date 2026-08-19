@@ -30,7 +30,7 @@ const ProductSchema = new Schema(
     /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
     isOriginal: { type: Boolean, default: false },
     thumbnailPosition: { type: String, default: "center" },
-    /** Pop-up / consignment exhibition fields (optional — most products are not in a pop-up). */
+    /** Pop-up fields kept for legacy documents; new flow uses ExhibitionItem. */
     locationId: { type: Schema.Types.ObjectId, ref: "Location", default: null },
     exhibitionStatus: {
       type: String,

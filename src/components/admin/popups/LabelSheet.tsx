@@ -5,9 +5,10 @@ import { AdminButton } from "@/components/admin/AdminShell";
 import { QrLabel } from "@/components/admin/popups/QrLabel";
 
 export type LabelSheetItem = {
-  productId: string;
+  itemId: string;
   locationId: string;
-  catalogCode: string;
+  instanceCode: string;
+  displayLabel: string;
   title: string;
 };
 
@@ -16,9 +17,9 @@ type LabelSheetProps = {
   onClose: () => void;
 };
 
-async function fetchQrObjectUrl(locationId: string, productId: string): Promise<string> {
+async function fetchQrObjectUrl(locationId: string, itemId: string): Promise<string> {
   const res = await fetch(
-    `/api/proxy/admin/locations/${locationId}/products/${productId}/qr`,
+    `/api/proxy/admin/locations/${locationId}/items/${itemId}/qr`,
     { credentials: "include", cache: "no-store" },
   );
   if (!res.ok) {
@@ -31,7 +32,7 @@ async function fetchQrObjectUrl(locationId: string, productId: string): Promise<
 
 /**
  * A4 batch sheet of 25mm×25mm labels with hairline cut guides.
- * Screen: preview + print button. Print: @page A4, mm units, no chrome.
+ * Tiny sticker text = instanceCode (CE-001-01). Admin table shows displayLabel.
  */
 export function LabelSheet({ items, onClose }: LabelSheetProps) {
   const [srcs, setSrcs] = useState<Record<string, string>>({});
@@ -48,9 +49,9 @@ export function LabelSheet({ items, onClose }: LabelSheetProps) {
       const next: Record<string, string> = {};
       try {
         for (const item of items) {
-          const url = await fetchQrObjectUrl(item.locationId, item.productId);
+          const url = await fetchQrObjectUrl(item.locationId, item.itemId);
           created.push(url);
-          next[item.productId] = url;
+          next[item.itemId] = url;
         }
         if (!cancelled) setSrcs(next);
       } catch (err) {
@@ -76,9 +77,15 @@ export function LabelSheet({ items, onClose }: LabelSheetProps) {
         <div>
           <p className="admin-list-item-title">Label sheet · {items.length} piece(s)</p>
           <p className="admin-muted" style={{ marginTop: 6, maxWidth: "52ch" }}>
-            Each cell is 25 mm x 25 mm. In the print dialog set scale to{" "}
-            <b>100% / Actual size</b> (not Fit to page), paper <b>A4</b>, margins default.
+            Each cell is 25 mm x 25 mm. Sticker text is the instance code (e.g. CE-001-01).
+            In the print dialog set scale to <b>100% / Actual size</b> (not Fit to page),
+            paper <b>A4</b>.
           </p>
+          <ul className="admin-muted" style={{ marginTop: 8, paddingLeft: 18 }}>
+            {items.map((i) => (
+              <li key={i.itemId}>{i.displayLabel}</li>
+            ))}
+          </ul>
         </div>
         <div className="admin-shell-actions">
           <AdminButton variant="primary" onClick={handlePrint} disabled={loading || Boolean(error)}>
@@ -100,9 +107,9 @@ export function LabelSheet({ items, onClose }: LabelSheetProps) {
         <div className="popup-label-grid">
           {items.map((item) => (
             <QrLabel
-              key={item.productId}
-              catalogCode={item.catalogCode}
-              qrSrc={srcs[item.productId] || ""}
+              key={item.itemId}
+              labelText={item.displayLabel}
+              qrSrc={srcs[item.itemId] || ""}
             />
           ))}
         </div>

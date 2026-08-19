@@ -14,9 +14,10 @@ export const metadata: Metadata = {
 
 type PageProps = { params: Promise<{ state: string }> };
 
-const DEMO: ReservePublicData = {
+  const DEMO: ReservePublicData = {
   title: "Cream Iron Oxide, Wire Wrapped",
   catalogCode: "SI-011",
+  instanceCode: "SI-011-01",
   category: "ceramics",
   material: "250ml",
   price: 31,
@@ -54,7 +55,7 @@ export default async function ReservePreviewPage({ params }: PageProps) {
     // Explicitly omit revolutPaymentLink (mirrors API)
     delete (data as { revolutPaymentLink?: string }).revolutPaymentLink;
     return (
-      <ReserveShell locationName={data.locationName} code={data.catalogCode}>
+      <ReserveShell locationName={data.locationName} code={data.instanceCode || data.catalogCode}>
         <ReserveUnavailable data={data} instagramUrl={instagramUrl} email={email} />
       </ReserveShell>
     );
@@ -62,7 +63,10 @@ export default async function ReservePreviewPage({ params }: PageProps) {
 
   // available (default)
   return (
-    <ReserveShell locationName={DEMO.locationName} code={DEMO.catalogCode}>
+    <ReserveShell
+      locationName={DEMO.locationName}
+      code={DEMO.instanceCode || DEMO.catalogCode}
+    >
       <ReserveAvailable data={DEMO} />
     </ReserveShell>
   );
