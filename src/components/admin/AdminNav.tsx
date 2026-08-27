@@ -8,6 +8,7 @@ const nav = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/popups", label: "Pop-ups" },
+  { href: "/admin/galleries", label: "Galleries" },
   { href: "/admin/journal", label: "Journal" },
   { href: "/admin/home", label: "Home" },
   { href: "/admin/settings", label: "Settings" },

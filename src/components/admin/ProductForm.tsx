@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { apiPost, apiPatch, readApiResult } from "@/lib/api";
+import { apiGet, apiPost, apiPatch, readApiResult } from "@/lib/api";
 import type { Product, ProductCategory } from "@/types/product";
+import type { Gallery } from "@/types/gallery";
 import { CATEGORY_CATALOG_PREFIX, isProductCategory } from "@/lib/categories";
 import { normalizeSlug, slugFromTitle } from "@/lib/slug";
 import {
@@ -34,6 +35,7 @@ export type ProductFormData = {
   soldOut: boolean;
   isPhotoReproduction: boolean;
   isOriginal: boolean;
+  currentGalleryId: string;
   thumbnailPosition: string;
   /** EUR — required for pop-up /reserve pricing; null = not set */
   price: string;
@@ -59,6 +61,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     soldOut: product?.soldOut ?? false,
     isPhotoReproduction: product?.isPhotoReproduction ?? false,
     isOriginal: product?.isOriginal ?? false,
+    currentGalleryId: product?.currentGalleryId ?? "",
     thumbnailPosition: product?.thumbnailPosition ?? "center",
     price:
       product?.price != null && Number.isFinite(Number(product.price))
@@ -93,6 +96,7 @@ export function formToPayload(form: ProductFormData) {
     soldOut: form.soldOut,
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
     isOriginal: form.isOriginal,
+    currentGalleryId: form.isOriginal && form.currentGalleryId ? form.currentGalleryId : null,
     thumbnailPosition: form.thumbnailPosition,
     price: priceNum != null && Number.isFinite(priceNum) ? priceNum : null,
   };
@@ -118,6 +122,26 @@ export function ProductForm({
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [slugTouched, setSlugTouched] = useState(Boolean(initial.slug));
+  const [galleries, setGalleries] = useState<Gallery[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadGalleries() {
+      try {
+        const res = await apiGet("/admin/galleries");
+        const data = await readApiResult<{ galleries: Gallery[] }>(res);
+        if (!cancelled && data.ok) {
+          setGalleries(data.galleries ?? []);
+        }
+      } catch {
+        /* dropdown stays empty if galleries API is unavailable */
+      }
+    }
+    void loadGalleries();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function update<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -359,6 +383,7 @@ export function ProductForm({
               ...prev,
               isOriginal: checked,
               price: checked ? "" : prev.price,
+              currentGalleryId: checked ? prev.currentGalleryId : "",
             }));
           }}
         />
@@ -369,6 +394,30 @@ export function ProductForm({
         Inquire link. Card uses title, catalog number, first gallery image, and the primary image
         alt above. Must also be Published to appear publicly.
       </p>
+
+      {form.isOriginal ? (
+        <>
+          <AdminSelect
+            label="Currently showing at"
+            value={form.currentGalleryId}
+            onChange={(e) => update("currentGalleryId", e.target.value)}
+          >
+            <option value="">None</option>
+            {galleries.map((gallery) => (
+              <option key={gallery._id} value={gallery._id}>
+                {gallery.name}
+                {gallery.city ? ` (${gallery.city})` : ""}
+                {!gallery.active ? " - inactive" : ""}
+              </option>
+            ))}
+          </AdminSelect>
+          <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+            Optional. When set and the piece is not sold, About shows &quot;On view at
+            [gallery]&quot; linking to the gallery website. Manage partners under Admin →
+            Galleries.
+          </p>
+        </>
+      ) : null}
 
       <div className="admin-field-divider" />
 

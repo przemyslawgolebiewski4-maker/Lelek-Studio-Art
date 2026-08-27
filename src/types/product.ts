@@ -25,6 +25,10 @@ export interface Product {
   isPhotoReproduction?: boolean;
   /** One-of-a-kind piece shown in About / Originals (inquiry only). */
   isOriginal?: boolean;
+  /** Gallery currently showing this Original (id only). */
+  currentGalleryId?: string | null;
+  /** Populated gallery snapshot for public Originals cards. */
+  currentGallery?: { _id: string; name: string; url: string } | null;
   thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;

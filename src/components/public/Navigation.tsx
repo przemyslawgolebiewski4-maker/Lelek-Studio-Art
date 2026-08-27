@@ -14,6 +14,7 @@ function buildLinks(shopUrl: string): NavLink[] {
     { href: shopUrl, label: "Shop", external: true },
     { href: "/journal", label: "Process" },
     { href: "/about", label: "About" },
+    { href: "/galleries", label: "Galleries" },
     { href: "/for-architects", label: "Trade" },
     { href: "/contact", label: "Contact" },
   ];

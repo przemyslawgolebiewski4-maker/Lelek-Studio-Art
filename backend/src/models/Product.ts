@@ -29,6 +29,8 @@ const ProductSchema = new Schema(
     isPhotoReproduction: { type: Boolean, default: false },
     /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
     isOriginal: { type: Boolean, default: false },
+    /** Gallery currently showing this Original (optional; UI only surfaces for isOriginal). */
+    currentGalleryId: { type: Schema.Types.ObjectId, ref: "Gallery", default: null },
     thumbnailPosition: { type: String, default: "center" },
     /** Pop-up fields kept for legacy documents; new flow uses ExhibitionItem. */
     locationId: { type: Schema.Types.ObjectId, ref: "Location", default: null },

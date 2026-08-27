@@ -4,8 +4,28 @@ import { requireAdmin } from "../lib/auth";
 import { normalizeSlug } from "../lib/slug";
 import { triggerRevalidate } from "../lib/revalidate";
 import { Product } from "../models";
+import mongoose from "mongoose";
 
 export const productsPublicRouter = Router();
+
+type GalleryLean = { _id: mongoose.Types.ObjectId; name: string; url: string; active?: boolean };
+
+function withCurrentGallery<T extends { currentGalleryId?: unknown }>(product: T) {
+  const raw = product.currentGalleryId;
+  if (raw && typeof raw === "object" && "_id" in (raw as object) && "name" in (raw as object)) {
+    const g = raw as GalleryLean;
+    return {
+      ...product,
+      currentGalleryId: String(g._id),
+      currentGallery: { _id: String(g._id), name: g.name, url: g.url },
+    };
+  }
+  return {
+    ...product,
+    currentGalleryId: raw ? String(raw) : null,
+    currentGallery: null,
+  };
+}
 
 productsPublicRouter.get("/products/public", async (req, res) => {
   try {
@@ -15,8 +35,12 @@ productsPublicRouter.get("/products/public", async (req, res) => {
     if (typeof req.query.category === "string" && req.query.category) {
       query.category = req.query.category;
     }
-    const products = await Product.find(query).sort({ order: 1 }).limit(limit).lean();
-    res.json(products);
+    const products = await Product.find(query)
+      .populate({ path: "currentGalleryId", select: "name url active" })
+      .sort({ order: 1 })
+      .limit(limit)
+      .lean();
+    res.json(products.map((p) => withCurrentGallery(p)));
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
@@ -26,10 +50,11 @@ productsPublicRouter.get("/products/home", async (req, res) => {
   try {
     await connectDB();
     const products = await Product.find({ published: true, homeVisible: true })
+      .populate({ path: "currentGalleryId", select: "name url active" })
       .sort({ order: 1 })
       .limit(3)
       .lean();
-    res.json(products);
+    res.json(products.map((p) => withCurrentGallery(p)));
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch home products" });
   }
@@ -41,15 +66,19 @@ productsPublicRouter.get("/products/public/:slug", async (req, res) => {
     const raw = typeof req.params.slug === "string" ? req.params.slug : "";
     const normalized = normalizeSlug(raw);
     const product =
-      (await Product.findOne({ slug: raw, published: true }).lean()) ??
+      (await Product.findOne({ slug: raw, published: true })
+        .populate({ path: "currentGalleryId", select: "name url active" })
+        .lean()) ??
       (normalized && normalized !== raw
-        ? await Product.findOne({ slug: normalized, published: true }).lean()
+        ? await Product.findOne({ slug: normalized, published: true })
+            .populate({ path: "currentGalleryId", select: "name url active" })
+            .lean()
         : null);
     if (!product) {
       res.status(404).json({ error: "Not found" });
       return;
     }
-    res.json(product);
+    res.json(withCurrentGallery(product));
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
@@ -78,6 +107,7 @@ const PRODUCT_FIELDS = [
   "soldOut",
   "isPhotoReproduction",
   "isOriginal",
+  "currentGalleryId",
   "thumbnailPosition",
 ] as const;
 
@@ -108,6 +138,18 @@ function pickProductFields(body: Record<string, unknown>) {
   }
   if ("isOriginal" in data) {
     data.isOriginal = Boolean(data.isOriginal);
+  }
+  if ("currentGalleryId" in data) {
+    if (data.currentGalleryId === null || data.currentGalleryId === "") {
+      data.currentGalleryId = null;
+    } else if (
+      typeof data.currentGalleryId === "string" &&
+      mongoose.Types.ObjectId.isValid(data.currentGalleryId)
+    ) {
+      data.currentGalleryId = data.currentGalleryId;
+    } else {
+      delete data.currentGalleryId;
+    }
   }
   if ("price" in data) {
     if (data.price === null || data.price === "" || data.price === undefined) {

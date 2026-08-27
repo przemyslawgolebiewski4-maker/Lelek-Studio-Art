@@ -10,6 +10,7 @@ import { migrateProductExhibitionsToItems } from "./lib/migrate-exhibition-items
 import authRouter from "./routes/auth";
 import { productsPublicRouter, productsAdminRouter } from "./routes/products";
 import { locationsAdminRouter } from "./routes/locations";
+import { galleriesPublicRouter, galleriesAdminRouter } from "./routes/galleries";
 import { reservePublicRouter } from "./routes/reserve";
 import messagesRouter from "./routes/messages";
 import contactRouter from "./routes/contact";
@@ -74,11 +75,13 @@ app.get("/health", async (_req, res) => {
 
 app.use(productsPublicRouter);
 app.use(reservePublicRouter);
+app.use(galleriesPublicRouter);
 app.use(settingsPublicRouter);
 app.use(journalPublicRouter);
 app.use("/auth", authRouter);
 app.use("/admin", productsAdminRouter);
 app.use("/admin", locationsAdminRouter);
+app.use("/admin", galleriesAdminRouter);
 app.use("/admin", messagesRouter);
 app.use("/admin", settingsAdminRouter);
 app.use("/admin", journalAdminRouter);

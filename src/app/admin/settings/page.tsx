@@ -63,7 +63,7 @@ const FIELD_GROUPS: FieldGroup[] = [
         key: "shop_url",
         label: "Shop URL (primary)",
         kind: "text",
-        hint: "Temporary default is Etsy until Shopify is live - change to https://shop.lelekstudio.com when ready. No deploy needed.",
+        hint: "Primary shop destination (Shopify). Falls back to https://shop.lelekstudio.com if empty. No deploy needed.",
       },
       { key: "etsy_url", label: "Etsy URL (legacy / reference)", kind: "text" },
       {

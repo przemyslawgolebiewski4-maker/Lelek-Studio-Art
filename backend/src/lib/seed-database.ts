@@ -62,9 +62,9 @@ export async function seedDatabase(options?: { force?: boolean }) {
   const site = legacy.site;
 
   const defaultShopUrl =
-    (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || site.etsy || "https://lelekstudio.etsy.com")
+    (process.env.NEXT_PUBLIC_SHOP_URL || process.env.SHOP_URL || "https://shop.lelekstudio.com")
       .trim()
-      .replace(/\/+$/, "") || "https://lelekstudio.etsy.com";
+      .replace(/\/+$/, "") || "https://shop.lelekstudio.com";
 
   const settings = [
     ["site_name", site.name],
