@@ -83,7 +83,7 @@ export function AdminInput({
   return (
     <label className="admin-field">
       <span className="admin-field-label">{label}</span>
-      <input className={`admin-field-input ${className}`.trim()} {...props} />
+      <input {...props} className={`admin-field-input ${className}`.trim()} />
     </label>
   );
 }
@@ -96,7 +96,7 @@ export function AdminTextarea({
   return (
     <label className="admin-field">
       <span className="admin-field-label">{label}</span>
-      <textarea className={className} {...props} />
+      <textarea {...props} className={`admin-field-input ${className}`.trim()} />
     </label>
   );
 }

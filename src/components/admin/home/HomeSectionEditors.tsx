@@ -27,22 +27,25 @@ export type HeroFormData = {
 };
 
 export function heroToForm(content: Record<string, unknown>): HeroFormData {
-  const c = content as Record<string, string>;
+  const c = content as Record<string, unknown>;
+  const str = (key: keyof HeroFormData) =>
+    typeof c[key] === "string" ? (c[key] as string) : "";
+
   return {
-    eyebrow: c.eyebrow ?? "",
-    subheadline: c.subheadline ?? "",
-    brandline: c.brandline ?? "",
-    kozodoj: c.kozodoj ?? "",
-    image: c.image ?? "",
-    imageMobile: c.imageMobile ?? "",
-    video: c.video ?? "",
-    videoMobile: c.videoMobile ?? "",
-    imageAlt: c.imageAlt ?? "",
-    imageCaption: c.imageCaption ?? "",
-    cta1Text: c.cta1Text ?? "",
-    cta1Url: c.cta1Url ?? "",
-    cta2Text: c.cta2Text ?? "",
-    cta2Url: c.cta2Url ?? "/about",
+    eyebrow: str("eyebrow"),
+    subheadline: str("subheadline"),
+    brandline: str("brandline"),
+    kozodoj: str("kozodoj"),
+    image: str("image"),
+    imageMobile: str("imageMobile"),
+    video: str("video"),
+    videoMobile: str("videoMobile"),
+    imageAlt: str("imageAlt"),
+    imageCaption: str("imageCaption"),
+    cta1Text: str("cta1Text"),
+    cta1Url: str("cta1Url") || "/about",
+    cta2Text: str("cta2Text"),
+    cta2Url: str("cta2Url") || "/about",
   };
 }
 
@@ -59,7 +62,7 @@ export function HeroSectionEditor({
 }) {
   const form = heroToForm(content);
   function set<K extends keyof HeroFormData>(key: K, value: HeroFormData[K]) {
-    onChange(heroFromForm({ ...form, [key]: value }));
+    onChange({ ...content, ...heroFromForm({ ...heroToForm(content), [key]: value }) });
   }
 
   return (
@@ -114,12 +117,17 @@ export function HeroSectionEditor({
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
         <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
         <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
-        <AdminInput
+        <AdminTextarea
           label="Elements tagline (under elements, if elements shown)"
+          rows={2}
+          name="kozodoj"
           value={form.kozodoj}
           onChange={(e) => set("kozodoj", e.target.value)}
           placeholder="Design through material."
         />
+        <p className="admin-field-hint">
+          Editable text field - appears under Earth / Water / Fire / Air when the Elements section is visible on the homepage.
+        </p>
       </div>
 
       <div className="admin-field-group">

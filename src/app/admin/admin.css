@@ -342,10 +342,16 @@
   outline: none;
 }
 
+.admin-field-input,
+.admin-field textarea {
+  cursor: text;
+}
+
 .admin-field-input:focus,
 .admin-field textarea:focus,
 .admin-field select:focus {
   border-bottom-width: 3px;
+  background: rgba(11, 10, 8, 0.04);
 }
 
 .admin-field textarea {
