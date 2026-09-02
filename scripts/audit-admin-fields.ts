@@ -18,18 +18,13 @@ const SETTINGS_KEYS = [
   "same_as_urls",
   "email",
   "instagram",
-  "instagram_handle",
-  "artist_url",
   "shop_url",
-  "etsy_url",
-  "acquire_label",
   "contact_heading_1",
   "contact_heading_2",
   "contact_heading_3",
   "contact_sub",
   "contact_success",
   "contact_form_note",
-  "impressum_body",
   "datenschutz_body",
 ];
 
@@ -122,10 +117,7 @@ const KNOWN_INDIRECT: Record<string, string> = {
   headline: "hero: deprecated legacy key (may still exist in DB only)",
   headlineEm: "hero: deprecated legacy key (may still exist in DB only)",
   quote: "hero: deprecated legacy key (may still exist in DB only)",
-  acquire_label: "legacy settings key - marked unused in Admin UI",
-  etsyUrl: "find section legacy Etsy reference",
-  etsy_url: "settings legacy Etsy reference",
-  artist_url: "optional settings URL",
+  etsyUrl: "find section Etsy link on homepage Find us block",
 };
 
 function collectSourceFiles(dir: string, out: string[] = []): string[] {

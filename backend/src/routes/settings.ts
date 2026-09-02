@@ -11,11 +11,8 @@ const PUBLIC_KEYS = [
   "tagline",
   "description",
   "shop_url",
-  "etsy_url",
   "instagram",
-  "instagram_handle",
   "email",
-  "artist_url",
   "location",
   "organization_logo",
   "same_as_urls",
@@ -25,7 +22,6 @@ const PUBLIC_KEYS = [
   "contact_sub",
   "contact_success",
   "contact_form_note",
-  "impressum_body",
   "datenschutz_body",
 ];
 

@@ -50,8 +50,6 @@ const FIELD_GROUPS: FieldGroup[] = [
     fields: [
       { key: "email", label: "Contact email", kind: "text" },
       { key: "instagram", label: "Instagram URL", kind: "text" },
-      { key: "instagram_handle", label: "Instagram handle (display)", kind: "text" },
-      { key: "artist_url", label: "Artist URL (optional)", kind: "text" },
     ],
   },
   {
@@ -64,12 +62,6 @@ const FIELD_GROUPS: FieldGroup[] = [
         label: "Shop URL (primary)",
         kind: "text",
         hint: "Primary shop destination (Shopify). Falls back to https://shop.lelekstudio.com if empty. No deploy needed.",
-      },
-      { key: "etsy_url", label: "Etsy URL (legacy / reference)", kind: "text" },
-      {
-        key: "acquire_label",
-        label: "Acquire bar text (legacy, unused on current homepage)",
-        kind: "text",
       },
     ],
   },
@@ -88,9 +80,8 @@ const FIELD_GROUPS: FieldGroup[] = [
   {
     title: "Legal pages",
     description:
-      "Impressum is plain text (paragraphs separated by blank lines). Datenschutz supports Markdown headings.",
+      "Impressum and Widerrufsbelehrung are maintained in code (legal review). Datenschutz supports Markdown headings and falls back to site defaults when empty.",
     fields: [
-      { key: "impressum_body", label: "Impressum body", kind: "textarea" },
       { key: "datenschutz_body", label: "Datenschutz body (Markdown)", kind: "textarea" },
     ],
   },
@@ -167,7 +158,7 @@ export default function AdminSettingsPage() {
               }
               if (field.kind === "textarea") {
                 const rows =
-                  field.key === "impressum_body" || field.key === "datenschutz_body"
+                  field.key === "datenschutz_body"
                     ? 14
                     : field.key === "same_as_urls"
                       ? 4
