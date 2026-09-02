@@ -7,14 +7,21 @@ import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL, resolveShopUrl, resolveInstagramUrl } from "@/lib/config";
-import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData } from "@/lib/site";
+import { DEFAULT_DESCRIPTION, DEFAULT_TAGLINE, SITE_NAME } from "@/lib/seo";
+import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData, getSiteSettings } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: { absolute: "Lelek Studio Berlin - Shaped by hand, guided by instinct" },
-  description:
-    "Handmade stoneware objects, vessels and wall pieces by ceramist Przemyslaw Golebiewski in Berlin.",
-  alternates: { canonical: `${SITE_URL}/` },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const siteName = settings.site_name || SITE_NAME;
+  const tagline = settings.tagline || DEFAULT_TAGLINE;
+  const description = settings.description || DEFAULT_DESCRIPTION;
+
+  return {
+    title: { absolute: `${siteName} - ${tagline}` },
+    description,
+    alternates: { canonical: `${SITE_URL}/` },
+  };
+}
 
 export const revalidate = 60;
 
@@ -54,28 +61,41 @@ export default async function HomePage() {
   const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
   const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
 
-  const orgLd = {
+  const graphLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: settings.site_name || "LELEK",
-    alternateName: "Lelek Studio Berlin",
-    url: SITE_URL,
-    logo: logoUrl,
-    sameAs: [
-      resolveInstagramUrl(settings.instagram),
-      shopUrl,
-      ...extraSameAs,
-    ].filter(Boolean),
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: settings.location || "Berlin",
-      addressCountry: "DE",
-    },
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: settings.site_name || "LELEK",
+        alternateName: "Lelek Studio Berlin",
+        url: SITE_URL,
+        logo: logoUrl,
+        sameAs: [
+          resolveInstagramUrl(settings.instagram),
+          shopUrl,
+          ...extraSameAs,
+        ].filter(Boolean),
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: settings.location || "Berlin",
+          addressCountry: "DE",
+        },
+        founder: { "@id": `${SITE_URL}/about#person` },
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/about#person`,
+        name: "Przemyslaw Golebiewski",
+        jobTitle: "Ceramist",
+        url: `${SITE_URL}/about`,
+      },
+    ],
   };
 
   return (
     <>
-      <JsonLd data={orgLd} />
+      <JsonLd data={graphLd} />
       <Hero content={heroContent} elements={elementItems} />
       <Signpost section={signpostSection} shopUrl={shopUrl} />
       <HomeStorySection story={story} />

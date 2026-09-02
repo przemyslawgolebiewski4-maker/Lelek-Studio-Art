@@ -16,7 +16,7 @@ export function Footer({
   instagram = INSTAGRAM_URL,
   email = "lelekstudio@lelekstudio.com",
   shopUrl = "https://shop.lelekstudio.com",
-  lelekMeaning = "Lelek - kozodoj - the nightjar",
+  lelekMeaning = "Design through material.",
 }: FooterProps) {
   const year = new Date().getFullYear();
 

@@ -115,10 +115,10 @@ export function HeroSectionEditor({
         <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
         <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
         <AdminInput
-          label="Kozodoj line (under elements, if elements shown)"
+          label="Elements tagline (under elements, if elements shown)"
           value={form.kozodoj}
           onChange={(e) => set("kozodoj", e.target.value)}
-          placeholder="Lelek - kozodoj - the nightjar - Slavic spirit"
+          placeholder="Design through material."
         />
       </div>
 
@@ -810,7 +810,7 @@ export function FindSectionEditor({
         </p>
       </div>
       <AdminInput
-        label="Brand tagline (footer - e.g. Lelek - kozodoj - the nightjar)"
+        label="Brand tagline (footer - e.g. Design through material.)"
         value={c.lelekMeaning ?? ""}
         onChange={(e) => set("lelekMeaning", e.target.value)}
       />

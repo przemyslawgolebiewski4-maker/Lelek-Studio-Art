@@ -107,7 +107,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
                 ))}
               </div>
               <div className="hero-kozodoj">
-                {content.kozodoj ?? "Lelek - kozodoj - the nightjar - Slavic spirit"}
+                {content.kozodoj ?? "Design through material."}
               </div>
             </div>
           ) : null}

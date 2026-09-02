@@ -4,13 +4,14 @@ import { getOriginalProducts, getSiteSettings, getStorySection } from "@/lib/sit
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL, resolveShopUrl } from "@/lib/config";
 import { normalizeSlug } from "@/lib/slug";
+import { truncateAtWord } from "@/lib/text";
 
 export async function generateMetadata(): Promise<Metadata> {
   const story = await getStorySection();
   const title = [story.heading, story.headingEm].filter(Boolean).join(" ");
   return {
     title: title || "About",
-    description: story.body1?.slice(0, 160),
+    description: truncateAtWord(story.body1 ?? "", 160),
     alternates: { canonical: `${SITE_URL}/about` },
   };
 }
