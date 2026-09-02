@@ -11,6 +11,7 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TAGLINE,
   resolveSiteName,
+  withPageDescription,
 } from "@/lib/seo";
 import {
   DEFAULT_VISIT_STUDIO_NAME,
@@ -24,11 +25,10 @@ export async function generateMetadata(): Promise<Metadata> {
   const tagline = settings.tagline || DEFAULT_TAGLINE;
   const description = settings.description || DEFAULT_DESCRIPTION;
 
-  return {
+  return withPageDescription(description, {
     title: { absolute: `${siteName} - ${tagline}` },
-    description,
     alternates: { canonical: `${SITE_URL}/` },
-  };
+  });
 }
 
 export const revalidate = 60;

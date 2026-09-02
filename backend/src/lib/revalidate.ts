@@ -1,3 +1,5 @@
+import { resolveAllPublicPaths } from "./public-paths";
+
 /**
  * On-demand ISR: POST to the Next.js /api/revalidate webhook after admin writes.
  * Requires Railway REVALIDATE_SECRET to match Vercel REVALIDATE_SECRET, and FRONTEND_URL.
@@ -27,4 +29,10 @@ export async function triggerRevalidate(paths: string[] = ["/"]): Promise<void> 
   } catch (err) {
     console.warn("revalidate request error:", err);
   }
+}
+
+/** Revalidate every public route that shares (public)/layout.tsx. */
+export async function triggerLayoutRevalidate(): Promise<void> {
+  const paths = await resolveAllPublicPaths();
+  await triggerRevalidate(paths);
 }

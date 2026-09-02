@@ -4,6 +4,7 @@ import { ProductDetail } from "@/components/public/ProductDetail";
 import { getProductBySlug } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL } from "@/lib/config";
+import { withPageDescription } from "@/lib/seo";
 import { normalizeSlug } from "@/lib/slug";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -14,19 +15,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!product) return { title: "Object not found" };
 
   const title = product.metaTitle || product.title;
-  const description = product.metaDescription || product.description;
+  const description = product.metaDescription || product.description || "";
   const cleanSlug = normalizeSlug(slug) || slug;
 
-  return {
+  return withPageDescription(description, {
     title,
-    description,
     openGraph: {
       title,
-      description,
       images: product.images[0] ? [{ url: product.images[0] }] : undefined,
     },
     alternates: { canonical: `${SITE_URL}/objects/${cleanSlug}` },
-  };
+  });
 }
 
 export const revalidate = 60;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/config";
 
 export const SITE_NAME = "Lelek Studio Berlin";
@@ -51,4 +52,21 @@ export const ARCHITECTS_PAGE_KEYWORDS = [
 
 export function resolveSiteName(settings: Record<string, string>): string {
   return settings.site_name?.trim() || SITE_NAME;
+}
+
+/** Keep name=description, og:description, and twitter:description identical on a page. */
+export function withPageDescription(description: string, metadata: Metadata = {}): Metadata {
+  const desc = description.trim();
+  return {
+    ...metadata,
+    description: desc,
+    openGraph: {
+      ...metadata.openGraph,
+      description: desc,
+    },
+    twitter: {
+      ...metadata.twitter,
+      description: desc,
+    },
+  };
 }

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { JournalPostContent } from "@/components/public/JournalPostContent";
 import { getJournalPostBySlug } from "@/lib/site";
 import { SITE_URL } from "@/lib/config";
+import { withPageDescription } from "@/lib/seo";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -12,18 +13,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!post) return { title: "Post not found" };
 
   const title = post.metaTitle || post.title;
-  const description = post.metaDescription || post.excerpt;
+  const description = post.metaDescription || post.excerpt || "";
 
-  return {
+  return withPageDescription(description, {
     title,
-    description,
     openGraph: {
       title,
-      description,
       images: post.coverImage ? [{ url: post.coverImage }] : undefined,
     },
     alternates: { canonical: `${SITE_URL}/journal/${slug}` },
-  };
+  });
 }
 
 export const revalidate = 60;

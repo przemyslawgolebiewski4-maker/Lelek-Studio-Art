@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import { JournalList } from "@/components/public/JournalList";
 import { getJournalPosts, getJournalSection } from "@/lib/site";
+import { withPageDescription } from "@/lib/seo";
 import { SITE_URL } from "@/lib/config";
 
 export async function generateMetadata(): Promise<Metadata> {
   const section = await getJournalSection();
   const title = [section.heading, section.headingEm].filter(Boolean).join(" ");
-  return {
+  const description = section.sub ?? "";
+  return withPageDescription(description, {
     title: title || "Journal",
-    description: section.sub,
     alternates: { canonical: `${SITE_URL}/journal` },
-  };
+  });
 }
 
 export const revalidate = 60;
