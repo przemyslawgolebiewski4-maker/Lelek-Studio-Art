@@ -212,7 +212,7 @@ export function StorySectionEditor({
 }) {
   const form = storyToForm(content);
   function set<K extends keyof StoryFormData>(key: K, value: StoryFormData[K]) {
-    onChange(storyFromForm({ ...form, [key]: value }));
+    onChange({ ...content, ...storyFromForm({ ...storyToForm(content), [key]: value }) });
   }
 
   function updateGallery(index: number, patch: Partial<StoryGalleryItem>) {
@@ -465,7 +465,11 @@ export function SignpostSectionEditor({
 
   function updateCard(index: number, patch: Partial<SignpostCardForm>) {
     const next = cards.map((card, i) => (i === index ? { ...card, ...patch } : card));
-    onChange({ intro, tradeSignal, tradeHref, cards: next });
+    onChange({ ...content, cards: next });
+  }
+
+  function setScalar(key: "intro" | "tradeSignal" | "tradeHref", value: string) {
+    onChange({ ...content, [key]: value });
   }
 
   return (
@@ -479,17 +483,17 @@ export function SignpostSectionEditor({
         label="Intro paragraph"
         rows={3}
         value={intro}
-        onChange={(e) => onChange({ intro: e.target.value, tradeSignal, tradeHref, cards })}
+        onChange={(e) => setScalar("intro", e.target.value)}
       />
       <AdminInput
         label="Trade signal text"
         value={tradeSignal}
-        onChange={(e) => onChange({ intro, tradeSignal: e.target.value, tradeHref, cards })}
+        onChange={(e) => setScalar("tradeSignal", e.target.value)}
       />
       <AdminInput
         label="Trade signal link"
         value={tradeHref}
-        onChange={(e) => onChange({ intro, tradeSignal, tradeHref: e.target.value, cards })}
+        onChange={(e) => setScalar("tradeHref", e.target.value)}
       />
       {cards.map((card, i) => (
         <div key={i} className="admin-field-group">
@@ -514,7 +518,7 @@ export function SignpostSectionEditor({
             index={i}
             total={cards.length}
             onMove={(from, to) =>
-              onChange({ intro, tradeSignal, tradeHref, cards: moveItem(cards, from, to) })
+              onChange({ ...content, cards: moveItem(cards, from, to) })
             }
           />
         </div>
@@ -860,7 +864,7 @@ export function FeaturedSectionEditor({
 }) {
   const form = featuredToForm(content);
   function set<K extends keyof FeaturedFormData>(key: K, value: FeaturedFormData[K]) {
-    onChange(featuredFromForm({ ...form, [key]: value }));
+    onChange({ ...content, ...featuredFromForm({ ...featuredToForm(content), [key]: value }) });
   }
 
   return (
