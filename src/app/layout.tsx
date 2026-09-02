@@ -3,6 +3,8 @@ import { SITE_URL } from "@/lib/config";
 import { fontVariables } from "@/lib/fonts";
 import {
   DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_OG_IMAGE_URL,
   SEO_KEYWORDS,
   resolveSiteName,
 } from "@/lib/seo";
@@ -32,12 +34,13 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName,
       title: siteName,
       description: DEFAULT_DESCRIPTION,
-      // og:image / twitter:image come from app/opengraph-image.png + app/twitter-image.png
+      images: [{ url: DEFAULT_OG_IMAGE_URL, alt: DEFAULT_OG_IMAGE_ALT }],
     },
     twitter: {
       card: "summary_large_image",
       title: siteName,
       description: DEFAULT_DESCRIPTION,
+      images: [DEFAULT_OG_IMAGE_URL],
     },
     verification: {
       google: "googlea016b4b9cf83275b",
