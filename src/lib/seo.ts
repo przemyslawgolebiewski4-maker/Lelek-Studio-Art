@@ -32,3 +32,23 @@ export const SEO_KEYWORDS = [
   "ceramic vases",
   "intuitive ceramics",
 ];
+
+export const ABOUT_PAGE_KEYWORDS = [
+  ...SEO_KEYWORDS,
+  "ceramist Berlin",
+  "intuitive handbuilding",
+  "mixed media artist",
+  "self-taught ceramist",
+];
+
+export const ARCHITECTS_PAGE_KEYWORDS = [
+  ...SEO_KEYWORDS,
+  "ceramics for architects",
+  "hospitality ceramics",
+  "interior design ceramics",
+  "commissioned ceramic pieces",
+];
+
+export function resolveSiteName(settings: Record<string, string>): string {
+  return settings.site_name?.trim() || SITE_NAME;
+}

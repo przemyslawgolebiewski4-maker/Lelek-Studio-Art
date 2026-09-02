@@ -49,7 +49,13 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="product-detail-thumbs">
               {rest.map((src) => (
                 <div key={src} className="product-detail-thumb">
-                  <Image src={src} alt={product.title} fill className="object-cover" sizes="25vw" />
+                  <Image
+                    src={src}
+                    alt={product.imageAlt || product.metaDescription || product.title}
+                    fill
+                    className="object-cover"
+                    sizes="25vw"
+                  />
                 </div>
               ))}
             </div>

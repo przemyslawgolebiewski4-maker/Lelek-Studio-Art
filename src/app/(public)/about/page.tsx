@@ -4,6 +4,7 @@ import { getOriginalProducts, getSiteSettings, getStorySection } from "@/lib/sit
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL, resolveShopUrl } from "@/lib/config";
 import { normalizeSlug } from "@/lib/slug";
+import { ABOUT_PAGE_KEYWORDS } from "@/lib/seo";
 import { truncateAtWord } from "@/lib/text";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: title || "About",
     description: truncateAtWord(story.body1 ?? "", 160),
+    keywords: ABOUT_PAGE_KEYWORDS,
     alternates: { canonical: `${SITE_URL}/about` },
   };
 }

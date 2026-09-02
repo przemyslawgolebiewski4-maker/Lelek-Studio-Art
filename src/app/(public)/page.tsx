@@ -7,12 +7,20 @@ import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL, resolveShopUrl, resolveInstagramUrl } from "@/lib/config";
-import { DEFAULT_DESCRIPTION, DEFAULT_TAGLINE, SITE_NAME } from "@/lib/seo";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TAGLINE,
+  resolveSiteName,
+} from "@/lib/seo";
+import {
+  DEFAULT_VISIT_STUDIO_NAME,
+  parseStudioAddress,
+} from "@/lib/address";
 import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData, getSiteSettings } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
-  const siteName = settings.site_name || SITE_NAME;
+  const siteName = resolveSiteName(settings);
   const tagline = settings.tagline || DEFAULT_TAGLINE;
   const description = settings.description || DEFAULT_DESCRIPTION;
 
@@ -61,6 +69,9 @@ export default async function HomePage() {
   const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
   const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
 
+  const visitName = find.studioName?.trim() || DEFAULT_VISIT_STUDIO_NAME;
+  const visitAddress = parseStudioAddress(find.studioAddress);
+
   const graphLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -89,6 +100,19 @@ export default async function HomePage() {
         name: "Przemyslaw Golebiewski",
         jobTitle: "Ceramist",
         url: `${SITE_URL}/about`,
+      },
+      {
+        "@type": "LocalBusiness",
+        "@id": `${SITE_URL}/#localbusiness`,
+        name: visitName,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: visitAddress.streetAddress,
+          postalCode: visitAddress.postalCode,
+          addressLocality: visitAddress.addressLocality,
+          addressCountry: visitAddress.addressCountry,
+        },
+        parentOrganization: { "@id": `${SITE_URL}/#organization` },
       },
     ],
   };

@@ -15,7 +15,7 @@ export function JournalList({ posts }: { posts: JournalPostSummary[] }) {
             <div className="product-card-img portrait">
               <Image
                 src={post.coverImage}
-                alt={post.title}
+                alt={post.coverImageAlt || post.title}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 220px"

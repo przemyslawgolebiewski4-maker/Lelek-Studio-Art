@@ -30,7 +30,7 @@ export function HomeJournalTeaser({
 
         <Link href={`/journal/${latest.slug}`} className="journal-teaser-card">
           {latest.coverImage ? (
-            <Image src={latest.coverImage} alt={latest.title} fill sizes="50vw" />
+            <Image src={latest.coverImage} alt={latest.coverImageAlt || latest.title} fill sizes="50vw" />
           ) : null}
           <div className="journal-teaser-card-body">
             <div className="journal-teaser-card-title">{latest.title}</div>
