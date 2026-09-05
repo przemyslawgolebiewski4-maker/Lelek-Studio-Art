@@ -40,7 +40,7 @@ const FIELD_GROUPS: FieldGroup[] = [
         key: "same_as_urls",
         label: "sameAs URLs (one per line)",
         kind: "textarea",
-        hint: "Extra profile URLs for Organization schema. Instagram and shop URL are added automatically.",
+        hint: "Appended to Organization JSON-LD sameAs after Instagram + Shop. One URL per line (e.g. https://www.etsy.com/shop/LelekStudio). Do not repeat Instagram or Shop — those come from the fields above.",
       },
     ],
   },

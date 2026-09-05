@@ -6,7 +6,7 @@ import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
-import { SITE_URL, resolveShopUrl, resolveInstagramUrl } from "@/lib/config";
+import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TAGLINE,
@@ -62,12 +62,10 @@ export default async function HomePage() {
     ),
   };
 
-  const extraSameAs = (settings.same_as_urls || "")
-    .split("\n")
-    .map((s) => s.trim())
-    .filter(Boolean);
   const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
   const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
+  // Instagram + shop always; Admin → Settings → same_as_urls lines appended (e.g. Etsy)
+  const sameAs = resolveOrganizationSameAs(settings);
 
   const visitName = find.studioName?.trim() || DEFAULT_VISIT_STUDIO_NAME;
   const visitAddress = parseStudioAddress(find.studioAddress);
@@ -82,11 +80,7 @@ export default async function HomePage() {
         alternateName: "Lelek Studio Berlin",
         url: SITE_URL,
         logo: logoUrl,
-        sameAs: [
-          resolveInstagramUrl(settings.instagram),
-          shopUrl,
-          ...extraSameAs,
-        ].filter(Boolean),
+        sameAs,
         address: {
           "@type": "PostalAddress",
           addressLocality: settings.location || "Berlin",

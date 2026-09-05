@@ -43,6 +43,33 @@ export function resolveInstagramUrl(raw?: string | null): string {
   return url;
 }
 
+/**
+ * Organization JSON-LD sameAs: Instagram + shop, then Admin → Settings → same_as_urls
+ * (one URL per line). Extra lines are appended; duplicates of Instagram/shop are dropped.
+ */
+export function resolveOrganizationSameAs(
+  settings?: Record<string, string> | null,
+): string[] {
+  const instagram = resolveInstagramUrl(settings?.instagram);
+  const shop = resolveShopUrl(settings);
+  const extras = (settings?.same_as_urls || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => (/^https?:\/\//i.test(line) ? line : `https://${line}`));
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const url of [instagram, shop, ...extras]) {
+    if (!url) continue;
+    const key = url.replace(/\/+$/, "").toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(url);
+  }
+  return out;
+}
+
 export function shouldSkipApiFetch(): boolean {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
   if (!apiUrl) return true;

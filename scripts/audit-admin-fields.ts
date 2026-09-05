@@ -2,6 +2,10 @@
 /**
  * Dev-only audit: flags Admin CMS field keys with zero public-facing reads.
  * Run: npm run audit:admin-fields
+ *
+ * Detection: string match for the key anywhere under src/ outside /admin
+ * (components, pages, lib helpers including JSON-LD builders). A key used
+ * only as settings.same_as_urls inside a schema helper still counts as OK.
  */
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
