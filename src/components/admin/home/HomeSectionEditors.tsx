@@ -645,10 +645,11 @@ export function TradeSectionEditor({
         <AdminInput label="Headline line 1" value={c.headline ?? ""} onChange={(e) => set("headline", e.target.value)} />
         <AdminInput label="Headline line 2 (italic)" value={c.headlineEm ?? ""} onChange={(e) => set("headlineEm", e.target.value)} />
         <AdminTextarea
-          label='Intro paragraph (e.g. "Objects already made...")'
-          rows={3}
+          label="Intro paragraph (page sub)"
+          rows={5}
           value={c.sub ?? ""}
           onChange={(e) => set("sub", e.target.value)}
+          placeholder="Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification."
         />
       </div>
 
@@ -728,7 +729,7 @@ export function TradeSectionEditor({
           rows={3}
           value={c.formIntro ?? ""}
           onChange={(e) => set("formIntro", e.target.value)}
-          placeholder="Tell us about your project - wall objects, vessels, or custom dimensions..."
+          placeholder="Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days."
         />
         <AdminInput label="Success title" value={c.formSuccessTitle ?? ""} onChange={(e) => set("formSuccessTitle", e.target.value)} />
         <AdminTextarea label="Success body" rows={2} value={c.formSuccessBody ?? ""} onChange={(e) => set("formSuccessBody", e.target.value)} />
