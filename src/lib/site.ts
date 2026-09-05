@@ -190,7 +190,8 @@ export const DEFAULT_ARCHITECTS: ArchitectsSection = {
   eyebrow: "For architects & designers",
   headline: "Objects for spaces",
   headlineEm: "that refuse the ordinary.",
-  sub: "Custom ceramic pieces for residential, hospitality and concept stores. Each object unique. None manufactured.",
+  sub:
+    "Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification.",
   point1Title: "Wall objects",
   point1Body:
     "Handbuilt ceramic pieces for walls. Each exists once. Available for residential and hospitality projects.",
@@ -203,12 +204,29 @@ export const DEFAULT_ARCHITECTS: ArchitectsSection = {
     "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
   ctaText: "Get in touch",
   formTitle: "Send an inquiry",
+  formIntro:
+    "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.",
   formSuccessTitle: "Message received.",
   formSuccessBody: "We will get back to you within 1-2 working days.",
   heroCaption:
     "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.",
   heroImageAlt: "Ceramic wall objects and vessels for spaces",
 };
+
+/** Retired contradiction copy still stored in production CMS for architects.sub */
+const STALE_ARCHITECTS_SUB_MARKERS = ["We do not produce to specification"] as const;
+
+/**
+ * Prefer CMS `sub` when present and not the retired contradiction.
+ * Falls back to DEFAULT so a deploy can retire stale Mongo text without an Admin save.
+ */
+export function resolveArchitectsSub(cmsSub?: string): string {
+  const text = cmsSub?.trim() ?? "";
+  if (!text || STALE_ARCHITECTS_SUB_MARKERS.some((m) => text.includes(m))) {
+    return DEFAULT_ARCHITECTS.sub!;
+  }
+  return text;
+}
 
 export async function getStorySection(): Promise<StorySection> {
   return serverFetch<StorySection>("/sections/story", { fallback: DEFAULT_STORY });

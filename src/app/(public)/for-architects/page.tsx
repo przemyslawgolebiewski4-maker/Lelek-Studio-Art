@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { ArchitectInquiryForm } from "@/components/public/ArchitectInquiryForm";
 import { TradeHero } from "@/components/public/TradeHero";
-import { DEFAULT_ARCHITECTS, getArchitectsSection } from "@/lib/site";
+import { DEFAULT_ARCHITECTS, getArchitectsSection, resolveArchitectsSub } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL } from "@/lib/config";
 import { ARCHITECTS_PAGE_KEYWORDS, withPageDescription } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const section = await getArchitectsSection();
-  const description = section.sub ?? "";
+  const description = resolveArchitectsSub(section.sub);
   return withPageDescription(description, {
     title: "Trade",
     keywords: ARCHITECTS_PAGE_KEYWORDS,
@@ -57,6 +57,11 @@ export default async function ForArchitectsPage() {
   }));
 
   const closingNote = section.closingNote || DEFAULT_ARCHITECTS.closingNote!;
+  const sub = resolveArchitectsSub(section.sub);
+  const formIntro =
+    section.formIntro?.trim() ||
+    DEFAULT_ARCHITECTS.formIntro ||
+    "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.";
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -89,7 +94,7 @@ export default async function ForArchitectsPage() {
             {section.headline}
             {section.headlineEm ? <> <em>{section.headlineEm}</em></> : null}
           </h1>
-          {section.sub ? <p className="arch-body">{section.sub}</p> : null}
+          {sub ? <p className="arch-body">{sub}</p> : null}
 
           <div className="arch-points">
             {points.map((p) => (
@@ -109,10 +114,7 @@ export default async function ForArchitectsPage() {
 
       <section className="page-shell">
         <div className="sec-eyebrow">{section.formEyebrow || "Project inquiry"}</div>
-        <p className="page-intro">
-          {section.formIntro ||
-            "Tell us about your project - wall objects, vessels, or custom dimensions. We reply within a few business days."}
-        </p>
+        <p className="page-intro">{formIntro}</p>
         <ArchitectInquiryForm />
       </section>
     </>

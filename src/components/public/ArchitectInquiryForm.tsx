@@ -116,7 +116,7 @@ export function ArchitectInquiryForm() {
           className="form-inp"
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          placeholder="Timeline, dimensions, quantity, location..."
+          placeholder="Space, scale, timeline, location..."
           required
         />
       </div>

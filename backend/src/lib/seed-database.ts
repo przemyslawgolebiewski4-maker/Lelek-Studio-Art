@@ -187,7 +187,8 @@ export async function seedDatabase(options?: { force?: boolean }) {
       content: {
         eyebrow: "For architects & designers",
         headline: "Looking for something made by hand, not manufactured?",
-        sub: "Ceramics for residential, hospitality, and concept stores.",
+        sub:
+          "Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification.",
         body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
         point1Title: "Wall objects",
         point1Body:
@@ -202,6 +203,8 @@ export async function seedDatabase(options?: { force?: boolean }) {
           "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
         ctaText: "Get in touch",
         ctaUrl: "/for-architects",
+        formIntro:
+          "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.",
         heroImage: "",
         heroImageMobile: "",
         heroVideo: "",
