@@ -12,6 +12,7 @@ import type { ElementItem } from "@/types/content";
 export type HeroFormData = {
   eyebrow: string;
   subheadline: string;
+  semanticCore: string;
   brandline: string;
   kozodoj: string;
   image: string;
@@ -34,6 +35,7 @@ export function heroToForm(content: Record<string, unknown>): HeroFormData {
   return {
     eyebrow: str("eyebrow"),
     subheadline: str("subheadline"),
+    semanticCore: str("semanticCore"),
     brandline: str("brandline"),
     kozodoj: str("kozodoj"),
     image: str("image"),
@@ -117,6 +119,15 @@ export function HeroSectionEditor({
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
         <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
         <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
+        <AdminInput
+          label="Semantic core sentence"
+          value={form.semanticCore}
+          onChange={(e) => set("semanticCore", e.target.value)}
+          placeholder="LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics."
+        />
+        <p className="admin-field-hint">
+          One sentence under the hero subline - SEO/GEO core claim. Empty uses the site default. Keep it a single sentence.
+        </p>
         <AdminTextarea
           label="Elements tagline (under elements, if elements shown)"
           rows={2}

@@ -28,6 +28,8 @@ export const DEFAULT_HERO: Record<string, string> = {
   headline: "",
   headlineEm: "",
   subheadline: "Ceramic objects, vessels, prints.",
+  semanticCore:
+    "LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics.",
   brandline: "LELEK - Berlin.",
   quote: "",
   // Media comes only from Admin - no static /images/hero leftovers under video

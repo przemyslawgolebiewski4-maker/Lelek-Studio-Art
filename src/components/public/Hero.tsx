@@ -3,6 +3,10 @@ import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { SHOP_URL } from "@/lib/config";
 
+/** Fallback when Admin → Home → Hero → semanticCore is empty. */
+export const DEFAULT_SEMANTIC_CORE =
+  "LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics.";
+
 export type HeroContent = {
   eyebrow?: string;
   /** @deprecated Not rendered - kept for CMS backward compatibility */
@@ -12,6 +16,8 @@ export type HeroContent = {
   /** @deprecated Not rendered - kept for CMS backward compatibility */
   quote?: string;
   subheadline?: string;
+  /** One-sentence semantic core under the hero subline (Admin-editable). */
+  semanticCore?: string;
   brandline?: string;
   image?: string;
   imageMobile?: string;
@@ -41,6 +47,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const eyebrow = content.eyebrow || "Design through material.";
   const subline = content.subheadline || "Ceramic objects, vessels, prints.";
   const brandline = content.brandline || "LELEK - Berlin.";
+  const semanticCore = content.semanticCore?.trim() || DEFAULT_SEMANTIC_CORE;
 
   return (
     <section className="hero">
@@ -76,6 +83,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
             </h1>
             <div className="hero-rule" />
             <p className="hero-quote hero-subline">{subline}</p>
+            <p className="hero-semantic-core">{semanticCore}</p>
             <div className="hero-btns">
               {content.cta1Text ? (
                 /^https?:\/\//i.test(content.cta1Url ?? "") ? (

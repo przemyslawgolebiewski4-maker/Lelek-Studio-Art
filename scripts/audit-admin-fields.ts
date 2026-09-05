@@ -32,6 +32,7 @@ const HOME_SECTION_KEYS: Record<string, string[]> = {
   hero: [
     "eyebrow",
     "subheadline",
+    "semanticCore",
     "brandline",
     "kozodoj",
     "image",
