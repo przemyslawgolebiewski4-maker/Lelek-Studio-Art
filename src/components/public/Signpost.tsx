@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { track } from "@vercel/analytics";
 import type { SignpostSection } from "@/types/content";
 import { SHOP_URL } from "@/lib/config";
 
@@ -25,6 +28,10 @@ function defaultCards(shopUrl: string) {
       href: "/for-architects",
     },
   ];
+}
+
+function trackSignpostClick(label: string, href: string) {
+  track("signpost_card_click", { card: label, href });
 }
 
 export function Signpost({
@@ -55,7 +62,11 @@ export function Signpost({
     <section className="signpost-section" aria-label="Wayfinding">
       <div className="signpost-intro">
         <p className="signpost-body">{intro}</p>
-        <Link href={tradeHref} className="trade-signal">
+        <Link
+          href={tradeHref}
+          className="trade-signal"
+          onClick={() => trackSignpostClick("trade_signal", tradeHref)}
+        >
           {tradeSignal}
         </Link>
       </div>
@@ -65,14 +76,24 @@ export function Signpost({
           const external = /^https?:\/\//i.test(card.href);
           if (external) {
             return (
-              <a key={card.label + card.href} href={card.href} className="signpost-card">
+              <a
+                key={card.label + card.href}
+                href={card.href}
+                className="signpost-card"
+                onClick={() => trackSignpostClick(card.label, card.href)}
+              >
                 <span className="signpost-card-label">{card.label}</span>
                 <span className="signpost-card-desc">{card.description}</span>
               </a>
             );
           }
           return (
-            <Link key={card.label + card.href} href={card.href} className="signpost-card">
+            <Link
+              key={card.label + card.href}
+              href={card.href}
+              className="signpost-card"
+              onClick={() => trackSignpostClick(card.label, card.href)}
+            >
               <span className="signpost-card-label">{card.label}</span>
               <span className="signpost-card-desc">{card.description}</span>
             </Link>

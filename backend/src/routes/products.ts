@@ -52,7 +52,7 @@ productsPublicRouter.get("/products/home", async (req, res) => {
     const products = await Product.find({ published: true, homeVisible: true })
       .populate({ path: "currentGalleryId", select: "name url active" })
       .sort({ order: 1 })
-      .limit(3)
+      .limit(6)
       .lean();
     res.json(products.map((p) => withCurrentGallery(p)));
   } catch (err) {

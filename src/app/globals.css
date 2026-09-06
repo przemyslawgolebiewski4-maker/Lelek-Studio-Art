@@ -1644,6 +1644,27 @@ button:hover:not(:disabled),
   color: var(--B);
 }
 
+.journal-teaser-date,
+.journal-post-date,
+.journal-list-date {
+  display: block;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted, rgba(11, 10, 8, 0.55));
+  margin-bottom: 8px;
+}
+
+.journal-post-date {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.journal-teaser-card:hover .journal-teaser-date {
+  color: rgba(255, 255, 255, 0.65);
+}
+
 /* ============================================================ CONTACT */
 .contact {
   background: var(--B);

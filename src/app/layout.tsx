@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/config";
 import { fontVariables } from "@/lib/fonts";
 import {
@@ -58,7 +59,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={fontVariables}>{children}</body>
+      <body className={fontVariables}>
+        {children}
+        <Analytics />
+      </body>
     </html>
   );
 }

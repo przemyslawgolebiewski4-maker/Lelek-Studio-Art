@@ -2,9 +2,11 @@ import { marked } from "marked";
 import Image from "next/image";
 import Link from "next/link";
 import type { JournalPost } from "@/types/content";
+import { resolvePostDate } from "@/lib/dates";
 
 export function JournalPostContent({ post }: { post: JournalPost }) {
   const html = marked.parse(post.body ?? "", { async: false }) as string;
+  const date = resolvePostDate(post);
 
   return (
     <article>
@@ -14,6 +16,11 @@ export function JournalPostContent({ post }: { post: JournalPost }) {
         </Link>
         <div className="sec-eyebrow">Journal</div>
         <h1 className="page-h1">{post.title}</h1>
+        {date ? (
+          <time className="journal-post-date" dateTime={date.iso}>
+            {date.label}
+          </time>
+        ) : null}
         {post.excerpt ? <p className="page-intro">{post.excerpt}</p> : null}
       </div>
 

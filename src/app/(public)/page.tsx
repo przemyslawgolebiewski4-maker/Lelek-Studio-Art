@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/public/Hero";
 import { HomeStorySection } from "@/components/public/HomeStorySection";
 import { HomeElementsBar } from "@/components/public/HomeElementsBar";
+import { FeaturedWorks } from "@/components/public/FeaturedWorks";
 import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
@@ -17,7 +18,13 @@ import {
   DEFAULT_VISIT_STUDIO_NAME,
   parseStudioAddress,
 } from "@/lib/address";
-import { DEFAULT_HERO, DEFAULT_SIGNPOST, getPublicHomeData, getSiteSettings } from "@/lib/site";
+import {
+  DEFAULT_HERO,
+  DEFAULT_SIGNPOST,
+  getPublicHomeData,
+  getSiteSettings,
+  resolveHomeFeaturedProducts,
+} from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -41,6 +48,9 @@ export default async function HomePage() {
     signpost,
     elements,
     elementsSection,
+    featured,
+    featuredSection,
+    homeProducts,
     journalSection,
     journalPosts,
     find,
@@ -61,6 +71,9 @@ export default async function HomePage() {
       i === 0 ? { ...card, href: shopUrl } : card,
     ),
   };
+
+  // Admin homeVisible first; pad from published catalog so orphan /objects pages get internal links
+  const featuredProducts = resolveHomeFeaturedProducts(homeProducts, featured, 3, 6);
 
   const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
   const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
@@ -124,6 +137,7 @@ export default async function HomePage() {
           "Ceramics process, below - Mire & Silt collections only"
         }
       />
+      <FeaturedWorks section={featuredSection} homeProducts={featuredProducts} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />
       <HomeFindSection section={find} email={settings.email} shopUrl={shopUrl} />
     </>

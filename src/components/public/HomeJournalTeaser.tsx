@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { JournalPostSummary, JournalSection } from "@/types/content";
+import { resolvePostDate } from "@/lib/dates";
 
 export function HomeJournalTeaser({
   section,
@@ -12,6 +13,7 @@ export function HomeJournalTeaser({
   if (posts.length === 0) return null;
 
   const [latest] = posts;
+  const date = resolvePostDate(latest);
 
   return (
     <section className="journal-sec">
@@ -33,6 +35,11 @@ export function HomeJournalTeaser({
             <Image src={latest.coverImage} alt={latest.coverImageAlt || latest.title} fill sizes="50vw" />
           ) : null}
           <div className="journal-teaser-card-body">
+            {date ? (
+              <time className="journal-teaser-date" dateTime={date.iso}>
+                {date.label}
+              </time>
+            ) : null}
             <div className="journal-teaser-card-title">{latest.title}</div>
             {latest.excerpt ? (
               <div className="product-card-meta">{latest.excerpt}</div>

@@ -142,8 +142,33 @@ export async function getPublicHomeData() {
   };
 }
 
-export async function getFeaturedProducts(limit = 3): Promise<Product[]> {
+export async function getFeaturedProducts(limit = 6): Promise<Product[]> {
   return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
+}
+
+/**
+ * Prefer Admin "Visible on Home" products; if fewer than `minCount`, pad from
+ * published catalog (by order) so the homepage always has internal /objects links.
+ * All candidates remain CMS products — never hardcoded slugs.
+ */
+export function resolveHomeFeaturedProducts(
+  homeVisible: Product[],
+  publishedFallback: Product[],
+  minCount = 3,
+  maxCount = 6,
+): Product[] {
+  const byId = new Map<string, Product>();
+  for (const p of homeVisible) {
+    byId.set(String(p._id), p);
+  }
+  if (byId.size < minCount) {
+    for (const p of publishedFallback) {
+      if (byId.size >= minCount) break;
+      const id = String(p._id);
+      if (!byId.has(id)) byId.set(id, p);
+    }
+  }
+  return Array.from(byId.values()).slice(0, maxCount);
 }
 
 export async function getPublishedProducts(limit = 50): Promise<Product[]> {

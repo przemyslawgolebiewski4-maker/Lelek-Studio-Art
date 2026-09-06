@@ -12,7 +12,7 @@ export function FeaturedWorks({
   homeProducts?: Product[];
 }) {
   const s = section ?? {};
-  const products = (homeProducts ?? []).slice(0, 3);
+  const products = (homeProducts ?? []).slice(0, 6);
   const hasVideo = Boolean(s.video);
   const hasProducts = products.length > 0;
 

@@ -369,8 +369,8 @@ export function ProductForm({
         Visible on Home (Featured)
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Shows product image in the Featured section on the homepage (max 3 products). Featured is
-        currently off the homepage composition - keep for when that section returns.
+        Shows this object in the Featured works section on the homepage (up to 6 products,
+        preferred over catalog padding). Toggle on the pieces you want linked from Home.
       </p>
 
       <label className="admin-checkbox">

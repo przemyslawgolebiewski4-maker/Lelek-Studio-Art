@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JournalPostContent } from "@/components/public/JournalPostContent";
+import { JsonLd } from "@/lib/json-ld";
+import { buildJournalPostJsonLd } from "@/lib/journal-json-ld";
 import { getJournalPostBySlug } from "@/lib/site";
 import { SITE_URL } from "@/lib/config";
 import { withPageDescription } from "@/lib/seo";
@@ -32,5 +34,10 @@ export default async function JournalPostPage({ params }: PageProps) {
   const post = await getJournalPostBySlug(slug);
   if (!post) notFound();
 
-  return <JournalPostContent post={post} />;
+  return (
+    <>
+      <JsonLd data={buildJournalPostJsonLd(post)} />
+      <JournalPostContent post={post} />
+    </>
+  );
 }

@@ -17,6 +17,7 @@
     "images:optimize": "bash scripts/optimize-images.sh"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^0.27.0",
     "marked": "^18.0.6",
     "next": "15.5.20",
