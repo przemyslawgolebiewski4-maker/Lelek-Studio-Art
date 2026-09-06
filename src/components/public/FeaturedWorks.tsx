@@ -18,14 +18,21 @@ export function FeaturedWorks({
 
   if (!hasVideo && !hasProducts) return null;
 
+  const headingEm = s.headingEm?.trim();
+
   return (
     <section id="works" className="works">
 
       {/* Section heading - unchanged from current design */}
       <div className="works-head">
         <h2 className="works-h2">
-          {s.heading ?? "Form, surface"}{" "}
-          <em>{s.headingEm ?? "and presence"}</em>
+          {s.heading ?? "Form, surface"}
+          {headingEm ? (
+            <>
+              {" "}
+              <em>{headingEm}</em>
+            </>
+          ) : null}
         </h2>
         <Link href="/collections" className="works-cta">
           View all works

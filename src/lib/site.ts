@@ -101,7 +101,8 @@ export async function getPublicHomeData() {
     serverFetch<ElementsSection>("/sections/elements", {
       fallback: {
         items: [],
-        scopeNote: "Ceramics process, below - Mire & Silt collections only",
+        scopeNote:
+          "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air.",
       },
     }),
     serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS }),

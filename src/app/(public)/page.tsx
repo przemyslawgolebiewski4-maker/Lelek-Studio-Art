@@ -134,7 +134,7 @@ export default async function HomePage() {
         items={elementItems}
         scopeNote={
           elementsSection.scopeNote ||
-          "Ceramics process, below - Mire & Silt collections only"
+          "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air."
         }
       />
       <FeaturedWorks section={featuredSection} homeProducts={featuredProducts} />
