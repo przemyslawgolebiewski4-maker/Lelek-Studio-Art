@@ -27,18 +27,12 @@ type LegacyContent = {
 };
 
 function loadLegacyContent(): LegacyContent {
-  const candidates = [
-    join(process.cwd(), "data", "content.json"),
-    join(process.cwd(), "..", "_legacy", "data", "content.json"),
-  ];
-
-  for (const path of candidates) {
-    if (existsSync(path)) {
-      return JSON.parse(readFileSync(path, "utf-8")) as LegacyContent;
-    }
+  // Seed source of truth: backend/data/content.json (cwd is backend/ when seeding)
+  const path = join(process.cwd(), "data", "content.json");
+  if (!existsSync(path)) {
+    throw new Error(`Seed content not found at ${path}`);
   }
-
-  throw new Error(`Seed content not found. Tried: ${candidates.join(", ")}`);
+  return JSON.parse(readFileSync(path, "utf-8")) as LegacyContent;
 }
 
 export async function seedDatabase(options?: { force?: boolean }) {

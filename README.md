@@ -89,7 +89,3 @@ Railway: **Root Directory = `backend`**, healthcheck `/health`.
 - `GET/POST /admin/products`, `GET/PATCH/DELETE /admin/products/:id`
 - `GET/PATCH/DELETE /admin/messages`, `GET/PATCH /admin/settings`
 - `POST /contact`, `GET /setup/seed`
-
-## Legacy static site
-
-Archived in `_legacy/`.
