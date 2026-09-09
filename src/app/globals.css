@@ -2136,6 +2136,17 @@ textarea.form-inp {
   margin-bottom: 16px;
 }
 
+.product-detail-text a.product-on-view {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--ink-faint);
+  transition: color 0.15s ease;
+}
+
+.product-detail-text a.product-on-view:hover {
+  color: var(--B);
+}
+
 .prose-brutal h2 {
   font-family: var(--font-serif);
   font-size: 24px;

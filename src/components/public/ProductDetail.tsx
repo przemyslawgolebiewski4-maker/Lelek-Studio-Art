@@ -22,6 +22,15 @@ export function ProductDetail({ product }: { product: Product }) {
   const [hero, ...rest] = product.images;
   const description = displayDescription(product);
   const categoryLabel = CATEGORY_LABELS[product.category] ?? product.category;
+  const gallery =
+    !product.soldOut &&
+    product.currentGallery &&
+    product.currentGallery.name?.trim() &&
+    product.currentGallery.url?.trim()
+      ? product.currentGallery
+      : null;
+  const inquireHref = gallery?.url ?? "/contact";
+  const inquireExternal = Boolean(gallery?.url);
 
   return (
     <article>
@@ -63,7 +72,18 @@ export function ProductDetail({ product }: { product: Product }) {
         </div>
 
         <div className="product-detail-text">
-          <div className="sec-eyebrow">{categoryLabel}</div>
+          {gallery ? (
+            <a
+              href={gallery.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sec-eyebrow product-on-view"
+            >
+              On view at {gallery.name}
+            </a>
+          ) : (
+            <div className="sec-eyebrow">{categoryLabel}</div>
+          )}
           <h1>{product.title}</h1>
           {product.material ? (
             <p className="story-sig" style={{ opacity: 1, marginTop: 8 }}>
@@ -87,9 +107,20 @@ export function ProductDetail({ product }: { product: Product }) {
                 </Link>
               </div>
             ) : product.isOriginal ? (
-              <Link href="/contact" className="btn-brutal filled">
-                Inquire →
-              </Link>
+              inquireExternal ? (
+                <a
+                  href={inquireHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-brutal filled"
+                >
+                  Inquire →
+                </a>
+              ) : (
+                <Link href={inquireHref} className="btn-brutal filled">
+                  Inquire →
+                </Link>
+              )
             ) : product.etsyUrl ? (
               <Link
                 href={product.etsyUrl}
