@@ -35,11 +35,10 @@ export const RESERVE_COPY: Record<ReserveLang, ReserveCopy> = {
     payIcons: "Card · Apple Pay · Google Pay",
     displayThrough: (date) => `This piece will be on display here through ${date}.`,
     displayThroughFallback: "the end of this exhibition",
-    keepConfirmation:
-      "Please keep your payment confirmation - you'll need it to collect.",
+    keepConfirmation: "",
     wantToday:
-      "Want it today instead? Just show your payment confirmation to a member of staff and they can hand it over right away.",
-    morePopupsBefore: "More pop-ups coming - follow ",
+      "Want it today? Just reserve and pay now, show your payment confirmation to a member of staff and take it with you.",
+    morePopupsBefore: "More pop-ups and not only - follow ",
     morePopupsAfter:
       " on Instagram to see where this collection shows up next.",
     legalBefore: "By paying you agree to our ",
