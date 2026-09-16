@@ -69,17 +69,21 @@ Wenn Sie das Kontaktformular auf dieser Website nutzen, werden die von Ihnen ang
 
 ## 4. Cookies und Analyse-Tools
 
-Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb der Website erforderlich sind. Es werden keine Analyse-, Marketing- oder Tracking-Cookies eingesetzt, und es findet keine Auswertung Ihres Nutzungsverhaltens statt.
+Technisch notwendige Speicherung (Ihre Cookie-Entscheidung) erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.
+
+Wenn Sie zustimmen (Art. 6 Abs. 1 lit. a DSGVO), setzen wir den Google-Tag (GT-NML4M7CV) für Google Analytics und optionales Marketing. Die Messung ist mit dem Shop unter shop.lelekstudio.com verknüpft (Cross-Domain). Ohne Einwilligung bleiben Analytics- und Marketing-Cookies deaktiviert (Google Consent Mode). Die Einwilligung können Sie jederzeit über „Cookie preferences“ im Footer widerrufen.
+
+Zusätzlich nutzen wir Vercel Analytics. Dieser Dienst ist first-party und setzt keine Werbecookies.
 
 ## 5. Verlinkte externe Dienste
 
-Diese Website verlinkt auf externe Plattformen (Etsy, Instagram, Shop). Beim Anklicken dieser Links verlassen Sie diese Website. Für die Datenverarbeitung auf diesen externen Plattformen sind deren jeweilige Betreiber verantwortlich.
+Diese Website verlinkt auf externe Plattformen (Instagram, Shop). Beim Anklicken dieser Links verlassen Sie diese Website. Für die Datenverarbeitung auf diesen externen Plattformen sind deren jeweilige Betreiber verantwortlich. Der Shop (shop.lelekstudio.com) verwendet eigene Cookie-Einstellungen von Shopify.
 
 ## 6. Ihre Rechte als betroffene Person
 
 Sie haben nach der DSGVO das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Zur Ausübung Ihrer Rechte genügt eine formlose Mitteilung an die oben genannte E-Mail-Adresse.
 
-Stand: 15.07.2026`;
+Stand: 16.09.2026`;
 
 /** Defaults for /contact when Settings fields are empty. */
 export const CONTACT_DEFAULTS = {

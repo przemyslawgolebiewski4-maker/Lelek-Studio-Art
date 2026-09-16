@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CookiePreferencesLink } from "@/components/public/CookiePreferencesLink";
 import { INSTAGRAM_URL } from "@/lib/config";
 
 type FooterProps = {
@@ -50,6 +51,9 @@ export function Footer({
         </li>
         <li>
           <Link href="/datenschutz">Datenschutz</Link>
+        </li>
+        <li>
+          <CookiePreferencesLink />
         </li>
         <li>
           <Link href="/about">Art</Link>

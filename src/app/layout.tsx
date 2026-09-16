@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleTag } from "@/components/analytics/GoogleTag";
+import { CookieBanner } from "@/components/public/CookieBanner";
 import { SITE_URL } from "@/lib/config";
+import { CONSENT_BOOTSTRAP_SCRIPT } from "@/lib/consent";
 import { fontVariables } from "@/lib/fonts";
 import {
   DEFAULT_DESCRIPTION,
@@ -60,7 +64,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={fontVariables}>
+        <Script id="lelek-consent-default" strategy="beforeInteractive">
+          {CONSENT_BOOTSTRAP_SCRIPT}
+        </Script>
         {children}
+        <GoogleTag />
+        <CookieBanner />
         <Analytics />
       </body>
     </html>
