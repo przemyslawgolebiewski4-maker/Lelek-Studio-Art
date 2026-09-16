@@ -2,12 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { SHOP_URL } from "@/lib/config";
 
 type NavLink =
   | { href: string; label: string; external?: false }
   | { href: string; label: string; external: true };
+
+const COMPACT_NAV_MQ = "(max-width: 900px)";
 
 function buildLinks(shopUrl: string): NavLink[] {
   return [
@@ -27,88 +36,232 @@ function isActive(pathname: string, href: string, external?: boolean) {
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
+function padIndex(index: number) {
+  return String(index + 1).padStart(2, "0");
+}
+
 export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const links = buildLinks(shopUrl);
+  const links = useMemo(() => buildLinks(shopUrl), [shopUrl]);
+  const menuId = useId();
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef(true);
+
+  const close = useCallback((restoreFocus = true) => {
+    restoreFocusRef.current = restoreFocus;
+    setOpen(false);
+  }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
+    restoreFocusRef.current = false;
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const mq = window.matchMedia(COMPACT_NAV_MQ);
+    const onChange = (event: MediaQueryListEvent) => {
+      if (!event.matches) close(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, [close]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const scrollY = window.scrollY;
+    const html = document.documentElement;
+    const { body } = document;
+    html.classList.add("nav-lock");
+    body.classList.add("nav-lock");
+    body.style.top = `-${scrollY}px`;
+
     return () => {
-      document.body.style.overflow = "";
+      html.classList.remove("nav-lock");
+      body.classList.remove("nav-lock");
+      body.style.top = "";
+      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+    if (!open) return;
+
+    const toggle = toggleRef.current;
+    const drawer = drawerRef.current;
+    const getFocusable = () => {
+      const drawerItems = drawer
+        ? Array.from(
+            drawer.querySelectorAll<HTMLElement>(
+              'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+            ),
+          ).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1)
+        : [];
+      return toggle ? [toggle, ...drawerItems] : drawerItems;
+    };
+
+    const firstLink = getFocusable().find((el) => el !== toggle);
+    firstLink?.focus();
+
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close(true);
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const items = getFocusable();
+      if (items.length === 0) return;
+      const first = items[0]!;
+      const last = items[items.length - 1]!;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      if (restoreFocusRef.current) {
+        toggle?.focus();
+      }
+    };
+  }, [open, close]);
 
   return (
-    <header id="site-nav" className="site-nav">
-      <Link href="/" className="logo" onClick={() => setOpen(false)}>
+    <header id="site-nav" className={`site-nav${open ? " is-open" : ""}`}>
+      <a href="#main-content" className="skip-to-content">
+        Skip to content
+      </a>
+
+      <Link href="/" className="logo" onClick={() => close(false)}>
         Lelek Studio
       </Link>
 
-      <ul className="nav-links">
-        {links.map((link) => (
-          <li key={link.href}>
-            {link.external ? (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="nav-shop"
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                href={link.href}
-                className={isActive(pathname, link.href) ? "is-active" : undefined}
-              >
-                {link.label}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
+      <nav className="nav-desktop" aria-label="Primary">
+        <ul className="nav-links">
+          {links.map((link) => {
+            const active = isActive(pathname, link.href, link.external);
+            return (
+              <li key={`${link.label}-${link.href}`}>
+                {link.external ? (
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="nav-shop"
+                    aria-label={`${link.label} (opens in a new tab)`}
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={link.href}
+                    className={active ? "is-active" : undefined}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {link.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
 
       <button
+        ref={toggleRef}
         type="button"
-        className="nav-toggle"
+        className={`nav-toggle${open ? " is-open" : ""}`}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
+        aria-controls={menuId}
+        onClick={() =>
+          setOpen((value) => {
+            if (!value) restoreFocusRef.current = true;
+            return !value;
+          })
+        }
       >
-        <span />
-        <span />
-        <span />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
+        <span aria-hidden="true" />
       </button>
 
-      <div className={`nav-mobile ${open ? "open" : ""}`}>
-        {links.map((link) =>
-          link.external ? (
-            <a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="nav-shop"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </a>
-          ) : (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={isActive(pathname, link.href) ? "is-active" : undefined}
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ),
-        )}
+      <div
+        className={`nav-backdrop${open ? " is-open" : ""}`}
+        onClick={() => close(true)}
+        aria-hidden="true"
+      />
+
+      <div
+        ref={drawerRef}
+        id={menuId}
+        className={`nav-mobile${open ? " is-open" : ""}`}
+        role="dialog"
+        aria-modal={open}
+        aria-label="Menu"
+        aria-hidden={!open}
+        inert={!open}
+      >
+        <nav aria-label="Primary">
+          <p className="nav-mobile-kicker">Navigate</p>
+          <ul className="nav-mobile-list">
+            {links.map((link, index) => {
+              const active = isActive(pathname, link.href, link.external);
+              const content = (
+                <>
+                  <span className="nav-mobile-index">{padIndex(index)}</span>
+                  <span className="nav-mobile-label">{link.label}</span>
+                  {link.external ? (
+                    <span className="nav-mobile-ext" aria-hidden="true">
+                      ↗
+                    </span>
+                  ) : null}
+                </>
+              );
+
+              return (
+                <li key={`${link.label}-${link.href}`}>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="nav-shop"
+                      aria-label={`${link.label} (opens in a new tab)`}
+                      onClick={() => close(false)}
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className={active ? "is-active" : undefined}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => close(false)}
+                    >
+                      {content}
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          <button
+            type="button"
+            className="nav-mobile-close"
+            onClick={() => close(true)}
+          >
+            Close
+          </button>
+        </nav>
       </div>
     </header>
   );
