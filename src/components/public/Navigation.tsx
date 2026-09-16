@@ -220,9 +220,17 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
                   <span className="nav-mobile-index">{padIndex(index)}</span>
                   <span className="nav-mobile-label">{link.label}</span>
                   {link.external ? (
-                    <span className="nav-mobile-ext" aria-hidden="true">
-                      ↗
-                    </span>
+                    <svg
+                      className="nav-mobile-ext"
+                      viewBox="0 0 12 12"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M3.5 2.5h6v6M9.5 2.5 2.5 9.5"
+                        strokeLinecap="square"
+                        strokeLinejoin="miter"
+                      />
+                    </svg>
                   ) : null}
                 </>
               );

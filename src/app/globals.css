@@ -488,10 +488,11 @@ body.nav-lock {
 }
 
 .nav-mobile-ext {
-  font-family: var(--font-mono);
-  font-size: 14px;
-  letter-spacing: 0;
-  color: var(--accent);
+  width: 12px;
+  height: 12px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 1.4;
   flex-shrink: 0;
 }
 
@@ -536,6 +537,7 @@ body.nav-lock {
 .site-nav.is-open .nav-mobile a.nav-shop:hover .nav-mobile-index,
 .site-nav.is-open .nav-mobile a.nav-shop:hover .nav-mobile-ext {
   color: var(--B);
+  stroke: var(--B);
 }
 
 .nav-mobile-close {
