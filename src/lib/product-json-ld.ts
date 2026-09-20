@@ -1,4 +1,5 @@
 import type { Product } from "@/types/product";
+import { withCreatorName } from "@/lib/brand";
 import { SITE_URL } from "@/lib/config";
 import { buildCreatorRef } from "@/lib/person-json-ld";
 
@@ -21,7 +22,8 @@ function productImages(product: Product): string[] {
 }
 
 function productDescription(product: Product): string | undefined {
-  return product.metaDescription?.trim() || product.description?.trim() || undefined;
+  const text = product.metaDescription?.trim() || product.description?.trim() || undefined;
+  return text ? withCreatorName(text) : undefined;
 }
 
 /**

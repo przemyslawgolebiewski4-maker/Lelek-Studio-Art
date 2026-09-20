@@ -1,7 +1,7 @@
 import type { JournalPost } from "@/types/content";
 import { SITE_URL } from "@/lib/config";
 import { ORGANIZATION_ID, buildCreatorRef } from "@/lib/person-json-ld";
-import { STUDIO_NAME_LONG } from "@/lib/brand";
+import { STUDIO_NAME_LONG, withCreatorName } from "@/lib/brand";
 
 /**
  * BlogPosting JSON-LD for /journal/[slug].
@@ -21,7 +21,9 @@ export function buildJournalPostJsonLd(post: JournalPost): Record<string, unknow
     "@type": "BlogPosting",
     "@id": `${url}#article`,
     headline: post.title,
-    description: post.metaDescription?.trim() || post.excerpt?.trim() || undefined,
+    description: withCreatorName(
+      post.metaDescription?.trim() || post.excerpt?.trim() || "",
+    ) || undefined,
     image: post.coverImage || undefined,
     url,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },

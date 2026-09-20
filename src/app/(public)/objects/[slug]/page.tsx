@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/public/ProductDetail";
 import { getProductBySlug } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
+import { withCreatorName } from "@/lib/brand";
 import { SITE_URL } from "@/lib/config";
 import { withPageDescription } from "@/lib/seo";
 import { buildProductJsonLd } from "@/lib/product-json-ld";
@@ -16,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!product) return { title: "Object not found" };
 
   const title = product.metaTitle || product.title;
-  const description = product.metaDescription || product.description || "";
+  const description = withCreatorName(product.metaDescription || product.description || "");
   const cleanSlug = normalizeSlug(slug) || slug;
 
   return withPageDescription(description, {

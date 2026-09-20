@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import { withCreatorName } from "@/lib/brand";
 import { normalizeSlug } from "@/lib/slug";
 
 type OriginalsGridProps = {
@@ -49,7 +50,7 @@ export function OriginalsGrid({
                 {product.images[0] ? (
                   <Image
                     src={product.images[0]}
-                    alt={product.imageAlt || product.metaDescription || product.title}
+                    alt={withCreatorName(product.imageAlt || product.metaDescription || product.title)}
                     fill
                     className="object-cover"
                     sizes="(max-width: 768px) 50vw, 33vw"

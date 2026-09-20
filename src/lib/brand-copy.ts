@@ -46,7 +46,7 @@ export const DEFAULT_HERO: Record<string, string> = {
 
 export const DEFAULT_STORY: StorySection = {
   eyebrow: "The ceramist",
-  heading: "The process comes first",
+  heading: "The process comes first,",
   headingEm: "always",
   body1: STORY_BODY_1,
   body2: STORY_BODY_2,
@@ -216,6 +216,14 @@ export function resolveStorySection(cms: StorySection): StorySection {
   };
 }
 
+const DESIGN_THROUGH_MATERIAL = /^Design through material\.?$/i;
+
+function resolveHeroLine(cms: string | undefined, fallback: string): string {
+  const text = cms?.trim() ?? "";
+  if (!text || DESIGN_THROUGH_MATERIAL.test(text)) return fallback;
+  return withCreatorName(text);
+}
+
 export function resolveHeroContent(
   cms: Record<string, string>,
   shopUrl: string,
@@ -223,11 +231,11 @@ export function resolveHeroContent(
   const merged = { ...DEFAULT_HERO, ...cms };
   return {
     ...merged,
-    eyebrow: cms.eyebrow?.trim() || DEFAULT_HERO.eyebrow,
+    eyebrow: resolveHeroLine(cms.eyebrow, DEFAULT_HERO.eyebrow),
     subheadline: cms.subheadline?.trim() || DEFAULT_HERO.subheadline,
     semanticCore: resolveHeroSemanticCore(cms.semanticCore),
     brandline: cms.brandline?.trim() || DEFAULT_HERO.brandline,
-    kozodoj: cms.kozodoj?.trim() || DEFAULT_HERO.kozodoj,
+    kozodoj: resolveHeroLine(cms.kozodoj, DEFAULT_HERO.kozodoj),
     imageAlt: cms.imageAlt?.trim()
       ? withCreatorName(cms.imageAlt)
       : DEFAULT_HERO.imageAlt,

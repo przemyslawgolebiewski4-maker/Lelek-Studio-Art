@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import { withCreatorName } from "@/lib/brand";
 import { CATEGORY_LABELS } from "@/lib/categories";
 
 const PHOTO_REPRODUCTION_SENTENCE =
   "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemysław Gołębiewski - not an illustration.";
 
 function displayDescription(product: Product): string | null {
-  const base = (product.description ?? "").trim();
+  const base = withCreatorName((product.description ?? "").trim());
   if (product.category !== "prints" || !product.isPhotoReproduction) {
     return base || null;
   }
@@ -16,6 +17,10 @@ function displayDescription(product: Product): string | null {
     return base;
   }
   return base ? `${base} ${PHOTO_REPRODUCTION_SENTENCE}` : PHOTO_REPRODUCTION_SENTENCE;
+}
+
+function productAlt(product: Product): string {
+  return withCreatorName(product.imageAlt || product.metaDescription || product.title);
 }
 
 export function ProductDetail({ product }: { product: Product }) {
@@ -46,7 +51,7 @@ export function ProductDetail({ product }: { product: Product }) {
             <div className="product-detail-hero">
               <Image
                 src={hero}
-                alt={product.imageAlt || product.metaDescription || product.title}
+                alt={productAlt(product)}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -60,7 +65,7 @@ export function ProductDetail({ product }: { product: Product }) {
                 <div key={src} className="product-detail-thumb">
                   <Image
                     src={src}
-                    alt={product.imageAlt || product.metaDescription || product.title}
+                    alt={productAlt(product)}
                     fill
                     className="object-cover"
                     sizes="25vw"

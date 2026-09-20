@@ -4,6 +4,7 @@ import { JournalPostContent } from "@/components/public/JournalPostContent";
 import { JsonLd } from "@/lib/json-ld";
 import { buildJournalPostJsonLd } from "@/lib/journal-json-ld";
 import { getJournalPostBySlug } from "@/lib/site";
+import { withCreatorName } from "@/lib/brand";
 import { SITE_URL } from "@/lib/config";
 import { withPageDescription } from "@/lib/seo";
 
@@ -15,7 +16,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!post) return { title: "Post not found" };
 
   const title = post.metaTitle || post.title;
-  const description = post.metaDescription || post.excerpt || "";
+  const description = withCreatorName(post.metaDescription || post.excerpt || "");
 
   return withPageDescription(description, {
     title,

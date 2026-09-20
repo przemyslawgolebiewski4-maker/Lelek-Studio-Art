@@ -11,7 +11,7 @@ const SITE_DESCRIPTION =
 
 const STORY = {
   eyebrow: "The ceramist",
-  heading: "The process comes first",
+  heading: "The process comes first,",
   headingEm: "always",
   body1: CREATOR_ENTITY,
   body2:
