@@ -1,7 +1,6 @@
 import type { Product } from "@/types/product";
 import { SITE_URL } from "@/lib/config";
-
-const PERSON_ID = `${SITE_URL}/about#person`;
+import { buildCreatorRef } from "@/lib/person-json-ld";
 
 const LOCATION_CREATED = {
   "@type": "Place",
@@ -58,7 +57,7 @@ export function buildProductJsonLd(
       artform: "Ceramics",
       artMedium: material,
       description,
-      creator: { "@id": PERSON_ID },
+      creator: buildCreatorRef(),
       locationCreated: LOCATION_CREATED,
     };
     if (catalog) artwork.identifier = catalog;
@@ -79,6 +78,7 @@ export function buildProductJsonLd(
     sku: catalog || undefined,
     category: product.category || undefined,
     material,
+    creator: buildCreatorRef(),
     brand: {
       "@type": "Brand",
       name: "LELEK",

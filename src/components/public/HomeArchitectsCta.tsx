@@ -48,9 +48,9 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
   }
 
   const points = [
-    { num: "01", title: s.point1Title ?? "Wall objects", body: s.point1Body ?? "Custom dimensions on request - functional and sculptural" },
-    { num: "02", title: s.point2Title ?? "Table ceramics", body: s.point2Body ?? "Cups, bowls and vessels for hospitality and residential" },
-    { num: "03", title: s.point3Title ?? "Sculptural objects", body: s.point3Body ?? "One-off pieces for interiors that demand presence" },
+    { num: "01", title: s.point1Title ?? "Wall objects", body: s.point1Body ?? "Handbuilt ceramic pieces for walls. Each exists once." },
+    { num: "02", title: s.point2Title ?? "Vessels and objects", body: s.point2Body ?? "Sculptural forms for shelves, tables and surfaces. Selected, not configured." },
+    { num: "03", title: s.point3Title ?? "Functional ceramics", body: s.point3Body ?? "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold." },
   ];
 
   return (

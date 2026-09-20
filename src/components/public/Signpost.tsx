@@ -9,22 +9,22 @@ function defaultCards(shopUrl: string) {
   return [
     {
       label: "Shop",
-      description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
+      description: "Vessels, cups, lamps and objects. Forms that repeat, never exactly.",
       href: shopUrl,
     },
     {
       label: "About",
-      description: "The studio story and one-of-a-kind Originals for collectors.",
+      description: "Przemysław Gołębiewski - self-taught ceramist. Process first, always.",
       href: "/about",
     },
     {
       label: "Process",
-      description: "Notes on material, making and life in the Berlin studio.",
+      description: "Notes on clay, kiln, texture, and what the material decides.",
       href: "/journal",
     },
     {
       label: "Trade",
-      description: "Commissions for hospitality, offices and private spaces.",
+      description: "Works for spaces that can hold something raw, organic, or both.",
       href: "/for-architects",
     },
   ];
@@ -53,7 +53,7 @@ export function Signpost({
 
   const intro =
     section.intro ??
-    "LELEK works across ceramics, sculpture and print. Originals for collectors. Stoneware, fine art posters and wearable pieces for everyday use.";
+    "LELEK is the ceramic practice of Przemysław Gołębiewski. Organic and brutalist forms, shaped by hand - vessels, cups, lamps and objects that never repeat exactly.";
   const tradeSignal =
     section.tradeSignal ?? "Designing a space? Let's talk";
   const tradeHref = section.tradeHref ?? "/for-architects";

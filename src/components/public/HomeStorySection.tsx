@@ -8,7 +8,7 @@ export function HomeStorySection({ story }: { story: StorySection }) {
   const imageMobile = story.imageMobile?.trim() || "";
   const video = story.video?.trim() || "";
   const videoMobile = story.videoMobile?.trim() || "";
-  const alt = story.imageAlt ?? "Lelek Studio";
+  const alt = story.imageAlt ?? "Przemysław Gołębiewski, ceramist";
   const hasMedia = Boolean(image || video);
 
   return (

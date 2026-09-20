@@ -28,7 +28,7 @@ const FIELD_GROUPS: FieldGroup[] = [
     fields: [
       { key: "site_name", label: "Site name", kind: "text" },
       { key: "tagline", label: "Tagline", kind: "text" },
-      { key: "description", label: "Default meta description", kind: "seo-desc" },
+      { key: "description", label: "Default meta description", kind: "seo-desc", hint: "Google / answer engines: start with “Przemysław Gołębiewski is a self-taught ceramist…”. Keep it third person." },
       { key: "location", label: "Location (footer)", kind: "text" },
       {
         key: "organization_logo",
@@ -147,13 +147,15 @@ export default function AdminSettingsPage() {
               const value = settings[field.key] ?? "";
               if (field.kind === "seo-desc") {
                 return (
-                  <AdminSeoTextarea
-                    key={field.key}
-                    label={field.label}
-                    value={value}
-                    onChange={(v) => setField(field.key, v)}
-                    rows={field.key === "description" ? 3 : 2}
-                  />
+                  <div key={field.key}>
+                    <AdminSeoTextarea
+                      label={field.label}
+                      value={value}
+                      onChange={(v) => setField(field.key, v)}
+                      rows={field.key === "description" ? 3 : 2}
+                    />
+                    {field.hint ? <p className="admin-muted">{field.hint}</p> : null}
+                  </div>
                 );
               }
               if (field.kind === "textarea") {

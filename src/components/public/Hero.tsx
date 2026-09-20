@@ -2,10 +2,14 @@ import Link from "next/link";
 import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { SHOP_URL } from "@/lib/config";
-
-/** Fallback when Admin → Home → Hero → semanticCore is empty. */
-export const DEFAULT_SEMANTIC_CORE =
-  "LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics.";
+import {
+  CREATOR_ENTITY_DESCRIPTION,
+  HERO_BRANDLINE,
+  HERO_ELEMENTS_TAGLINE,
+  HERO_EYEBROW,
+  HERO_IMAGE_ALT,
+  HERO_SUBHEADLINE,
+} from "@/lib/brand";
 
 export type HeroContent = {
   eyebrow?: string;
@@ -43,11 +47,11 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const imageMobile = content.imageMobile?.trim() || "";
   const video = content.video?.trim() || "";
   const videoMobile = content.videoMobile?.trim() || "";
-  const alt = content.imageAlt ?? "Lelek Studio Berlin - handmade ceramics";
-  const eyebrow = content.eyebrow || "Design through material.";
-  const subline = content.subheadline || "Ceramic objects, vessels, prints.";
-  const brandline = content.brandline || "LELEK - Berlin.";
-  const semanticCore = content.semanticCore?.trim() || DEFAULT_SEMANTIC_CORE;
+  const alt = content.imageAlt ?? HERO_IMAGE_ALT;
+  const eyebrow = content.eyebrow || HERO_EYEBROW;
+  const subline = content.subheadline || HERO_SUBHEADLINE;
+  const brandline = content.brandline || HERO_BRANDLINE;
+  const semanticCore = content.semanticCore?.trim() || CREATOR_ENTITY_DESCRIPTION;
 
   return (
     <section className="hero">
@@ -115,7 +119,7 @@ export function Hero({ content, elements = [] }: HeroProps) {
                 ))}
               </div>
               <div className="hero-kozodoj">
-                {content.kozodoj ?? "Design through material."}
+                {content.kozodoj ?? HERO_ELEMENTS_TAGLINE}
               </div>
             </div>
           ) : null}

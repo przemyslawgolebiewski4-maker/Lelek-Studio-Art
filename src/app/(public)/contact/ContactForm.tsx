@@ -16,7 +16,7 @@ const DEFAULTS: Required<ContactCopy> = {
   headingLine1: "Connect",
   headingLine2: "with",
   headingLine3: "the clay.",
-  sub: "Wall objects, custom orders, interior projects - or simply to say something. I work intuitively. I will respond the same way.",
+  sub: "Wall objects, commissions, a piece for the home - or simply to say something. I work intuitively. I will respond the same way.",
   successMessage: "Message sent. Thank you - we will reply soon.",
   formNote: "lelekstudio@lelekstudio.com\nClay Stories Berlin",
 };

@@ -6,8 +6,8 @@ export function TradeHero({ section }: { section: ArchitectsSection }) {
   const video = section.heroVideo;
   const caption =
     section.heroCaption ??
-    "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.";
-  const alt = section.heroImageAlt || "LELEK Trade - ceramic objects for spaces";
+    "Ceramic vessels, lamps and wall objects by Przemysław Gołębiewski - for spaces that can hold something raw, organic, or both.";
+  const alt = section.heroImageAlt || "Ceramic objects by Przemysław Gołębiewski for interiors";
 
   if (!image && !video) {
     return (

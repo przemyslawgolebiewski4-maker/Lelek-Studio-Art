@@ -77,7 +77,7 @@ NEXT_PUBLIC_API_URL=https://TWOJ-API.up.railway.app \
 npm run create-admin -- \
   --email=lelekstudio@lelekstudio.com \
   --password="TwojeSilneHaslo123!" \
-  --name="Przemyslaw Golebiewski"
+  --name="Przemysław Gołębiewski"
 ```
 
 Lub curl:
@@ -85,7 +85,7 @@ Lub curl:
 ```bash
 curl -X POST "https://TWOJ-API.up.railway.app/setup/admin?secret=TWOJ_SETUP_SECRET&force=true" \
   -H "Content-Type: application/json" \
-  -d '{"email":"lelekstudio@lelekstudio.com","password":"TwojeSilneHaslo123!","name":"Przemyslaw Golebiewski"}'
+  -d '{"email":"lelekstudio@lelekstudio.com","password":"TwojeSilneHaslo123!","name":"Przemysław Gołębiewski"}'
 ```
 
 ---

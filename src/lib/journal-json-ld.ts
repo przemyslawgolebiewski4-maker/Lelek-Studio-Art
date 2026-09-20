@@ -1,5 +1,7 @@
 import type { JournalPost } from "@/types/content";
 import { SITE_URL } from "@/lib/config";
+import { ORGANIZATION_ID, buildCreatorRef } from "@/lib/person-json-ld";
+import { STUDIO_NAME_LONG } from "@/lib/brand";
 
 /**
  * BlogPosting JSON-LD for /journal/[slug].
@@ -25,16 +27,11 @@ export function buildJournalPostJsonLd(post: JournalPost): Record<string, unknow
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     datePublished,
     dateModified,
-    author: {
-      "@type": "Person",
-      "@id": `${SITE_URL}/about#person`,
-      name: "Przemyslaw Golebiewski",
-      url: `${SITE_URL}/about`,
-    },
+    author: buildCreatorRef(),
     publisher: {
       "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
-      name: "Lelek Studio Berlin",
+      "@id": ORGANIZATION_ID,
+      name: STUDIO_NAME_LONG,
       url: SITE_URL,
     },
   };

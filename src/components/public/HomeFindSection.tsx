@@ -23,7 +23,7 @@ export function HomeFindSection({
   const onlineHeading = section.onlineHeading || "Shop";
   const onlineDescription =
     section.onlineDescription ||
-    "Ceramic objects, vessels, prints and wearable pieces - available on the LELEK shop.";
+    "Vessels, cups, lamps and objects - each one a little different from the last.";
   const onlineCta = section.onlineCtaLabel || "Visit shop ↗";
 
   return (

@@ -4,7 +4,8 @@ import type { Gallery } from "@/types/gallery";
 
 export const metadata: Metadata = {
   title: "Galleries",
-  description: "Gallery partners showing LELEK originals.",
+  description:
+    "Gallery partners showing original ceramics by Przemysław Gołębiewski - LELEK, Berlin.",
   alternates: { canonical: `${SITE_URL}/galleries` },
 };
 
@@ -36,7 +37,8 @@ export default async function GalleriesPage() {
 
       <div className="page-content">
         <p className="galleries-intro">
-          LELEK originals are shown through gallery partners - current venues below.
+          LELEK originals by Przemysław Gołębiewski are shown through gallery partners - current
+          venues below.
         </p>
 
         {galleries.length === 0 ? (

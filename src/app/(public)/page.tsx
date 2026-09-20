@@ -7,9 +7,10 @@ import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
+import { CREATOR_NAME, ELEMENTS_SCOPE_NOTE, resolveSiteDescription } from "@/lib/brand";
+import { resolveHeroContent, resolveSignpostSection } from "@/lib/brand-copy";
 import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
 import {
-  DEFAULT_DESCRIPTION,
   DEFAULT_TAGLINE,
   resolveSiteName,
   withPageDescription,
@@ -19,21 +20,29 @@ import {
   parseStudioAddress,
 } from "@/lib/address";
 import {
-  DEFAULT_HERO,
-  DEFAULT_SIGNPOST,
   getPublicHomeData,
   getSiteSettings,
   resolveHomeFeaturedProducts,
 } from "@/lib/site";
+import {
+  ORGANIZATION_ID,
+  PERSON_ID,
+  buildOrganizationJsonLd,
+  buildPersonJsonLd,
+  buildWebsiteJsonLd,
+  personSameAsFromSettings,
+} from "@/lib/person-json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const siteName = resolveSiteName(settings);
-  const tagline = settings.tagline || DEFAULT_TAGLINE;
-  const description = settings.description || DEFAULT_DESCRIPTION;
+  const tagline = settings.tagline?.trim() || DEFAULT_TAGLINE;
+  const description = resolveSiteDescription(settings.description);
 
   return withPageDescription(description, {
     title: { absolute: `${siteName} - ${tagline}` },
+    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
+    creator: CREATOR_NAME,
     alternates: { canonical: `${SITE_URL}/` },
   });
 }
@@ -58,27 +67,17 @@ export default async function HomePage() {
 
   const elementItems = elements;
   const shopUrl = resolveShopUrl(settings);
-  // CMS wins when set; DEFAULT_HERO fills empty fields (editable in /admin/home → Hero)
-  const heroContent = {
-    ...DEFAULT_HERO,
-    ...hero,
-    cta1Url: (hero.cta1Url as string | undefined)?.trim() || shopUrl,
-  };
+  const heroContent = resolveHeroContent(hero, shopUrl);
+  const signpostSection = resolveSignpostSection(signpost, shopUrl);
 
-  const signpostSection = signpost ?? {
-    ...DEFAULT_SIGNPOST,
-    cards: DEFAULT_SIGNPOST.cards?.map((card, i) =>
-      i === 0 ? { ...card, href: shopUrl } : card,
-    ),
-  };
-
-  // Admin homeVisible first; pad from published catalog so orphan /objects pages get internal links
   const featuredProducts = resolveHomeFeaturedProducts(homeProducts, featured, 3, 6);
 
   const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
-  const logoUrl = logoPath.startsWith("http") ? logoPath : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
-  // Instagram + shop always; Admin → Settings → same_as_urls lines appended (e.g. Etsy)
+  const logoUrl = logoPath.startsWith("http")
+    ? logoPath
+    : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
   const sameAs = resolveOrganizationSameAs(settings);
+  const personSameAs = personSameAsFromSettings(settings);
 
   const visitName = find.studioName?.trim() || DEFAULT_VISIT_STUDIO_NAME;
   const visitAddress = parseStudioAddress(find.studioAddress);
@@ -86,28 +85,16 @@ export default async function HomePage() {
   const graphLd = {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
-        name: settings.site_name || "LELEK",
-        alternateName: "Lelek Studio Berlin",
-        url: SITE_URL,
+      buildOrganizationJsonLd({
+        name: settings.site_name || undefined,
         logo: logoUrl,
         sameAs,
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: settings.location || "Berlin",
-          addressCountry: "DE",
-        },
-        founder: { "@id": `${SITE_URL}/about#person` },
-      },
-      {
-        "@type": "Person",
-        "@id": `${SITE_URL}/about#person`,
-        name: "Przemyslaw Golebiewski",
-        jobTitle: "Ceramist",
-        url: `${SITE_URL}/about`,
-      },
+      }),
+      buildPersonJsonLd({
+        sameAs: personSameAs,
+        image: story.image?.trim() || undefined,
+      }),
+      buildWebsiteJsonLd(resolveSiteDescription(settings.description)),
       {
         "@type": "LocalBusiness",
         "@id": `${SITE_URL}/#localbusiness`,
@@ -119,7 +106,8 @@ export default async function HomePage() {
           addressLocality: visitAddress.addressLocality,
           addressCountry: visitAddress.addressCountry,
         },
-        parentOrganization: { "@id": `${SITE_URL}/#organization` },
+        parentOrganization: { "@id": ORGANIZATION_ID },
+        founder: { "@id": PERSON_ID },
       },
     ],
   };
@@ -132,10 +120,7 @@ export default async function HomePage() {
       <HomeStorySection story={story} />
       <HomeElementsBar
         items={elementItems}
-        scopeNote={
-          elementsSection.scopeNote ||
-          "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air."
-        }
+        scopeNote={elementsSection.scopeNote || ELEMENTS_SCOPE_NOTE}
       />
       <FeaturedWorks section={featuredSection} homeProducts={featuredProducts} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />

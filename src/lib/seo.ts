@@ -1,57 +1,36 @@
 import type { Metadata } from "next";
 import { SITE_URL } from "@/lib/config";
+import {
+  ABOUT_PAGE_KEYWORDS,
+  ARCHITECTS_PAGE_KEYWORDS,
+  CREATOR_NAME,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_TAGLINE,
+  SEO_KEYWORDS,
+  STUDIO_NAME_LONG,
+  TRADE_DESCRIPTION,
+} from "@/lib/brand";
 
-export const SITE_NAME = "Lelek Studio Berlin";
+export const SITE_NAME = STUDIO_NAME_LONG;
 
-export const DEFAULT_TAGLINE = "Shaped by hand, guided by instinct";
+export {
+  ABOUT_PAGE_KEYWORDS,
+  ARCHITECTS_PAGE_KEYWORDS,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_TAGLINE,
+  SEO_KEYWORDS,
+  TRADE_DESCRIPTION,
+};
 
-export const DEFAULT_DESCRIPTION =
-  "LELEK Studio Berlin - ceramist Przemyslaw Golebiewski shapes functional ceramics, lighting, sculpture and vases from natural materials, guided by nature and intuition.";
+export { CREATOR_NAME };
 
 /** Stable absolute OG/Twitter image URL (1200×630). Also served via app/opengraph-image.png. */
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/images/og-image.png`;
 
 /** Next.js file-metadata OG image (same asset as app/opengraph-image.png). */
 export const DEFAULT_OG_IMAGE_URL = `${SITE_URL}/opengraph-image.png`;
-
-export const DEFAULT_OG_IMAGE_ALT =
-  "Lelek Studio Berlin - ceramics, lighting, sculpture and vases shaped by hand from natural materials.";
-
-export const SEO_KEYWORDS = [
-  "ceramics",
-  "handmade ceramics",
-  "Berlin ceramist",
-  "stoneware",
-  "Lelek Studio",
-  "Przemyslaw Golebiewski",
-  "functional ceramics",
-  "wall objects",
-  "prints",
-  "ceramic prints",
-  "natural materials",
-  "nature-inspired ceramics",
-  "ceramic lighting",
-  "architectural ceramics",
-  "ceramic sculpture",
-  "ceramic vases",
-  "intuitive ceramics",
-];
-
-export const ABOUT_PAGE_KEYWORDS = [
-  ...SEO_KEYWORDS,
-  "ceramist Berlin",
-  "intuitive handbuilding",
-  "mixed media artist",
-  "self-taught ceramist",
-];
-
-export const ARCHITECTS_PAGE_KEYWORDS = [
-  ...SEO_KEYWORDS,
-  "ceramics for architects",
-  "hospitality ceramics",
-  "interior design ceramics",
-  "commissioned ceramic pieces",
-];
 
 export function resolveSiteName(settings: Record<string, string>): string {
   return settings.site_name?.trim() || SITE_NAME;

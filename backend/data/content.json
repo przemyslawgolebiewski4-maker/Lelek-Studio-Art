@@ -1,8 +1,8 @@
 {
   "site": {
     "name": "Lelek Studio",
-    "tagline": "Shaped by hand, guided by instinct",
-    "description": "Lelek Studio is the ceramic practice of Przemyslaw Golebiewski - a self-taught ceramist from rural Poland, working in Berlin. Handmade functional ceramics, vessels and wall objects shaped by intuition, earth, water, fire and air.",
+    "tagline": "The process comes first, always",
+    "description": "Przemysław Gołębiewski is a self-taught ceramist in Berlin. Working by intuition rather than plan, he shapes vessels, cups and lamps by hand - never exactly the same.",
     "url": "https://www.lelekstudio.com",
     "instagram": "https://www.instagram.com/lelek.berlin/",
     "instagramHandle": "@lelek.berlin",
@@ -17,31 +17,31 @@
     "lelekMeaning": "Lelek - kozodoj - the nightjar"
   },
   "hero": {
-    "eyebrow": "Handmade in Berlin - Ceramic Studio",
+    "eyebrow": "The process comes first.",
     "headline": "Shaped by hand,",
     "headlineEm": "guided by instinct",
     "quote": "Kazde ziarno piasku jest tez inne...",
-    "subheadline": "Functional ceramics, vessels and wall objects made in Berlin. Each piece shaped slowly - by material, process and use.",
+    "subheadline": "Vessels, cups, lamps - organic and raw, shaped by hand, never exactly.",
     "image": "/images/hero/hero-main.jpg",
     "imageMobile": "/images/hero/hero-main-mobile.jpg",
-    "imageAlt": "Lelek Studio Berlin - handmade stoneware ceramics and wall objects by ceramist Przemyslaw Golebiewski",
+    "imageAlt": "Handmade ceramics by ceramist Przemysław Gołębiewski - Lelek Studio Berlin",
     "cta1Text": "View works",
     "cta1Url": "#works",
     "cta2Text": "My story",
     "cta2Url": "#story"
   },
   "story": {
-    "eyebrow": "The story",
-    "heading": "From peatlands",
-    "headingEm": "to clay",
+    "eyebrow": "The ceramist",
+    "heading": "The process comes first",
+    "headingEm": "always",
     "image": "/images/process/studio.jpg",
     "imageMobile": "/images/process/studio-mobile.jpg",
-    "imageAlt": "Przemyslaw Golebiewski - ceramist at the wheel, Clay Stories Berlin",
+    "imageAlt": "Przemysław Gołębiewski, self-taught ceramist at work in Berlin",
     "imageCaption": "Clay Stories Berlin",
-    "body1": "As a small boy I always followed the pull of nature - that was where I felt safe. Spending hours wandering through the wilderness of the village where I grew up, I forgot about the rest of the world. Only here and now mattered.",
-    "body2": "Not far from my family home stretched wide peatlands, home to different animals, the sounds of nature, and probably other presences I was not aware of. I slipped away there whenever I could, into my second world, where it was only me, the material things of nature, and whatever lay beyond them.",
-    "body3": "I never got to finish art school, but that did not stop me from searching for a way to express what I often could not put into words - maybe I still cannot. I am self-taught. I work intuitively, whether painting or working with clay. In Berlin, the community in different studios showed me the tools and how to use them. The rest is a process of discovery, of listening to my own intuition. Maybe that is why I almost never make identical things. Every grain of sand is different too...",
-    "signature": "Przemyslaw Golebiewski - ceramist"
+    "body1": "Przemysław Gołębiewski is a self-taught ceramist, working by intuition rather than plan. The process comes first, always - the hand moves, the mind follows after.",
+    "body2": "I want to bring warmth and something of nature into the home through what I make - I'm drawn to organic shapes, the play of texture, and the feel of a piece under my hands as it takes form. What fascinates me most is how concrete and nature sometimes meet without asking permission - how an organic shape, a natural color, can sit inside something as raw as brutalism and somehow belong there. My own work moves between those two registers: some pieces stay raw, closer to brutalism itself; others lean fully organic. And sometimes the two don't sit side by side at all - they mix into something that only makes sense with itself.",
+    "body3": "Materials with real, unrepeatable origins interest me most: a pigment found on a trip, a clay mix that may never come back the same way twice. The process leaves its own marks - a crack stabilized, not hidden; a drip left where water carried it. What the kiln and the material decide together, not just the maker alone. Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences, shaped by hand, not by mold.",
+    "signature": "Przemysław Gołębiewski - ceramist"
   },
   "elements": [
     {"number": "I.", "name": "Earth"},
@@ -105,7 +105,7 @@
     "eyebrow": "Functional ceramic",
     "heading": "Made for",
     "headingEm": "everyday ritual",
-    "body": "Cups and bowls for daily use. Wheel-thrown stoneware with glaze applied by hand - each piece slightly different from the next.",
+    "body": "Cups and bowls for daily use. Shaped by hand - each piece slightly different from the next.",
     "ctaText": "Available in my Etsy shop",
     "items": [
       {
@@ -142,7 +142,7 @@
     "eyebrow": "Vessels",
     "heading": "Between use",
     "headingEm": "and form",
-    "body": "Stoneware vessels shaped on the wheel. Pieces that hold flowers, objects, or simply space - each one a single form shaped by material and process.",
+    "body": "Stoneware vessels shaped by hand. Pieces that hold flowers, objects, or simply space - each one a single form, never exactly the same.",
     "ctaText": "Available in my Etsy shop",
     "items": [
       {
@@ -172,7 +172,7 @@
     "eyebrow": "Wall objects and Objects",
     "heading": "Shaped by hand,",
     "headingEm": "placed in space",
-    "body": "Handmade ceramic objects for walls and shelves - each piece functional and present. Built through intuitive handbuilding, form emerging from the material. For interiors that want something made by hand, not manufactured.",
+    "body": "Handmade ceramic objects for walls and shelves. Built through intuitive handbuilding - a crack stabilized, not hidden; a drip left where water carried it. For interiors that want something made by hand, not by mold.",
     "note": "Available for interior designers and architects - custom dimensions on request",
     "items": [
       {
@@ -228,9 +228,9 @@
     "headingEm": "without a plan",
     "image": "/images/process/studio.jpg",
     "imageMobile": "/images/process/studio-mobile.jpg",
-    "imageAlt": "Ceramist Przemyslaw Golebiewski at the wheel, Clay Stories Berlin studio",
-    "body1": "Each functional piece starts on the wheel - shaped, trimmed, glazed by hand. Wall objects are built differently: through intuitive handbuilding, form emerging from the material rather than the wheel.",
-    "body2": "Small batches, slow process, made at Clay Stories Berlin. The glaze is applied by hand and fired at high temperature - the result is always slightly different from what was planned, and better for it.",
+    "imageAlt": "Ceramist Przemysław Gołębiewski at work, Clay Stories Berlin studio",
+    "body1": "The process comes first, always - the hand moves, the mind follows after. Wall objects are built through intuitive handbuilding; vessels, cups and lamps take form the same way: by hand, not by mold.",
+    "body2": "What the kiln and the material decide together, not just the maker alone. A pigment found on a trip, a clay mix that may never come back the same way twice. Forms may repeat, but never exactly.",
     "signature": "Earth - water - fire - air"
   },
   "find": {
@@ -246,7 +246,7 @@
     "online": {
       "eyebrow": "Online",
       "heading": "Shop on Etsy",
-      "body": "Functional ceramics available for worldwide shipping. New pieces added after each firing.",
+      "body": "Vessels, cups, lamps and objects - each one a little different from the last. New pieces after each firing.",
       "etsyText": "Visit Etsy shop",
       "customHeading": "Interior projects",
       "customBody": "Wall objects and custom orders - get in touch directly for interior projects.",

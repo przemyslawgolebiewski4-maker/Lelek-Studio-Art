@@ -2,19 +2,36 @@ import type { Metadata } from "next";
 import { AboutContent } from "@/components/public/AboutContent";
 import { getOriginalProducts, getSiteSettings, getStorySection } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
-import { SITE_URL, resolveShopUrl } from "@/lib/config";
+import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
 import { normalizeSlug } from "@/lib/slug";
 import { ABOUT_PAGE_KEYWORDS, withPageDescription } from "@/lib/seo";
+import { CREATOR_FAMILY_NAME, CREATOR_GIVEN_NAME, CREATOR_NAME } from "@/lib/brand";
 import { truncateAtWord } from "@/lib/text";
+import {
+  PERSON_ID,
+  buildAboutFaqJsonLd,
+  buildCreatorRef,
+  buildOrganizationJsonLd,
+  buildPersonJsonLd,
+  personSameAsFromSettings,
+} from "@/lib/person-json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
   const story = await getStorySection();
   const title = [story.heading, story.headingEm].filter(Boolean).join(" ");
   const description = truncateAtWord(story.body1 ?? "", 160);
   return withPageDescription(description, {
-    title: title || "About",
+    title: title || CREATOR_NAME,
     keywords: ABOUT_PAGE_KEYWORDS,
+    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
+    creator: CREATOR_NAME,
     alternates: { canonical: `${SITE_URL}/about` },
+    openGraph: {
+      type: "profile",
+      firstName: CREATOR_GIVEN_NAME,
+      lastName: CREATOR_FAMILY_NAME,
+      username: "lelek.berlin",
+    },
   });
 }
 
@@ -27,27 +44,35 @@ export default async function AboutPage() {
     getSiteSettings(),
   ]);
   const shopUrl = resolveShopUrl(settings);
+  const sameAs = resolveOrganizationSameAs(settings);
+  const personSameAs = personSameAsFromSettings(settings);
+  const logoPath = settings.organization_logo?.trim() || "/images/og-image.png";
+  const logoUrl = logoPath.startsWith("http")
+    ? logoPath
+    : `${SITE_URL}${logoPath.startsWith("/") ? "" : "/"}${logoPath}`;
 
   const personOrgLd = {
     "@context": "https://schema.org",
     "@graph": [
+      buildOrganizationJsonLd({
+        name: settings.site_name || undefined,
+        logo: logoUrl,
+        sameAs,
+      }),
+      buildPersonJsonLd({
+        sameAs: personSameAs,
+        image: story.image?.trim() || undefined,
+        description: story.body1,
+      }),
       {
-        "@type": "Organization",
-        "@id": `${SITE_URL}/#organization`,
-        name: "LELEK",
-        alternateName: "Lelek Studio Berlin",
-        url: SITE_URL,
-        logo: `${SITE_URL}/images/og-image.png`,
-        founder: { "@id": `${SITE_URL}/about#person` },
-      },
-      {
-        "@type": "Person",
-        "@id": `${SITE_URL}/about#person`,
-        name: "Przemyslaw Golebiewski",
-        jobTitle: "Ceramist",
+        "@type": "ProfilePage",
+        "@id": `${SITE_URL}/about`,
         url: `${SITE_URL}/about`,
-        worksFor: { "@id": `${SITE_URL}/#organization` },
+        name: `${CREATOR_NAME} - ceramist`,
+        mainEntity: { "@id": PERSON_ID },
+        about: { "@id": PERSON_ID },
       },
+      buildAboutFaqJsonLd(),
       {
         "@type": "BreadcrumbList",
         itemListElement: [
@@ -60,7 +85,7 @@ export default async function AboutPage() {
           {
             "@type": "ListItem",
             position: 2,
-            name: "About",
+            name: CREATOR_NAME,
             item: `${SITE_URL}/about`,
           },
         ],
@@ -71,7 +96,7 @@ export default async function AboutPage() {
         url: `${SITE_URL}/objects/${normalizeSlug(product.slug) || product.slug}`,
         image: product.images[0] || undefined,
         artform: "Ceramics",
-        creator: { "@id": `${SITE_URL}/about#person` },
+        creator: buildCreatorRef(),
         description: product.metaDescription || product.description || undefined,
       })),
     ],

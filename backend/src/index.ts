@@ -6,6 +6,7 @@ import rateLimit from "express-rate-limit";
 import { connectDB } from "./lib/db";
 import { sanitizeProductSlugs } from "./lib/slug";
 import { migrateProductExhibitionsToItems } from "./lib/migrate-exhibition-items";
+import { migrateBrandCoreCopy } from "./lib/migrate-brand-core";
 
 import authRouter from "./routes/auth";
 import { productsPublicRouter, productsAdminRouter } from "./routes/products";
@@ -112,6 +113,14 @@ async function start() {
     }
   } catch (err) {
     console.error("Exhibition item migration failed:", err);
+  }
+  try {
+    const brandUpdated = await migrateBrandCoreCopy();
+    if (brandUpdated > 0) {
+      console.log(`Migrated ${brandUpdated} brand-core copy field(s)`);
+    }
+  } catch (err) {
+    console.error("Brand-core copy migration failed:", err);
   }
   app.listen(PORT, () => {
     console.log(`Lelek API running on port ${PORT}`);

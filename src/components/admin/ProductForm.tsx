@@ -274,7 +274,7 @@ export function ProductForm({
           </label>
           <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
             When checked, the public description must include: &quot;This poster reproduces a
-            photograph of an original ceramic piece, hand-shaped by Przemek - not an
+            photograph of an original ceramic piece, hand-shaped by Przemysław Gołębiewski - not an
             illustration.&quot; Close Prints descriptions with: &quot;Printed to order. Shipped from
             Europe.&quot;
           </p>
@@ -295,7 +295,7 @@ export function ProductForm({
         placeholder={
           form.category === "prints"
             ? form.isPhotoReproduction
-              ? "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration. … Printed to order. Shipped from Europe."
+              ? "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemysław Gołębiewski - not an illustration. … Printed to order. Shipped from Europe."
               : "… Printed to order. Shipped from Europe."
             : undefined
         }

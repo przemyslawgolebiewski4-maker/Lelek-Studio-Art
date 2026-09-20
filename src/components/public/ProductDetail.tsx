@@ -4,7 +4,7 @@ import type { Product } from "@/types/product";
 import { CATEGORY_LABELS } from "@/lib/categories";
 
 const PHOTO_REPRODUCTION_SENTENCE =
-  "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration.";
+  "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemysław Gołębiewski - not an illustration.";
 
 function displayDescription(product: Product): string | null {
   const base = (product.description ?? "").trim();

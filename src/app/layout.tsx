@@ -6,8 +6,8 @@ import { CookieBanner } from "@/components/public/CookieBanner";
 import { SITE_URL } from "@/lib/config";
 import { CONSENT_BOOTSTRAP_SCRIPT } from "@/lib/consent";
 import { fontVariables } from "@/lib/fonts";
+import { CREATOR_NAME, resolveSiteDescription } from "@/lib/brand";
 import {
-  DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE_ALT,
   DEFAULT_OG_IMAGE_URL,
   SEO_KEYWORDS,
@@ -19,6 +19,7 @@ import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
   const siteName = resolveSiteName(settings);
+  const description = resolveSiteDescription(settings.description);
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -26,8 +27,11 @@ export async function generateMetadata(): Promise<Metadata> {
       default: siteName,
       template: `%s | ${siteName}`,
     },
-    description: DEFAULT_DESCRIPTION,
+    description,
     keywords: SEO_KEYWORDS,
+    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
+    creator: CREATOR_NAME,
+    publisher: siteName,
     robots: { index: true, follow: true },
     alternates: {
       canonical: SITE_URL,
@@ -38,13 +42,13 @@ export async function generateMetadata(): Promise<Metadata> {
       url: SITE_URL,
       siteName,
       title: siteName,
-      description: DEFAULT_DESCRIPTION,
+      description,
       images: [{ url: DEFAULT_OG_IMAGE_URL, alt: DEFAULT_OG_IMAGE_ALT }],
     },
     twitter: {
       card: "summary_large_image",
       title: siteName,
-      description: DEFAULT_DESCRIPTION,
+      description,
       images: [DEFAULT_OG_IMAGE_URL],
     },
     verification: {

@@ -26,7 +26,7 @@ export function FeaturedWorks({
       {/* Section heading - unchanged from current design */}
       <div className="works-head">
         <h2 className="works-h2">
-          {s.heading ?? "Form, surface"}
+          {s.heading ?? "Shaped by hand"}
           {headingEm ? (
             <>
               {" "}
@@ -50,7 +50,7 @@ export function FeaturedWorks({
                 muted
                 loop
                 playsInline
-                aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+                aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
                 className="featured-video-el featured-video-el--desktop"
               >
                 <source src={s.video} />
@@ -61,7 +61,7 @@ export function FeaturedWorks({
                 muted
                 loop
                 playsInline
-                aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+                aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
                 className="featured-video-el featured-video-el--mobile"
               >
                 <source src={s.videoMobile} />
@@ -74,7 +74,7 @@ export function FeaturedWorks({
               muted
               loop
               playsInline
-              aria-label={s.videoAlt ?? "Lelek Studio Berlin"}
+              aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
               className="featured-video-el"
             >
               <source src={s.video} />

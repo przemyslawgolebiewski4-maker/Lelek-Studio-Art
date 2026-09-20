@@ -50,7 +50,7 @@ export const DEFAULT_DATENSCHUTZ = `## 1. Verantwortlicher
 
 Verantwortlich für die Datenverarbeitung auf dieser Website ist:
 
-Przemyslaw Golebiewski
+Przemysław Gołębiewski
 Lelek Studio
 Sewanstraße 128
 10319 Berlin
@@ -90,7 +90,7 @@ export const CONTACT_DEFAULTS = {
   heading1: "Connect",
   heading2: "with",
   heading3: "the clay.",
-  sub: "Wall objects, custom orders, interior projects - or simply to say something. I work intuitively. I will respond the same way.",
+  sub: "Wall objects, commissions, a piece for the home - or simply to say something. I work intuitively. I will respond the same way.",
   success: "Message sent. Thank you - we will reply soon.",
   formNote: "lelekstudio@lelekstudio.com\nClay Stories Berlin",
 } as const;

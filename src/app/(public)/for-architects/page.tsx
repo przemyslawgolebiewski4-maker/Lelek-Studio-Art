@@ -4,12 +4,10 @@ import { TradeHero } from "@/components/public/TradeHero";
 import { DEFAULT_ARCHITECTS, getArchitectsSection, resolveArchitectsSub } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL } from "@/lib/config";
-import { ARCHITECTS_PAGE_KEYWORDS, withPageDescription } from "@/lib/seo";
+import { ARCHITECTS_PAGE_KEYWORDS, TRADE_DESCRIPTION, withPageDescription } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const section = await getArchitectsSection();
-  const description = resolveArchitectsSub(section.sub);
-  return withPageDescription(description, {
+  return withPageDescription(TRADE_DESCRIPTION, {
     title: "Trade",
     keywords: ARCHITECTS_PAGE_KEYWORDS,
     alternates: { canonical: `${SITE_URL}/for-architects` },

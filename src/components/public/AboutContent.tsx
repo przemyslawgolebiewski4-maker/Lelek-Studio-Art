@@ -21,7 +21,7 @@ export function AboutContent({
   const imageMobile = story.imageMobile?.trim() || "";
   const video = story.video?.trim() || "";
   const videoMobile = story.videoMobile?.trim() || "";
-  const alt = story.imageAlt || "Lelek Studio";
+  const alt = story.imageAlt || "Przemysław Gołębiewski, ceramist";
   const gallery = (story.gallery ?? []).filter((g) => g.image);
   const shopLabel = story.ctaShopLabel || "Shop the collections";
   const tradeLabel = story.ctaTradeLabel || "Designing a space?";
@@ -101,11 +101,11 @@ export function AboutContent({
         <div className="originals-header">
           <div className="sec-eyebrow">{story.originalsEyebrow || "Originals"}</div>
           <h2 className="page-h1" style={{ fontSize: "var(--text-2xl)" }}>
-            {story.originalsHeading || "One-of-a-kind pieces"}
+            {story.originalsHeading || "Shaped by hand, not by mold"}
           </h2>
           <p className="page-intro">
             {story.originalsIntro ||
-              "Sculptural and statement works available by inquiry - not sold through the shop."}
+              "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences."}
           </p>
         </div>
         <OriginalsGrid products={originals} inquireHref="/contact" />

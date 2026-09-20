@@ -5,6 +5,8 @@ import { getSiteSettings } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact",
+  description:
+    "Write to Przemysław Gołębiewski at LELEK in Berlin - commissions, interior projects, or a piece for the home.",
   alternates: { canonical: `${SITE_URL}/contact` },
 };
 

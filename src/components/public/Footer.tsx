@@ -17,7 +17,7 @@ export function Footer({
   instagram = INSTAGRAM_URL,
   email = "lelekstudio@lelekstudio.com",
   shopUrl = "https://shop.lelekstudio.com",
-  lelekMeaning = "Design through material.",
+  lelekMeaning = "The hand moves, the mind follows after.",
 }: FooterProps) {
   const year = new Date().getFullYear();
 
@@ -56,7 +56,7 @@ export function Footer({
           <CookiePreferencesLink />
         </li>
         <li>
-          <Link href="/about">Art</Link>
+          <Link href="/about">About</Link>
         </li>
         <li>
           <Link href={`mailto:${email}`}>{email}</Link>

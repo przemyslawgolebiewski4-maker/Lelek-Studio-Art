@@ -116,17 +116,17 @@ export function HeroSectionEditor({
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">2. Text (as on the page)</h3>
-        <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="Design through material." />
+        <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="The process comes first." />
         <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
-        <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Ceramic objects, vessels, prints." />
+        <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Vessels, cups, lamps - organic and raw, shaped by hand, never exactly." />
         <AdminInput
           label="Semantic core sentence"
           value={form.semanticCore}
           onChange={(e) => set("semanticCore", e.target.value)}
-          placeholder="LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics."
+          placeholder="Przemysław Gołębiewski is a self-taught ceramist, working by intuition rather than plan."
         />
         <p className="admin-field-hint">
-          One sentence under the hero subline - SEO/GEO core claim. Empty uses the site default. Keep it a single sentence.
+          One sentence under the hero subline - this is the entity Google should read. Keep it third person: &quot;Przemysław Gołębiewski is a self-taught ceramist…&quot; Empty uses the site default.
         </p>
         <AdminTextarea
           label="Elements tagline (under elements, if elements shown)"
@@ -134,7 +134,7 @@ export function HeroSectionEditor({
           name="kozodoj"
           value={form.kozodoj}
           onChange={(e) => set("kozodoj", e.target.value)}
-          placeholder="Design through material."
+          placeholder="The hand moves, the mind follows after."
         />
         <p className="admin-field-hint">
           Editable text field - appears under Earth / Water / Fire / Air when the Elements section is visible on the homepage.
@@ -202,10 +202,10 @@ export function storyToForm(content: Record<string, unknown>): StoryFormData {
     ctaShopLabel: c.ctaShopLabel ?? "Shop the collections",
     ctaTradeLabel: c.ctaTradeLabel ?? "Designing a space?",
     originalsEyebrow: c.originalsEyebrow ?? "Originals",
-    originalsHeading: c.originalsHeading ?? "One-of-a-kind pieces",
+    originalsHeading: c.originalsHeading ?? "Shaped by hand, not by mold",
     originalsIntro:
       c.originalsIntro ??
-      "Sculptural and statement works available by inquiry - not sold through the shop.",
+      "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences.",
     gallery: rawGallery.map((g) => ({ image: g.image ?? "", alt: g.alt ?? "" })),
   };
 }
@@ -293,7 +293,9 @@ export function StorySectionEditor({
       <div className="admin-field-group">
         <h3 className="admin-group-title">Bio copy</h3>
         <p className="admin-muted">
-          Paragraph 1 also appears as the homepage Story teaser. Paragraphs 2-3 and the signature appear only on /about.
+          Paragraph 1 also appears as the homepage Story teaser and should stay third person:
+          &quot;Przemysław Gołębiewski is a self-taught ceramist…&quot; so Google can read the maker.
+          Paragraphs 2-3 and the signature appear only on /about (first person, core voice).
         </p>
         <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} />
         <AdminInput label="Heading" value={form.heading} onChange={(e) => set("heading", e.target.value)} />
@@ -400,7 +402,7 @@ export function ElementsSectionEditor({
   const scopeNote =
     typeof content.scopeNote === "string"
       ? content.scopeNote
-      : "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air.";
+      : "Stoneware shaped by hand, not by mold - organic and raw, shown below in the studio's four elements: earth, water, fire, air.";
 
   function updateItem(index: number, patch: Partial<ElementItem>) {
     const next = items.map((item, i) => (i === index ? { ...item, ...patch } : item));
@@ -649,7 +651,7 @@ export function TradeSectionEditor({
           rows={5}
           value={c.sub ?? ""}
           onChange={(e) => set("sub", e.target.value)}
-          placeholder="Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification."
+          placeholder="Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic."
         />
       </div>
 
@@ -834,7 +836,7 @@ export function FindSectionEditor({
         </p>
       </div>
       <AdminInput
-        label="Brand tagline (footer - e.g. Design through material.)"
+        label="Brand tagline (footer - e.g. The hand moves, the mind follows after.)"
         value={c.lelekMeaning ?? ""}
         onChange={(e) => set("lelekMeaning", e.target.value)}
       />
@@ -855,11 +857,11 @@ export function featuredToForm(content: Record<string, unknown>): FeaturedFormDa
   const c = content as Record<string, string>;
   return {
     eyebrow: c.eyebrow ?? "Works",
-    heading: c.heading ?? "Form, surface",
-    headingEm: c.headingEm ?? "and presence",
+    heading: c.heading ?? "Shaped by hand",
+    headingEm: c.headingEm ?? "never exactly",
     video: c.video ?? "",
     videoMobile: c.videoMobile ?? "",
-    videoAlt: c.videoAlt ?? "Lelek Studio Berlin - handmade ceramics",
+    videoAlt: c.videoAlt ?? "Ceramics by Przemysław Gołębiewski - Lelek Studio Berlin",
   };
 }
 

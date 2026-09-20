@@ -1,5 +1,17 @@
 import { serverFetch } from "@/lib/api-server";
-import { SHOP_URL } from "@/lib/config";
+import { ELEMENTS_SCOPE_NOTE } from "@/lib/brand";
+import {
+  DEFAULT_ARCHITECTS,
+  DEFAULT_HERO,
+  DEFAULT_SIGNPOST,
+  DEFAULT_STORY,
+  resolveArchitectsSection,
+  resolveArchitectsSub,
+  resolveElementsScope,
+  resolveSignpostSection,
+  resolveStorySection,
+} from "@/lib/brand-copy";
+import { resolveShopUrl } from "@/lib/config";
 import type { Product } from "@/types/product";
 import type {
   ArchitectsSection,
@@ -13,6 +25,14 @@ import type {
   StorySection,
 } from "@/types/content";
 
+export {
+  DEFAULT_ARCHITECTS,
+  DEFAULT_HERO,
+  DEFAULT_SIGNPOST,
+  DEFAULT_STORY,
+  resolveArchitectsSub,
+};
+
 export type HomeSectionKey =
   | "hero"
   | "story"
@@ -22,57 +42,6 @@ export type HomeSectionKey =
   | "architects"
   | "journal"
   | "find";
-
-export const DEFAULT_HERO: Record<string, string> = {
-  eyebrow: "Design through material.",
-  headline: "",
-  headlineEm: "",
-  subheadline: "Ceramic objects, vessels, prints.",
-  semanticCore:
-    "LELEK is a Berlin-based ceramic artist and studio creating handbuilt ceramic sculptures, wall objects and collectible functional ceramics.",
-  brandline: "LELEK - Berlin.",
-  quote: "",
-  // Media comes only from Admin - no static /images/hero leftovers under video
-  image: "",
-  imageMobile: "",
-  video: "",
-  videoMobile: "",
-  imageCaption: "",
-  imageAlt: "Lelek Studio Berlin - handmade ceramics",
-  cta1Text: "Shop",
-  cta1Url: SHOP_URL,
-  cta2Text: "About",
-  cta2Url: "/about",
-};
-
-export const DEFAULT_SIGNPOST: SignpostSection = {
-  intro:
-    "LELEK works across ceramics, sculpture and print. Originals for collectors. Stoneware, fine art posters and wearable pieces for everyday use.",
-  tradeSignal: "Designing a space? Let's talk",
-  tradeHref: "/for-architects",
-  cards: [
-    {
-      label: "Shop",
-      description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
-      href: SHOP_URL,
-    },
-    {
-      label: "About",
-      description: "The studio story and one-of-a-kind Originals for collectors.",
-      href: "/about",
-    },
-    {
-      label: "Process",
-      description: "Notes on material, making and life in the Berlin studio.",
-      href: "/journal",
-    },
-    {
-      label: "Trade",
-      description: "Commissions for hospitality, offices and private spaces.",
-      href: "/for-architects",
-    },
-  ],
-};
 
 export async function getSiteSettings(): Promise<Record<string, string>> {
   return serverFetch("/settings/public", { fallback: {} });
@@ -101,17 +70,16 @@ export async function getPublicHomeData() {
     serverFetch<ElementsSection>("/sections/elements", {
       fallback: {
         items: [],
-        scopeNote:
-          "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air.",
+        scopeNote: ELEMENTS_SCOPE_NOTE,
       },
     }),
     serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS }),
     serverFetch<JournalSection>("/sections/journal", {
       fallback: {
         eyebrow: "Journal",
-        heading: "Stories from",
-        headingEm: "the studio",
-        sub: "Notes on process, material and making in Berlin.",
+        heading: "Notes on process",
+        headingEm: "and material",
+        sub: "What the kiln and the material decide together.",
       },
     }),
     serverFetch<JournalPostSummary[]>("/journal/public", { fallback: [] }),
@@ -119,12 +87,14 @@ export async function getPublicHomeData() {
     serverFetch<FeaturedSection>("/sections/featured", {
       fallback: {
         eyebrow: "Works",
-        heading: "Form, surface",
-        headingEm: "and presence",
+        heading: "Shaped by hand",
+        headingEm: "never exactly",
       },
     }),
     serverFetch<Product[]>("/products/home", { fallback: [] }),
   ]);
+
+  const shopUrl = resolveShopUrl(settings);
 
   return {
     settings,
@@ -132,11 +102,14 @@ export async function getPublicHomeData() {
     featured,
     featuredSection,
     homeProducts,
-    story,
-    signpost,
-    elementsSection: elements,
+    story: resolveStorySection(story),
+    signpost: resolveSignpostSection(signpost, shopUrl),
+    elementsSection: {
+      ...elements,
+      scopeNote: resolveElementsScope(elements.scopeNote),
+    },
     elements: elements.items ?? [],
-    architects,
+    architects: resolveArchitectsSection(architects),
     journalSection,
     journalPosts: journalPosts.slice(0, 1),
     find,
@@ -187,88 +160,27 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   });
 }
 
-export const DEFAULT_STORY: StorySection = {
-  eyebrow: "The story",
-  heading: "From peatlands",
-  headingEm: "to clay",
-  body1:
-    "As a small boy I always followed the pull of nature - that was where I felt safe.",
-  body2:
-    "Not far from my family home stretched wide peatlands, home to different animals and the sounds of nature.",
-  body3:
-    "I am self-taught. I work intuitively, whether painting or working with clay.",
-  signature: "Przemyslaw Golebiewski - ceramist",
-  // Media comes only from Admin - no static /images/process leftovers
-  image: "",
-  imageMobile: "",
-  imageAlt: "Przemyslaw Golebiewski at the wheel, Clay Stories Berlin",
-  imageCaption: "",
-  gallery: [],
-  ctaShopLabel: "Shop the collections",
-  ctaTradeLabel: "Designing a space?",
-  originalsEyebrow: "Originals",
-  originalsHeading: "One-of-a-kind pieces",
-  originalsIntro:
-    "Sculptural and statement works available by inquiry - not sold through the shop.",
-};
-
-export const DEFAULT_ARCHITECTS: ArchitectsSection = {
-  eyebrow: "For architects & designers",
-  headline: "Objects for spaces",
-  headlineEm: "that refuse the ordinary.",
-  sub:
-    "Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification.",
-  point1Title: "Wall objects",
-  point1Body:
-    "Handbuilt ceramic pieces for walls. Each exists once. Available for residential and hospitality projects.",
-  point2Title: "Vessels and objects",
-  point2Body: "Sculptural forms for shelves, tables and surfaces. Selected, not configured.",
-  point3Title: "Functional ceramics",
-  point3Body:
-    "Cups, bowls and tea objects available to order. The only category produced in series.",
-  closingNote:
-    "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
-  ctaText: "Get in touch",
-  formTitle: "Send an inquiry",
-  formIntro:
-    "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.",
-  formSuccessTitle: "Message received.",
-  formSuccessBody: "We will get back to you within 1-2 working days.",
-  heroCaption:
-    "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.",
-  heroImageAlt: "Ceramic wall objects and vessels for spaces",
-};
-
-/** Retired contradiction copy still stored in production CMS for architects.sub */
-const STALE_ARCHITECTS_SUB_MARKERS = ["We do not produce to specification"] as const;
-
-/**
- * Prefer CMS `sub` when present and not the retired contradiction.
- * Falls back to DEFAULT so a deploy can retire stale Mongo text without an Admin save.
- */
-export function resolveArchitectsSub(cmsSub?: string): string {
-  const text = cmsSub?.trim() ?? "";
-  if (!text || STALE_ARCHITECTS_SUB_MARKERS.some((m) => text.includes(m))) {
-    return DEFAULT_ARCHITECTS.sub!;
-  }
-  return text;
-}
-
 export async function getStorySection(): Promise<StorySection> {
-  return serverFetch<StorySection>("/sections/story", { fallback: DEFAULT_STORY });
+  const story = await serverFetch<StorySection>("/sections/story", {
+    fallback: DEFAULT_STORY,
+  });
+  return resolveStorySection(story);
 }
 
 export async function getArchitectsSection(): Promise<ArchitectsSection> {
-  return serverFetch<ArchitectsSection>("/sections/architects", { fallback: DEFAULT_ARCHITECTS });
+  const section = await serverFetch<ArchitectsSection>("/sections/architects", {
+    fallback: DEFAULT_ARCHITECTS,
+  });
+  return resolveArchitectsSection(section);
 }
 
 export async function getJournalSection(): Promise<JournalSection> {
   return serverFetch<JournalSection>("/sections/journal", {
     fallback: {
       eyebrow: "Journal",
-      heading: "Stories from",
-      headingEm: "the studio",
-      sub: "Notes on process, material and making in Berlin.",
+      heading: "Notes on process",
+      headingEm: "and material",
+      sub: "What the kiln and the material decide together.",
     },
   });
 }

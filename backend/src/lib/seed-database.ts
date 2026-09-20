@@ -86,12 +86,15 @@ export async function seedDatabase(options?: { force?: boolean }) {
       sectionKey: "hero",
       order: 0,
       content: {
-        eyebrow: "Design through material.",
+        eyebrow: "The process comes first.",
         headline: "",
         headlineEm: "",
         quote: "",
-        subheadline: "Ceramic objects, vessels, prints.",
+        subheadline: "Vessels, cups, lamps - organic and raw, shaped by hand, never exactly.",
+        semanticCore:
+          "Przemysław Gołębiewski is a self-taught ceramist, working by intuition rather than plan. The process comes first, always - the hand moves, the mind follows after.",
         brandline: "LELEK - Berlin.",
+        kozodoj: "The hand moves, the mind follows after.",
         image: legacy.hero.image,
         imageMobile: legacy.hero.imageMobile,
         imageAlt: legacy.hero.imageAlt,
@@ -124,6 +127,10 @@ export async function seedDatabase(options?: { force?: boolean }) {
         gallery: [],
         ctaShopLabel: "Shop the collections",
         ctaTradeLabel: "Designing a space?",
+        originalsEyebrow: "Originals",
+        originalsHeading: "Shaped by hand, not by mold",
+        originalsIntro:
+          "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences.",
       },
     },
     {
@@ -131,28 +138,28 @@ export async function seedDatabase(options?: { force?: boolean }) {
       order: 2,
       content: {
         intro:
-          "LELEK works across ceramics, sculpture and print. Originals for collectors. Stoneware, fine art posters and wearable pieces for everyday use.",
+          "LELEK is the ceramic practice of Przemysław Gołębiewski. Organic and brutalist forms, shaped by hand - vessels, cups, lamps and objects that never repeat exactly.",
         tradeSignal: "Designing a space? Let's talk",
         tradeHref: "/for-architects",
         cards: [
           {
             label: "Shop",
-            description: "Ceramic objects, vessels, prints and wearable pieces for everyday use.",
+            description: "Vessels, cups, lamps and objects. Forms that repeat, never exactly.",
             href: "https://shop.lelekstudio.com",
           },
           {
             label: "About",
-            description: "The studio story and one-of-a-kind Originals for collectors.",
+            description: "Przemysław Gołębiewski - self-taught ceramist. Process first, always.",
             href: "/about",
           },
           {
             label: "Process",
-            description: "Notes on material, making and life in the Berlin studio.",
+            description: "Notes on clay, kiln, texture, and what the material decides.",
             href: "/journal",
           },
           {
             label: "Trade",
-            description: "Commissions for hospitality, offices and private spaces.",
+            description: "Works for spaces that can hold something raw, organic, or both.",
             href: "/for-architects",
           },
         ],
@@ -164,7 +171,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
       content: {
         items: legacy.elements,
         scopeNote:
-          "Handbuilt stoneware, wheel-thrown and shaped by hand - shown below in the studio's four elements: earth, water, fire, air.",
+          "Stoneware shaped by hand, not by mold - organic and raw, shown below in the studio's four elements: earth, water, fire, air.",
       },
     },
     {
@@ -183,7 +190,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
         eyebrow: "For architects & designers",
         headline: "Looking for something made by hand, not manufactured?",
         sub:
-          "Each wall object, vessel and sculptural piece exists as a singular form - shaped by intuition, not brief. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of an architectural space - but always through the same intuitive process, never to a fixed specification.",
+          "Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of a room - but always through the same process: the hand moves, the mind follows after. Never to a fixed specification. Never by mold.",
         body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
         point1Title: "Wall objects",
         point1Body:
@@ -193,7 +200,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
           "Sculptural forms for shelves, tables and surfaces. Selected, not configured.",
         point3Title: "Functional ceramics",
         point3Body:
-          "Cups, bowls and tea objects available to order. The only category produced in series.",
+          "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold.",
         closingNote:
           "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
         ctaText: "Get in touch",
@@ -214,9 +221,9 @@ export async function seedDatabase(options?: { force?: boolean }) {
       order: 6,
       content: {
         eyebrow: "Journal",
-        heading: "Stories from",
-        headingEm: "the studio",
-        sub: "Notes on process, material and making in Berlin.",
+        heading: "Notes on process",
+        headingEm: "and material",
+        sub: "What the kiln and the material decide together.",
       },
     },
     {
@@ -259,7 +266,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
         title: item.title,
         category: categories[i],
         material: item.meta,
-        description: `Shaped by hand in Berlin - ${item.meta.toLowerCase()}. One of a kind. Made in Berlin.`,
+        description: `Shaped by hand in Berlin - ${item.meta.toLowerCase()}. Each piece a little different from the last.`,
         images: [item.image],
         metaTitle: `${item.title} | Lelek Studio`,
         metaDescription: item.alt,
@@ -281,12 +288,12 @@ export async function seedDatabase(options?: { force?: boolean }) {
       category: "prints",
       material: "Archival pigment print on paper",
       description:
-        "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemek - not an illustration. A quiet record of form and surface from the studio. Printed to order. Shipped from Europe.",
+        "This poster reproduces a photograph of an original ceramic piece, hand-shaped by Przemysław Gołębiewski - not an illustration. A quiet record of form and surface from the studio. Printed to order. Shipped from Europe.",
       process: "Photographed in natural light, printed on archival paper.",
       images: ["/images/featured/feat-1.jpg"],
       metaTitle: "LELEK Sentences 01 | Lelek Studio",
       metaDescription:
-        "Archival print reproducing a photograph of an original ceramic piece by Przemek - Lelek Studio Berlin.",
+        "Archival print reproducing a photograph of an original ceramic piece by Przemysław Gołębiewski - Lelek Studio Berlin.",
       published: true,
       order: 10,
       etsyUrl: site.etsy,
