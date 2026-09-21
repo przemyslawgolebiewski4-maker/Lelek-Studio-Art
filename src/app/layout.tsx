@@ -67,6 +67,12 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <meta
+          name="facebook-domain-verification"
+          content="i1pgkcadze0s7rjqgxba3ptwu0brnm"
+        />
+      </head>
       <body className={fontVariables}>
         <Script id="lelek-consent-default" strategy="beforeInteractive">
           {CONSENT_BOOTSTRAP_SCRIPT}
