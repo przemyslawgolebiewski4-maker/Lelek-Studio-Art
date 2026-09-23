@@ -17,7 +17,9 @@ export default async function PublicLayout({ children }: { children: React.React
   return (
     <>
       <Navigation shopUrl={shopUrl} />
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>
+        {children}
+      </main>
       <Footer
         siteName={settings.site_name}
         location={settings.location}
