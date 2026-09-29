@@ -7,13 +7,15 @@ import { getJournalPostBySlug } from "@/lib/site";
 import { withCreatorName } from "@/lib/brand";
 import { SITE_URL } from "@/lib/config";
 import { withPageDescription } from "@/lib/seo";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getJournalPostBySlug(slug);
-  if (!post) return { title: "Post not found" };
+  if (!post) return { title: t(await getLocale(), "meta.missingPost") };
 
   const title = post.metaTitle || post.title;
   const description = withCreatorName(post.metaDescription || post.excerpt || "");

@@ -1,13 +1,18 @@
 import type { ArchitectsSection } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { localeText } from "@/lib/i18n/present";
 
-export function TradeHero({ section }: { section: ArchitectsSection }) {
+export async function TradeHero({ section }: { section: ArchitectsSection }) {
+  const locale = await getLocale();
   const image = section.heroImage;
   const video = section.heroVideo;
-  const caption =
-    section.heroCaption ??
-    "Ceramic vessels, lamps and wall objects by Przemysław Gołębiewski - for spaces that can hold something raw, organic, or both.";
-  const alt = section.heroImageAlt || "Ceramic objects by Przemysław Gołębiewski for interiors";
+  const caption = localeText(
+    locale,
+    section.heroCaption ||
+      "Ceramic vessels, lamps and wall objects by Przemysław Gołębiewski - for spaces that can hold something raw, organic, or both.",
+  );
+  const alt = localeText(locale, section.heroImageAlt || "Ceramic objects by Przemysław Gołębiewski for interiors");
 
   if (!image && !video) {
     return (

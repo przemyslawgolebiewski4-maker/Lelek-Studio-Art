@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { track } from "@vercel/analytics";
+import { useLocale } from "@/components/i18n/LocaleProvider";
 import type { SignpostSection } from "@/types/content";
 import { SHOP_URL } from "@/lib/config";
+import { localeText } from "@/lib/i18n/present";
 
 function defaultCards(shopUrl: string) {
   return [
@@ -41,25 +43,35 @@ export function Signpost({
   section: SignpostSection;
   shopUrl?: string;
 }) {
-  const fallback = defaultCards(shopUrl);
+  const locale = useLocale();
+  const fallback = defaultCards(shopUrl).map((card) => ({
+    ...card,
+    label: localeText(locale, card.label),
+    description: localeText(locale, card.description),
+  }));
   const cards =
     section.cards && section.cards.length > 0
-      ? section.cards.slice(0, 4)
+      ? section.cards.slice(0, 4).map((card) => ({
+          ...card,
+          label: localeText(locale, card.label),
+          description: localeText(locale, card.description),
+        }))
       : fallback.slice();
 
   while (cards.length < 4) {
     cards.push(fallback[cards.length]!);
   }
 
-  const intro =
-    section.intro ??
-    "LELEK is the ceramic practice of Przemysław Gołębiewski. Organic and brutalist forms, shaped by hand - vessels, cups, lamps and objects that never repeat exactly.";
-  const tradeSignal =
-    section.tradeSignal ?? "Designing a space? Let's talk";
+  const intro = localeText(
+    locale,
+    section.intro?.trim() ||
+      "LELEK is the ceramic practice of Przemysław Gołębiewski. Organic and brutalist forms, shaped by hand - vessels, cups, lamps and objects that never repeat exactly.",
+  );
+  const tradeSignal = localeText(locale, section.tradeSignal?.trim() || "Designing a space? Let's talk");
   const tradeHref = section.tradeHref ?? "/for-architects";
 
   return (
-    <section className="signpost-section" aria-label="Wayfinding">
+    <section className="signpost-section" aria-label={localeText(locale, "Wayfinding")}>
       <div className="signpost-intro">
         <p className="signpost-body">{intro}</p>
         <Link

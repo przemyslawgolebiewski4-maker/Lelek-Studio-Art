@@ -32,4 +32,15 @@ export interface Product {
   thumbnailPosition?: string;
   createdAt?: string;
   updatedAt?: string;
+  i18n?: {
+    pl?: {
+      title?: string;
+      material?: string;
+      description?: string;
+      process?: string;
+      imageAlt?: string;
+      metaTitle?: string;
+      metaDescription?: string;
+    };
+  };
 }

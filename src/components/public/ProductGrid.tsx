@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
-import type { Product, ProductCategory } from "@/types/product";
+import type { Product } from "@/types/product";
 import {
   CATEGORY_ANCHOR,
   CATEGORY_INDEX,
@@ -12,6 +12,9 @@ import {
   CATEGORY_TAB_LABELS,
   parseCategoryAnchor,
 } from "@/lib/categories";
+import { useLocale, useT } from "@/components/i18n/LocaleProvider";
+import type { MessageKey } from "@/lib/i18n/messages";
+import type { ProductCategory } from "@/types/product";
 import { normalizeSlug } from "@/lib/slug";
 
 export { CATEGORY_LABELS };
@@ -36,6 +39,20 @@ export function WorksGrid({
   etsyUrl?: string;
 }) {
   const [filter, setFilter] = useState<FilterCat>("all");
+  const tr = useT();
+  const locale = useLocale();
+  const tabKey: Record<ProductCategory, MessageKey> = {
+    ceramics: "cat.ceramics",
+    vessels: "cat.vessels",
+    "wall-objects": "cat.wall",
+    prints: "cat.prints",
+  };
+  const longKey: Record<ProductCategory, MessageKey> = {
+    ceramics: "cat.ceramicsLong",
+    vessels: "cat.vessels",
+    "wall-objects": "cat.wallLong",
+    prints: "cat.prints",
+  };
 
   useEffect(() => {
     const applyHash = () => {
@@ -79,20 +96,22 @@ export function WorksGrid({
   return (
     <div className="works-page">
       <section className="works-header">
-        <h1 className="works-title">Works</h1>
-        <div className="works-total">{products.length} objects</div>
+        <h1 className="works-title">{tr("works.title")}</h1>
+        <div className="works-total">
+          {products.length} {tr("works.objects")}
+        </div>
       </section>
 
       {products.length === 0 ? (
         <div className="works-empty">
-          No works published yet.{" "}
+          {tr("works.empty")}{" "}
           <Link href="/contact" className="link-brutal" style={{ marginTop: 0 }}>
-            Get in touch
+            {tr("find.touch")}
           </Link>
         </div>
       ) : (
         <>
-          <div className="works-cats" role="tablist" aria-label="Filter works by category">
+          <div className="works-cats" role="tablist" aria-label={tr("works.filter")}>
             <button
               type="button"
               role="tab"
@@ -100,7 +119,7 @@ export function WorksGrid({
               className={`works-cat-btn${filter === "all" ? " active" : ""}`}
               onClick={() => selectFilter("all")}
             >
-              All
+              {tr("works.allFilter")}
               <span className="works-cat-count">{products.length}</span>
             </button>
             {CATEGORY_ORDER.map((category) => (
@@ -112,7 +131,7 @@ export function WorksGrid({
                 className={`works-cat-btn${filter === category ? " active" : ""}`}
                 onClick={() => selectFilter(category)}
               >
-                {CATEGORY_TAB_LABELS[category]}
+                {locale === "pl" ? tr(tabKey[category]) : CATEGORY_TAB_LABELS[category]}
                 <span className="works-cat-count">{counts[category]}</span>
               </button>
             ))}
@@ -132,8 +151,12 @@ export function WorksGrid({
                   className="works-cat-row"
                   data-cat={group.category}
                 >
-                  <span className="works-cat-label">Category {CATEGORY_INDEX[group.category]}</span>
-                  <span className="works-cat-name">{CATEGORY_LABELS[group.category]}</span>
+                  <span className="works-cat-label">
+                    {tr("works.category")} {CATEGORY_INDEX[group.category]}
+                  </span>
+                  <span className="works-cat-name">
+                    {locale === "pl" ? tr(longKey[group.category]) : CATEGORY_LABELS[group.category]}
+                  </span>
                 </div>
               );
 
@@ -148,7 +171,7 @@ export function WorksGrid({
                   >
                     <span className="works-item-num">{formatCatalog(product.catalog)}</span>
                     {product.soldOut ? (
-                      <span className="works-item-sold">Sold</span>
+                      <span className="works-item-sold">{tr("works.sold")}</span>
                     ) : null}
                     <div className="works-item-img">
                       {product.images[0] ? (

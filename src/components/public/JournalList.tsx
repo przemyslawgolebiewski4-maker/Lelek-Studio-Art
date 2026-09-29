@@ -2,10 +2,13 @@ import Link from "next/link";
 import Image from "next/image";
 import type { JournalPostSummary } from "@/types/content";
 import { resolvePostDate } from "@/lib/dates";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
-export function JournalList({ posts }: { posts: JournalPostSummary[] }) {
+export async function JournalList({ posts }: { posts: JournalPostSummary[] }) {
+  const locale = await getLocale();
   if (posts.length === 0) {
-    return <p className="page-intro">No journal entries yet. Check back soon.</p>;
+    return <p className="page-intro">{t(locale, "journal.empty")}</p>;
   }
 
   return (

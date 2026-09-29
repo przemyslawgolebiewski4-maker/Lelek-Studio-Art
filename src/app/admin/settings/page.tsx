@@ -9,6 +9,10 @@ import {
   AdminTextarea,
 } from "@/components/admin/AdminShell";
 import { AdminSeoTextarea } from "@/components/admin/AdminFieldHelpers";
+import { LangPair } from "@/components/admin/BilingualField";
+import { DEFAULT_DESCRIPTION, DEFAULT_TAGLINE } from "@/lib/brand";
+import { suggestPl } from "@/lib/i18n/dictionary";
+import { CONTACT_DEFAULTS } from "@/lib/legal";
 import { apiGet, apiPatch, readApiResult, readPlainJson } from "@/lib/api";
 
 type FieldDef =
@@ -19,6 +23,30 @@ type FieldGroup = {
   title: string;
   description?: string;
   fields: FieldDef[];
+};
+
+const TRANSLATABLE = new Set([
+  "tagline",
+  "description",
+  "location",
+  "contact_heading_1",
+  "contact_heading_2",
+  "contact_heading_3",
+  "contact_sub",
+  "contact_success",
+  "contact_form_note",
+  "datenschutz_body",
+]);
+
+const EN_FALLBACK: Record<string, string> = {
+  tagline: DEFAULT_TAGLINE,
+  description: DEFAULT_DESCRIPTION,
+  contact_heading_1: CONTACT_DEFAULTS.heading1,
+  contact_heading_2: CONTACT_DEFAULTS.heading2,
+  contact_heading_3: CONTACT_DEFAULTS.heading3,
+  contact_sub: CONTACT_DEFAULTS.sub,
+  contact_success: CONTACT_DEFAULTS.success,
+  contact_form_note: CONTACT_DEFAULTS.formNote,
 };
 
 const FIELD_GROUPS: FieldGroup[] = [
@@ -119,14 +147,22 @@ export default function AdminSettingsPage() {
   async function save() {
     setSaving(true);
     setError("");
-    const res = await apiPatch("/admin/settings", { settings });
+    const next = { ...settings };
+    for (const key of TRANSLATABLE) {
+      const plKey = `${key}_pl`;
+      if (!next[plKey]?.trim()) {
+        const suggested = suggestPl(next[key] || EN_FALLBACK[key] || "");
+        if (suggested) next[plKey] = suggested;
+      }
+    }
+    const res = await apiPatch("/admin/settings", { settings: next });
     const data = await readApiResult<{ settings?: Record<string, string> }>(res);
     setSaving(false);
     if (!data.ok) {
       setError(data.error);
       return;
     }
-    setSettings(data.settings ?? settings);
+    setSettings(data.settings ?? next);
     setSaved(true);
   }
 
@@ -145,6 +181,27 @@ export default function AdminSettingsPage() {
             {group.description ? <p className="admin-muted">{group.description}</p> : null}
             {group.fields.map((field) => {
               const value = settings[field.key] ?? "";
+              if (TRANSLATABLE.has(field.key)) {
+                const plKey = `${field.key}_pl`;
+                const pl =
+                  settings[plKey] ??
+                  suggestPl(value || EN_FALLBACK[field.key] || "");
+                const rows = field.key === "datenschutz_body" ? 14 : field.kind === "text" ? 2 : 4;
+                return (
+                  <div key={field.key}>
+                    <LangPair
+                      label={field.label}
+                      en={value}
+                      pl={pl}
+                      multiline={field.kind !== "text"}
+                      rows={rows}
+                      onEn={(next) => setField(field.key, next)}
+                      onPl={(next) => setField(plKey, next)}
+                    />
+                    {field.hint ? <p className="admin-muted">{field.hint}</p> : null}
+                  </div>
+                );
+              }
               if (field.kind === "seo-desc") {
                 return (
                   <div key={field.key}>

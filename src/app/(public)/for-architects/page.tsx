@@ -4,11 +4,15 @@ import { TradeHero } from "@/components/public/TradeHero";
 import { DEFAULT_ARCHITECTS, getArchitectsSection, resolveArchitectsSub } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL } from "@/lib/config";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
+import { localeText } from "@/lib/i18n/present";
 import { ARCHITECTS_PAGE_KEYWORDS, TRADE_DESCRIPTION, withPageDescription } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  return withPageDescription(TRADE_DESCRIPTION, {
-    title: "Trade",
+  const locale = await getLocale();
+  return withPageDescription(localeText(locale, TRADE_DESCRIPTION), {
+    title: t(locale, "meta.trade"),
     keywords: ARCHITECTS_PAGE_KEYWORDS,
     alternates: { canonical: `${SITE_URL}/for-architects` },
   });
@@ -17,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function ForArchitectsPage() {
-  const section = await getArchitectsSection();
+  const [section, locale] = await Promise.all([getArchitectsSection(), getLocale()]);
 
   const rawPoints =
     section.points && section.points.length > 0
@@ -50,16 +54,19 @@ export default async function ForArchitectsPage() {
 
   const points = rawPoints.map((p, i) => ({
     num: String(i + 1).padStart(2, "0"),
-    title: p.title || defaultTitles[i] || `Point ${i + 1}`,
-    body: p.body || defaultBodies[i] || "",
+    title: p.title || localeText(locale, defaultTitles[i] || `Point ${i + 1}`),
+    body: p.body || localeText(locale, defaultBodies[i] || ""),
   }));
 
-  const closingNote = section.closingNote || DEFAULT_ARCHITECTS.closingNote!;
+  const closingNote = section.closingNote || localeText(locale, DEFAULT_ARCHITECTS.closingNote!);
   const sub = resolveArchitectsSub(section.sub);
   const formIntro =
     section.formIntro?.trim() ||
-    DEFAULT_ARCHITECTS.formIntro ||
-    "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.";
+    localeText(
+      locale,
+      DEFAULT_ARCHITECTS.formIntro ||
+        "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.",
+    );
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -68,13 +75,13 @@ export default async function ForArchitectsPage() {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Home",
+        name: t(locale, "home.crumb"),
         item: `${SITE_URL}/`,
       },
       {
         "@type": "ListItem",
         position: 2,
-        name: "Trade",
+        name: t(locale, "meta.trade"),
         item: `${SITE_URL}/for-architects`,
       },
     ],
@@ -111,7 +118,7 @@ export default async function ForArchitectsPage() {
       </section>
 
       <section className="page-shell">
-        <div className="sec-eyebrow">{section.formEyebrow || "Project inquiry"}</div>
+        <div className="sec-eyebrow">{section.formEyebrow || t(locale, "trade.inquiry")}</div>
         <p className="page-intro">{formIntro}</p>
         <ArchitectInquiryForm />
       </section>

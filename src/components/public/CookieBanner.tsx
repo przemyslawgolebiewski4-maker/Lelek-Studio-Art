@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 import {
   CONSENT_OPEN_EVENT,
   readConsent,
@@ -12,6 +13,7 @@ import {
 export function CookieBanner() {
   const pathname = usePathname();
   const titleId = useId();
+  const tr = useT();
   const [ready, setReady] = useState(false);
   const [showBar, setShowBar] = useState(false);
   const [showPrefs, setShowPrefs] = useState(false);
@@ -61,23 +63,22 @@ export function CookieBanner() {
         <div className="cookie-banner" role="dialog" aria-modal="false" aria-labelledby={titleId}>
           <div className="cookie-banner__copy">
             <h2 id={titleId} className="cookie-banner__title">
-              Cookie consent
+              {tr("cookie.title")}
             </h2>
             <p>
-              We and our partners, including Google, use cookies for analytics and marketing.
-              These load only after you accept.{" "}
-              <Link href="/datenschutz">Privacy Policy</Link>
+              {tr("cookie.body")}{" "}
+              <Link href="/datenschutz">{tr("cookie.privacy")}</Link>
             </p>
           </div>
           <div className="cookie-banner__actions">
             <button type="button" className="btn-brutal" onClick={() => setShowPrefs(true)}>
-              Manage preferences
+              {tr("cookie.manage")}
             </button>
             <button type="button" className="btn-brutal filled" onClick={() => save(true, true)}>
-              Accept
+              {tr("cookie.accept")}
             </button>
             <button type="button" className="btn-brutal" onClick={() => save(false, false)}>
-              Decline
+              {tr("cookie.decline")}
             </button>
           </div>
         </div>
@@ -88,7 +89,7 @@ export function CookieBanner() {
           <button
             type="button"
             className="cookie-prefs__overlay"
-            aria-label="Close cookie preferences"
+            aria-label={tr("cookie.close")}
             onClick={() => setShowPrefs(false)}
           />
           <div
@@ -98,42 +99,41 @@ export function CookieBanner() {
             aria-labelledby={`${titleId}-prefs`}
           >
             <div className="cookie-prefs__head">
-              <h2 id={`${titleId}-prefs`}>Cookie and privacy preferences</h2>
+              <h2 id={`${titleId}-prefs`}>{tr("cookie.prefsTitle")}</h2>
               <div className="cookie-prefs__actions">
                 <button type="button" className="btn-brutal filled" onClick={() => save(true, true)}>
-                  Accept all
+                  {tr("cookie.acceptAll")}
                 </button>
                 <button type="button" className="btn-brutal" onClick={() => save(false, false)}>
-                  Decline all
+                  {tr("cookie.declineAll")}
                 </button>
                 <button
                   type="button"
                   className="btn-brutal"
                   onClick={() => save(analytics, marketing)}
                 >
-                  Save my choices
+                  {tr("cookie.save")}
                 </button>
               </div>
             </div>
 
             <p className="cookie-prefs__lede">
-              Required cookies keep the site working. Analytics and marketing stay off until you
-              choose them. Details: <Link href="/datenschutz">Datenschutz</Link>.
+              {tr("cookie.lede")} <Link href="/datenschutz">{tr("cookie.privacy")}</Link>.
             </p>
 
             <ul className="cookie-prefs__list">
               <li>
                 <span>
-                  <strong>Required</strong>
-                  <small>Needed for the site, language and your cookie choice.</small>
+                  <strong>{tr("cookie.required")}</strong>
+                  <small>{tr("cookie.requiredHelp")}</small>
                 </span>
-                <span className="cookie-prefs__lock">On</span>
+                <span className="cookie-prefs__lock">{tr("cookie.on")}</span>
               </li>
               <li>
                 <label>
                   <span>
-                    <strong>Analytics</strong>
-                    <small>Google Analytics — how the studio site is used. Shared with the shop.</small>
+                    <strong>{tr("cookie.analytics")}</strong>
+                    <small>{tr("cookie.analyticsHelp")}</small>
                   </span>
                   <input
                     type="checkbox"
@@ -145,8 +145,8 @@ export function CookieBanner() {
               <li>
                 <label>
                   <span>
-                    <strong>Marketing</strong>
-                    <small>Google ads and measurement across studio and shop.</small>
+                    <strong>{tr("cookie.marketing")}</strong>
+                    <small>{tr("cookie.marketingHelp")}</small>
                   </span>
                   <input
                     type="checkbox"

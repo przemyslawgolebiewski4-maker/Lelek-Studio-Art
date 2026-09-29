@@ -17,6 +17,7 @@ import {
   SignpostSectionEditor,
   TradeSectionEditor,
 } from "@/components/admin/home/HomeSectionEditors";
+import { stampSectionPl } from "@/lib/i18n/cms";
 import { apiGet, apiPatch, readApiResult } from "@/lib/api";
 import type { HomeSectionKey } from "@/lib/site";
 
@@ -97,7 +98,8 @@ export default function AdminHomePage() {
     if (!selectedKey) return;
     setSaving(true);
     setError("");
-    const res = await apiPatch(`/admin/sections/${selectedKey}`, { content: draft, visible });
+    const content = stampSectionPl(selectedKey, draft);
+    const res = await apiPatch(`/admin/sections/${selectedKey}`, { content, visible });
     const data = await readApiResult(res);
     setSaving(false);
     if (!data.ok) {

@@ -7,4 +7,5 @@ export type Gallery = {
   order?: number;
   createdAt?: string;
   updatedAt?: string;
+  i18n?: { pl?: { name?: string; city?: string } };
 };

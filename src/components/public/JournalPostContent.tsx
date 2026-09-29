@@ -3,8 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import type { JournalPost } from "@/types/content";
 import { resolvePostDate } from "@/lib/dates";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
-export function JournalPostContent({ post }: { post: JournalPost }) {
+export async function JournalPostContent({ post }: { post: JournalPost }) {
+  const locale = await getLocale();
   const html = marked.parse(post.body ?? "", { async: false }) as string;
   const date = resolvePostDate(post);
 
@@ -12,9 +15,9 @@ export function JournalPostContent({ post }: { post: JournalPost }) {
     <article>
       <div className="page-shell">
         <Link href="/journal" className="back-link">
-          ← Journal
+          ← {t(locale, "journal.back")}
         </Link>
-        <div className="sec-eyebrow">Journal</div>
+        <div className="sec-eyebrow">{t(locale, "journal.back")}</div>
         <h1 className="page-h1">{post.title}</h1>
         {date ? (
           <time className="journal-post-date" dateTime={date.iso}>

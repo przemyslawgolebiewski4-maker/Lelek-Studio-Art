@@ -1,15 +1,71 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SITE_URL } from "@/lib/config";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
-export const metadata: Metadata = {
-  title: "Impressum",
-  alternates: { canonical: `${SITE_URL}/impressum` },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  return {
+    title: t(locale, "legal.impressum"),
+    alternates: { canonical: `${SITE_URL}/impressum` },
+  };
+}
 
 export const revalidate = 60;
 
-export default function ImpressumPage() {
+export default async function ImpressumPage() {
+  const locale = await getLocale();
+  if (locale === "pl") {
+    return (
+      <article>
+        <section className="page-shell">
+          <h1 className="page-h1">Impressum</h1>
+        </section>
+        <div className="page-content">
+          <div className="legal-prose">
+            <h2>Dane zgodnie z § 5 DDG</h2>
+            <p>
+              Przemysław Gołębiewski
+              <br />
+              działający pod nazwą „LELEK”
+              <br />
+              Sewanstraße 128
+              <br />
+              10319 Berlin
+              <br />
+              Niemcy
+            </p>
+            <h2>Kontakt</h2>
+            <p>
+              E-mail:{" "}
+              <a href="mailto:lelekstudio@lelekstudio.com">lelekstudio@lelekstudio.com</a>
+              <br />
+              Formularz kontaktowy: <Link href="/contact">Formularz kontaktowy</Link>
+            </p>
+            <h2>Numer identyfikacji VAT zgodnie z § 27a UStG</h2>
+            <p>DE463889135</p>
+            <h2>Zwolnienie dla małych przedsiębiorców</h2>
+            <p>Zgodnie z § 19 UStG podatek VAT nie jest naliczany.</p>
+            <h2>Rozstrzyganie sporów</h2>
+            <p>
+              Komisja Europejska udostępnia platformę internetowego rozstrzygania sporów
+              (ODR):{" "}
+              <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">
+                https://ec.europa.eu/consumers/odr/
+              </a>
+              <br />
+              Nasz adres e-mail znajdziesz wyżej, w danych Impressum.
+              <br />
+              Nie jesteśmy gotowi ani zobowiązani do udziału w postępowaniu przed
+              konsumenckim organem polubownym.
+            </p>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article>
       <section className="page-shell">

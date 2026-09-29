@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useT } from "@/components/i18n/LocaleProvider";
+import { localeText } from "@/lib/i18n/present";
 import { apiPost } from "@/lib/api";
 import type { ArchitectsSection } from "@/types/content";
 
@@ -10,6 +12,8 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
   const [formState, setFormState] = useState<FormState>("idle");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const locale = useLocale();
+  const tr = useT();
 
   const [form, setForm] = useState({
     name: "",
@@ -27,7 +31,7 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
-      setError("Name, email and message are required.");
+      setError(tr("form.required"));
       return;
     }
     setSubmitting(true);
@@ -36,21 +40,21 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
       const res = await apiPost("/contact", form);
       const data = await res.json();
       if (!res.ok || !data.ok) {
-        setError(data.error ?? "Something went wrong. Please try again.");
+        setError(data.error ?? tr("form.fail"));
         setSubmitting(false);
         return;
       }
       setFormState("success");
     } catch {
-      setError("Network error. Please try again.");
+      setError(tr("form.network"));
       setSubmitting(false);
     }
   }
 
   const points = [
-    { num: "01", title: s.point1Title ?? "Wall objects", body: s.point1Body ?? "Handbuilt ceramic pieces for walls. Each exists once." },
-    { num: "02", title: s.point2Title ?? "Vessels and objects", body: s.point2Body ?? "Sculptural forms for shelves, tables and surfaces. Selected, not configured." },
-    { num: "03", title: s.point3Title ?? "Functional ceramics", body: s.point3Body ?? "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold." },
+    { num: "01", title: localeText(locale, s.point1Title || "Wall objects"), body: localeText(locale, s.point1Body || "Handbuilt ceramic pieces for walls. Each exists once.") },
+    { num: "02", title: localeText(locale, s.point2Title || "Vessels and objects"), body: localeText(locale, s.point2Body || "Sculptural forms for shelves, tables and surfaces. Selected, not configured.") },
+    { num: "03", title: localeText(locale, s.point3Title || "Functional ceramics"), body: localeText(locale, s.point3Body || "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold.") },
   ];
 
   return (
@@ -63,7 +67,7 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
         ) : null}
 
         <h2 className="arch-h2">
-          {s.headline ?? "Objects for spaces"}
+          {localeText(locale, s.headline || "Objects for spaces")}
           {s.headlineEm ? (
             <> <em>{s.headlineEm}</em></>
           ) : null}
@@ -95,7 +99,7 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
             className="arch-btn"
             onClick={() => setFormState("open")}
           >
-            {s.ctaText ?? "Get in touch"}
+            {localeText(locale, s.ctaText || "Get in touch")}
           </button>
         )}
 
@@ -108,57 +112,57 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
 
             <form onSubmit={handleSubmit} noValidate>
               <div className="arch-field">
-                <div className="arch-field-label">Name</div>
+                <div className="arch-field-label">{tr("form.name")}</div>
                 <input
                   className="arch-field-input"
                   type="text"
-                  placeholder="your name"
+                  placeholder={tr("contact.namePh")}
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
                   required
                 />
               </div>
               <div className="arch-field">
-                <div className="arch-field-label">Studio</div>
+                <div className="arch-field-label">{tr("form.studio")}</div>
                 <input
                   className="arch-field-input"
                   type="text"
-                  placeholder="studio or company"
+                  placeholder={tr("form.studioPh")}
                   value={form.company}
                   onChange={(e) => update("company", e.target.value)}
                 />
               </div>
               <div className="arch-field">
-                <div className="arch-field-label">Email</div>
+                <div className="arch-field-label">{tr("form.email")}</div>
                 <input
                   className="arch-field-input"
                   type="email"
-                  placeholder="your email"
+                  placeholder={tr("contact.emailPh")}
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                   required
                 />
               </div>
               <div className="arch-field">
-                <div className="arch-field-label">Project</div>
+                <div className="arch-field-label">{tr("form.project")}</div>
                 <select
                   className="arch-field-input arch-field-select"
                   value={form.projectType}
                   onChange={(e) => update("projectType", e.target.value)}
                 >
-                  <option value="" disabled>select type</option>
-                  <option>Residential</option>
-                  <option>Hospitality</option>
-                  <option>Concept store</option>
-                  <option>Public space</option>
-                  <option>Other</option>
+                  <option value="" disabled>{tr("form.select")}</option>
+                  <option>{tr("form.residential")}</option>
+                  <option>{tr("form.hospitality")}</option>
+                  <option>{tr("form.concept")}</option>
+                  <option>{tr("form.public")}</option>
+                  <option>{tr("form.other")}</option>
                 </select>
               </div>
               <div className="arch-field arch-field-textarea">
-                <div className="arch-field-label">Message</div>
+                <div className="arch-field-label">{tr("form.message")}</div>
                 <textarea
                   className="arch-field-input"
-                  placeholder="tell us about your project"
+                  placeholder={tr("form.detailsPh")}
                   rows={3}
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}
@@ -176,7 +180,7 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
                   className="arch-submit"
                   disabled={submitting}
                 >
-                  {submitting ? "Sending..." : "Send it \u2192"}
+                  {submitting ? tr("form.sending") : `${tr("form.send")} →`}
                 </button>
                 <button
                   type="button"
@@ -186,7 +190,7 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
                     setError("");
                   }}
                 >
-                  Cancel
+                  {tr("form.cancel")}
                 </button>
               </div>
             </form>
@@ -198,10 +202,10 @@ export function HomeArchitectsCta({ section: s }: { section: ArchitectsSection }
           <div className="arch-success">
             <div className="arch-success-num">01</div>
             <div className="arch-success-h">
-              {s.formSuccessTitle ?? "Message received."}
+              {localeText(locale, s.formSuccessTitle || "Message received.")}
             </div>
             <div className="arch-success-body">
-              {s.formSuccessBody ?? "We will get back to you within 1-2 working days."}
+              {localeText(locale, s.formSuccessBody || "We will get back to you within 1-2 working days.")}
             </div>
           </div>
         )}

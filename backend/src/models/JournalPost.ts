@@ -12,6 +12,7 @@ const JournalPostSchema = new Schema(
     metaDescription: { type: String, default: "" },
     published: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
+    i18n: { type: Schema.Types.Mixed, default: undefined },
   },
   { collection: "journal_posts", timestamps: true },
 );

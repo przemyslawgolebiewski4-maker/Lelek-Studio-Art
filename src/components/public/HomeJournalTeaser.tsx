@@ -2,14 +2,17 @@ import Link from "next/link";
 import Image from "next/image";
 import type { JournalPostSummary, JournalSection } from "@/types/content";
 import { resolvePostDate } from "@/lib/dates";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
-export function HomeJournalTeaser({
+export async function HomeJournalTeaser({
   section,
   posts,
 }: {
   section: JournalSection;
   posts: JournalPostSummary[];
 }) {
+  const locale = await getLocale();
   if (posts.length === 0) return null;
 
   const [latest] = posts;
@@ -26,7 +29,7 @@ export function HomeJournalTeaser({
           </h2>
           {section.sub ? <p className="journal-intro">{section.sub}</p> : null}
           <Link href="/journal" className="story-link">
-            All journal entries
+            {t(locale, "journal.all")}
           </Link>
         </div>
 

@@ -7,8 +7,9 @@ import { HomeJournalTeaser } from "@/components/public/HomeJournalTeaser";
 import { HomeFindSection } from "@/components/public/HomeFindSection";
 import { Signpost } from "@/components/public/Signpost";
 import { JsonLd } from "@/lib/json-ld";
-import { CREATOR_NAME, ELEMENTS_SCOPE_NOTE, resolveSiteDescription } from "@/lib/brand";
-import { resolveHeroContent, resolveSignpostSection } from "@/lib/brand-copy";
+import { CREATOR_ENTITY_DESCRIPTION, CREATOR_NAME, ELEMENTS_SCOPE_NOTE, resolveSiteDescription } from "@/lib/brand";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { localeText } from "@/lib/i18n/present";
 import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
 import {
   DEFAULT_TAGLINE,
@@ -34,10 +35,14 @@ import {
 } from "@/lib/person-json-ld";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const [settings, locale] = await Promise.all([getSiteSettings(), getLocale()]);
   const siteName = resolveSiteName(settings);
-  const tagline = settings.tagline?.trim() || DEFAULT_TAGLINE;
-  const description = resolveSiteDescription(settings.description);
+  const tagline = localeText(locale, settings.tagline?.trim() || DEFAULT_TAGLINE, settings.tagline_pl);
+  const description = localeText(
+    locale,
+    resolveSiteDescription(settings.description),
+    settings.description_pl,
+  );
 
   return withPageDescription(description, {
     title: { absolute: `${siteName} - ${tagline}` },
@@ -52,9 +57,10 @@ export const revalidate = 60;
 export default async function HomePage() {
   const {
     settings,
-    hero,
+    locale,
+    hero: heroContent,
     story,
-    signpost,
+    signpost: signpostSection,
     elements,
     elementsSection,
     featured,
@@ -67,8 +73,6 @@ export default async function HomePage() {
 
   const elementItems = elements;
   const shopUrl = resolveShopUrl(settings);
-  const heroContent = resolveHeroContent(hero, shopUrl);
-  const signpostSection = resolveSignpostSection(signpost, shopUrl);
 
   const featuredProducts = resolveHomeFeaturedProducts(homeProducts, featured, 3, 6);
 
@@ -93,8 +97,12 @@ export default async function HomePage() {
       buildPersonJsonLd({
         sameAs: personSameAs,
         image: story.image?.trim() || undefined,
+        description: localeText(locale, CREATOR_ENTITY_DESCRIPTION),
       }),
-      buildWebsiteJsonLd(resolveSiteDescription(settings.description)),
+      buildWebsiteJsonLd(
+        localeText(locale, resolveSiteDescription(settings.description), settings.description_pl),
+        locale,
+      ),
       {
         "@type": "LocalBusiness",
         "@id": `${SITE_URL}/#localbusiness`,
@@ -120,7 +128,7 @@ export default async function HomePage() {
       <HomeStorySection story={story} />
       <HomeElementsBar
         items={elementItems}
-        scopeNote={elementsSection.scopeNote || ELEMENTS_SCOPE_NOTE}
+        scopeNote={elementsSection.scopeNote || localeText(locale, ELEMENTS_SCOPE_NOTE)}
       />
       <FeaturedWorks section={featuredSection} homeProducts={featuredProducts} />
       <HomeJournalTeaser section={journalSection} posts={journalPosts} />

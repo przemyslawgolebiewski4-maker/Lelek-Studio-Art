@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { apiPost } from "@/lib/api";
 
 export type ContactCopy = {
@@ -32,6 +33,7 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  const tr = useT();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -43,7 +45,7 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
 
     if (!res.ok || !data.ok) {
       setStatus("error");
-      setError(data.error ?? "Something went wrong");
+      setError(data.error ?? tr("contact.error"));
       return;
     }
 
@@ -75,11 +77,11 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
           {error ? <p className="form-error">{error}</p> : null}
 
           <div className="form-row">
-            <div className="form-lbl">Name</div>
+            <div className="form-lbl">{tr("contact.name")}</div>
             <input
               className="form-inp"
               type="text"
-              placeholder="your name"
+              placeholder={tr("contact.namePh")}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               required
@@ -87,11 +89,11 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
           </div>
 
           <div className="form-row">
-            <div className="form-lbl">Email</div>
+            <div className="form-lbl">{tr("contact.email")}</div>
             <input
               className="form-inp"
               type="email"
-              placeholder="your email"
+              placeholder={tr("contact.emailPh")}
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
@@ -99,21 +101,21 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
           </div>
 
           <div className="form-row">
-            <div className="form-lbl">About</div>
+            <div className="form-lbl">{tr("contact.about")}</div>
             <input
               className="form-inp"
               type="text"
-              placeholder="interior project / custom order / other"
+              placeholder={tr("contact.aboutPh")}
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
             />
           </div>
 
           <div className="form-row">
-            <div className="form-lbl">Message</div>
+            <div className="form-lbl">{tr("contact.message")}</div>
             <textarea
               className="form-inp"
-              placeholder="say something honest"
+              placeholder={tr("contact.messagePh")}
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
               required
@@ -122,7 +124,7 @@ export default function ContactForm({ copy }: { copy?: ContactCopy }) {
 
           <div className="form-actions">
             <button type="submit" className="form-submit" disabled={status === "loading"}>
-              {status === "loading" ? "Sending..." : "Send it →"}
+              {status === "loading" ? tr("contact.sending") : `${tr("contact.send")} →`}
             </button>
             <div className="form-note" style={{ whiteSpace: "pre-line" }}>
               {c.formNote}

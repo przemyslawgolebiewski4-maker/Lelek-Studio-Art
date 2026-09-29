@@ -16,7 +16,29 @@ const POST_FIELDS = [
   "metaDescription",
   "published",
   "order",
+  "i18n",
 ] as const;
+
+const POST_PL_KEYS = [
+  "title",
+  "excerpt",
+  "body",
+  "coverImageAlt",
+  "metaTitle",
+  "metaDescription",
+] as const;
+
+function sanitizePostI18n(value: unknown): { pl: Record<string, string> } | undefined {
+  if (!value || typeof value !== "object") return undefined;
+  const plIn = (value as { pl?: unknown }).pl;
+  if (!plIn || typeof plIn !== "object") return { pl: {} };
+  const pl: Record<string, string> = {};
+  for (const key of POST_PL_KEYS) {
+    const item = (plIn as Record<string, unknown>)[key];
+    if (typeof item === "string") pl[key] = item;
+  }
+  return { pl };
+}
 
 function pickPostFields(body: Record<string, unknown>) {
   const data: Record<string, unknown> = {};
@@ -25,6 +47,7 @@ function pickPostFields(body: Record<string, unknown>) {
   }
   if (typeof data.slug === "string") data.slug = normalizeSlug(data.slug);
   if (typeof data.title === "string") data.title = data.title.trim();
+  if ("i18n" in data) data.i18n = sanitizePostI18n(data.i18n);
   return data;
 }
 

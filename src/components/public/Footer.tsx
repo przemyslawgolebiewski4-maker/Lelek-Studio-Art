@@ -2,13 +2,25 @@ import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/public/CookiePreferencesLink";
 import { INSTAGRAM_URL } from "@/lib/config";
 
+type FooterLabels = {
+  contact: string;
+  about: string;
+  impressum: string;
+  withdrawal: string;
+  privacy: string;
+  cookies: string;
+  shop: string;
+};
+
 type FooterProps = {
+  locale?: "en" | "pl";
   siteName?: string;
   location?: string;
   instagram?: string;
   email?: string;
   shopUrl?: string;
   lelekMeaning?: string;
+  labels?: FooterLabels;
 };
 
 export function Footer({
@@ -18,6 +30,15 @@ export function Footer({
   email = "lelekstudio@lelekstudio.com",
   shopUrl = "https://shop.lelekstudio.com",
   lelekMeaning = "The hand moves, the mind follows after.",
+  labels = {
+    contact: "Contact",
+    about: "About",
+    impressum: "Impressum",
+    withdrawal: "Widerrufsrecht",
+    privacy: "Datenschutz",
+    cookies: "Cookie preferences",
+    shop: "Shop",
+  },
 }: FooterProps) {
   const year = new Date().getFullYear();
 
@@ -37,26 +58,26 @@ export function Footer({
         </li>
         <li>
           <a href={shopUrl} target="_blank" rel="noopener noreferrer">
-            Shop
+            {labels.shop}
           </a>
         </li>
         <li>
-          <Link href="/contact">Contact</Link>
+          <Link href="/contact">{labels.contact}</Link>
         </li>
         <li>
-          <Link href="/impressum">Impressum</Link>
+          <Link href="/impressum">{labels.impressum}</Link>
         </li>
         <li>
-          <Link href="/widerrufsrecht">Widerrufsrecht</Link>
+          <Link href="/widerrufsrecht">{labels.withdrawal}</Link>
         </li>
         <li>
-          <Link href="/datenschutz">Datenschutz</Link>
+          <Link href="/datenschutz">{labels.privacy}</Link>
         </li>
         <li>
-          <CookiePreferencesLink />
+          <CookiePreferencesLink label={labels.cookies} />
         </li>
         <li>
-          <Link href="/about">About</Link>
+          <Link href="/about">{labels.about}</Link>
         </li>
         <li>
           <Link href={`mailto:${email}`}>{email}</Link>

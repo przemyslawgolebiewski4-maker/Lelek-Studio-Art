@@ -11,10 +11,30 @@ import {
   AdminButton,
   AdminInput,
   AdminSelect,
-  AdminTextarea,
 } from "@/components/admin/AdminShell";
-import { AdminSeoInput, AdminSeoTextarea } from "@/components/admin/AdminFieldHelpers";
 import { ImageListField } from "@/components/admin/MediaUploadField";
+import { LangPair } from "@/components/admin/BilingualField";
+import { suggestPl } from "@/lib/i18n/dictionary";
+
+type ProductPlFields = {
+  title: string;
+  material: string;
+  description: string;
+  process: string;
+  imageAlt: string;
+  metaTitle: string;
+  metaDescription: string;
+};
+
+const EMPTY_PL: ProductPlFields = {
+  title: "",
+  material: "",
+  description: "",
+  process: "",
+  imageAlt: "",
+  metaTitle: "",
+  metaDescription: "",
+};
 
 export type ProductFormData = {
   slug: string;
@@ -39,22 +59,40 @@ export type ProductFormData = {
   thumbnailPosition: string;
   /** EUR — required for pop-up /reserve pricing; null = not set */
   price: string;
+  pl: ProductPlFields;
 };
 
+function polishField(
+  product: Partial<Product> | undefined,
+  key: keyof ProductPlFields,
+  english: string,
+): string {
+  const stored = product?.i18n?.pl?.[key];
+  if (typeof stored === "string" && stored.trim()) return stored;
+  return suggestPl(english);
+}
+
 export function productToForm(product?: Partial<Product>): ProductFormData {
+  const title = product?.title ?? "";
+  const material = product?.material ?? "";
+  const description = product?.description ?? "";
+  const process = product?.process ?? "";
+  const imageAlt = product?.imageAlt ?? "";
+  const metaTitle = product?.metaTitle ?? "";
+  const metaDescription = product?.metaDescription ?? "";
   return {
     slug: product?.slug ?? "",
     catalog: product?.catalog ?? "",
-    title: product?.title ?? "",
+    title,
     category: product?.category ?? "ceramics",
-    material: product?.material ?? "",
-    description: product?.description ?? "",
-    process: product?.process ?? "",
+    material,
+    description,
+    process,
     etsyUrl: product?.etsyUrl ?? "",
     images: (product?.images ?? []).join("\n"),
-    imageAlt: product?.imageAlt ?? "",
-    metaTitle: product?.metaTitle ?? "",
-    metaDescription: product?.metaDescription ?? "",
+    imageAlt,
+    metaTitle,
+    metaDescription,
     published: product?.published ?? false,
     order: product?.order ?? 0,
     homeVisible: product?.homeVisible ?? false,
@@ -67,6 +105,15 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
       product?.price != null && Number.isFinite(Number(product.price))
         ? String(product.price)
         : "",
+    pl: {
+      title: polishField(product, "title", title),
+      material: polishField(product, "material", material),
+      description: polishField(product, "description", description),
+      process: polishField(product, "process", process),
+      imageAlt: polishField(product, "imageAlt", imageAlt),
+      metaTitle: polishField(product, "metaTitle", metaTitle),
+      metaDescription: polishField(product, "metaDescription", metaDescription),
+    },
   };
 }
 
@@ -99,6 +146,7 @@ export function formToPayload(form: ProductFormData) {
     currentGalleryId: form.isOriginal && form.currentGalleryId ? form.currentGalleryId : null,
     thumbnailPosition: form.thumbnailPosition,
     price: priceNum != null && Number.isFinite(priceNum) ? priceNum : null,
+    i18n: { pl: form.pl ?? EMPTY_PL },
   };
 }
 
@@ -145,6 +193,10 @@ export function ProductForm({
 
   function update<K extends keyof ProductFormData>(key: K, value: ProductFormData[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function updatePl<K extends keyof ProductPlFields>(key: K, value: string) {
+    setForm((prev) => ({ ...prev, pl: { ...prev.pl, [key]: value } }));
   }
 
   function updateTitle(title: string) {
@@ -201,11 +253,12 @@ export function ProductForm({
       {error ? <p className="admin-error">{error}</p> : null}
 
       <div className="admin-form-row-2">
-        <AdminInput
+        <LangPair
           label="Title"
-          value={form.title}
-          onChange={(e) => updateTitle(e.target.value)}
-          required
+          en={form.title}
+          pl={form.pl.title}
+          onEn={updateTitle}
+          onPl={(value) => updatePl("title", value)}
         />
         <AdminInput
           label="Slug"
@@ -281,17 +334,22 @@ export function ProductForm({
         </>
       ) : null}
 
-      <AdminInput
+      <LangPair
         label="Material"
-        value={form.material}
-        onChange={(e) => update("material", e.target.value)}
+        en={form.material}
+        pl={form.pl.material}
+        onEn={(value) => update("material", value)}
+        onPl={(value) => updatePl("material", value)}
       />
 
-      <AdminTextarea
+      <LangPair
         label="Description"
+        en={form.description}
+        pl={form.pl.description}
+        multiline
         rows={4}
-        value={form.description}
-        onChange={(e) => update("description", e.target.value)}
+        onEn={(value) => update("description", value)}
+        onPl={(value) => updatePl("description", value)}
         placeholder={
           form.category === "prints"
             ? form.isPhotoReproduction
@@ -301,11 +359,14 @@ export function ProductForm({
         }
       />
 
-      <AdminTextarea
+      <LangPair
         label="Process"
+        en={form.process}
+        pl={form.pl.process}
+        multiline
         rows={3}
-        value={form.process}
-        onChange={(e) => update("process", e.target.value)}
+        onEn={(value) => update("process", value)}
+        onPl={(value) => updatePl("process", value)}
       />
 
       <AdminInput
@@ -323,25 +384,33 @@ export function ProductForm({
         onThumbnailPositionChange={(v) => update("thumbnailPosition", v)}
         hint="First image = catalog thumbnail / Originals card. Drag to reorder."
       />
-      <AdminInput
+      <LangPair
         label="Primary image alt text"
-        value={form.imageAlt}
-        onChange={(e) => update("imageAlt", e.target.value)}
+        en={form.imageAlt}
+        pl={form.pl.imageAlt}
         placeholder={form.title || "Describe the primary product image"}
+        onEn={(value) => update("imageAlt", value)}
+        onPl={(value) => updatePl("imageAlt", value)}
       />
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
         Used on the Originals card and product detail hero. Falls back to meta description, then title.
       </p>
 
-      <AdminSeoInput
+      <LangPair
         label="Meta title"
-        value={form.metaTitle}
-        onChange={(v) => update("metaTitle", v)}
+        en={form.metaTitle}
+        pl={form.pl.metaTitle}
+        onEn={(value) => update("metaTitle", value)}
+        onPl={(value) => updatePl("metaTitle", value)}
       />
-      <AdminSeoTextarea
+      <LangPair
         label="Meta description"
-        value={form.metaDescription}
-        onChange={(v) => update("metaDescription", v)}
+        en={form.metaDescription}
+        pl={form.pl.metaDescription}
+        multiline
+        rows={2}
+        onEn={(value) => update("metaDescription", value)}
+        onPl={(value) => updatePl("metaDescription", value)}
       />
       <AdminInput
         label="Sort order"

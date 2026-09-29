@@ -2,12 +2,22 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
-import { AdminSeoInput, AdminSeoTextarea } from "@/components/admin/AdminFieldHelpers";
+import { AdminButton, AdminInput } from "@/components/admin/AdminShell";
+import { LangPair } from "@/components/admin/BilingualField";
+import { suggestPl } from "@/lib/i18n/dictionary";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { apiPatch, apiPost, readApiResult } from "@/lib/api";
 import { MEDIA_HINTS } from "@/lib/media-hints";
 import type { JournalPost } from "@/types/content";
+
+type JournalPl = {
+  title: string;
+  excerpt: string;
+  body: string;
+  coverImageAlt: string;
+  metaTitle: string;
+  metaDescription: string;
+};
 
 export type JournalFormData = {
   slug: string;
@@ -20,20 +30,45 @@ export type JournalFormData = {
   metaDescription: string;
   published: boolean;
   order: number;
+  pl: JournalPl;
 };
 
+function journalPl(
+  post: Partial<JournalPost> | undefined,
+  key: keyof JournalPl,
+  english: string,
+): string {
+  const stored = post?.i18n?.pl?.[key];
+  if (typeof stored === "string" && stored.trim()) return stored;
+  return suggestPl(english);
+}
+
 export function postToForm(post?: Partial<JournalPost>): JournalFormData {
+  const title = post?.title ?? "";
+  const excerpt = post?.excerpt ?? "";
+  const body = post?.body ?? "";
+  const coverImageAlt = post?.coverImageAlt ?? "";
+  const metaTitle = post?.metaTitle ?? "";
+  const metaDescription = post?.metaDescription ?? "";
   return {
     slug: post?.slug ?? "",
-    title: post?.title ?? "",
-    excerpt: post?.excerpt ?? "",
-    body: post?.body ?? "",
+    title,
+    excerpt,
+    body,
     coverImage: post?.coverImage ?? "",
-    coverImageAlt: post?.coverImageAlt ?? "",
-    metaTitle: post?.metaTitle ?? "",
-    metaDescription: post?.metaDescription ?? "",
+    coverImageAlt,
+    metaTitle,
+    metaDescription,
     published: post?.published ?? false,
     order: post?.order ?? 0,
+    pl: {
+      title: journalPl(post, "title", title),
+      excerpt: journalPl(post, "excerpt", excerpt),
+      body: journalPl(post, "body", body),
+      coverImageAlt: journalPl(post, "coverImageAlt", coverImageAlt),
+      metaTitle: journalPl(post, "metaTitle", metaTitle),
+      metaDescription: journalPl(post, "metaDescription", metaDescription),
+    },
   };
 }
 
@@ -54,9 +89,10 @@ export function JournalPostForm({
     setLoading(true);
     setError("");
 
+    const payload = { ...form, i18n: { pl: form.pl } };
     const res = postId
-      ? await apiPatch(`/admin/journal/${postId}`, form)
-      : await apiPost("/admin/journal", form);
+      ? await apiPatch(`/admin/journal/${postId}`, payload)
+      : await apiPost("/admin/journal", payload);
     const data = await readApiResult(res);
 
     setLoading(false);
@@ -69,6 +105,10 @@ export function JournalPostForm({
     router.refresh();
   }
 
+  function updatePl<K extends keyof JournalPl>(key: K, value: string) {
+    setForm((prev) => ({ ...prev, pl: { ...prev.pl, [key]: value } }));
+  }
+
   return (
     <form onSubmit={handleSubmit} className="admin-form-stack-lg">
       {error ? <p className="admin-error">{error}</p> : null}
@@ -76,11 +116,12 @@ export function JournalPostForm({
       <div className="admin-field-group">
         <h3 className="admin-group-title">1. Post content</h3>
         <div className="admin-form-row-2">
-          <AdminInput
+          <LangPair
             label="Title"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-            required
+            en={form.title}
+            pl={form.pl.title}
+            onEn={(value) => setForm({ ...form, title: value })}
+            onPl={(value) => updatePl("title", value)}
           />
           <AdminInput
             label="Slug"
@@ -90,18 +131,24 @@ export function JournalPostForm({
           />
         </div>
 
-        <AdminTextarea
+        <LangPair
           label="Excerpt"
+          en={form.excerpt}
+          pl={form.pl.excerpt}
+          multiline
           rows={2}
-          value={form.excerpt}
-          onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+          onEn={(value) => setForm({ ...form, excerpt: value })}
+          onPl={(value) => updatePl("excerpt", value)}
         />
 
-        <AdminTextarea
+        <LangPair
           label="Body (Markdown)"
+          en={form.body}
+          pl={form.pl.body}
+          multiline
           rows={12}
-          value={form.body}
-          onChange={(e) => setForm({ ...form, body: e.target.value })}
+          onEn={(value) => setForm({ ...form, body: value })}
+          onPl={(value) => updatePl("body", value)}
         />
         <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
           Image alt in Markdown: write ![short description of the image](https://…) - the text
@@ -118,11 +165,13 @@ export function JournalPostForm({
           folder="journal"
           hint={MEDIA_HINTS.journalCover}
         />
-        <AdminInput
+        <LangPair
           label="Cover image alt text"
-          value={form.coverImageAlt}
-          onChange={(e) => setForm({ ...form, coverImageAlt: e.target.value })}
+          en={form.coverImageAlt}
+          pl={form.pl.coverImageAlt}
           placeholder={form.title || "Describe the cover image"}
+          onEn={(value) => setForm({ ...form, coverImageAlt: value })}
+          onPl={(value) => updatePl("coverImageAlt", value)}
         />
         <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
           Defaults to the post title if left empty - prefer a real description of the image.
@@ -131,17 +180,23 @@ export function JournalPostForm({
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">3. SEO &amp; publish</h3>
-        <AdminSeoInput
+        <LangPair
           label="Meta title"
-          value={form.metaTitle}
-          onChange={(v) => setForm({ ...form, metaTitle: v })}
+          en={form.metaTitle}
+          pl={form.pl.metaTitle}
           placeholder={form.title}
+          onEn={(value) => setForm({ ...form, metaTitle: value })}
+          onPl={(value) => updatePl("metaTitle", value)}
         />
-        <AdminSeoTextarea
+        <LangPair
           label="Meta description"
-          value={form.metaDescription}
-          onChange={(v) => setForm({ ...form, metaDescription: v })}
+          en={form.metaDescription}
+          pl={form.pl.metaDescription}
+          multiline
+          rows={2}
           placeholder={form.excerpt}
+          onEn={(value) => setForm({ ...form, metaDescription: value })}
+          onPl={(value) => updatePl("metaDescription", value)}
         />
         <AdminInput
           label="Order"

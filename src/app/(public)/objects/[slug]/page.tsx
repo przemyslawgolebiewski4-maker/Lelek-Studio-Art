@@ -8,13 +8,15 @@ import { SITE_URL } from "@/lib/config";
 import { withPageDescription } from "@/lib/seo";
 import { buildProductJsonLd } from "@/lib/product-json-ld";
 import { normalizeSlug } from "@/lib/slug";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  if (!product) return { title: "Object not found" };
+  if (!product) return { title: t(await getLocale(), "meta.missingObject") };
 
   const title = product.metaTitle || product.title;
   const description = withCreatorName(product.metaDescription || product.description || "");

@@ -1,4 +1,6 @@
 import { SITE_URL, resolveInstagramUrl, resolveOrganizationSameAs } from "@/lib/config";
+import type { Locale } from "@/lib/i18n/locale";
+import { localeText } from "@/lib/i18n/present";
 import {
   CREATOR_ENTITY_DESCRIPTION,
   CREATOR_FAMILY_NAME,
@@ -96,7 +98,7 @@ export function buildOrganizationJsonLd(options?: {
   };
 }
 
-export function buildWebsiteJsonLd(description: string): Record<string, unknown> {
+export function buildWebsiteJsonLd(description: string, locale: Locale = "en"): Record<string, unknown> {
   return {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
@@ -104,31 +106,34 @@ export function buildWebsiteJsonLd(description: string): Record<string, unknown>
     name: STUDIO_NAME,
     alternateName: STUDIO_NAME_LONG,
     description,
-    inLanguage: "en",
+    inLanguage: locale === "pl" ? "pl" : "en",
     publisher: { "@id": ORGANIZATION_ID },
     author: { "@id": PERSON_ID },
   };
 }
 
-export function buildAboutFaqJsonLd(): Record<string, unknown> {
+export function buildAboutFaqJsonLd(locale: Locale = "en"): Record<string, unknown> {
+  const who = `Who is ${CREATOR_NAME}?`;
+  const what = `What kind of ceramics does ${CREATOR_NAME} make?`;
+  const whatAnswer = `${CREATOR_NAME} shapes vessels, cups and lamps by hand, not by mold. Some pieces stay raw, closer to brutalism; others lean fully organic. Forms may repeat, but never exactly.`;
   return {
     "@type": "FAQPage",
     "@id": `${SITE_URL}/about#faq`,
     mainEntity: [
       {
         "@type": "Question",
-        name: `Who is ${CREATOR_NAME}?`,
+        name: localeText(locale, who),
         acceptedAnswer: {
           "@type": "Answer",
-          text: CREATOR_ENTITY_DESCRIPTION,
+          text: localeText(locale, CREATOR_ENTITY_DESCRIPTION),
         },
       },
       {
         "@type": "Question",
-        name: `What kind of ceramics does ${CREATOR_NAME} make?`,
+        name: localeText(locale, what),
         acceptedAnswer: {
           "@type": "Answer",
-          text: `${CREATOR_NAME} shapes vessels, cups and lamps by hand, not by mold. Some pieces stay raw, closer to brutalism; others lean fully organic. Forms may repeat, but never exactly.`,
+          text: localeText(locale, whatAnswer),
         },
       },
     ],

@@ -360,6 +360,40 @@ button:hover:not(:disabled),
   border-color: var(--accent) !important;
 }
 
+.site-nav .nav-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: stretch;
+  border-left: 1px solid rgba(230, 235, 231, 0.1);
+}
+
+.lang-switch button {
+  font-family: var(--font-sans);
+  font-size: var(--text-ui);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--chalk-muted);
+  background: transparent;
+  border: none;
+  padding: 18px 10px;
+  cursor: pointer;
+}
+
+.lang-switch button + button {
+  border-left: 1px solid rgba(230, 235, 231, 0.1);
+}
+
+.lang-switch button.is-active,
+.lang-switch button:hover {
+  background: var(--W);
+  color: var(--B);
+}
+
 .site-nav .nav-toggle {
   display: none;
   flex-direction: column;

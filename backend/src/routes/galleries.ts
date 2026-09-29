@@ -49,6 +49,18 @@ function pickGalleryFields(body: Record<string, unknown>, partial: boolean) {
     data.order = 0;
   }
 
+  if ("i18n" in body && body.i18n && typeof body.i18n === "object") {
+    const plIn = (body.i18n as { pl?: unknown }).pl;
+    const pl: Record<string, string> = {};
+    if (plIn && typeof plIn === "object") {
+      for (const key of ["name", "city"] as const) {
+        const item = (plIn as Record<string, unknown>)[key];
+        if (typeof item === "string") pl[key] = item;
+      }
+    }
+    data.i18n = { pl };
+  }
+
   return { data };
 }
 

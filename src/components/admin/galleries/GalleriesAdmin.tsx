@@ -7,21 +7,27 @@ import {
   AdminCard,
   AdminInput,
 } from "@/components/admin/AdminShell";
+import { LangPair } from "@/components/admin/BilingualField";
+import { suggestPl } from "@/lib/i18n/dictionary";
 import { apiGet, apiPost, apiPatch, apiDelete, readApiResult } from "@/lib/api";
 import type { Gallery } from "@/types/gallery";
 
 type GalleryFormState = {
   name: string;
+  namePl: string;
   url: string;
   city: string;
+  cityPl: string;
   active: boolean;
   order: string;
 };
 
 const EMPTY_FORM: GalleryFormState = {
   name: "",
+  namePl: "",
   url: "",
   city: "",
+  cityPl: "",
   active: true,
   order: "0",
 };
@@ -62,8 +68,10 @@ export function GalleriesAdmin() {
     setEditingId(gallery._id);
     setForm({
       name: gallery.name,
+      namePl: gallery.i18n?.pl?.name || suggestPl(gallery.name) || gallery.name,
       url: gallery.url,
       city: gallery.city ?? "",
+      cityPl: gallery.i18n?.pl?.city || suggestPl(gallery.city) || gallery.city || "",
       active: Boolean(gallery.active),
       order: String(gallery.order ?? 0),
     });
@@ -83,6 +91,12 @@ export function GalleriesAdmin() {
       city: form.city.trim(),
       active: form.active,
       order: Number(form.order) || 0,
+      i18n: {
+        pl: {
+          name: form.namePl.trim() || suggestPl(form.name) || form.name.trim(),
+          city: form.cityPl.trim() || suggestPl(form.city) || form.city.trim(),
+        },
+      },
     };
     try {
       const res = editingId
@@ -154,11 +168,12 @@ export function GalleriesAdmin() {
           {editingId ? "Edit gallery" : "Add gallery"}
         </h2>
         <div className="admin-form-stack">
-          <AdminInput
+          <LangPair
             label="Name"
-            value={form.name}
-            onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-            required
+            en={form.name}
+            pl={form.namePl || suggestPl(form.name) || form.name}
+            onEn={(value) => setForm((f) => ({ ...f, name: value }))}
+            onPl={(value) => setForm((f) => ({ ...f, namePl: value }))}
           />
           <AdminInput
             label="Website URL"
@@ -168,11 +183,13 @@ export function GalleriesAdmin() {
             required
           />
           <div className="admin-form-row-2">
-            <AdminInput
+            <LangPair
               label="City"
-              value={form.city}
-              onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+              en={form.city}
+              pl={form.cityPl || suggestPl(form.city) || form.city}
               placeholder="optional"
+              onEn={(value) => setForm((f) => ({ ...f, city: value }))}
+              onPl={(value) => setForm((f) => ({ ...f, cityPl: value }))}
             />
             <AdminInput
               label="Order"

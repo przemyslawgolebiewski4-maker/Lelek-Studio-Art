@@ -6,6 +6,9 @@ import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/confi
 import { normalizeSlug } from "@/lib/slug";
 import { ABOUT_PAGE_KEYWORDS, withPageDescription } from "@/lib/seo";
 import { CREATOR_FAMILY_NAME, CREATOR_GIVEN_NAME, CREATOR_NAME } from "@/lib/brand";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
+import { localeText } from "@/lib/i18n/present";
 import { truncateAtWord } from "@/lib/text";
 import {
   PERSON_ID,
@@ -38,10 +41,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  const [story, originals, settings] = await Promise.all([
+  const [story, originals, settings, locale] = await Promise.all([
     getStorySection(),
     getOriginalProducts(50),
     getSiteSettings(),
+    getLocale(),
   ]);
   const shopUrl = resolveShopUrl(settings);
   const sameAs = resolveOrganizationSameAs(settings);
@@ -68,18 +72,18 @@ export default async function AboutPage() {
         "@type": "ProfilePage",
         "@id": `${SITE_URL}/about`,
         url: `${SITE_URL}/about`,
-        name: `${CREATOR_NAME} - ceramist`,
+        name: localeText(locale, `${CREATOR_NAME} - ceramist`),
         mainEntity: { "@id": PERSON_ID },
         about: { "@id": PERSON_ID },
       },
-      buildAboutFaqJsonLd(),
+      buildAboutFaqJsonLd(locale),
       {
         "@type": "BreadcrumbList",
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
-            name: "Home",
+            name: t(locale, "home.crumb"),
             item: `${SITE_URL}/`,
           },
           {

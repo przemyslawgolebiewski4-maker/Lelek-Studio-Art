@@ -1,5 +1,18 @@
 import { serverFetch } from "@/lib/api-server";
 import { ELEMENTS_SCOPE_NOTE } from "@/lib/brand";
+import { getLocale } from "@/lib/i18n/get-locale";
+import {
+  presentArchitects,
+  presentElements,
+  presentFeatured,
+  presentFind,
+  presentHero,
+  presentJournalPost,
+  presentJournalSection,
+  presentProduct,
+  presentSignpost,
+  presentStory,
+} from "@/lib/i18n/present";
 import {
   DEFAULT_ARCHITECTS,
   DEFAULT_HERO,
@@ -8,6 +21,7 @@ import {
   resolveArchitectsSection,
   resolveArchitectsSub,
   resolveElementsScope,
+  resolveHeroContent,
   resolveSignpostSection,
   resolveStorySection,
 } from "@/lib/brand-copy";
@@ -95,29 +109,47 @@ export async function getPublicHomeData() {
   ]);
 
   const shopUrl = resolveShopUrl(settings);
+  const locale = await getLocale();
+  const heroResolved = resolveHeroContent(hero, shopUrl);
+  const signpostResolved = resolveSignpostSection(signpost, shopUrl);
+  const storyResolved = resolveStorySection(story);
+  const elementsResolved = {
+    ...elements,
+    scopeNote: resolveElementsScope(elements.scopeNote),
+  };
+  const architectsResolved = resolveArchitectsSection(architects);
+  const heroRaw = hero as unknown as Record<string, unknown>;
+  const storyRaw = story as unknown as Record<string, unknown>;
+  const signpostRaw = signpost as unknown as Record<string, unknown>;
+  const elementsRaw = elements as unknown as Record<string, unknown>;
+  const architectsRaw = architects as unknown as Record<string, unknown>;
+  const journalRaw = journalSection as unknown as Record<string, unknown>;
+  const findRaw = find as unknown as Record<string, unknown>;
+  const featuredRaw = featuredSection as unknown as Record<string, unknown>;
+  const elementsView = presentElements(elementsResolved, elementsRaw, locale);
 
   return {
     settings,
-    hero,
-    featured,
-    featuredSection,
-    homeProducts,
-    story: resolveStorySection(story),
-    signpost: resolveSignpostSection(signpost, shopUrl),
-    elementsSection: {
-      ...elements,
-      scopeNote: resolveElementsScope(elements.scopeNote),
-    },
-    elements: elements.items ?? [],
-    architects: resolveArchitectsSection(architects),
-    journalSection,
-    journalPosts: journalPosts.slice(0, 1),
-    find,
+    locale,
+    hero: presentHero(heroResolved, heroRaw, locale),
+    featured: featured.map((product) => presentProduct(product, locale)),
+    featuredSection: presentFeatured(featuredSection, featuredRaw, locale),
+    homeProducts: homeProducts.map((product) => presentProduct(product, locale)),
+    story: presentStory(storyResolved, storyRaw, locale),
+    signpost: presentSignpost(signpostResolved, signpostRaw, locale),
+    elementsSection: elementsView,
+    elements: elementsView.items ?? [],
+    architects: presentArchitects(architectsResolved, architectsRaw, locale),
+    journalSection: presentJournalSection(journalSection, journalRaw, locale),
+    journalPosts: journalPosts.slice(0, 1).map((post) => presentJournalPost(post, locale)),
+    find: presentFind(find, findRaw, locale),
   };
 }
 
 export async function getFeaturedProducts(limit = 6): Promise<Product[]> {
-  return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
+  const products = await serverFetch<Product[]>(`/products/public?limit=${limit}`, { fallback: [] });
+  const locale = await getLocale();
+  return products.map((product) => presentProduct(product, locale));
 }
 
 /**
@@ -146,7 +178,9 @@ export function resolveHomeFeaturedProducts(
 }
 
 export async function getPublishedProducts(limit = 50): Promise<Product[]> {
-  return serverFetch(`/products/public?limit=${limit}`, { fallback: [] });
+  const products = await serverFetch<Product[]>(`/products/public?limit=${limit}`, { fallback: [] });
+  const locale = await getLocale();
+  return products.map((product) => presentProduct(product, locale));
 }
 
 export async function getOriginalProducts(limit = 50): Promise<Product[]> {
@@ -155,27 +189,37 @@ export async function getOriginalProducts(limit = 50): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  return serverFetch<Product | null>(`/products/public/${encodeURIComponent(slug)}`, {
+  const product = await serverFetch<Product | null>(`/products/public/${encodeURIComponent(slug)}`, {
     fallback: null,
   });
+  if (!product) return null;
+  return presentProduct(product, await getLocale());
 }
 
 export async function getStorySection(): Promise<StorySection> {
   const story = await serverFetch<StorySection>("/sections/story", {
     fallback: DEFAULT_STORY,
   });
-  return resolveStorySection(story);
+  return presentStory(
+    resolveStorySection(story),
+    story as unknown as Record<string, unknown>,
+    await getLocale(),
+  );
 }
 
 export async function getArchitectsSection(): Promise<ArchitectsSection> {
   const section = await serverFetch<ArchitectsSection>("/sections/architects", {
     fallback: DEFAULT_ARCHITECTS,
   });
-  return resolveArchitectsSection(section);
+  return presentArchitects(
+    resolveArchitectsSection(section),
+    section as unknown as Record<string, unknown>,
+    await getLocale(),
+  );
 }
 
 export async function getJournalSection(): Promise<JournalSection> {
-  return serverFetch<JournalSection>("/sections/journal", {
+  const section = await serverFetch<JournalSection>("/sections/journal", {
     fallback: {
       eyebrow: "Journal",
       heading: "Notes on process",
@@ -183,14 +227,19 @@ export async function getJournalSection(): Promise<JournalSection> {
       sub: "What the kiln and the material decide together.",
     },
   });
+  return presentJournalSection(section, section as unknown as Record<string, unknown>, await getLocale());
 }
 
 export async function getJournalPosts(): Promise<JournalPostSummary[]> {
-  return serverFetch<JournalPostSummary[]>("/journal/public", { fallback: [] });
+  const posts = await serverFetch<JournalPostSummary[]>("/journal/public", { fallback: [] });
+  const locale = await getLocale();
+  return posts.map((post) => presentJournalPost(post, locale));
 }
 
 export async function getJournalPostBySlug(slug: string): Promise<JournalPost | null> {
-  return serverFetch<JournalPost | null>(`/journal/public/${encodeURIComponent(slug)}`, {
+  const post = await serverFetch<JournalPost | null>(`/journal/public/${encodeURIComponent(slug)}`, {
     fallback: null,
   });
+  if (!post) return null;
+  return presentJournalPost(post, await getLocale());
 }

@@ -3,20 +3,23 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { LanguageSwitch } from "@/components/public/LanguageSwitch";
 import { SHOP_URL } from "@/lib/config";
+import { t } from "@/lib/i18n/messages";
+import type { Locale } from "@/lib/i18n/locale";
 
 type NavLink =
   | { href: string; label: string; external?: false }
   | { href: string; label: string; external: true };
 
-function buildLinks(shopUrl: string): NavLink[] {
+function buildLinks(shopUrl: string, locale: Locale): NavLink[] {
   return [
-    { href: shopUrl, label: "Shop", external: true },
-    { href: "/journal", label: "Process" },
-    { href: "/about", label: "About" },
-    { href: "/galleries", label: "Galleries" },
-    { href: "/for-architects", label: "Trade" },
-    { href: "/contact", label: "Contact" },
+    { href: shopUrl, label: t(locale, "nav.shop"), external: true },
+    { href: "/journal", label: t(locale, "nav.process") },
+    { href: "/about", label: t(locale, "nav.about") },
+    { href: "/galleries", label: t(locale, "nav.galleries") },
+    { href: "/for-architects", label: t(locale, "nav.trade") },
+    { href: "/contact", label: t(locale, "nav.contact") },
   ];
 }
 
@@ -27,10 +30,16 @@ function isActive(pathname: string, href: string, external?: boolean) {
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
-export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
+export function Navigation({
+  shopUrl = SHOP_URL,
+  locale = "en",
+}: {
+  shopUrl?: string;
+  locale?: Locale;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const links = buildLinks(shopUrl);
+  const links = buildLinks(shopUrl, locale);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -73,17 +82,20 @@ export function Navigation({ shopUrl = SHOP_URL }: { shopUrl?: string }) {
         ))}
       </ul>
 
-      <button
-        type="button"
-        className="nav-toggle"
-        aria-label={open ? "Close menu" : "Open menu"}
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-      >
-        <span />
-        <span />
-        <span />
-      </button>
+      <div className="nav-tools">
+        <LanguageSwitch locale={locale} />
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-label={open ? t(locale, "nav.close") : t(locale, "nav.open")}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+      </div>
 
       <div className={`nav-mobile ${open ? "open" : ""}`}>
         {links.map((link) =>

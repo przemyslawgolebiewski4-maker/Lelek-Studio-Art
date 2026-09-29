@@ -32,6 +32,8 @@ const ProductSchema = new Schema(
     /** Gallery currently showing this Original (optional; UI only surfaces for isOriginal). */
     currentGalleryId: { type: Schema.Types.ObjectId, ref: "Gallery", default: null },
     thumbnailPosition: { type: String, default: "center" },
+    /** Polish copy for public text fields. English stays on the scalar fields. */
+    i18n: { type: Schema.Types.Mixed, default: undefined },
     /** Pop-up fields kept for legacy documents; new flow uses ExhibitionItem. */
     locationId: { type: Schema.Types.ObjectId, ref: "Location", default: null },
     exhibitionStatus: {

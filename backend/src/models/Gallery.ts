@@ -7,6 +7,7 @@ const GallerySchema = new Schema(
     city: { type: String, default: "" },
     active: { type: Boolean, default: true },
     order: { type: Number, default: 0 },
+    i18n: { type: Schema.Types.Mixed, default: undefined },
   },
   { collection: "galleries", timestamps: true },
 );

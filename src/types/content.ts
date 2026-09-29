@@ -13,6 +13,16 @@ export interface JournalPost {
   order: number;
   createdAt?: string;
   updatedAt?: string;
+  i18n?: {
+    pl?: {
+      title?: string;
+      excerpt?: string;
+      body?: string;
+      coverImageAlt?: string;
+      metaTitle?: string;
+      metaDescription?: string;
+    };
+  };
 }
 
 export type JournalPostSummary = Omit<JournalPost, "body">;
@@ -24,6 +34,7 @@ export interface HomeSectionContent {
 export interface GalleryImage {
   image: string;
   alt: string;
+  altPl?: string;
 }
 
 export interface StorySection {
@@ -57,7 +68,7 @@ export interface ArchitectsSection {
   headlineEm?: string;
   sub?: string;
   /** Preferred repeatable points list (falls back to point1Title/Body …) */
-  points?: { title: string; body: string }[];
+  points?: { title: string; body: string; titlePl?: string; bodyPl?: string }[];
   point1Title?: string;
   point1Body?: string;
   point2Title?: string;
@@ -91,8 +102,10 @@ export interface JournalSection {
 export interface ElementItem {
   number: string;
   name: string;
+  namePl?: string;
   /** Optional short description under the element name */
   description?: string;
+  descriptionPl?: string;
 }
 
 export interface ElementsSection {
@@ -105,6 +118,8 @@ export interface SignpostCard {
   label: string;
   description: string;
   href: string;
+  labelPl?: string;
+  descriptionPl?: string;
 }
 
 export interface SignpostSection {

@@ -3,15 +3,19 @@ import Link from "next/link";
 import type { Product } from "@/types/product";
 import type { FeaturedSection } from "@/types/content";
 import { withCreatorName } from "@/lib/brand";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
+import { localeText } from "@/lib/i18n/present";
 import { normalizeSlug } from "@/lib/slug";
 
-export function FeaturedWorks({
+export async function FeaturedWorks({
   section,
   homeProducts,
 }: {
   section?: FeaturedSection;
   homeProducts?: Product[];
 }) {
+  const locale = await getLocale();
   const s = section ?? {};
   const products = (homeProducts ?? []).slice(0, 6);
   const hasVideo = Boolean(s.video);
@@ -27,7 +31,7 @@ export function FeaturedWorks({
       {/* Section heading - unchanged from current design */}
       <div className="works-head">
         <h2 className="works-h2">
-          {s.heading ?? "Shaped by hand"}
+          {s.heading?.trim() || localeText(locale, "Shaped by hand")}
           {headingEm ? (
             <>
               {" "}
@@ -36,7 +40,7 @@ export function FeaturedWorks({
           ) : null}
         </h2>
         <Link href="/collections" className="works-cta">
-          View all works
+          {t(locale, "works.all")}
         </Link>
       </div>
 
@@ -51,7 +55,7 @@ export function FeaturedWorks({
                 muted
                 loop
                 playsInline
-                aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
+                aria-label={localeText(locale, s.videoAlt || "Ceramics by Przemysław Gołębiewski")}
                 className="featured-video-el featured-video-el--desktop"
               >
                 <source src={s.video} />
@@ -62,7 +66,7 @@ export function FeaturedWorks({
                 muted
                 loop
                 playsInline
-                aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
+                aria-label={localeText(locale, s.videoAlt || "Ceramics by Przemysław Gołębiewski")}
                 className="featured-video-el featured-video-el--mobile"
               >
                 <source src={s.videoMobile} />
@@ -75,7 +79,7 @@ export function FeaturedWorks({
               muted
               loop
               playsInline
-              aria-label={s.videoAlt ?? "Ceramics by Przemysław Gołębiewski"}
+              aria-label={localeText(locale, s.videoAlt || "Ceramics by Przemysław Gołębiewski")}
               className="featured-video-el"
             >
               <source src={s.video} />

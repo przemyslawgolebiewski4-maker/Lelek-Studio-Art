@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useT } from "@/components/i18n/LocaleProvider";
 import { apiPost } from "@/lib/api";
 
 export function ArchitectInquiryForm() {
@@ -15,6 +16,7 @@ export function ArchitectInquiryForm() {
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
+  const tr = useT();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -26,7 +28,7 @@ export function ArchitectInquiryForm() {
 
     if (!res.ok || !data.ok) {
       setStatus("error");
-      setError(data.error ?? "Something went wrong");
+      setError(data.error ?? tr("contact.error"));
       return;
     }
 
@@ -45,7 +47,7 @@ export function ArchitectInquiryForm() {
   if (status === "success") {
     return (
       <p className="story-body">
-        Thank you - your inquiry has been sent. We will reply within a few business days.
+        {tr("form.success")}
       </p>
     );
   }
@@ -55,7 +57,7 @@ export function ArchitectInquiryForm() {
       {error ? <p className="form-error" style={{ color: "var(--B)" }}>{error}</p> : null}
 
       <div className="form-row">
-        <div className="form-lbl">Name</div>
+        <div className="form-lbl">{tr("form.name")}</div>
         <input
           className="form-inp"
           value={form.name}
@@ -65,7 +67,7 @@ export function ArchitectInquiryForm() {
       </div>
 
       <div className="form-row">
-        <div className="form-lbl">Email</div>
+        <div className="form-lbl">{tr("form.email")}</div>
         <input
           type="email"
           className="form-inp"
@@ -76,7 +78,7 @@ export function ArchitectInquiryForm() {
       </div>
 
       <div className="form-row">
-        <div className="form-lbl">Company</div>
+        <div className="form-lbl">{tr("form.company")}</div>
         <input
           className="form-inp"
           value={form.company}
@@ -85,45 +87,45 @@ export function ArchitectInquiryForm() {
       </div>
 
       <div className="form-row">
-        <div className="form-lbl">Project</div>
+        <div className="form-lbl">{tr("form.project")}</div>
         <select
           className="form-inp"
           value={form.projectType}
           onChange={(e) => setForm({ ...form, projectType: e.target.value })}
         >
-          <option value="">Select...</option>
-          <option value="residential">Residential</option>
-          <option value="hospitality">Hospitality</option>
-          <option value="retail">Retail / concept store</option>
-          <option value="office">Office / workspace</option>
-          <option value="other">Other</option>
+          <option value="">{tr("form.select")}</option>
+          <option value="residential">{tr("form.residential")}</option>
+          <option value="hospitality">{tr("form.hospitality")}</option>
+          <option value="retail">{tr("form.retail")}</option>
+          <option value="office">{tr("form.office")}</option>
+          <option value="other">{tr("form.other")}</option>
         </select>
       </div>
 
       <div className="form-row">
-        <div className="form-lbl">Subject</div>
+        <div className="form-lbl">{tr("form.subject")}</div>
         <input
           className="form-inp"
           value={form.subject}
           onChange={(e) => setForm({ ...form, subject: e.target.value })}
-          placeholder="Wall objects for a hotel lobby"
+          placeholder={tr("form.subjectPh")}
         />
       </div>
 
       <div className="form-row">
-        <div className="form-lbl">Details</div>
+        <div className="form-lbl">{tr("form.details")}</div>
         <textarea
           className="form-inp"
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
-          placeholder="Space, scale, timeline, location..."
+          placeholder={tr("form.detailsPh")}
           required
         />
       </div>
 
       <div className="form-actions">
         <button type="submit" className="form-submit" disabled={status === "loading"}>
-          {status === "loading" ? "Sending..." : "Send inquiry →"}
+          {status === "loading" ? tr("form.sending") : `${tr("form.send")} →`}
         </button>
       </div>
     </form>

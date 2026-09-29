@@ -28,6 +28,16 @@ const PUBLIC_KEYS = [
   "contact_success",
   "contact_form_note",
   "datenschutz_body",
+  "tagline_pl",
+  "description_pl",
+  "location_pl",
+  "contact_heading_1_pl",
+  "contact_heading_2_pl",
+  "contact_heading_3_pl",
+  "contact_sub_pl",
+  "contact_success_pl",
+  "contact_form_note_pl",
+  "datenschutz_body_pl",
 ];
 
 /** Seeded default when shop_url is missing in Mongo (matches frontend env fallback). */

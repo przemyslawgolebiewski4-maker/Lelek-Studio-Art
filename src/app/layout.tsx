@@ -13,13 +13,20 @@ import {
   SEO_KEYWORDS,
   resolveSiteName,
 } from "@/lib/seo";
+import { LocaleProvider } from "@/components/i18n/LocaleProvider";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { localeText } from "@/lib/i18n/present";
 import { getSiteSettings } from "@/lib/site";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings();
+  const [settings, locale] = await Promise.all([getSiteSettings(), getLocale()]);
   const siteName = resolveSiteName(settings);
-  const description = resolveSiteDescription(settings.description);
+  const description = localeText(
+    locale,
+    resolveSiteDescription(settings.description),
+    settings.description_pl,
+  );
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -38,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       type: "website",
-      locale: "en_DE",
+      locale: locale === "pl" ? "pl_PL" : "en_DE",
       url: SITE_URL,
       siteName,
       title: siteName,
@@ -64,9 +71,10 @@ export const viewport: Viewport = {
   themeColor: "#0B0A08",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <meta
           name="facebook-domain-verification"
@@ -77,10 +85,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Script id="lelek-consent-default" strategy="beforeInteractive">
           {CONSENT_BOOTSTRAP_SCRIPT}
         </Script>
-        {children}
-        <GoogleTag />
-        <CookieBanner />
-        <Analytics />
+        <LocaleProvider locale={locale}>
+          {children}
+          <GoogleTag />
+          <CookieBanner />
+          <Analytics />
+        </LocaleProvider>
       </body>
     </html>
   );

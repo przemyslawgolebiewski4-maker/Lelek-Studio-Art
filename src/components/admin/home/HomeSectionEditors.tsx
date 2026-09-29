@@ -4,6 +4,8 @@ import {
   AdminInput,
   AdminTextarea,
 } from "@/components/admin/AdminShell";
+import { CmsLangField, LangPair } from "@/components/admin/BilingualField";
+import { suggestPl } from "@/lib/i18n/dictionary";
 import { AdminReorderControls, moveItem } from "@/components/admin/AdminFieldHelpers";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
 import { MEDIA_HINTS } from "@/lib/media-hints";
@@ -83,11 +85,7 @@ export function HeroSectionEditor({
           folder="hero"
           hint={MEDIA_HINTS.heroDesktopImage}
         />
-        <AdminInput
-          label="Alt text for desktop / poster image"
-          value={form.imageAlt}
-          onChange={(e) => set("imageAlt", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="imageAlt" label="Alt text for desktop / poster image" />
         <MediaUploadField
           label="Mobile image (optional)"
           value={form.imageMobile}
@@ -111,30 +109,34 @@ export function HeroSectionEditor({
           mode="video"
           hint={MEDIA_HINTS.heroMobileVideo}
         />
-        <AdminInput label="Media caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
+        <CmsLangField content={content} onChange={onChange} name="imageCaption" label="Media caption" />
       </div>
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">2. Text (as on the page)</h3>
-        <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} placeholder="The process comes first." />
-        <AdminInput label="Brand line (main heading)" value={form.brandline} onChange={(e) => set("brandline", e.target.value)} placeholder="LELEK - Berlin." />
-        <AdminTextarea label="Subline" rows={2} value={form.subheadline} onChange={(e) => set("subheadline", e.target.value)} placeholder="Vessels, cups, lamps - organic and raw, shaped by hand, never exactly." />
-        <AdminInput
+        <CmsLangField content={content} onChange={onChange} name="eyebrow" label="Eyebrow" placeholder="The process comes first." fallbackEn="The process comes first." />
+        <CmsLangField content={content} onChange={onChange} name="brandline" label="Brand line (main heading)" placeholder="LELEK - Berlin." fallbackEn="LELEK - Berlin." />
+        <CmsLangField content={content} onChange={onChange} name="subheadline" label="Subline" multiline rows={2} placeholder="Vessels, cups, lamps - organic and raw, shaped by hand, never exactly." fallbackEn="Vessels, cups, lamps - organic and raw, shaped by hand, never exactly." />
+        <CmsLangField
+          content={content}
+          onChange={onChange}
+          name="semanticCore"
           label="Semantic core sentence"
-          value={form.semanticCore}
-          onChange={(e) => set("semanticCore", e.target.value)}
           placeholder="Przemysław Gołębiewski is a self-taught ceramist, working by intuition rather than plan."
+          fallbackEn="Przemysław Gołębiewski is a self-taught ceramist, working by intuition rather than plan. The process comes first, always - the hand moves, the mind follows after."
         />
         <p className="admin-field-hint">
           One sentence under the hero subline - this is the entity Google should read. Keep it third person: &quot;Przemysław Gołębiewski is a self-taught ceramist…&quot; Empty uses the site default.
         </p>
-        <AdminTextarea
-          label="Elements tagline (under elements, if elements shown)"
-          rows={2}
+        <CmsLangField
+          content={content}
+          onChange={onChange}
           name="kozodoj"
-          value={form.kozodoj}
-          onChange={(e) => set("kozodoj", e.target.value)}
+          label="Elements tagline (under elements, if elements shown)"
+          multiline
+          rows={2}
           placeholder="The hand moves, the mind follows after."
+          fallbackEn="The hand moves, the mind follows after."
         />
         <p className="admin-field-hint">
           Editable text field - appears under Earth / Water / Fire / Air when the Elements section is visible on the homepage.
@@ -144,11 +146,11 @@ export function HeroSectionEditor({
       <div className="admin-field-group">
         <h3 className="admin-group-title">3. Buttons</h3>
         <div className="admin-form-row-2">
-          <AdminInput label="Primary CTA text" value={form.cta1Text} onChange={(e) => set("cta1Text", e.target.value)} />
+          <CmsLangField content={content} onChange={onChange} name="cta1Text" label="Primary CTA text" fallbackEn="Shop" />
           <AdminInput label="Primary CTA link" value={form.cta1Url} onChange={(e) => set("cta1Url", e.target.value)} />
         </div>
         <div className="admin-form-row-2">
-          <AdminInput label="Secondary CTA text" value={form.cta2Text} onChange={(e) => set("cta2Text", e.target.value)} />
+          <CmsLangField content={content} onChange={onChange} name="cta2Text" label="Secondary CTA text" fallbackEn="About" />
           <AdminInput label="Secondary CTA link" value={form.cta2Url} onChange={(e) => set("cta2Url", e.target.value)} />
         </div>
       </div>
@@ -156,7 +158,7 @@ export function HeroSectionEditor({
   );
 }
 
-export type StoryGalleryItem = { image: string; alt: string };
+export type StoryGalleryItem = { image: string; alt: string; altPl?: string };
 
 export type StoryFormData = {
   eyebrow: string;
@@ -206,7 +208,11 @@ export function storyToForm(content: Record<string, unknown>): StoryFormData {
     originalsIntro:
       c.originalsIntro ??
       "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences.",
-    gallery: rawGallery.map((g) => ({ image: g.image ?? "", alt: g.alt ?? "" })),
+    gallery: rawGallery.map((g) => ({
+      image: g.image ?? "",
+      alt: g.alt ?? "",
+      altPl: g.altPl ?? "",
+    })),
   };
 }
 
@@ -259,11 +265,7 @@ export function StorySectionEditor({
           folder="story"
           hint={MEDIA_HINTS.storyDesktopImage}
         />
-        <AdminInput
-          label="Alt text for image / poster"
-          value={form.imageAlt}
-          onChange={(e) => set("imageAlt", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="imageAlt" label="Alt text for image / poster" fallbackEn="Przemysław Gołębiewski, self-taught ceramist at work in Berlin" />
         <MediaUploadField
           label="Mobile image"
           value={form.imageMobile}
@@ -287,7 +289,7 @@ export function StorySectionEditor({
           mode="video"
           hint={MEDIA_HINTS.storyMobileVideo}
         />
-        <AdminInput label="Caption" value={form.imageCaption} onChange={(e) => set("imageCaption", e.target.value)} />
+        <CmsLangField content={content} onChange={onChange} name="imageCaption" label="Caption" />
       </div>
 
       <div className="admin-field-group">
@@ -297,13 +299,13 @@ export function StorySectionEditor({
           &quot;Przemysław Gołębiewski is a self-taught ceramist…&quot; so Google can read the maker.
           Paragraphs 2-3 and the signature appear only on /about (first person, core voice).
         </p>
-        <AdminInput label="Eyebrow" value={form.eyebrow} onChange={(e) => set("eyebrow", e.target.value)} />
-        <AdminInput label="Heading" value={form.heading} onChange={(e) => set("heading", e.target.value)} />
-        <AdminInput label="Heading emphasis (italic)" value={form.headingEm} onChange={(e) => set("headingEm", e.target.value)} />
-        <AdminTextarea label="Paragraph 1 (homepage teaser + About)" rows={3} value={form.body1} onChange={(e) => set("body1", e.target.value)} />
-        <AdminTextarea label="Paragraph 2 (About only)" rows={3} value={form.body2} onChange={(e) => set("body2", e.target.value)} />
-        <AdminTextarea label="Paragraph 3 (About only)" rows={3} value={form.body3} onChange={(e) => set("body3", e.target.value)} />
-        <AdminInput label="Signature" value={form.signature} onChange={(e) => set("signature", e.target.value)} />
+        <CmsLangField content={content} onChange={onChange} name="eyebrow" label="Eyebrow" fallbackEn="The ceramist" />
+        <CmsLangField content={content} onChange={onChange} name="heading" label="Heading" fallbackEn="The process comes first," />
+        <CmsLangField content={content} onChange={onChange} name="headingEm" label="Heading emphasis (italic)" fallbackEn="always" />
+        <CmsLangField content={content} onChange={onChange} name="body1" label="Paragraph 1 (homepage teaser + About)" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="body2" label="Paragraph 2 (About only)" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="body3" label="Paragraph 3 (About only)" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="signature" label="Signature" fallbackEn="Przemysław Gołębiewski - ceramist" />
       </div>
 
       <div className="admin-field-group">
@@ -311,16 +313,8 @@ export function StorySectionEditor({
         <p className="admin-muted">
           Both buttons render on /about. Hrefs stay fixed (Shop URL from env / /for-architects). Edit labels only.
         </p>
-        <AdminInput
-          label='Primary CTA label (default: "Shop the collections")'
-          value={form.ctaShopLabel}
-          onChange={(e) => set("ctaShopLabel", e.target.value)}
-        />
-        <AdminInput
-          label='Secondary CTA label (default: "Designing a space?")'
-          value={form.ctaTradeLabel}
-          onChange={(e) => set("ctaTradeLabel", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="ctaShopLabel" label='Primary CTA label (default: "Shop the collections")' fallbackEn="Shop the collections" />
+        <CmsLangField content={content} onChange={onChange} name="ctaTradeLabel" label='Secondary CTA label (default: "Designing a space?")' fallbackEn="Designing a space?" />
       </div>
 
       <div className="admin-field-group">
@@ -329,22 +323,9 @@ export function StorySectionEditor({
           Heading block above the Originals product grid on /about. Pieces themselves are managed under
           Products (flag &quot;Original&quot;).
         </p>
-        <AdminInput
-          label="Eyebrow"
-          value={form.originalsEyebrow}
-          onChange={(e) => set("originalsEyebrow", e.target.value)}
-        />
-        <AdminInput
-          label="Heading"
-          value={form.originalsHeading}
-          onChange={(e) => set("originalsHeading", e.target.value)}
-        />
-        <AdminTextarea
-          label="Intro"
-          rows={2}
-          value={form.originalsIntro}
-          onChange={(e) => set("originalsIntro", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="originalsEyebrow" label="Eyebrow" fallbackEn="Originals" />
+        <CmsLangField content={content} onChange={onChange} name="originalsHeading" label="Heading" fallbackEn="Shaped by hand, not by mold" />
+        <CmsLangField content={content} onChange={onChange} name="originalsIntro" label="Intro" multiline rows={2} fallbackEn="Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences." />
       </div>
 
       <div className="admin-field-group">
@@ -363,10 +344,12 @@ export function StorySectionEditor({
               onChange={(v) => updateGallery(i, { image: v })}
               folder="story"
             />
-            <AdminInput
+            <LangPair
               label={`Alt text for image ${i + 1}`}
-              value={item.alt}
-              onChange={(e) => updateGallery(i, { alt: e.target.value })}
+              en={item.alt}
+              pl={item.altPl || suggestPl(item.alt)}
+              onEn={(value) => updateGallery(i, { alt: value })}
+              onPl={(value) => updateGallery(i, { altPl: value })}
             />
             <AdminReorderControls
               index={i}
@@ -415,10 +398,12 @@ export function ElementsSectionEditor({
         Fixed four slots (Earth / Water / Fire / Air) matching the public bar. Use &quot;Visible on site&quot;
         above to show or hide this section on the homepage after you Save.
       </p>
-      <AdminInput
+      <CmsLangField
+        content={{ ...content, scopeNote }}
+        onChange={(next) => onChange({ ...next, items })}
+        name="scopeNote"
         label="Scope note (above bar)"
-        value={scopeNote}
-        onChange={(e) => onChange({ ...content, items, scopeNote: e.target.value })}
+        fallbackEn="Stoneware shaped by hand, not by mold - organic and raw, shown below in the studio's four elements: earth, water, fire, air."
       />
       {items.map((item, i) => (
         <div key={i} className="admin-field-group" style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}>
@@ -429,16 +414,20 @@ export function ElementsSectionEditor({
               value={item.number}
               onChange={(e) => updateItem(i, { number: e.target.value })}
             />
-            <AdminInput
+            <LangPair
               label="Label (e.g. Earth)"
-              value={item.name}
-              onChange={(e) => updateItem(i, { name: e.target.value })}
+              en={item.name}
+              pl={item.namePl || suggestPl(item.name)}
+              onEn={(value) => updateItem(i, { name: value })}
+              onPl={(value) => updateItem(i, { namePl: value })}
             />
           </div>
-          <AdminInput
+          <LangPair
             label="Short description (optional)"
-            value={item.description ?? ""}
-            onChange={(e) => updateItem(i, { description: e.target.value })}
+            en={item.description ?? ""}
+            pl={item.descriptionPl || suggestPl(item.description)}
+            onEn={(value) => updateItem(i, { description: value })}
+            onPl={(value) => updateItem(i, { descriptionPl: value })}
           />
           <AdminReorderControls
             index={i}
@@ -457,6 +446,8 @@ export type SignpostCardForm = {
   label: string;
   description: string;
   href: string;
+  labelPl?: string;
+  descriptionPl?: string;
 };
 
 export function SignpostSectionEditor({
@@ -466,8 +457,6 @@ export function SignpostSectionEditor({
   content: Record<string, unknown>;
   onChange: (next: Record<string, unknown>) => void;
 }) {
-  const intro = typeof content.intro === "string" ? content.intro : "";
-  const tradeSignal = typeof content.tradeSignal === "string" ? content.tradeSignal : "";
   const tradeHref = typeof content.tradeHref === "string" ? content.tradeHref : "/for-architects";
   const cards = (
     Array.isArray(content.cards) ? (content.cards as SignpostCardForm[]) : []
@@ -492,17 +481,8 @@ export function SignpostSectionEditor({
         matching the fixed destinations. Reorder with Move up / Move down; labels and links stay editable.
         Tip: keep the Shop card link in sync with Admin → Settings → Shop URL (or paste that URL here).
       </p>
-      <AdminTextarea
-        label="Intro paragraph"
-        rows={3}
-        value={intro}
-        onChange={(e) => setScalar("intro", e.target.value)}
-      />
-      <AdminInput
-        label="Trade signal text"
-        value={tradeSignal}
-        onChange={(e) => setScalar("tradeSignal", e.target.value)}
-      />
+      <CmsLangField content={content} onChange={onChange} name="intro" label="Intro paragraph" multiline rows={3} />
+      <CmsLangField content={content} onChange={onChange} name="tradeSignal" label="Trade signal text" fallbackEn="Designing a space? Let's talk" />
       <AdminInput
         label="Trade signal link"
         value={tradeHref}
@@ -511,16 +491,21 @@ export function SignpostSectionEditor({
       {cards.map((card, i) => (
         <div key={i} className="admin-field-group">
           <h3 className="admin-group-title">Card {i + 1}</h3>
-          <AdminInput
+          <LangPair
             label="Label"
-            value={card.label}
-            onChange={(e) => updateCard(i, { label: e.target.value })}
+            en={card.label}
+            pl={card.labelPl || suggestPl(card.label)}
+            onEn={(value) => updateCard(i, { label: value })}
+            onPl={(value) => updateCard(i, { labelPl: value })}
           />
-          <AdminTextarea
+          <LangPair
             label="Description"
+            en={card.description}
+            pl={card.descriptionPl || suggestPl(card.description)}
+            multiline
             rows={2}
-            value={card.description}
-            onChange={(e) => updateCard(i, { description: e.target.value })}
+            onEn={(value) => updateCard(i, { description: value })}
+            onPl={(value) => updateCard(i, { descriptionPl: value })}
           />
           <AdminInput
             label="Link (path or full URL)"
@@ -540,7 +525,7 @@ export function SignpostSectionEditor({
   );
 }
 
-type TradePoint = { title: string; body: string };
+type TradePoint = { title: string; body: string; titlePl?: string; bodyPl?: string };
 
 function tradePointsFromContent(content: Record<string, unknown>): TradePoint[] {
   const c = content as Record<string, string>;
@@ -548,6 +533,8 @@ function tradePointsFromContent(content: Record<string, unknown>): TradePoint[] 
     return (content.points as TradePoint[]).map((p) => ({
       title: p.title ?? "",
       body: p.body ?? "",
+      titlePl: p.titlePl ?? "",
+      bodyPl: p.bodyPl ?? "",
     }));
   }
   return [
@@ -608,11 +595,7 @@ export function TradeSectionEditor({
           onChange={(v) => set("heroImage", v)}
           folder="architects"
         />
-        <AdminInput
-          label="Alt text for hero image"
-          value={c.heroImageAlt ?? ""}
-          onChange={(e) => set("heroImageAlt", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="heroImageAlt" label="Alt text for hero image" fallbackEn="Ceramic objects by Przemysław Gołębiewski for interiors" />
         <MediaUploadField
           label="Hero image mobile"
           value={c.heroImageMobile ?? ""}
@@ -633,24 +616,21 @@ export function TradeSectionEditor({
           folder="architects"
           mode="video"
         />
-        <AdminTextarea
-          label="Hero caption"
-          rows={2}
-          value={c.heroCaption ?? ""}
-          onChange={(e) => set("heroCaption", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="heroCaption" label="Hero caption" multiline rows={2} />
       </div>
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">2. Intro</h3>
-        <AdminInput label="Eyebrow" value={c.eyebrow ?? ""} onChange={(e) => set("eyebrow", e.target.value)} />
-        <AdminInput label="Headline line 1" value={c.headline ?? ""} onChange={(e) => set("headline", e.target.value)} />
-        <AdminInput label="Headline line 2 (italic)" value={c.headlineEm ?? ""} onChange={(e) => set("headlineEm", e.target.value)} />
-        <AdminTextarea
+        <CmsLangField content={content} onChange={onChange} name="eyebrow" label="Eyebrow" fallbackEn="For architects & designers" />
+        <CmsLangField content={content} onChange={onChange} name="headline" label="Headline line 1" fallbackEn="Objects for spaces" />
+        <CmsLangField content={content} onChange={onChange} name="headlineEm" label="Headline line 2 (italic)" fallbackEn="that refuse the ordinary." />
+        <CmsLangField
+          content={content}
+          onChange={onChange}
+          name="sub"
           label="Intro paragraph (page sub)"
+          multiline
           rows={5}
-          value={c.sub ?? ""}
-          onChange={(e) => set("sub", e.target.value)}
           placeholder="Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic."
         />
       </div>
@@ -672,17 +652,22 @@ export function TradeSectionEditor({
             <h3 className="admin-group-title">
               Point {String(i + 1).padStart(2, "0")}
             </h3>
-            <AdminInput
+            <LangPair
               label="Title"
-              value={point.title}
-              onChange={(e) => updatePoint(i, { title: e.target.value })}
+              en={point.title}
+              pl={point.titlePl || suggestPl(point.title)}
               placeholder={i === 0 ? "Wall objects" : undefined}
+              onEn={(value) => updatePoint(i, { title: value })}
+              onPl={(value) => updatePoint(i, { titlePl: value })}
             />
-            <AdminTextarea
+            <LangPair
               label="Description"
+              en={point.body}
+              pl={point.bodyPl || suggestPl(point.body)}
+              multiline
               rows={2}
-              value={point.body}
-              onChange={(e) => updatePoint(i, { body: e.target.value })}
+              onEn={(value) => updatePoint(i, { body: value })}
+              onPl={(value) => updatePoint(i, { bodyPl: value })}
             />
             <AdminReorderControls
               index={i}
@@ -710,31 +695,24 @@ export function TradeSectionEditor({
         >
           Add point
         </button>
-        <AdminTextarea
-          label="Closing collaboration note"
-          rows={3}
-          value={c.closingNote ?? ""}
-          onChange={(e) => set("closingNote", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="closingNote" label="Closing collaboration note" multiline rows={3} />
       </div>
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">4. Project inquiry form</h3>
-        <AdminInput
-          label="Form section eyebrow"
-          value={c.formEyebrow ?? ""}
-          onChange={(e) => set("formEyebrow", e.target.value)}
-          placeholder="Project inquiry"
-        />
-        <AdminTextarea
+        <CmsLangField content={content} onChange={onChange} name="formEyebrow" label="Form section eyebrow" placeholder="Project inquiry" fallbackEn="Project inquiry" />
+        <CmsLangField
+          content={content}
+          onChange={onChange}
+          name="formIntro"
           label="Form intro text"
+          multiline
           rows={3}
-          value={c.formIntro ?? ""}
-          onChange={(e) => set("formIntro", e.target.value)}
           placeholder="Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days."
+          fallbackEn="Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days."
         />
-        <AdminInput label="Success title" value={c.formSuccessTitle ?? ""} onChange={(e) => set("formSuccessTitle", e.target.value)} />
-        <AdminTextarea label="Success body" rows={2} value={c.formSuccessBody ?? ""} onChange={(e) => set("formSuccessBody", e.target.value)} />
+        <CmsLangField content={content} onChange={onChange} name="formSuccessTitle" label="Success title" fallbackEn="Message received." />
+        <CmsLangField content={content} onChange={onChange} name="formSuccessBody" label="Success body" multiline rows={2} fallbackEn="We will get back to you within 1-2 working days." />
       </div>
     </div>
   );
@@ -751,31 +729,22 @@ export function TextSectionEditor({
   fields: { key: string; label: string; multiline?: boolean; hint?: string }[];
   description?: string;
 }) {
-  const c = content as Record<string, string>;
-
   return (
     <div className="admin-form-stack-lg">
       {description ? <p className="admin-muted">{description}</p> : null}
-      {fields.map(({ key, label, multiline, hint }) =>
-        multiline ? (
-          <AdminTextarea
-            key={key}
+      {fields.map(({ key, label, multiline, hint }) => (
+        <div key={key}>
+          <CmsLangField
+            content={content}
+            onChange={onChange}
+            name={key}
             label={label}
+            multiline={multiline}
             rows={3}
-            value={c[key] ?? ""}
-            onChange={(e) => onChange({ ...content, [key]: e.target.value })}
           />
-        ) : (
-          <div key={key}>
-            <AdminInput
-              label={label}
-              value={c[key] ?? ""}
-              onChange={(e) => onChange({ ...content, [key]: e.target.value })}
-            />
-            {hint ? <p className="admin-field-hint">{hint}</p> : null}
-          </div>
-        ),
-      )}
+          {hint ? <p className="admin-field-hint">{hint}</p> : null}
+        </div>
+      ))}
     </div>
   );
 }
@@ -799,46 +768,36 @@ export function FindSectionEditor({
       </p>
       <div className="admin-field-group">
         <h3 className="admin-group-title">Find us</h3>
-        <AdminInput label="Studio name" value={c.studioName ?? ""} onChange={(e) => set("studioName", e.target.value)} />
+        <CmsLangField content={content} onChange={onChange} name="studioName" label="Studio name" />
         <AdminTextarea label="Studio address" rows={3} value={c.studioAddress ?? ""} onChange={(e) => set("studioAddress", e.target.value)} />
-        <AdminTextarea
+        <CmsLangField
+          content={content}
+          onChange={onChange}
+          name="openDaysNote"
           label="Open days note"
+          multiline
           rows={2}
-          value={c.openDaysNote ?? ""}
-          onChange={(e) => set("openDaysNote", e.target.value)}
           placeholder="Available during open days and selected sales events..."
+          fallbackEn="Available during open days and selected sales events. Follow Instagram for dates."
         />
         <AdminInput label="Instagram handle (display)" value={c.studioInstagram ?? ""} onChange={(e) => set("studioInstagram", e.target.value)} />
         <AdminInput label="Instagram URL" value={c.studioInstagramUrl ?? ""} onChange={(e) => set("studioInstagramUrl", e.target.value)} />
       </div>
       <div className="admin-field-group">
         <h3 className="admin-group-title">Online / Shop block</h3>
-        <AdminInput
-          label="Online heading"
-          value={c.onlineHeading ?? ""}
-          onChange={(e) => set("onlineHeading", e.target.value)}
-          placeholder="Shop"
-        />
-        <AdminTextarea
-          label="Online description"
-          rows={3}
-          value={c.onlineDescription ?? ""}
-          onChange={(e) => set("onlineDescription", e.target.value)}
-        />
-        <AdminInput
-          label="Online CTA label"
-          value={c.onlineCtaLabel ?? ""}
-          onChange={(e) => set("onlineCtaLabel", e.target.value)}
-          placeholder="Visit shop ↗"
-        />
+        <CmsLangField content={content} onChange={onChange} name="onlineHeading" label="Online heading" placeholder="Shop" fallbackEn="Shop" />
+        <CmsLangField content={content} onChange={onChange} name="onlineDescription" label="Online description" multiline rows={3} fallbackEn="Vessels, cups, lamps and objects - each one a little different from the last." />
+        <CmsLangField content={content} onChange={onChange} name="onlineCtaLabel" label="Online CTA label" placeholder="Visit shop ↗" fallbackEn="Visit shop ↗" />
         <p className="admin-muted">
           Shop destination URL is edited in Admin → Settings → Shop URL (not here).
         </p>
       </div>
-      <AdminInput
+      <CmsLangField
+        content={content}
+        onChange={onChange}
+        name="lelekMeaning"
         label="Brand tagline (footer - e.g. The hand moves, the mind follows after.)"
-        value={c.lelekMeaning ?? ""}
-        onChange={(e) => set("lelekMeaning", e.target.value)}
+        fallbackEn="The hand moves, the mind follows after."
       />
     </div>
   );
@@ -891,16 +850,8 @@ export function FeaturedSectionEditor({
 
       <div className="admin-field-group">
         <h3 className="admin-group-title">Heading</h3>
-        <AdminInput
-          label="Heading line 1"
-          value={form.heading}
-          onChange={(e) => set("heading", e.target.value)}
-        />
-        <AdminInput
-          label="Heading line 2 (italic)"
-          value={form.headingEm}
-          onChange={(e) => set("headingEm", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="heading" label="Heading line 1" fallbackEn="Shaped by hand" />
+        <CmsLangField content={content} onChange={onChange} name="headingEm" label="Heading line 2 (italic)" fallbackEn="never exactly" />
       </div>
 
       <div className="admin-field-group">
@@ -925,11 +876,7 @@ export function FeaturedSectionEditor({
           mode="video"
           hint="Optional lighter file for phones - same 1920×840 (16:7) frame, not vertical."
         />
-        <AdminInput
-          label="Video alt text (accessibility)"
-          value={form.videoAlt}
-          onChange={(e) => set("videoAlt", e.target.value)}
-        />
+        <CmsLangField content={content} onChange={onChange} name="videoAlt" label="Video alt text (accessibility)" fallbackEn="Ceramics by Przemysław Gołębiewski - Lelek Studio Berlin" />
       </div>
 
       <div className="admin-field-group">

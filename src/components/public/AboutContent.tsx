@@ -5,6 +5,8 @@ import type { StorySection } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { OriginalsGrid } from "@/components/public/OriginalsGrid";
 import { SHOP_URL } from "@/lib/config";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { localeText } from "@/lib/i18n/present";
 
 type AboutContentProps = {
   story: StorySection;
@@ -12,7 +14,7 @@ type AboutContentProps = {
   shopUrl?: string;
 };
 
-export function AboutContent({
+export async function AboutContent({
   story,
   originals,
   shopUrl = SHOP_URL,
@@ -21,10 +23,11 @@ export function AboutContent({
   const imageMobile = story.imageMobile?.trim() || "";
   const video = story.video?.trim() || "";
   const videoMobile = story.videoMobile?.trim() || "";
-  const alt = story.imageAlt || "Przemysław Gołębiewski, ceramist";
+  const locale = await getLocale();
+  const alt = localeText(locale, story.imageAlt || "Przemysław Gołębiewski, ceramist");
   const gallery = (story.gallery ?? []).filter((g) => g.image);
-  const shopLabel = story.ctaShopLabel || "Shop the collections";
-  const tradeLabel = story.ctaTradeLabel || "Designing a space?";
+  const shopLabel = localeText(locale, story.ctaShopLabel || "Shop the collections");
+  const tradeLabel = localeText(locale, story.ctaTradeLabel || "Designing a space?");
   const hasMedia = Boolean(image || video);
 
   return (
@@ -80,7 +83,7 @@ export function AboutContent({
       </div>
 
       {gallery.length > 0 ? (
-        <section className="about-gallery" aria-label="Studio gallery">
+        <section className="about-gallery" aria-label={localeText(locale, "Studio gallery")}>
           <div className="gallery">
             {gallery.map((item, i) => (
               <div key={`${item.image}-${i}`} className="gallery-item">
@@ -99,13 +102,18 @@ export function AboutContent({
 
       <section id="originals" className="originals-section">
         <div className="originals-header">
-          <div className="sec-eyebrow">{story.originalsEyebrow || "Originals"}</div>
+          <div className="sec-eyebrow">
+            {localeText(locale, story.originalsEyebrow || "Originals")}
+          </div>
           <h2 className="page-h1" style={{ fontSize: "var(--text-2xl)" }}>
-            {story.originalsHeading || "Shaped by hand, not by mold"}
+            {localeText(locale, story.originalsHeading || "Shaped by hand, not by mold")}
           </h2>
           <p className="page-intro">
-            {story.originalsIntro ||
-              "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences."}
+            {localeText(
+              locale,
+              story.originalsIntro ||
+                "Some forms repeat - vessels, cups, lamps - but never exactly. Each one carries its own small differences.",
+            )}
           </p>
         </div>
         <OriginalsGrid products={originals} inquireHref="/contact" />

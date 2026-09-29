@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
 import { withCreatorName } from "@/lib/brand";
+import { getLocale } from "@/lib/i18n/get-locale";
+import { t } from "@/lib/i18n/messages";
 import { normalizeSlug } from "@/lib/slug";
 
 type OriginalsGridProps = {
@@ -9,16 +11,17 @@ type OriginalsGridProps = {
   inquireHref?: string;
 };
 
-export function OriginalsGrid({
+export async function OriginalsGrid({
   products,
   inquireHref = "/contact",
 }: OriginalsGridProps) {
+  const locale = await getLocale();
   if (products.length === 0) {
     return (
       <div className="originals-empty">
-        No Originals listed yet.{" "}
+        {t(locale, "originals.empty")}{" "}
         <Link href={inquireHref} className="link-brutal" style={{ marginTop: 0 }}>
-          Inquire
+          {t(locale, "originals.inquire")}
         </Link>
       </div>
     );
@@ -45,7 +48,7 @@ export function OriginalsGrid({
             <div className="originals-item-media-wrap">
               <Link href={`/objects/${slug}`} className="originals-item-media">
                 {sold ? (
-                  <span className="originals-item-sold">In a private collection</span>
+                  <span className="originals-item-sold">{t(locale, "originals.private")}</span>
                 ) : null}
                 {product.images[0] ? (
                   <Image
@@ -65,7 +68,7 @@ export function OriginalsGrid({
                   rel="noopener noreferrer"
                   className="originals-on-view"
                 >
-                  On view at {gallery.name}
+                  {t(locale, "product.onView")} {gallery.name}
                 </a>
               ) : null}
             </div>
@@ -75,10 +78,10 @@ export function OriginalsGrid({
                 {product.title}
               </Link>
               {sold ? (
-                <span className="originals-sold-label">In a private collection</span>
+                <span className="originals-sold-label">{t(locale, "originals.private")}</span>
               ) : (
                 <Link href={inquireHref} className="originals-inquire">
-                  Inquire →
+                  {t(locale, "product.inquireArrow")}
                 </Link>
               )}
             </div>
