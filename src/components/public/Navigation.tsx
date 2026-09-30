@@ -5,22 +5,27 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LanguageSwitch } from "@/components/public/LanguageSwitch";
 import { SHOP_URL } from "@/lib/config";
-import { CREATOR_HOST, isAboutHref, studioHref } from "@/lib/links";
+import { ABOUT_URL, CREATOR_HOST, isAboutHref, studioHref } from "@/lib/links";
 import { t } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/locale";
 
-type NavLink =
-  | { href: string; label: string; external?: false }
-  | { href: string; label: string; external: true };
+type NavLink = {
+  id: string;
+  href: string;
+  label: string;
+  newTab?: boolean;
+  creator?: boolean;
+};
 
 function buildLinks(shopUrl: string, locale: Locale): NavLink[] {
   return [
-    { href: shopUrl, label: t(locale, "nav.shop"), external: true },
-    { href: studioHref("/journal"), label: t(locale, "nav.process") },
-    { href: studioHref("/about"), label: t(locale, "nav.about") },
-    { href: studioHref("/galleries"), label: t(locale, "nav.galleries") },
-    { href: studioHref("/for-architects"), label: t(locale, "nav.trade") },
-    { href: studioHref("/contact"), label: t(locale, "nav.contact") },
+    { id: "shop", href: shopUrl, label: t(locale, "nav.shop"), newTab: true },
+    { id: "process", href: studioHref("/journal"), label: t(locale, "nav.process") },
+    { id: "about", href: studioHref("/about"), label: t(locale, "nav.about") },
+    { id: "creator", href: ABOUT_URL, label: t(locale, "nav.creator"), creator: true },
+    { id: "galleries", href: studioHref("/galleries"), label: t(locale, "nav.galleries") },
+    { id: "trade", href: studioHref("/for-architects"), label: t(locale, "nav.trade") },
+    { id: "contact", href: studioHref("/contact"), label: t(locale, "nav.contact") },
   ];
 }
 
@@ -35,14 +40,21 @@ function hrefPathname(href: string): string {
   return href.split("#")[0]?.split("?")[0] || "/";
 }
 
-function isActive(pathname: string, href: string, external?: boolean, host = "") {
-  if (external) return false;
-  if (isAboutHref(href)) {
-    const onCreator = host === CREATOR_HOST || host === `www.${CREATOR_HOST}`;
-    if (onCreator) return pathname === "/" || pathname === "/about" || pathname.startsWith("/about/");
+function onCreatorHost(host: string) {
+  return host === CREATOR_HOST || host === `www.${CREATOR_HOST}`;
+}
+
+function isActive(pathname: string, link: NavLink, host = "") {
+  const onCreator = onCreatorHost(host);
+  if (link.creator) {
+    return onCreator && (pathname === "/" || pathname === "/about" || pathname.startsWith("/about/"));
+  }
+  if (link.newTab) return false;
+  if (isAboutHref(link.href)) {
+    if (onCreator) return false;
     return pathname === "/about" || pathname.startsWith("/about/");
   }
-  const pathOnly = hrefPathname(href);
+  const pathOnly = hrefPathname(link.href);
   if (pathOnly === "/") return pathname === "/";
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
@@ -82,8 +94,8 @@ export function Navigation({
 
       <ul className="nav-links">
         {links.map((link) => (
-          <li key={link.href}>
-            {link.external ? (
+          <li key={link.id}>
+            {link.newTab ? (
               <a
                 href={link.href}
                 target="_blank"
@@ -95,7 +107,7 @@ export function Navigation({
             ) : (
               <Link
                 href={link.href}
-                className={isActive(pathname, link.href, false, host) ? "is-active" : undefined}
+                className={isActive(pathname, link, host) ? "is-active" : undefined}
               >
                 {link.label}
               </Link>
@@ -121,9 +133,9 @@ export function Navigation({
 
       <div className={`nav-mobile ${open ? "open" : ""}`}>
         {links.map((link) =>
-          link.external ? (
+          link.newTab ? (
             <a
-              key={link.href}
+              key={link.id}
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
@@ -134,9 +146,9 @@ export function Navigation({
             </a>
           ) : (
             <Link
-              key={link.href}
+              key={link.id}
               href={link.href}
-              className={isActive(pathname, link.href, false, host) ? "is-active" : undefined}
+              className={isActive(pathname, link, host) ? "is-active" : undefined}
               onClick={() => setOpen(false)}
             >
               {link.label}
