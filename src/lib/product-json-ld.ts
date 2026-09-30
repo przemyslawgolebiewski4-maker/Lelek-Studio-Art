@@ -1,7 +1,6 @@
 import type { Product } from "@/types/product";
 import { withCreatorName } from "@/lib/brand";
 import { SITE_URL } from "@/lib/config";
-import { ABOUT_URL } from "@/lib/links";
 import { buildCreatorRef } from "@/lib/person-json-ld";
 
 const LOCATION_CREATED = {
@@ -45,7 +44,7 @@ export function buildProductJsonLd(
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
-      { "@type": "ListItem", position: 2, name: "About", item: ABOUT_URL },
+      { "@type": "ListItem", position: 2, name: "About", item: `${SITE_URL}/about` },
       { "@type": "ListItem", position: 3, name: product.title, item: url },
     ],
   };

@@ -4,7 +4,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { GoogleTag } from "@/components/analytics/GoogleTag";
 import { CookieBanner } from "@/components/public/CookieBanner";
 import { SITE_URL } from "@/lib/config";
-import { ABOUT_URL } from "@/lib/links";
 import { CONSENT_BOOTSTRAP_SCRIPT } from "@/lib/consent";
 import { fontVariables } from "@/lib/fonts";
 import { CREATOR_NAME, resolveSiteDescription } from "@/lib/brand";
@@ -37,7 +36,7 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description,
     keywords: SEO_KEYWORDS,
-    authors: [{ name: CREATOR_NAME, url: ABOUT_URL }],
+    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
     creator: CREATOR_NAME,
     publisher: siteName,
     robots: { index: true, follow: true },

@@ -19,8 +19,9 @@ export type HostDecision =
   | { action: "redirect"; destination: string };
 
 /**
- * Production (www) publishes the maker page on its own host.
- * Preview and local development keep /about on the same origin.
+ * Production links that leave the studio host use absolute studio URLs.
+ * Preview and local development keep same-origin paths.
+ * /about stays on the studio site. The maker menu item uses ABOUT_URL directly.
  */
 export function linkMode(): LinkMode {
   const vercelEnv = process.env.NEXT_PUBLIC_VERCEL_ENV || process.env.VERCEL_ENV || "";
@@ -50,21 +51,10 @@ function isAboutPath(pathname: string): boolean {
   return pathname === "/about" || pathname.startsWith("/about/");
 }
 
-/** Rest of the path after /about, or "" when the path is exactly /about. */
-function aboutRest(pathname: string): string {
-  const rest = pathname.slice("/about".length);
-  return rest === "/" ? "" : rest;
-}
-
-function aboutPublicUrl(rest: string, search: string): string {
-  if (!rest && !search) return ABOUT_URL;
-  if (!rest) return withSearch(`${ABOUT_URL}/`, search);
-  return withSearch(`${ABOUT_URL}${rest}`, search);
-}
-
 /**
  * Where a request should go based on the public host.
  * Unknown hosts (localhost, preview) are left unchanged.
+ * /about is served on the studio host. The maker host root rewrites to that page.
  */
 export function decideHostRoute(
   hostHeader: string | null | undefined,
@@ -75,20 +65,16 @@ export function decideHostRoute(
   const path = normalizePathname(pathname);
 
   if (CREATOR_HOSTS.has(host)) {
-    if (host !== CREATOR_HOST && (path === "/" || isAboutPath(path))) {
-      const rest = isAboutPath(path) ? aboutRest(path) : "";
-      return { action: "redirect", destination: aboutPublicUrl(rest, search) };
-    }
-
-    if (isAboutPath(path)) {
-      return { action: "redirect", destination: aboutPublicUrl(aboutRest(path), search) };
+    if (host !== CREATOR_HOST) {
+      const destPath = path === "/" ? "/" : path;
+      return { action: "redirect", destination: withSearch(`${ABOUT_URL}${destPath}`, search) };
     }
 
     if (path === "/") {
       return { action: "rewrite", pathname: "/about" };
     }
 
-    if (path.startsWith("/api") || path.startsWith("/_next")) {
+    if (path.startsWith("/api") || path.startsWith("/_next") || isAboutPath(path)) {
       return { action: "continue" };
     }
 
@@ -98,26 +84,17 @@ export function decideHostRoute(
     };
   }
 
-  if (STUDIO_HOSTS.has(host)) {
-    if (isAboutPath(path)) {
-      return { action: "redirect", destination: aboutPublicUrl(aboutRest(path), search) };
-    }
-    if (path === "/collections" || path.startsWith("/collections/")) {
-      return { action: "redirect", destination: `${ABOUT_URL}/#originals` };
-    }
+  if (STUDIO_HOSTS.has(host) && (path === "/collections" || path.startsWith("/collections/"))) {
+    return { action: "redirect", destination: `${STUDIO_ORIGIN}/about#originals` };
   }
 
   return { action: "continue" };
 }
 
-function isStudioHostname(hostname: string): boolean {
-  return STUDIO_HOSTS.has(hostname);
-}
-
 /**
- * Turn an in-app or legacy studio href into the public URL.
- * In host mode, /about points at the creator host and other site paths
- * point at the studio origin so they stay correct from that host.
+ * Turn an in-app href into the public URL.
+ * In host mode, site paths point at the studio origin so they stay correct
+ * from the maker host. /about stays on that studio origin.
  */
 export function resolvePublicHref(href: string, mode: LinkMode = linkMode()): string {
   const trimmed = href.trim();
@@ -136,17 +113,6 @@ export function resolvePublicHref(href: string, mode: LinkMode = linkMode()): st
 
   const path = normalizePathname(url.pathname);
   const relative = trimmed.startsWith("/");
-  const onStudio = relative || isStudioHostname(url.hostname);
-
-  if (onStudio && isAboutPath(path)) {
-    const rest = aboutRest(path);
-    if (mode === "path") {
-      return `${path}${url.search}${url.hash}`;
-    }
-    if (!rest && !url.search && !url.hash) return ABOUT_URL;
-    if (!rest) return `${ABOUT_URL}/${url.search}${url.hash}`;
-    return `${ABOUT_URL}${rest}${url.search}${url.hash}`;
-  }
 
   if (mode === "host" && relative) {
     if (path === "/") return withSearch(`${STUDIO_ORIGIN}/`, url.search) + url.hash;

@@ -11,7 +11,6 @@ import { CREATOR_ENTITY_DESCRIPTION, CREATOR_NAME, ELEMENTS_SCOPE_NOTE, resolveS
 import { getLocale } from "@/lib/i18n/get-locale";
 import { localeText } from "@/lib/i18n/present";
 import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
-import { ABOUT_URL } from "@/lib/links";
 import {
   DEFAULT_TAGLINE,
   resolveSiteName,
@@ -47,7 +46,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return withPageDescription(description, {
     title: { absolute: `${siteName} - ${tagline}` },
-    authors: [{ name: CREATOR_NAME, url: ABOUT_URL }],
+    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
     creator: CREATOR_NAME,
     alternates: { canonical: `${SITE_URL}/` },
   });

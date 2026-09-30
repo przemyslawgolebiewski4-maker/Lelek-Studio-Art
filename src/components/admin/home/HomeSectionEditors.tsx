@@ -253,8 +253,7 @@ export function StorySectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Story / About - homepage shows paragraph 1 only. The full page is published at
-        przemyslawgolebiewski.lelekstudio.com (paragraphs, gallery, CTAs and Originals).
+        Story / About - homepage shows paragraph 1 only; /about shows all paragraphs, gallery, CTAs and Originals.
       </p>
 
       <div className="admin-field-group">
