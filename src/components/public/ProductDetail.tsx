@@ -6,6 +6,7 @@ import { CATEGORY_LABELS } from "@/lib/categories";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t, type MessageKey } from "@/lib/i18n/messages";
 import { localeText } from "@/lib/i18n/present";
+import { aboutHref } from "@/lib/links";
 import type { ProductCategory } from "@/types/product";
 
 const PHOTO_REPRODUCTION_SENTENCE =
@@ -55,7 +56,7 @@ export async function ProductDetail({ product }: { product: Product }) {
   return (
     <article>
       <div className="page-shell">
-        <Link href="/collections" className="back-link">
+        <Link href={aboutHref("originals")} className="back-link">
           ← {t(locale, "works.allLink")}
         </Link>
       </div>

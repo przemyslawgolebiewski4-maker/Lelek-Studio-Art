@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/config";
+import { ABOUT_URL } from "@/lib/links";
 import { serverFetch } from "@/lib/api-server";
 import { normalizeSlug } from "@/lib/slug";
 import type { Product } from "@/types/product";
@@ -30,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticEntries: MetadataRoute.Sitemap = STATIC_ROUTES.map(
     ({ path, priority, changeFrequency }) => ({
-      url: path ? `${SITE_URL}${path}` : `${SITE_URL}/`,
+      url: path === "/about" ? ABOUT_URL : path ? `${SITE_URL}${path}` : `${SITE_URL}/`,
       lastModified: now,
       changeFrequency,
       priority,

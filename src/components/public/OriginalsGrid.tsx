@@ -4,6 +4,7 @@ import type { Product } from "@/types/product";
 import { withCreatorName } from "@/lib/brand";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
+import { studioHref } from "@/lib/links";
 import { normalizeSlug } from "@/lib/slug";
 
 type OriginalsGridProps = {
@@ -31,6 +32,7 @@ export async function OriginalsGrid({
     <div className="originals-grid">
       {products.map((product) => {
         const slug = normalizeSlug(product.slug) || product.slug;
+        const objectHref = studioHref(`/objects/${slug}`);
         const sold = Boolean(product.soldOut);
         const gallery =
           !sold &&
@@ -46,7 +48,7 @@ export async function OriginalsGrid({
             className={`originals-item${sold ? " is-sold" : ""}`}
           >
             <div className="originals-item-media-wrap">
-              <Link href={`/objects/${slug}`} className="originals-item-media">
+              <Link href={objectHref} className="originals-item-media">
                 {sold ? (
                   <span className="originals-item-sold">{t(locale, "originals.private")}</span>
                 ) : null}
@@ -74,7 +76,7 @@ export async function OriginalsGrid({
             </div>
             <div className="originals-item-meta">
               <span className="originals-catalog">{product.catalog || "-"}</span>
-              <Link href={`/objects/${slug}`} className="originals-title">
+              <Link href={objectHref} className="originals-title">
                 {product.title}
               </Link>
               {sold ? (

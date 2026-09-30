@@ -3,6 +3,7 @@ import { AboutContent } from "@/components/public/AboutContent";
 import { getOriginalProducts, getSiteSettings, getStorySection } from "@/lib/site";
 import { JsonLd } from "@/lib/json-ld";
 import { SITE_URL, resolveShopUrl, resolveOrganizationSameAs } from "@/lib/config";
+import { ABOUT_URL } from "@/lib/links";
 import { normalizeSlug } from "@/lib/slug";
 import { ABOUT_PAGE_KEYWORDS, withPageDescription } from "@/lib/seo";
 import { CREATOR_FAMILY_NAME, CREATOR_GIVEN_NAME, CREATOR_NAME } from "@/lib/brand";
@@ -26,11 +27,12 @@ export async function generateMetadata(): Promise<Metadata> {
   return withPageDescription(description, {
     title: title || CREATOR_NAME,
     keywords: ABOUT_PAGE_KEYWORDS,
-    authors: [{ name: CREATOR_NAME, url: `${SITE_URL}/about` }],
+    authors: [{ name: CREATOR_NAME, url: ABOUT_URL }],
     creator: CREATOR_NAME,
-    alternates: { canonical: `${SITE_URL}/about` },
+    alternates: { canonical: ABOUT_URL },
     openGraph: {
       type: "profile",
+      url: ABOUT_URL,
       firstName: CREATOR_GIVEN_NAME,
       lastName: CREATOR_FAMILY_NAME,
       username: "lelek.berlin",
@@ -70,8 +72,8 @@ export default async function AboutPage() {
       }),
       {
         "@type": "ProfilePage",
-        "@id": `${SITE_URL}/about`,
-        url: `${SITE_URL}/about`,
+        "@id": `${ABOUT_URL}/#profile`,
+        url: ABOUT_URL,
         name: localeText(locale, `${CREATOR_NAME} - ceramist`),
         mainEntity: { "@id": PERSON_ID },
         about: { "@id": PERSON_ID },
@@ -90,7 +92,7 @@ export default async function AboutPage() {
             "@type": "ListItem",
             position: 2,
             name: CREATOR_NAME,
-            item: `${SITE_URL}/about`,
+            item: ABOUT_URL,
           },
         ],
       },

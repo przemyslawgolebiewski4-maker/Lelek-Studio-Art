@@ -10,7 +10,15 @@ export function LanguageSwitch({ locale }: { locale: Locale }) {
 
   function choose(next: Locale) {
     if (next === locale) return;
-    document.cookie = `${LOCALE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax`;
+    const host = window.location.hostname;
+    const shared = host === "lelekstudio.com" || host.endsWith(".lelekstudio.com");
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    if (shared) {
+      document.cookie = `${LOCALE_COOKIE}=; Path=/; Max-Age=0; SameSite=Lax${secure}`;
+      document.cookie = `${LOCALE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax; Domain=.lelekstudio.com${secure}`;
+    } else {
+      document.cookie = `${LOCALE_COOKIE}=${next}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+    }
     router.refresh();
   }
 

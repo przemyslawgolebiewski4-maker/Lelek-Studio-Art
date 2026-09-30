@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { SHOP_URL } from "@/lib/config";
+import { resolvePublicHref } from "@/lib/links";
 import {
   CREATOR_ENTITY_DESCRIPTION,
   HERO_BRANDLINE,
@@ -52,6 +53,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
   const subline = content.subheadline || HERO_SUBHEADLINE;
   const brandline = content.brandline || HERO_BRANDLINE;
   const semanticCore = content.semanticCore?.trim() || CREATOR_ENTITY_DESCRIPTION;
+  const cta1Href = resolvePublicHref(content.cta1Url ?? SHOP_URL);
+  const cta2Href = resolvePublicHref(content.cta2Url ?? "/about");
 
   return (
     <section className="hero">
@@ -90,18 +93,18 @@ export function Hero({ content, elements = [] }: HeroProps) {
             <p className="hero-semantic-core">{semanticCore}</p>
             <div className="hero-btns">
               {content.cta1Text ? (
-                /^https?:\/\//i.test(content.cta1Url ?? "") ? (
-                  <a href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                /^https?:\/\//i.test(cta1Href) ? (
+                  <a href={cta1Href} className="hero-btn filled">
                     {content.cta1Text}
                   </a>
                 ) : (
-                  <Link href={content.cta1Url ?? SHOP_URL} className="hero-btn filled">
+                  <Link href={cta1Href} className="hero-btn filled">
                     {content.cta1Text}
                   </Link>
                 )
               ) : null}
               {content.cta2Text ? (
-                <Link href={content.cta2Url ?? "/about"} className="hero-btn">
+                <Link href={cta2Href} className="hero-btn">
                   {content.cta2Text}
                 </Link>
               ) : null}

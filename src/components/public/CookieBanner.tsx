@@ -9,6 +9,7 @@ import {
   readConsent,
   writeConsent,
 } from "@/lib/consent";
+import { studioHref } from "@/lib/links";
 
 export function CookieBanner() {
   const pathname = usePathname();
@@ -67,7 +68,7 @@ export function CookieBanner() {
             </h2>
             <p>
               {tr("cookie.body")}{" "}
-              <Link href="/datenschutz">{tr("cookie.privacy")}</Link>
+              <Link href={studioHref("/datenschutz")}>{tr("cookie.privacy")}</Link>
             </p>
           </div>
           <div className="cookie-banner__actions">
@@ -118,7 +119,7 @@ export function CookieBanner() {
             </div>
 
             <p className="cookie-prefs__lede">
-              {tr("cookie.lede")} <Link href="/datenschutz">{tr("cookie.privacy")}</Link>.
+              {tr("cookie.lede")} <Link href={studioHref("/datenschutz")}>{tr("cookie.privacy")}</Link>.
             </p>
 
             <ul className="cookie-prefs__list">

@@ -7,6 +7,7 @@ export const GA_LINKER_DOMAINS = [
   "lelekstudio.com",
   "www.lelekstudio.com",
   "shop.lelekstudio.com",
+  "przemyslawgolebiewski.lelekstudio.com",
 ] as const;
 
 export type ConsentChoice = {

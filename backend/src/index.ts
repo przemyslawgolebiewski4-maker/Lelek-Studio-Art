@@ -25,6 +25,7 @@ const PORT = process.env.PORT || 3001;
 const allowedOrigins = new Set([
   "https://www.lelekstudio.com",
   "https://lelekstudio.com",
+  "https://przemyslawgolebiewski.lelekstudio.com",
   process.env.FRONTEND_URL ?? "http://localhost:3000",
 ]);
 

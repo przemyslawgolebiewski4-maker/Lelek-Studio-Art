@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
+import { aboutHref } from "@/lib/links";
 
-/** Legacy Works catalog - Originals now live on About. */
+/** Legacy Works catalog - Originals now live on the maker page. */
 export default function CollectionsPage() {
-  redirect("/about#originals");
+  redirect(aboutHref("originals"));
 }

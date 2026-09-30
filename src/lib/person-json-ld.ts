@@ -1,4 +1,5 @@
 import { SITE_URL, resolveInstagramUrl, resolveOrganizationSameAs } from "@/lib/config";
+import { ABOUT_URL } from "@/lib/links";
 import type { Locale } from "@/lib/i18n/locale";
 import { localeText } from "@/lib/i18n/present";
 import {
@@ -15,7 +16,7 @@ import {
   STUDIO_NAME_LONG,
 } from "@/lib/brand";
 
-export const PERSON_ID = `${SITE_URL}/about#person`;
+export const PERSON_ID = `${ABOUT_URL}/#person`;
 export const ORGANIZATION_ID = `${SITE_URL}/#organization`;
 export const WEBSITE_ID = `${SITE_URL}/#website`;
 
@@ -41,7 +42,7 @@ export function buildPersonJsonLd(options?: {
     familyName: CREATOR_FAMILY_NAME,
     jobTitle: CREATOR_JOB_TITLE,
     description: options?.description || CREATOR_ENTITY_DESCRIPTION,
-    url: `${SITE_URL}/about`,
+    url: ABOUT_URL,
     image: options?.image || undefined,
     nationality: { "@type": "Country", name: "Poland" },
     homeLocation: {
@@ -70,7 +71,7 @@ export function buildCreatorRef(): Record<string, unknown> {
     "@id": PERSON_ID,
     name: CREATOR_NAME,
     alternateName: CREATOR_NAME_ASCII,
-    url: `${SITE_URL}/about`,
+    url: ABOUT_URL,
     jobTitle: CREATOR_JOB_TITLE,
   };
 }
@@ -118,7 +119,7 @@ export function buildAboutFaqJsonLd(locale: Locale = "en"): Record<string, unkno
   const whatAnswer = `${CREATOR_NAME} shapes vessels, cups and lamps by hand, not by mold. Some pieces stay raw, closer to brutalism; others lean fully organic. Forms may repeat, but never exactly.`;
   return {
     "@type": "FAQPage",
-    "@id": `${SITE_URL}/about#faq`,
+    "@id": `${ABOUT_URL}/#faq`,
     mainEntity: [
       {
         "@type": "Question",

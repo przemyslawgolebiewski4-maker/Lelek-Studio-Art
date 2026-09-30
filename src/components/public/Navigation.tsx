@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LanguageSwitch } from "@/components/public/LanguageSwitch";
 import { SHOP_URL } from "@/lib/config";
+import { CREATOR_HOST, isAboutHref, studioHref } from "@/lib/links";
 import { t } from "@/lib/i18n/messages";
 import type { Locale } from "@/lib/i18n/locale";
 
@@ -15,18 +16,34 @@ type NavLink =
 function buildLinks(shopUrl: string, locale: Locale): NavLink[] {
   return [
     { href: shopUrl, label: t(locale, "nav.shop"), external: true },
-    { href: "/journal", label: t(locale, "nav.process") },
-    { href: "/about", label: t(locale, "nav.about") },
-    { href: "/galleries", label: t(locale, "nav.galleries") },
-    { href: "/for-architects", label: t(locale, "nav.trade") },
-    { href: "/contact", label: t(locale, "nav.contact") },
+    { href: studioHref("/journal"), label: t(locale, "nav.process") },
+    { href: studioHref("/about"), label: t(locale, "nav.about") },
+    { href: studioHref("/galleries"), label: t(locale, "nav.galleries") },
+    { href: studioHref("/for-architects"), label: t(locale, "nav.trade") },
+    { href: studioHref("/contact"), label: t(locale, "nav.contact") },
   ];
 }
 
-function isActive(pathname: string, href: string, external?: boolean) {
+function hrefPathname(href: string): string {
+  if (/^https?:\/\//i.test(href)) {
+    try {
+      return new URL(href).pathname || "/";
+    } catch {
+      return href;
+    }
+  }
+  return href.split("#")[0]?.split("?")[0] || "/";
+}
+
+function isActive(pathname: string, href: string, external?: boolean, host = "") {
   if (external) return false;
-  if (href === "/") return pathname === "/";
-  const pathOnly = href.split("#")[0];
+  if (isAboutHref(href)) {
+    const onCreator = host === CREATOR_HOST || host === `www.${CREATOR_HOST}`;
+    if (onCreator) return pathname === "/" || pathname === "/about" || pathname.startsWith("/about/");
+    return pathname === "/about" || pathname.startsWith("/about/");
+  }
+  const pathOnly = hrefPathname(href);
+  if (pathOnly === "/") return pathname === "/";
   return pathname === pathOnly || pathname.startsWith(`${pathOnly}/`);
 }
 
@@ -39,7 +56,12 @@ export function Navigation({
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [host, setHost] = useState("");
   const links = buildLinks(shopUrl, locale);
+
+  useEffect(() => {
+    setHost(window.location.hostname);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -54,7 +76,7 @@ export function Navigation({
 
   return (
     <header id="site-nav" className="site-nav">
-      <Link href="/" className="logo" onClick={() => setOpen(false)}>
+      <Link href={studioHref("/")} className="logo" onClick={() => setOpen(false)}>
         Lelek Studio
       </Link>
 
@@ -73,7 +95,7 @@ export function Navigation({
             ) : (
               <Link
                 href={link.href}
-                className={isActive(pathname, link.href) ? "is-active" : undefined}
+                className={isActive(pathname, link.href, false, host) ? "is-active" : undefined}
               >
                 {link.label}
               </Link>
@@ -114,7 +136,7 @@ export function Navigation({
             <Link
               key={link.href}
               href={link.href}
-              className={isActive(pathname, link.href) ? "is-active" : undefined}
+              className={isActive(pathname, link.href, false, host) ? "is-active" : undefined}
               onClick={() => setOpen(false)}
             >
               {link.label}

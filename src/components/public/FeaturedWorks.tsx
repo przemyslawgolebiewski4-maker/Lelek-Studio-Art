@@ -6,6 +6,7 @@ import { withCreatorName } from "@/lib/brand";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { localeText } from "@/lib/i18n/present";
+import { aboutHref } from "@/lib/links";
 import { normalizeSlug } from "@/lib/slug";
 
 export async function FeaturedWorks({
@@ -39,7 +40,7 @@ export async function FeaturedWorks({
             </>
           ) : null}
         </h2>
-        <Link href="/collections" className="works-cta">
+        <Link href={aboutHref("originals")} className="works-cta">
           {t(locale, "works.all")}
         </Link>
       </div>

@@ -5,6 +5,7 @@ import { track } from "@vercel/analytics";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 import type { SignpostSection } from "@/types/content";
 import { SHOP_URL } from "@/lib/config";
+import { resolvePublicHref } from "@/lib/links";
 import { localeText } from "@/lib/i18n/present";
 
 function defaultCards(shopUrl: string) {
@@ -17,17 +18,17 @@ function defaultCards(shopUrl: string) {
     {
       label: "About",
       description: "Przemysław Gołębiewski - self-taught ceramist. Process first, always.",
-      href: "/about",
+      href: resolvePublicHref("/about"),
     },
     {
       label: "Process",
       description: "Notes on clay, kiln, texture, and what the material decides.",
-      href: "/journal",
+      href: resolvePublicHref("/journal"),
     },
     {
       label: "Trade",
       description: "Works for spaces that can hold something raw, organic, or both.",
-      href: "/for-architects",
+      href: resolvePublicHref("/for-architects"),
     },
   ];
 }
@@ -53,6 +54,7 @@ export function Signpost({
     section.cards && section.cards.length > 0
       ? section.cards.slice(0, 4).map((card) => ({
           ...card,
+          href: resolvePublicHref(card.href),
           label: localeText(locale, card.label),
           description: localeText(locale, card.description),
         }))
@@ -68,7 +70,7 @@ export function Signpost({
       "LELEK is the ceramic practice of Przemysław Gołębiewski. Organic and brutalist forms, shaped by hand - vessels, cups, lamps and objects that never repeat exactly.",
   );
   const tradeSignal = localeText(locale, section.tradeSignal?.trim() || "Designing a space? Let's talk");
-  const tradeHref = section.tradeHref ?? "/for-architects";
+  const tradeHref = resolvePublicHref(section.tradeHref ?? "/for-architects");
 
   return (
     <section className="signpost-section" aria-label={localeText(locale, "Wayfinding")}>

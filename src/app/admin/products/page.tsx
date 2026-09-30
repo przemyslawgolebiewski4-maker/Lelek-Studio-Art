@@ -93,7 +93,7 @@ export default function AdminProductsPage() {
       {!loading && products.length > 0 && !products.some((p) => p.isOriginal) ? (
         <p className="admin-muted" style={{ marginBottom: 16 }}>
           No Originals flagged yet - open a product and enable &quot;Original (About / Originals)&quot;
-          so it appears on /about#originals.
+          so it appears on przemyslawgolebiewski.lelekstudio.com/#originals.
         </p>
       ) : null}
 

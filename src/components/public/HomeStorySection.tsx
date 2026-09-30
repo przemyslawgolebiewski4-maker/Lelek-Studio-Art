@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { StorySection } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
+import { aboutHref } from "@/lib/links";
 
 /** Homepage teaser - only body1. Full story lives on /about. */
 export function HomeStorySection({ story }: { story: StorySection }) {
@@ -43,7 +44,7 @@ export function HomeStorySection({ story }: { story: StorySection }) {
         </h2>
         <div className="story-rule" />
         {story.body1 ? <p className="story-body">{story.body1}</p> : null}
-        <Link href="/about" className="story-link">
+        <Link href={aboutHref()} className="story-link">
           Read more
         </Link>
       </div>

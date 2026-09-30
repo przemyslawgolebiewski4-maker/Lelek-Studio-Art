@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CookiePreferencesLink } from "@/components/public/CookiePreferencesLink";
 import { INSTAGRAM_URL } from "@/lib/config";
+import { studioHref } from "@/lib/links";
 
 type FooterLabels = {
   contact: string;
@@ -62,22 +63,22 @@ export function Footer({
           </a>
         </li>
         <li>
-          <Link href="/contact">{labels.contact}</Link>
+          <Link href={studioHref("/contact")}>{labels.contact}</Link>
         </li>
         <li>
-          <Link href="/impressum">{labels.impressum}</Link>
+          <Link href={studioHref("/impressum")}>{labels.impressum}</Link>
         </li>
         <li>
-          <Link href="/widerrufsrecht">{labels.withdrawal}</Link>
+          <Link href={studioHref("/widerrufsrecht")}>{labels.withdrawal}</Link>
         </li>
         <li>
-          <Link href="/datenschutz">{labels.privacy}</Link>
+          <Link href={studioHref("/datenschutz")}>{labels.privacy}</Link>
         </li>
         <li>
           <CookiePreferencesLink label={labels.cookies} />
         </li>
         <li>
-          <Link href="/about">{labels.about}</Link>
+          <Link href={studioHref("/about")}>{labels.about}</Link>
         </li>
         <li>
           <Link href={`mailto:${email}`}>{email}</Link>

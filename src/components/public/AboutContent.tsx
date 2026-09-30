@@ -5,6 +5,7 @@ import type { StorySection } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { OriginalsGrid } from "@/components/public/OriginalsGrid";
 import { SHOP_URL } from "@/lib/config";
+import { studioHref } from "@/lib/links";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { localeText } from "@/lib/i18n/present";
 
@@ -75,7 +76,7 @@ export async function AboutContent({
             >
               {shopLabel}
             </a>
-            <Link href="/for-architects" className="cta-btn">
+            <Link href={studioHref("/for-architects")} className="cta-btn">
               {tradeLabel}
             </Link>
           </div>
@@ -116,7 +117,7 @@ export async function AboutContent({
             )}
           </p>
         </div>
-        <OriginalsGrid products={originals} inquireHref="/contact" />
+        <OriginalsGrid products={originals} inquireHref={studioHref("/contact")} />
       </section>
     </article>
   );
