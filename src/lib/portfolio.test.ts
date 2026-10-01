@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { photosFromProducts, presentPortfolio } from "./portfolio";
+import { photosFromProducts, portfolioStructuredData, presentPortfolio } from "./portfolio";
 
 const empty = presentPortfolio({}, "en");
 assert.equal(empty.name, "Przemysław Gołębiewski");
@@ -9,7 +9,28 @@ assert.equal(empty.navGalleries, "Galleries");
 assert.equal(empty.navContact, "Contact");
 assert.equal(empty.aboutBody, "");
 assert.equal(empty.intro, "");
+assert.equal(empty.seoTitle, "");
+assert.equal(empty.geoSummary, "");
+assert.equal(empty.aeoAnswer, "");
+assert.deepEqual(empty.aeoItems, []);
 assert.deepEqual(empty.works, []);
+
+const structured = portfolioStructuredData(
+  {
+    ...empty,
+    geoSummary: "Visual artist working in Berlin.",
+    geoPlace: "Berlin",
+    geoSameAs: ["https://shop.lelekstudio.com"],
+    aeoQuestion: "Who is Przemysław Gołębiewski?",
+    aeoAnswer: "A visual artist.",
+  },
+  ["https://www.instagram.com/lelek.berlin/", "https://shop.lelekstudio.com"],
+);
+const graph = structured["@graph"] as Array<Record<string, unknown>>;
+assert.equal(graph[0]?.description, "Visual artist working in Berlin.");
+assert.equal((graph[0]?.homeLocation as { name: string }).name, "Berlin");
+assert.equal((graph[0]?.sameAs as string[]).length, 2);
+assert.equal(graph[1]?.["@type"], "FAQPage");
 
 const pl = presentPortfolio({}, "pl");
 assert.equal(pl.name, "Przemysław Gołębiewski");
@@ -48,14 +69,27 @@ const photos = photosFromProducts([
     catalog: "CE-001",
     imageAlt: "Clay vessel",
     images: [" https://cdn.example/a.jpg ", "", "https://cdn.example/b.jpg"],
+    currentGallery: { name: "Partner", url: "https://gallery.example/show" },
+  },
+  {
+    isPortfolio: true,
+    title: "Held",
+    soldOut: true,
+    images: ["https://cdn.example/sold.jpg", "https://cdn.example/sold-2.jpg"],
+    currentGallery: { name: "Hidden", url: "https://gallery.example/hidden" },
   },
   { isPortfolio: true, title: "Empty", images: [] },
 ]);
 assert.equal(photos.length, 2);
+assert.equal(photos[0]?.image, "https://cdn.example/a.jpg");
 assert.equal(photos[0]?.title, "Vessel");
 assert.equal(photos[0]?.caption, "CE-001");
 assert.equal(photos[0]?.alt, "Clay vessel");
-assert.equal(photos[1]?.image, "https://cdn.example/b.jpg");
-assert.equal(photos[1]?.alt, "Vessel");
+assert.equal(photos[0]?.galleryName, "Partner");
+assert.equal(photos[0]?.galleryUrl, "https://gallery.example/show");
+assert.equal(photos[0]?.soldOut, false);
+assert.equal(photos[1]?.image, "https://cdn.example/sold.jpg");
+assert.equal(photos[1]?.soldOut, true);
+assert.equal(photos[1]?.galleryUrl, "");
 
 console.log("portfolio ok");

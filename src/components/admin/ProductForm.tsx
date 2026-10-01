@@ -500,8 +500,9 @@ export function ProductForm({
         Portfolio
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Shows every photograph of this piece on the portfolio gallery. The piece must also be
-        Published. Partners listed on that page are managed under Admin → Galleries.
+        Shows the first photograph of this piece on the portfolio gallery. Sold out shows as a
+        private collection. A gallery assignment links that photo to the gallery. The piece must
+        also be Published.
       </p>
 
       <div className="admin-field-divider" />

@@ -123,6 +123,19 @@ const SECTION_TEXT: Record<string, string[]> = {
     "galleriesIntro",
     "contactHeading",
     "contactBody",
+    "seoTitle",
+    "seoDescription",
+    "seoKeywords",
+    "aboutSeoTitle",
+    "aboutSeoDescription",
+    "galleriesSeoTitle",
+    "galleriesSeoDescription",
+    "contactSeoTitle",
+    "contactSeoDescription",
+    "geoSummary",
+    "geoPlace",
+    "aeoQuestion",
+    "aeoAnswer",
   ],
 };
 
@@ -185,6 +198,16 @@ export function stampSectionPl(
       points: (next.points as Record<string, unknown>[]).map((point) => {
         const withTitle = stampPair(point, "title", "titlePl");
         return stampPair(withTitle, "body", "bodyPl");
+      }),
+    };
+  }
+
+  if (sectionKey === "portfolio" && Array.isArray(next.aeoItems)) {
+    next = {
+      ...next,
+      aeoItems: (next.aeoItems as Record<string, unknown>[]).map((item) => {
+        const withQuestion = stampPair(item, "question", "questionPl");
+        return stampPair(withQuestion, "answer", "answerPl");
       }),
     };
   }

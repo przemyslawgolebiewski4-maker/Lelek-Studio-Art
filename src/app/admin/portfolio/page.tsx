@@ -82,7 +82,7 @@ export default function AdminPortfolioPage() {
   return (
     <AdminShell
       title="Portfolio"
-      subtitle="Przemysław Gołębiewski. Photos and all page copy for the maker site."
+      subtitle="Przemysław Gołębiewski. Page copy, search text, and answers for the maker site."
       actions={
         <Link href="/portfolio" target="_blank" className="admin-btn ghost">
           Preview portfolio ↗

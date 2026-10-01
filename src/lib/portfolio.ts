@@ -14,6 +14,14 @@ export type PortfolioWork = {
   title: string;
   caption: string;
   alt: string;
+  soldOut: boolean;
+  galleryName: string;
+  galleryUrl: string;
+};
+
+export type PortfolioFaq = {
+  question: string;
+  answer: string;
 };
 
 export type PortfolioContent = {
@@ -36,6 +44,21 @@ export type PortfolioContent = {
   contactBody: string;
   contactEmail: string;
   works: PortfolioWork[];
+  seoTitle: string;
+  seoDescription: string;
+  seoKeywords: string;
+  aboutSeoTitle: string;
+  aboutSeoDescription: string;
+  galleriesSeoTitle: string;
+  galleriesSeoDescription: string;
+  contactSeoTitle: string;
+  contactSeoDescription: string;
+  geoSummary: string;
+  geoPlace: string;
+  geoSameAs: string[];
+  aeoQuestion: string;
+  aeoAnswer: string;
+  aeoItems: PortfolioFaq[];
 };
 
 const DEFAULTS = {
@@ -76,6 +99,33 @@ function field(
   return suggestPl(english) || english;
 }
 
+function keywordList(value: string): string[] {
+  return value
+    .split(/[,|\n]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function sameAsList(value: unknown): string[] {
+  return text(value)
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+function faqFromRow(locale: Locale, row: Record<string, unknown>): PortfolioFaq | null {
+  const question =
+    locale === "pl"
+      ? text(row.questionPl) || suggestPl(text(row.question)) || text(row.question)
+      : text(row.question);
+  const answer =
+    locale === "pl"
+      ? text(row.answerPl) || suggestPl(text(row.answer)) || text(row.answer)
+      : text(row.answer);
+  if (!question || !answer) return null;
+  return { question, answer };
+}
+
 function workField(locale: Locale, item: Record<string, unknown>, key: "title" | "caption" | "alt"): string {
   const english = text(item[key]);
   if (locale !== "pl") return english;
@@ -107,6 +157,25 @@ export function presentPortfolio(raw: Record<string, unknown> | null | undefined
     contactHeading: field(locale, source, "contactHeading", DEFAULTS.contactHeading),
     contactBody: field(locale, source, "contactBody"),
     contactEmail: text(source.contactEmail),
+    seoTitle: field(locale, source, "seoTitle"),
+    seoDescription: field(locale, source, "seoDescription"),
+    seoKeywords: field(locale, source, "seoKeywords"),
+    aboutSeoTitle: field(locale, source, "aboutSeoTitle"),
+    aboutSeoDescription: field(locale, source, "aboutSeoDescription"),
+    galleriesSeoTitle: field(locale, source, "galleriesSeoTitle"),
+    galleriesSeoDescription: field(locale, source, "galleriesSeoDescription"),
+    contactSeoTitle: field(locale, source, "contactSeoTitle"),
+    contactSeoDescription: field(locale, source, "contactSeoDescription"),
+    geoSummary: field(locale, source, "geoSummary"),
+    geoPlace: field(locale, source, "geoPlace"),
+    geoSameAs: sameAsList(source.geoSameAs),
+    aeoQuestion: field(locale, source, "aeoQuestion"),
+    aeoAnswer: field(locale, source, "aeoAnswer"),
+    aeoItems: (Array.isArray(source.aeoItems) ? source.aeoItems : []).flatMap((item) => {
+      if (!item || typeof item !== "object") return [];
+      const faq = faqFromRow(locale, item as Record<string, unknown>);
+      return faq ? [faq] : [];
+    }),
     works: works.flatMap((item) => {
       if (!item || typeof item !== "object") return [];
       const work = item as Record<string, unknown>;
@@ -118,6 +187,9 @@ export function presentPortfolio(raw: Record<string, unknown> | null | undefined
           title: workField(locale, work, "title"),
           caption: workField(locale, work, "caption"),
           alt: workField(locale, work, "alt"),
+          soldOut: false,
+          galleryName: "",
+          galleryUrl: "",
         },
       ];
     }),
@@ -131,20 +203,28 @@ export function photosFromProducts(
     catalog?: string;
     imageAlt?: string;
     images?: string[];
+    soldOut?: boolean;
+    currentGallery?: { name?: string; url?: string } | null;
   }>,
 ): PortfolioWork[] {
   const photos: PortfolioWork[] = [];
   for (const product of products) {
     if (!product.isPortfolio) continue;
-    const images = (product.images ?? []).map((image) => image.trim()).filter(Boolean);
-    images.forEach((image, index) => {
-      const title = product.title?.trim() || "";
-      photos.push({
-        image,
-        title,
-        caption: product.catalog?.trim() || "",
-        alt: (index === 0 ? product.imageAlt?.trim() : "") || title,
-      });
+    const image = (product.images ?? []).map((item) => item.trim()).find(Boolean);
+    if (!image) continue;
+    const title = product.title?.trim() || "";
+    const soldOut = Boolean(product.soldOut);
+    const galleryName = product.currentGallery?.name?.trim() || "";
+    const galleryUrl = product.currentGallery?.url?.trim() || "";
+    const onView = !soldOut && Boolean(galleryName) && Boolean(galleryUrl);
+    photos.push({
+      image,
+      title,
+      caption: product.catalog?.trim() || "",
+      alt: product.imageAlt?.trim() || title,
+      soldOut,
+      galleryName: onView ? galleryName : "",
+      galleryUrl: onView ? galleryUrl : "",
     });
   }
   return photos;
@@ -167,23 +247,43 @@ export const getPortfolio = cache(async (locale: Locale): Promise<PortfolioConte
   return presentPortfolio(raw, locale);
 });
 
+function pageCopy(content: PortfolioContent, path: "" | "/about" | "/galleries" | "/contact") {
+  if (path === "/about") {
+    return {
+      heading: content.aboutHeading,
+      title: content.aboutSeoTitle,
+      description: content.aboutSeoDescription,
+    };
+  }
+  if (path === "/galleries") {
+    return {
+      heading: content.galleriesHeading,
+      title: content.galleriesSeoTitle,
+      description: content.galleriesSeoDescription,
+    };
+  }
+  if (path === "/contact") {
+    return {
+      heading: content.contactHeading,
+      title: content.contactSeoTitle,
+      description: content.contactSeoDescription,
+    };
+  }
+  return { heading: "", title: content.seoTitle, description: content.seoDescription };
+}
+
 export function portfolioMetadata(content: PortfolioContent, path: "" | "/about" | "/galleries" | "/contact"): Metadata {
-  const heading =
-    path === "/about"
-      ? content.aboutHeading
-      : path === "/galleries"
-        ? content.galleriesHeading
-        : path === "/contact"
-          ? content.contactHeading
-          : "";
-  const title = heading ? `${heading} | ${content.name}` : content.name;
-  const description = content.intro || content.role;
+  const page = pageCopy(content, path);
+  const title = page.title || (page.heading ? `${page.heading} | ${content.name}` : content.name);
+  const description = page.description || content.intro || content.geoSummary || content.role;
+  const keywords = keywordList(content.seoKeywords);
   const url = path ? `${ABOUT_URL}${path}` : `${ABOUT_URL}/`;
   const image = content.bannerImage || content.aboutImage || content.works[0]?.image || "";
 
   return {
     title: { absolute: title },
     description,
+    keywords: keywords.length > 0 ? keywords : [content.name],
     alternates: { canonical: url },
     openGraph: {
       type: "website",
@@ -198,5 +298,45 @@ export function portfolioMetadata(content: PortfolioContent, path: "" | "/about"
       description,
       ...(image ? { images: [image] } : {}),
     },
+  };
+}
+
+export function portfolioStructuredData(content: PortfolioContent, sameAs: string[] = []) {
+  const description = content.geoSummary || content.seoDescription || content.intro;
+  const links = [...sameAs, ...content.geoSameAs]
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .filter((item, index, all) => all.findIndex((other) => other.replace(/\/+$/, "") === item.replace(/\/+$/, "")) === index);
+  const person: Record<string, unknown> = {
+    "@type": "Person",
+    name: content.name,
+    jobTitle: content.role,
+    url: `${ABOUT_URL}/`,
+  };
+  if (description) person.description = description;
+  if (content.geoPlace) person.homeLocation = { "@type": "Place", name: content.geoPlace };
+  if (links.length > 0) person.sameAs = links;
+
+  const faqs = [
+    ...(content.aeoQuestion && content.aeoAnswer
+      ? [{ question: content.aeoQuestion, answer: content.aeoAnswer }]
+      : []),
+    ...content.aeoItems,
+  ];
+  const graph: Record<string, unknown>[] = [person];
+  if (faqs.length > 0) {
+    graph.push({
+      "@type": "FAQPage",
+      mainEntity: faqs.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer },
+      })),
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
   };
 }

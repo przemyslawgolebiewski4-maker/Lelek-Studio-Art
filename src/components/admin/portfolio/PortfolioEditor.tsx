@@ -1,8 +1,34 @@
 "use client";
 
-import { CmsLangField } from "@/components/admin/BilingualField";
+import { CmsLangField, LangPair } from "@/components/admin/BilingualField";
+import { AdminReorderControls, moveItem } from "@/components/admin/AdminFieldHelpers";
 import { MediaUploadField } from "@/components/admin/MediaUploadField";
-import { AdminInput } from "@/components/admin/AdminShell";
+import { AdminButton, AdminInput, AdminTextarea } from "@/components/admin/AdminShell";
+import { suggestPl } from "@/lib/i18n/dictionary";
+
+type FaqDraft = {
+  question: string;
+  questionPl: string;
+  answer: string;
+  answerPl: string;
+};
+
+function asFaqs(content: Record<string, unknown>): FaqDraft[] {
+  if (!Array.isArray(content.aeoItems)) return [];
+  return content.aeoItems.flatMap((item) => {
+    if (!item || typeof item !== "object") return [];
+    const row = item as Record<string, unknown>;
+    const read = (key: string) => (typeof row[key] === "string" ? (row[key] as string) : "");
+    return [
+      {
+        question: read("question"),
+        questionPl: read("questionPl"),
+        answer: read("answer"),
+        answerPl: read("answerPl"),
+      },
+    ];
+  });
+}
 
 export function PortfolioEditor({
   content,
@@ -11,6 +37,12 @@ export function PortfolioEditor({
   content: Record<string, unknown>;
   onChange: (next: Record<string, unknown>) => void;
 }) {
+  const faqs = asFaqs(content);
+
+  function setFaqs(next: FaqDraft[]) {
+    onChange({ ...content, aeoItems: next });
+  }
+
   return (
     <div className="admin-field-group">
       <p className="admin-muted">
@@ -64,8 +96,8 @@ export function PortfolioEditor({
 
       <h3 className="admin-group-title">Galleries</h3>
       <p className="admin-muted">
-        The partner list is Admin → Galleries. Photographs are every image on a published product with
-        the Portfolio flag.
+        The partner list is Admin → Galleries. Each Portfolio product shows its first photograph.
+        Sold out appears as a private collection. A gallery assignment links the photo to that gallery.
       </p>
       <CmsLangField content={content} onChange={onChange} name="galleriesHeading" label="Heading" />
       <CmsLangField content={content} onChange={onChange} name="galleriesIntro" label="Intro" multiline rows={3} />
@@ -79,6 +111,75 @@ export function PortfolioEditor({
         placeholder="Leave empty to use the studio email from Settings"
         onChange={(event) => onChange({ ...content, contactEmail: event.target.value })}
       />
+
+      <h3 className="admin-group-title">Search (SEO)</h3>
+      <p className="admin-muted">
+        Titles and descriptions for Google. Leave a field empty to use the page heading and the intro.
+        Keywords apply to every portfolio page.
+      </p>
+      <CmsLangField content={content} onChange={onChange} name="seoTitle" label="Home title" />
+      <CmsLangField content={content} onChange={onChange} name="seoDescription" label="Home description" multiline rows={3} />
+      <CmsLangField content={content} onChange={onChange} name="seoKeywords" label="Keywords" multiline rows={2} placeholder="Separate with commas" />
+      <CmsLangField content={content} onChange={onChange} name="aboutSeoTitle" label="About title" />
+      <CmsLangField content={content} onChange={onChange} name="aboutSeoDescription" label="About description" multiline rows={3} />
+      <CmsLangField content={content} onChange={onChange} name="galleriesSeoTitle" label="Galleries title" />
+      <CmsLangField content={content} onChange={onChange} name="galleriesSeoDescription" label="Galleries description" multiline rows={3} />
+      <CmsLangField content={content} onChange={onChange} name="contactSeoTitle" label="Contact title" />
+      <CmsLangField content={content} onChange={onChange} name="contactSeoDescription" label="Contact description" multiline rows={3} />
+
+      <h3 className="admin-group-title">Generative engines (GEO)</h3>
+      <p className="admin-muted">
+        A short factual summary and place that AI search can cite. Extra profile links, one URL per line.
+        Instagram and the shop are added automatically.
+      </p>
+      <CmsLangField content={content} onChange={onChange} name="geoSummary" label="Entity summary" multiline rows={4} />
+      <CmsLangField content={content} onChange={onChange} name="geoPlace" label="Place" />
+      <AdminTextarea
+        label="More profile links"
+        rows={3}
+        value={typeof content.geoSameAs === "string" ? content.geoSameAs : ""}
+        placeholder="https://"
+        onChange={(event) => onChange({ ...content, geoSameAs: event.target.value })}
+      />
+
+      <h3 className="admin-group-title">Answer engines (AEO)</h3>
+      <p className="admin-muted">
+        One direct answer, plus further questions. Filled pairs are published as FAQ data for answer engines.
+      </p>
+      <CmsLangField content={content} onChange={onChange} name="aeoQuestion" label="Primary question" />
+      <CmsLangField content={content} onChange={onChange} name="aeoAnswer" label="Primary answer" multiline rows={4} />
+      {faqs.map((item, index) => (
+        <div key={index} className="admin-field-group" style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}>
+          <LangPair
+            label={`Question ${index + 1}`}
+            en={item.question}
+            pl={item.questionPl || suggestPl(item.question)}
+            onEn={(value) => setFaqs(faqs.map((row, i) => (i === index ? { ...row, question: value } : row)))}
+            onPl={(value) => setFaqs(faqs.map((row, i) => (i === index ? { ...row, questionPl: value } : row)))}
+          />
+          <LangPair
+            label={`Answer ${index + 1}`}
+            en={item.answer}
+            pl={item.answerPl || suggestPl(item.answer)}
+            multiline
+            rows={3}
+            onEn={(value) => setFaqs(faqs.map((row, i) => (i === index ? { ...row, answer: value } : row)))}
+            onPl={(value) => setFaqs(faqs.map((row, i) => (i === index ? { ...row, answerPl: value } : row)))}
+          />
+          <AdminReorderControls
+            index={index}
+            total={faqs.length}
+            onMove={(from, to) => setFaqs(moveItem(faqs, from, to))}
+            onRemove={() => setFaqs(faqs.filter((_, i) => i !== index))}
+          />
+        </div>
+      ))}
+      <AdminButton
+        variant="ghost"
+        onClick={() => setFaqs([...faqs, { question: "", questionPl: "", answer: "", answerPl: "" }])}
+      >
+        Add question
+      </AdminButton>
     </div>
   );
 }

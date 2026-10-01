@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { PortfolioBanner } from "@/components/portfolio/PortfolioBanner";
 import { PortfolioProse, PortfolioWorks } from "@/components/portfolio/PortfolioWorks";
-import { ABOUT_URL } from "@/lib/links";
+import { resolveInstagramUrl, resolveShopUrl } from "@/lib/config";
 import { getLocale } from "@/lib/i18n/get-locale";
-import { getPortfolio, getPortfolioProducts, portfolioMetadata } from "@/lib/portfolio";
+import { getPortfolio, getPortfolioProducts, portfolioMetadata, portfolioStructuredData } from "@/lib/portfolio";
+import { getSiteSettings } from "@/lib/site";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -13,14 +14,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PortfolioHomePage() {
   const locale = await getLocale();
-  const [content, photos] = await Promise.all([getPortfolio(locale), getPortfolioProducts(locale)]);
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: content.name,
-    jobTitle: content.role,
-    url: `${ABOUT_URL}/`,
-  };
+  const [content, photos, settings] = await Promise.all([
+    getPortfolio(locale),
+    getPortfolioProducts(locale),
+    getSiteSettings(),
+  ]);
+  const jsonLd = portfolioStructuredData(content, [
+    resolveInstagramUrl(settings.instagram),
+    resolveShopUrl(settings),
+  ]);
 
   return (
     <>

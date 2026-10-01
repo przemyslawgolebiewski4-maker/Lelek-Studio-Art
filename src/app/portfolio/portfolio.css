@@ -249,6 +249,46 @@
   margin: 0 0 84px;
 }
 
+.portfolio-work-media {
+  position: relative;
+}
+
+.portfolio-work-link {
+  display: block;
+  color: inherit;
+}
+
+.portfolio-work.is-sold img {
+  opacity: 0.55;
+}
+
+.portfolio-work-badge,
+.portfolio-on-view {
+  position: absolute;
+  z-index: 2;
+  max-width: calc(100% - 24px);
+  padding: 6px 8px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(17, 17, 17, 0.72);
+}
+
+.portfolio-work-badge {
+  top: 12px;
+  right: 12px;
+  text-align: right;
+  pointer-events: none;
+}
+
+.portfolio-on-view {
+  left: 12px;
+  bottom: 12px;
+}
+
 .portfolio-work figcaption {
   display: flex;
   flex-direction: column;
