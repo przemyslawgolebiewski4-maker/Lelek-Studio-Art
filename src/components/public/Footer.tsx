@@ -33,7 +33,7 @@ export function Footer({
   lelekMeaning = "The hand moves, the mind follows after.",
   labels = {
     contact: "Contact",
-    about: "About",
+    about: "About LELEK Studio",
     impressum: "Impressum",
     withdrawal: "Widerrufsrecht",
     privacy: "Datenschutz",
