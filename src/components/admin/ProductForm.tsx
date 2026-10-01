@@ -484,8 +484,9 @@ export function ProductForm({
         Portfolio
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Shows the first photograph of this piece on the portfolio gallery. Sold out shows as a
-        private collection. The piece must also be Published.
+        Shows the first photograph of this piece on the portfolio homepage. Sold out shows as a
+        private collection. The piece must also be Published. The Galleries page lists partners
+        only.
       </p>
 
       {form.isOriginal || form.isPortfolio ? (

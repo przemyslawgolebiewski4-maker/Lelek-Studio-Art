@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { PortfolioProse, PortfolioWorks } from "@/components/portfolio/PortfolioWorks";
+import { PortfolioProse } from "@/components/portfolio/PortfolioWorks";
 import { getLocale } from "@/lib/i18n/get-locale";
-import { getPartnerGalleries, getPortfolio, getPortfolioProducts, portfolioMetadata } from "@/lib/portfolio";
+import { getPartnerGalleries, getPortfolio, portfolioMetadata } from "@/lib/portfolio";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  const [content, photos] = await Promise.all([getPortfolio(locale), getPortfolioProducts(locale)]);
-  return portfolioMetadata({ ...content, works: photos }, "/galleries");
+  const content = await getPortfolio(locale);
+  return portfolioMetadata({ ...content, works: [] }, "/galleries");
 }
 
 export default async function PortfolioGalleriesPage() {
   const locale = await getLocale();
-  const [content, galleries, photos] = await Promise.all([
-    getPortfolio(locale),
-    getPartnerGalleries(locale),
-    getPortfolioProducts(locale),
-  ]);
+  const [content, galleries] = await Promise.all([getPortfolio(locale), getPartnerGalleries(locale)]);
 
   return (
     <article className="portfolio-page">
@@ -35,7 +31,6 @@ export default async function PortfolioGalleriesPage() {
           ))}
         </ul>
       ) : null}
-      <PortfolioWorks works={photos} />
     </article>
   );
 }

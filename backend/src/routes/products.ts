@@ -246,7 +246,7 @@ productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
       isPhotoReproduction:
         category === "prints" ? Boolean(data.isPhotoReproduction) : false,
     });
-    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries", `/objects/${product.slug}`]);
+    void triggerRevalidate(["/", "/about", "/portfolio", `/objects/${product.slug}`]);
     res.status(201).json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -287,7 +287,7 @@ productsAdminRouter.patch("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries", `/objects/${product.slug}`]);
+    void triggerRevalidate(["/", "/about", "/portfolio", `/objects/${product.slug}`]);
     res.json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -302,7 +302,7 @@ productsAdminRouter.delete("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries"]);
+    void triggerRevalidate(["/", "/about", "/portfolio"]);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

@@ -47,7 +47,8 @@ export function PortfolioEditor({
     <div className="admin-field-group">
       <p className="admin-muted">
         Public page: przemyslawgolebiewski.lelekstudio.com. Banner, menu and page text are saved here.
-        Galleries lists partners from Admin → Galleries. Photographs come from Products flagged Portfolio.
+        The homepage shows the first photograph of each published Product flagged Portfolio.
+        Galleries lists partners from Admin → Galleries and does not show photographs.
         The footer still uses Lelek Studio settings (name, city, email, Instagram, shop).
       </p>
 
@@ -96,8 +97,7 @@ export function PortfolioEditor({
 
       <h3 className="admin-group-title">Galleries</h3>
       <p className="admin-muted">
-        The partner list is Admin → Galleries. Each Portfolio product shows its first photograph.
-        Sold out appears as a private collection. A gallery assignment links the photo to that gallery.
+        The partner list is Admin → Galleries. Photographs stay on the portfolio homepage.
       </p>
       <CmsLangField content={content} onChange={onChange} name="galleriesHeading" label="Heading" />
       <CmsLangField content={content} onChange={onChange} name="galleriesIntro" label="Intro" multiline rows={3} />
