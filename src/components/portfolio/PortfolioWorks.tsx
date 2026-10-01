@@ -21,22 +21,27 @@ export async function PortfolioWorks({ works }: { works: PortfolioWork[] }) {
               {work.galleryUrl ? (
                 <a href={work.galleryUrl} target="_blank" rel="noopener noreferrer" className="portfolio-work-link">
                   {image}
-                  <span className="portfolio-on-view">
-                    {onViewLabel} {work.galleryName}
-                  </span>
                 </a>
               ) : (
                 image
               )}
-              {work.soldOut ? <span className="portfolio-work-badge">{privateLabel}</span> : null}
+              {work.soldOut ? <span className="originals-item-sold">{privateLabel}</span> : null}
+              {work.galleryUrl ? (
+                <a
+                  href={work.galleryUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="originals-on-view"
+                >
+                  {onViewLabel} {work.galleryName}
+                </a>
+              ) : null}
             </div>
-            {work.title || work.caption || work.soldOut ? (
-              <figcaption>
-                {work.title ? <span className="portfolio-work-title">{work.title}</span> : null}
-                {work.caption ? <span className="portfolio-work-caption">{work.caption}</span> : null}
-                {work.soldOut ? <span className="portfolio-work-caption">{privateLabel}</span> : null}
-              </figcaption>
-            ) : null}
+            <figcaption className="originals-item-meta portfolio-work-meta">
+              <span className="originals-catalog">{work.caption || "-"}</span>
+              {work.title ? <span className="originals-title">{work.title}</span> : null}
+              {work.soldOut ? <span className="originals-sold-label">{privateLabel}</span> : null}
+            </figcaption>
           </figure>
         );
       })}

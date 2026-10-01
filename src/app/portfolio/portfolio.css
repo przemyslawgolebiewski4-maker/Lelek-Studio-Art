@@ -251,55 +251,23 @@
 
 .portfolio-work-media {
   position: relative;
+  background: #111111;
 }
 
 .portfolio-work-link {
   display: block;
   color: inherit;
+  cursor: pointer;
 }
 
 .portfolio-work.is-sold img {
-  opacity: 0.55;
+  opacity: 0.5;
 }
 
-.portfolio-work-badge,
-.portfolio-on-view {
-  position: absolute;
-  z-index: 2;
-  max-width: calc(100% - 24px);
-  padding: 6px 8px;
-  font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  line-height: 1.35;
-  text-transform: uppercase;
-  color: #ffffff;
-  background: rgba(17, 17, 17, 0.72);
-}
-
-.portfolio-work-badge {
-  top: 12px;
-  right: 12px;
-  text-align: right;
-  pointer-events: none;
-}
-
-.portfolio-on-view {
-  left: 12px;
-  bottom: 12px;
-}
-
-.portfolio-work figcaption {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 14px;
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--portfolio-muted);
+.portfolio-work-meta {
+  align-items: flex-start;
+  text-align: left;
+  padding: 16px 0 0;
 }
 
 .portfolio-email {

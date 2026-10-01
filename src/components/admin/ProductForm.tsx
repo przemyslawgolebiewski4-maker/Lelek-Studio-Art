@@ -146,7 +146,8 @@ export function formToPayload(form: ProductFormData) {
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
     isOriginal: form.isOriginal,
     isPortfolio: form.isPortfolio,
-    currentGalleryId: form.isOriginal && form.currentGalleryId ? form.currentGalleryId : null,
+    currentGalleryId:
+      (form.isOriginal || form.isPortfolio) && form.currentGalleryId ? form.currentGalleryId : null,
     thumbnailPosition: form.thumbnailPosition,
     price: priceNum != null && Number.isFinite(priceNum) ? priceNum : null,
     i18n: { pl: form.pl ?? EMPTY_PL },
@@ -455,7 +456,7 @@ export function ProductForm({
               ...prev,
               isOriginal: checked,
               price: checked ? "" : prev.price,
-              currentGalleryId: checked ? prev.currentGalleryId : "",
+              currentGalleryId: checked || prev.isPortfolio ? prev.currentGalleryId : "",
             }));
           }}
         />
@@ -467,7 +468,27 @@ export function ProductForm({
         alt above. Must also be Published to appear publicly.
       </p>
 
-      {form.isOriginal ? (
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.isPortfolio}
+          onChange={(e) => {
+            const checked = e.target.checked;
+            setForm((prev) => ({
+              ...prev,
+              isPortfolio: checked,
+              currentGalleryId: checked || prev.isOriginal ? prev.currentGalleryId : "",
+            }));
+          }}
+        />
+        Portfolio
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Shows the first photograph of this piece on the portfolio gallery. Sold out shows as a
+        private collection. The piece must also be Published.
+      </p>
+
+      {form.isOriginal || form.isPortfolio ? (
         <>
           <AdminSelect
             label="Currently showing at"
@@ -484,26 +505,12 @@ export function ProductForm({
             ))}
           </AdminSelect>
           <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-            Optional. When set and the piece is not sold, About shows &quot;On view at
-            [gallery]&quot; linking to the gallery website. Manage partners under Admin →
-            Galleries.
+            Optional. When set and the piece is not sold, the photo shows &quot;On view at
+            [gallery]&quot;. On the portfolio, clicking that photo opens the gallery website.
+            Manage partners under Admin → Galleries.
           </p>
         </>
       ) : null}
-
-      <label className="admin-checkbox">
-        <input
-          type="checkbox"
-          checked={form.isPortfolio}
-          onChange={(e) => update("isPortfolio", e.target.checked)}
-        />
-        Portfolio
-      </label>
-      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Shows the first photograph of this piece on the portfolio gallery. Sold out shows as a
-        private collection. A gallery assignment links that photo to the gallery. The piece must
-        also be Published.
-      </p>
 
       <div className="admin-field-divider" />
 
