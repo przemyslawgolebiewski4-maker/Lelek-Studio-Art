@@ -23,7 +23,6 @@ function buildLinks(shopUrl: string, locale: Locale): NavLink[] {
     { id: "process", href: studioHref("/journal"), label: t(locale, "nav.process") },
     { id: "about", href: studioHref("/about"), label: t(locale, "nav.about") },
     { id: "creator", href: ABOUT_URL, label: t(locale, "nav.creator"), creator: true, newTab: true },
-    { id: "galleries", href: studioHref("/galleries"), label: t(locale, "nav.galleries") },
     { id: "trade", href: studioHref("/for-architects"), label: t(locale, "nav.trade") },
     { id: "contact", href: studioHref("/contact"), label: t(locale, "nav.contact") },
   ];
