@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { ProductLoupe } from "@/components/public/ProductLoupe";
 import type { Product } from "@/types/product";
 import { withCreatorName } from "@/lib/brand";
 import { CATEGORY_LABELS } from "@/lib/categories";
@@ -39,7 +39,7 @@ function productAlt(product: Product): string {
 export async function ProductDetail({ product }: { product: Product }) {
   const locale = await getLocale();
   const sentence = localeText(locale, PHOTO_REPRODUCTION_SENTENCE);
-  const [hero, ...rest] = product.images;
+  const hero = product.images.find((src) => src.trim());
   const description = displayDescription(product, sentence);
   const categoryLabel =
     locale === "pl" ? t(locale, LONG_LABEL[product.category]) : CATEGORY_LABELS[product.category] ?? product.category;
@@ -64,31 +64,12 @@ export async function ProductDetail({ product }: { product: Product }) {
       <div className="product-detail">
         <div className="product-detail-imgs">
           {hero ? (
-            <div className="product-detail-hero">
-              <Image
-                src={hero}
-                alt={productAlt(product)}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority
-              />
-            </div>
-          ) : null}
-          {rest.length > 0 ? (
-            <div className="product-detail-thumbs">
-              {rest.map((src) => (
-                <div key={src} className="product-detail-thumb">
-                  <Image
-                    src={src}
-                    alt={productAlt(product)}
-                    fill
-                    className="object-cover"
-                    sizes="25vw"
-                  />
-                </div>
-              ))}
-            </div>
+            <ProductLoupe
+              src={hero}
+              alt={productAlt(product)}
+              magnifyLabel={t(locale, "product.magnify")}
+              dragLabel={t(locale, "product.magnifyDrag")}
+            />
           ) : null}
         </div>
 

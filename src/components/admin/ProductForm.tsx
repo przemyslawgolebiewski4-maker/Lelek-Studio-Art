@@ -386,7 +386,7 @@ export function ProductForm({
         folder="products"
         thumbnailPosition={form.thumbnailPosition}
         onThumbnailPositionChange={(v) => update("thumbnailPosition", v)}
-        hint="First image = catalog thumbnail / Originals card. Drag to reorder."
+        hint="First image is the Originals card and the only photograph on the product page. Export a square 2400 x 2400 px file (sRGB JPEG or WebP) so the loupe stays sharp. Further images are not shown on the product page."
       />
       <LangPair
         label="Primary image alt text"
