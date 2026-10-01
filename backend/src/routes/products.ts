@@ -30,8 +30,10 @@ function withCurrentGallery<T extends { currentGalleryId?: unknown }>(product: T
 productsPublicRouter.get("/products/public", async (req, res) => {
   try {
     await connectDB();
-    const limit = Math.min(Number(req.query.limit) || 6, 50);
+    const portfolioOnly = req.query.portfolio === "1";
+    const limit = Math.min(Number(req.query.limit) || 6, portfolioOnly ? 100 : 50);
     const query: Record<string, unknown> = { published: true };
+    if (portfolioOnly) query.isPortfolio = true;
     if (typeof req.query.category === "string" && req.query.category) {
       query.category = req.query.category;
     }
@@ -107,6 +109,7 @@ const PRODUCT_FIELDS = [
   "soldOut",
   "isPhotoReproduction",
   "isOriginal",
+  "isPortfolio",
   "currentGalleryId",
   "thumbnailPosition",
   "i18n",
@@ -162,6 +165,9 @@ function pickProductFields(body: Record<string, unknown>) {
   }
   if ("isOriginal" in data) {
     data.isOriginal = Boolean(data.isOriginal);
+  }
+  if ("isPortfolio" in data) {
+    data.isPortfolio = Boolean(data.isPortfolio);
   }
   if ("currentGalleryId" in data) {
     if (data.currentGalleryId === null || data.currentGalleryId === "") {
@@ -240,7 +246,7 @@ productsAdminRouter.post("/products", requireAdmin, async (req, res) => {
       isPhotoReproduction:
         category === "prints" ? Boolean(data.isPhotoReproduction) : false,
     });
-    void triggerRevalidate(["/", "/about", `/objects/${product.slug}`]);
+    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries", `/objects/${product.slug}`]);
     res.status(201).json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -281,7 +287,7 @@ productsAdminRouter.patch("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    void triggerRevalidate(["/", "/about", `/objects/${product.slug}`]);
+    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries", `/objects/${product.slug}`]);
     res.json({ ok: true, product });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -296,7 +302,7 @@ productsAdminRouter.delete("/products/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
-    void triggerRevalidate(["/", "/about"]);
+    void triggerRevalidate(["/", "/about", "/portfolio", "/portfolio/galleries"]);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

@@ -29,6 +29,8 @@ const ProductSchema = new Schema(
     isPhotoReproduction: { type: Boolean, default: false },
     /** One-of-a-kind Original shown on About (inquiry only - no price on this site). */
     isOriginal: { type: Boolean, default: false },
+    /** Photographs of this piece appear on the maker portfolio gallery. */
+    isPortfolio: { type: Boolean, default: false },
     /** Gallery currently showing this Original (optional; UI only surfaces for isOriginal). */
     currentGalleryId: { type: Schema.Types.ObjectId, ref: "Gallery", default: null },
     thumbnailPosition: { type: String, default: "center" },

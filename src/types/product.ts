@@ -25,6 +25,8 @@ export interface Product {
   isPhotoReproduction?: boolean;
   /** One-of-a-kind piece shown in About / Originals (inquiry only). */
   isOriginal?: boolean;
+  /** Photographs shown on the maker portfolio gallery. */
+  isPortfolio?: boolean;
   /** Gallery currently showing this Original (id only). */
   currentGalleryId?: string | null;
   /** Populated gallery snapshot for public Originals cards. */

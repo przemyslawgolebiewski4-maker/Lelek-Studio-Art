@@ -5,7 +5,7 @@ import { track } from "@vercel/analytics";
 import { useLocale } from "@/components/i18n/LocaleProvider";
 import type { SignpostSection } from "@/types/content";
 import { SHOP_URL } from "@/lib/config";
-import { resolvePublicHref } from "@/lib/links";
+import { opensInNewTab, resolvePublicHref } from "@/lib/links";
 import { localeText } from "@/lib/i18n/present";
 
 function defaultCards(shopUrl: string) {
@@ -89,11 +89,14 @@ export function Signpost({
         {cards.map((card) => {
           const external = /^https?:\/\//i.test(card.href);
           if (external) {
+            const newTab = opensInNewTab(card.href);
             return (
               <a
                 key={card.label + card.href}
                 href={card.href}
                 className="signpost-card"
+                target={newTab ? "_blank" : undefined}
+                rel={newTab ? "noopener noreferrer" : undefined}
                 onClick={() => trackSignpostClick(card.label, card.href)}
               >
                 <span className="signpost-card-label">{card.label}</span>

@@ -4,7 +4,10 @@ import { serverFetch } from "@/lib/api-server";
 import { ABOUT_URL } from "@/lib/links";
 import { readPl } from "@/lib/i18n/cms";
 import { suggestPl } from "@/lib/i18n/dictionary";
+import { presentGallery, presentProduct } from "@/lib/i18n/present";
 import type { Locale } from "@/lib/i18n/locale";
+import type { Gallery } from "@/types/gallery";
+import type { Product } from "@/types/product";
 
 export type PortfolioWork = {
   image: string;
@@ -120,6 +123,44 @@ export function presentPortfolio(raw: Record<string, unknown> | null | undefined
     }),
   };
 }
+
+export function photosFromProducts(
+  products: Array<{
+    isPortfolio?: boolean;
+    title?: string;
+    catalog?: string;
+    imageAlt?: string;
+    images?: string[];
+  }>,
+): PortfolioWork[] {
+  const photos: PortfolioWork[] = [];
+  for (const product of products) {
+    if (!product.isPortfolio) continue;
+    const images = (product.images ?? []).map((image) => image.trim()).filter(Boolean);
+    images.forEach((image, index) => {
+      const title = product.title?.trim() || "";
+      photos.push({
+        image,
+        title,
+        caption: product.catalog?.trim() || "",
+        alt: (index === 0 ? product.imageAlt?.trim() : "") || title,
+      });
+    });
+  }
+  return photos;
+}
+
+export const getPortfolioProducts = cache(async (locale: Locale): Promise<PortfolioWork[]> => {
+  const products = await serverFetch<Product[]>("/products/public?portfolio=1&limit=100", { fallback: [] });
+  const list = Array.isArray(products) ? products : [];
+  return photosFromProducts(list.map((product) => presentProduct(product, locale)));
+});
+
+export const getPartnerGalleries = cache(async (locale: Locale): Promise<Gallery[]> => {
+  const galleries = await serverFetch<Gallery[]>("/public/galleries", { fallback: [] });
+  const list = Array.isArray(galleries) ? galleries : [];
+  return list.map((gallery) => presentGallery(gallery, locale));
+});
 
 export const getPortfolio = cache(async (locale: Locale): Promise<PortfolioContent> => {
   const raw = await serverFetch<Record<string, unknown>>("/sections/portfolio", { fallback: {} });

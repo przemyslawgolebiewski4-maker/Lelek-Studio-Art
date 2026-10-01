@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ElementItem } from "@/types/content";
 import { MediaBlock } from "@/components/public/MediaBlock";
 import { SHOP_URL } from "@/lib/config";
-import { resolvePublicHref } from "@/lib/links";
+import { opensInNewTab, resolvePublicHref } from "@/lib/links";
 import {
   CREATOR_ENTITY_DESCRIPTION,
   HERO_BRANDLINE,
@@ -93,8 +93,8 @@ export function Hero({ content, elements = [] }: HeroProps) {
             <p className="hero-semantic-core">{semanticCore}</p>
             <div className="hero-btns">
               {content.cta1Text ? (
-                /^https?:\/\//i.test(cta1Href) ? (
-                  <a href={cta1Href} className="hero-btn filled">
+                opensInNewTab(cta1Href) ? (
+                  <a href={cta1Href} className="hero-btn filled" target="_blank" rel="noopener noreferrer">
                     {content.cta1Text}
                   </a>
                 ) : (
@@ -104,9 +104,15 @@ export function Hero({ content, elements = [] }: HeroProps) {
                 )
               ) : null}
               {content.cta2Text ? (
-                <Link href={cta2Href} className="hero-btn">
-                  {content.cta2Text}
-                </Link>
+                opensInNewTab(cta2Href) ? (
+                  <a href={cta2Href} className="hero-btn" target="_blank" rel="noopener noreferrer">
+                    {content.cta2Text}
+                  </a>
+                ) : (
+                  <Link href={cta2Href} className="hero-btn">
+                    {content.cta2Text}
+                  </Link>
+                )
               ) : null}
             </div>
           </div>

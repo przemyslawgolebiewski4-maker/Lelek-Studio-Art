@@ -6,6 +6,7 @@ import {
   aboutHref,
   decideHostRoute,
   isAboutHref,
+  opensInNewTab,
   resolvePublicHref,
   studioHref,
 } from "./links";
@@ -84,5 +85,15 @@ assert.deepEqual(decideHostRoute("www.lelekstudio.com", "/collections"), {
   destination: `${STUDIO_ORIGIN}/about#originals`,
 });
 assert.deepEqual(decideHostRoute("preview.vercel.app", "/about"), { action: "continue" });
+
+assert.equal(opensInNewTab("https://shop.lelekstudio.com"), true);
+assert.equal(opensInNewTab("https://www.shop.lelekstudio.com/x"), true);
+assert.equal(opensInNewTab(ABOUT_URL), true);
+assert.equal(opensInNewTab(`${ABOUT_URL}/galleries`), true);
+assert.equal(opensInNewTab("/about"), false);
+assert.equal(opensInNewTab(`${STUDIO_ORIGIN}/contact`), false);
+assert.equal(opensInNewTab("mailto:lelekstudio@lelekstudio.com"), false);
+assert.equal(opensInNewTab("https://custom-shop.example/all", "https://custom-shop.example"), true);
+assert.equal(opensInNewTab("https://other.example", "https://custom-shop.example"), false);
 
 console.log("links ok");

@@ -210,6 +210,35 @@
   height: auto;
 }
 
+.portfolio-partners {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.portfolio-partners li {
+  margin: 0 0 32px;
+}
+
+.portfolio-partners a {
+  font-family: var(--font-serif);
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.portfolio-partner-city {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--portfolio-muted);
+}
+
 .portfolio-works {
   width: min(1100px, calc(100% - 48px));
   margin: 0 auto;

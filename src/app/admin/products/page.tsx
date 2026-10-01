@@ -15,6 +15,7 @@ type ProductRow = {
   published: boolean;
   order: number;
   isOriginal?: boolean;
+  isPortfolio?: boolean;
 };
 
 export default function AdminProductsPage() {
@@ -82,7 +83,7 @@ export default function AdminProductsPage() {
         <div className="admin-form-stack">
           <p className="admin-list-item-title">No products yet</p>
           <p className="admin-muted" style={{ marginBottom: 12 }}>
-            Add a piece, then flag Originals for the About page (inquiry only).
+            Add a piece, then flag Originals for the About page or Portfolio for the maker gallery.
           </p>
           <AdminLinkButton href="/admin/products/new" variant="primary">
             Create first product
@@ -96,6 +97,12 @@ export default function AdminProductsPage() {
           so it appears on /about#originals.
         </p>
       ) : null}
+      {!loading && products.length > 0 && !products.some((p) => p.isPortfolio) ? (
+        <p className="admin-muted" style={{ marginBottom: 16 }}>
+          No Portfolio pieces flagged yet. Open a product and enable Portfolio so its photographs
+          appear on the maker gallery.
+        </p>
+      ) : null}
 
       {products.length > 0 ? (
         <div className="admin-table-wrap">
@@ -107,6 +114,7 @@ export default function AdminProductsPage() {
                 <th>Category</th>
                 <th>Published</th>
                 <th>Original</th>
+                <th>Portfolio</th>
                 <th>Order</th>
                 <th>Actions</th>
               </tr>
@@ -130,6 +138,7 @@ export default function AdminProductsPage() {
                     </button>
                   </td>
                   <td className="admin-muted">{product.isOriginal ? "Yes" : "-"}</td>
+                  <td className="admin-muted">{product.isPortfolio ? "Yes" : "-"}</td>
                   <td className="admin-muted">{product.order}</td>
                   <td>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>

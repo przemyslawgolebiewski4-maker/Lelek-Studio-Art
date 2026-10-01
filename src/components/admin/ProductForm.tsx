@@ -55,6 +55,7 @@ export type ProductFormData = {
   soldOut: boolean;
   isPhotoReproduction: boolean;
   isOriginal: boolean;
+  isPortfolio: boolean;
   currentGalleryId: string;
   thumbnailPosition: string;
   /** EUR — required for pop-up /reserve pricing; null = not set */
@@ -99,6 +100,7 @@ export function productToForm(product?: Partial<Product>): ProductFormData {
     soldOut: product?.soldOut ?? false,
     isPhotoReproduction: product?.isPhotoReproduction ?? false,
     isOriginal: product?.isOriginal ?? false,
+    isPortfolio: product?.isPortfolio ?? false,
     currentGalleryId: product?.currentGalleryId ?? "",
     thumbnailPosition: product?.thumbnailPosition ?? "center",
     price:
@@ -143,6 +145,7 @@ export function formToPayload(form: ProductFormData) {
     soldOut: form.soldOut,
     isPhotoReproduction: isPrints ? form.isPhotoReproduction : false,
     isOriginal: form.isOriginal,
+    isPortfolio: form.isPortfolio,
     currentGalleryId: form.isOriginal && form.currentGalleryId ? form.currentGalleryId : null,
     thumbnailPosition: form.thumbnailPosition,
     price: priceNum != null && Number.isFinite(priceNum) ? priceNum : null,
@@ -487,6 +490,19 @@ export function ProductForm({
           </p>
         </>
       ) : null}
+
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={form.isPortfolio}
+          onChange={(e) => update("isPortfolio", e.target.checked)}
+        />
+        Portfolio
+      </label>
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        Shows every photograph of this piece on the portfolio gallery. The piece must also be
+        Published. Partners listed on that page are managed under Admin → Galleries.
+      </p>
 
       <div className="admin-field-divider" />
 

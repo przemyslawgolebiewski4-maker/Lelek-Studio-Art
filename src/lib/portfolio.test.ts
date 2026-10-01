@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { presentPortfolio } from "./portfolio";
+import { photosFromProducts, presentPortfolio } from "./portfolio";
 
 const empty = presentPortfolio({}, "en");
 assert.equal(empty.name, "Przemysław Gołębiewski");
@@ -39,5 +39,23 @@ assert.equal(custom.works.length, 1);
 assert.equal(custom.works[0]?.title, "Naczynie");
 assert.equal(custom.works[0]?.caption, "2024");
 assert.equal(custom.contactEmail, "hello@example.com");
+
+const photos = photosFromProducts([
+  { isPortfolio: false, title: "Skip", images: ["https://cdn.example/skip.jpg"] },
+  {
+    isPortfolio: true,
+    title: "Vessel",
+    catalog: "CE-001",
+    imageAlt: "Clay vessel",
+    images: [" https://cdn.example/a.jpg ", "", "https://cdn.example/b.jpg"],
+  },
+  { isPortfolio: true, title: "Empty", images: [] },
+]);
+assert.equal(photos.length, 2);
+assert.equal(photos[0]?.title, "Vessel");
+assert.equal(photos[0]?.caption, "CE-001");
+assert.equal(photos[0]?.alt, "Clay vessel");
+assert.equal(photos[1]?.image, "https://cdn.example/b.jpg");
+assert.equal(photos[1]?.alt, "Vessel");
 
 console.log("portfolio ok");

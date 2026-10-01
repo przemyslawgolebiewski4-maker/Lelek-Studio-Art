@@ -22,7 +22,7 @@ function buildLinks(shopUrl: string, locale: Locale): NavLink[] {
     { id: "shop", href: shopUrl, label: t(locale, "nav.shop"), newTab: true },
     { id: "process", href: studioHref("/journal"), label: t(locale, "nav.process") },
     { id: "about", href: studioHref("/about"), label: t(locale, "nav.about") },
-    { id: "creator", href: ABOUT_URL, label: t(locale, "nav.creator"), creator: true },
+    { id: "creator", href: ABOUT_URL, label: t(locale, "nav.creator"), creator: true, newTab: true },
     { id: "galleries", href: studioHref("/galleries"), label: t(locale, "nav.galleries") },
     { id: "trade", href: studioHref("/for-architects"), label: t(locale, "nav.trade") },
     { id: "contact", href: studioHref("/contact"), label: t(locale, "nav.contact") },
@@ -100,7 +100,7 @@ export function Navigation({
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="nav-shop"
+                className={link.id === "shop" ? "nav-shop" : undefined}
               >
                 {link.label}
               </a>
@@ -139,7 +139,7 @@ export function Navigation({
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="nav-shop"
+              className={link.id === "shop" ? "nav-shop" : undefined}
               onClick={() => setOpen(false)}
             >
               {link.label}

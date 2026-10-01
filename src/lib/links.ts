@@ -169,6 +169,45 @@ export function studioHref(path: string, mode: LinkMode = linkMode()): string {
   return resolvePublicHref(normalized, mode);
 }
 
+const SHOP_HOST = "shop.lelekstudio.com";
+
+/**
+ * Shop and the maker portfolio are separate sites. Links to them open in a new tab.
+ * An optional shop URL covers a custom shop host from Settings.
+ */
+export function opensInNewTab(href: string, shopUrl = ""): boolean {
+  const trimmed = href.trim();
+  if (
+    !trimmed ||
+    trimmed.startsWith("#") ||
+    trimmed.startsWith("mailto:") ||
+    trimmed.startsWith("tel:")
+  ) {
+    return false;
+  }
+
+  let url: URL;
+  try {
+    url = new URL(trimmed, `${STUDIO_ORIGIN}/`);
+  } catch {
+    return false;
+  }
+  if (url.protocol !== "http:" && url.protocol !== "https:") return false;
+
+  const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  if (host === CREATOR_HOST || host === SHOP_HOST) return true;
+
+  const shop = shopUrl.trim();
+  if (!shop) return false;
+  try {
+    const shopHost = new URL(shop, `${STUDIO_ORIGIN}/`).hostname.toLowerCase().replace(/^www\./, "");
+    const studioHost = new URL(STUDIO_ORIGIN).hostname.toLowerCase().replace(/^www\./, "");
+    return shopHost !== studioHost && shopHost === host;
+  } catch {
+    return false;
+  }
+}
+
 export function isAboutHref(href: string): boolean {
   if (href.startsWith("/")) {
     const path = normalizePathname(href.split("#")[0]?.split("?")[0] ?? href);

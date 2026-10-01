@@ -2,6 +2,7 @@ import { Router } from "express";
 import mongoose from "mongoose";
 import { connectDB } from "../lib/db";
 import { requireAdmin } from "../lib/auth";
+import { triggerRevalidate } from "../lib/revalidate";
 import { Gallery, Product } from "../models";
 
 export const galleriesPublicRouter = Router();
@@ -97,6 +98,7 @@ galleriesAdminRouter.post("/galleries", requireAdmin, async (req, res) => {
       return;
     }
     const gallery = await Gallery.create(picked.data);
+    void triggerRevalidate(["/galleries", "/portfolio/galleries"]);
     res.status(201).json({ ok: true, gallery });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -127,6 +129,7 @@ galleriesAdminRouter.patch("/galleries/:id", requireAdmin, async (req, res) => {
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/galleries", "/portfolio/galleries"]);
     res.json({ ok: true, gallery });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });
@@ -153,6 +156,7 @@ galleriesAdminRouter.delete("/galleries/:id", requireAdmin, async (req, res) => 
       res.status(404).json({ ok: false, error: "Not found" });
       return;
     }
+    void triggerRevalidate(["/galleries", "/portfolio/galleries"]);
     res.json({ ok: true });
   } catch (err) {
     res.status(500).json({ ok: false, error: String(err) });

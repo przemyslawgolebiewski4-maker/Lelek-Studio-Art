@@ -3,15 +3,17 @@ import { PortfolioBanner } from "@/components/portfolio/PortfolioBanner";
 import { PortfolioProse, PortfolioWorks } from "@/components/portfolio/PortfolioWorks";
 import { ABOUT_URL } from "@/lib/links";
 import { getLocale } from "@/lib/i18n/get-locale";
-import { getPortfolio, portfolioMetadata } from "@/lib/portfolio";
+import { getPortfolio, getPortfolioProducts, portfolioMetadata } from "@/lib/portfolio";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const content = await getPortfolio(await getLocale());
-  return portfolioMetadata(content, "");
+  const locale = await getLocale();
+  const [content, photos] = await Promise.all([getPortfolio(locale), getPortfolioProducts(locale)]);
+  return portfolioMetadata({ ...content, works: photos }, "");
 }
 
 export default async function PortfolioHomePage() {
-  const content = await getPortfolio(await getLocale());
+  const locale = await getLocale();
+  const [content, photos] = await Promise.all([getPortfolio(locale), getPortfolioProducts(locale)]);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
@@ -35,7 +37,7 @@ export default async function PortfolioHomePage() {
           <PortfolioProse text={content.intro} />
         </div>
       ) : null}
-      <PortfolioWorks works={content.works} />
+      <PortfolioWorks works={photos} />
     </>
   );
 }
