@@ -36,9 +36,34 @@ assert.equal(isAboutHref("/journal"), false);
 assert.equal(isAboutHref(ABOUT_URL), true);
 assert.equal(isAboutHref(`${STUDIO_ORIGIN}/journal`), false);
 
-assert.deepEqual(decideHostRoute(CREATOR_HOST, "/"), { action: "rewrite", pathname: "/about" });
-assert.deepEqual(decideHostRoute(CREATOR_HOST, "/about"), { action: "continue" });
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/"), { action: "rewrite", pathname: "/portfolio" });
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/about"), { action: "rewrite", pathname: "/portfolio/about" });
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/galleries"), {
+  action: "rewrite",
+  pathname: "/portfolio/galleries",
+});
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/contact", "?from=nav"), {
+  action: "rewrite",
+  pathname: "/portfolio/contact",
+});
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/portfolio"), {
+  action: "redirect",
+  destination: `${ABOUT_URL}/`,
+});
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/portfolio/about", "?x=1"), {
+  action: "redirect",
+  destination: `${ABOUT_URL}/about?x=1`,
+});
+assert.deepEqual(decideHostRoute(CREATOR_HOST, "/about/extra"), {
+  action: "redirect",
+  destination: `${ABOUT_URL}/about`,
+});
 assert.deepEqual(decideHostRoute("www.lelekstudio.com", "/about"), { action: "continue" });
+assert.deepEqual(decideHostRoute("www.lelekstudio.com", "/galleries"), { action: "continue" });
+assert.deepEqual(decideHostRoute("www.lelekstudio.com", "/portfolio/galleries"), {
+  action: "redirect",
+  destination: `${ABOUT_URL}/galleries`,
+});
 assert.deepEqual(decideHostRoute("lelekstudio.com", "/about", "?x=1"), { action: "continue" });
 assert.deepEqual(decideHostRoute(CREATOR_HOST, "/journal", "?y=2"), {
   action: "redirect",

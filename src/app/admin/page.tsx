@@ -86,6 +86,9 @@ export default function AdminDashboardPage() {
           <Link href="/admin/home" className="admin-link">
             Home sections →
           </Link>
+          <Link href="/admin/portfolio" className="admin-link">
+            Portfolio →
+          </Link>
         </AdminCard>
         <AdminCard>
           <p className="admin-stat-label">Site settings</p>

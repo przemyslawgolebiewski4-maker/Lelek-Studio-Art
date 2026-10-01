@@ -108,6 +108,22 @@ const SECTION_TEXT: Record<string, string[]> = {
     "onlineCtaLabel",
     "lelekMeaning",
   ],
+  portfolio: [
+    "name",
+    "role",
+    "bannerAlt",
+    "intro",
+    "navAbout",
+    "navGalleries",
+    "navContact",
+    "aboutHeading",
+    "aboutBody",
+    "aboutImageAlt",
+    "galleriesHeading",
+    "galleriesIntro",
+    "contactHeading",
+    "contactBody",
+  ],
 };
 
 function stampPair(
@@ -169,6 +185,17 @@ export function stampSectionPl(
       points: (next.points as Record<string, unknown>[]).map((point) => {
         const withTitle = stampPair(point, "title", "titlePl");
         return stampPair(withTitle, "body", "bodyPl");
+      }),
+    };
+  }
+
+  if (sectionKey === "portfolio" && Array.isArray(next.works)) {
+    next = {
+      ...next,
+      works: (next.works as Record<string, unknown>[]).map((work) => {
+        const withTitle = stampPair(work, "title", "titlePl");
+        const withCaption = stampPair(withTitle, "caption", "captionPl");
+        return stampPair(withCaption, "alt", "altPl");
       }),
     };
   }

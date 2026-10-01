@@ -68,6 +68,7 @@ const PUBLIC_SECTION_KEYS = [
   "architects",
   "journal",
   "find",
+  "portfolio",
 ] as const;
 
 type PublicSectionKey = (typeof PUBLIC_SECTION_KEYS)[number];

@@ -11,6 +11,7 @@ const nav = [
   { href: "/admin/galleries", label: "Galleries" },
   { href: "/admin/journal", label: "Journal" },
   { href: "/admin/home", label: "Home" },
+  { href: "/admin/portfolio", label: "Portfolio" },
   { href: "/admin/settings", label: "Settings" },
   { href: "/admin/messages", label: "Messages" },
 ];

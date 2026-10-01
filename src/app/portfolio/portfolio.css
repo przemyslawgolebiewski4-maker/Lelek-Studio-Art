@@ -1,0 +1,345 @@
+.portfolio {
+  --portfolio-ink: #111111;
+  --portfolio-muted: #5c5c5c;
+  --portfolio-line: rgba(17, 17, 17, 0.14);
+  background: #ffffff;
+  color: var(--portfolio-ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio main {
+  flex: 1;
+}
+
+.portfolio-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #ffffff;
+  border-bottom: 1px solid var(--portfolio-line);
+}
+
+.portfolio-nav-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 16px;
+  min-height: 68px;
+  padding: 0 28px;
+}
+
+.portfolio-wordmark {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  justify-self: start;
+}
+
+.portfolio-nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio-nav-links a {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--portfolio-ink);
+}
+
+.portfolio-nav-links a.is-current {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.portfolio-nav-links a:hover,
+.portfolio-wordmark:hover,
+.portfolio-email a:hover,
+.portfolio-footer a:hover,
+.portfolio-footer button:hover {
+  opacity: 0.55;
+}
+
+.portfolio-nav-lang {
+  justify-self: end;
+}
+
+.portfolio .lang-switch {
+  border-left: none;
+}
+
+.portfolio .lang-switch button {
+  color: var(--portfolio-ink);
+  background: transparent;
+  padding: 8px 7px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+
+.portfolio .lang-switch button + button {
+  border-left: none;
+}
+
+.portfolio .lang-switch button.is-active,
+.portfolio .lang-switch button:hover {
+  background: transparent;
+  color: var(--portfolio-ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.portfolio-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100svh - 68px);
+  background: #ffffff;
+  color: var(--portfolio-ink);
+  overflow: hidden;
+}
+
+.portfolio-banner.has-media {
+  color: #ffffff;
+}
+
+.portfolio-banner-media,
+.portfolio-banner-scrim {
+  position: absolute;
+  inset: 0;
+}
+
+.portfolio-banner-media img,
+.portfolio-banner-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.portfolio-banner-scrim {
+  background:
+    linear-gradient(to top, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.12) 42%, rgba(0, 0, 0, 0.28) 100%);
+}
+
+.portfolio-banner-copy {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 48px 24px;
+  max-width: 1100px;
+}
+
+.portfolio-role {
+  margin: 0 0 18px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: lowercase;
+  line-height: 1.4;
+}
+
+.portfolio-name {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(2.7rem, 8.4vw, 7.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.portfolio-home-intro,
+.portfolio-page {
+  width: min(760px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.portfolio-home-intro {
+  padding: 72px 0 12px;
+  text-align: center;
+}
+
+.portfolio-page {
+  padding: 88px 0 24px;
+}
+
+.portfolio-page-head {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.portfolio-page-head h1 {
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.portfolio-prose {
+  white-space: pre-line;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--portfolio-ink);
+}
+
+.portfolio-page-head .portfolio-prose {
+  margin-top: 22px;
+  color: var(--portfolio-muted);
+}
+
+.portfolio-portrait {
+  margin: 0 auto 36px;
+  max-width: 720px;
+}
+
+.portfolio-portrait img,
+.portfolio-work img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portfolio-works {
+  width: min(1100px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 72px 0 12px;
+}
+
+.portfolio-work {
+  margin: 0 0 84px;
+}
+
+.portfolio-work figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 14px;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--portfolio-muted);
+}
+
+.portfolio-email {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: -0.02em;
+}
+
+.portfolio-footer {
+  margin-top: 72px;
+  padding: 36px 28px 28px;
+  border-top: 1px solid var(--portfolio-line);
+  text-align: center;
+}
+
+.portfolio-footer-brand,
+.portfolio-footer-meaning {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.portfolio-footer-meaning {
+  margin-top: 10px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--portfolio-muted);
+}
+
+.portfolio-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.portfolio-footer button {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.portfolio a:focus-visible,
+.portfolio button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
+}
+
+@media (max-width: 760px) {
+  .portfolio-nav-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    min-height: 0;
+    padding: 14px 16px 12px;
+    gap: 8px 16px;
+  }
+
+  .portfolio-wordmark {
+    width: 100%;
+    text-align: center;
+  }
+
+  .portfolio-nav-links {
+    gap: 16px;
+  }
+
+  .portfolio-nav-lang {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .portfolio-banner {
+    min-height: calc(100svh - 118px);
+  }
+
+  .portfolio-role {
+    letter-spacing: 0.28em;
+  }
+
+  .portfolio-works,
+  .portfolio-home-intro,
+  .portfolio-page {
+    width: min(1100px, calc(100% - 32px));
+  }
+
+  .portfolio-work {
+    margin-bottom: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-banner-media video {
+    display: none;
+  }
+}

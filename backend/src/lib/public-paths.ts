@@ -60,6 +60,8 @@ export function getSectionRevalidatePaths(sectionKey: string): string[] {
       return ["/for-architects"];
     case "journal":
       return ["/", "/journal"];
+    case "portfolio":
+      return ["/portfolio", "/portfolio/about", "/portfolio/galleries", "/portfolio/contact"];
     default:
       return ["/"];
   }

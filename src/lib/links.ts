@@ -51,10 +51,27 @@ function isAboutPath(pathname: string): boolean {
   return pathname === "/about" || pathname.startsWith("/about/");
 }
 
+/** Public portfolio paths on the maker host, rewritten to the /portfolio app routes. */
+const PORTFOLIO_REWRITES: Record<string, string> = {
+  "/": "/portfolio",
+  "/about": "/portfolio/about",
+  "/galleries": "/portfolio/galleries",
+  "/contact": "/portfolio/contact",
+};
+
+/** Filesystem /portfolio URLs mapped back to the clean maker-host path. */
+function portfolioCleanPath(path: string): string | null {
+  if (path === "/portfolio") return "/";
+  if (path === "/portfolio/about" || path === "/portfolio/galleries" || path === "/portfolio/contact") {
+    return path.slice("/portfolio".length);
+  }
+  return null;
+}
+
 /**
  * Where a request should go based on the public host.
  * Unknown hosts (localhost, preview) are left unchanged.
- * /about is served on the studio host. The maker host root rewrites to that page.
+ * Studio /about stays on the studio site. The maker host serves the portfolio.
  */
 export function decideHostRoute(
   hostHeader: string | null | undefined,
@@ -66,15 +83,29 @@ export function decideHostRoute(
 
   if (CREATOR_HOSTS.has(host)) {
     if (host !== CREATOR_HOST) {
-      const destPath = path === "/" ? "/" : path;
+      const clean = portfolioCleanPath(path);
+      const destPath = clean ?? (path === "/" ? "/" : path);
       return { action: "redirect", destination: withSearch(`${ABOUT_URL}${destPath}`, search) };
     }
 
-    if (path === "/") {
-      return { action: "rewrite", pathname: "/about" };
+    const rewrite = PORTFOLIO_REWRITES[path];
+    if (rewrite) return { action: "rewrite", pathname: rewrite };
+
+    const clean = portfolioCleanPath(path);
+    if (clean) {
+      return { action: "redirect", destination: withSearch(`${ABOUT_URL}${clean}`, search) };
     }
 
-    if (path.startsWith("/api") || path.startsWith("/_next") || isAboutPath(path)) {
+    if (path.startsWith("/portfolio/")) {
+      return { action: "redirect", destination: withSearch(`${ABOUT_URL}/`, search) };
+    }
+
+    if (path.startsWith("/about/") || path.startsWith("/galleries/") || path.startsWith("/contact/")) {
+      const root = `/${path.split("/")[1]}`;
+      return { action: "redirect", destination: withSearch(`${ABOUT_URL}${root}`, search) };
+    }
+
+    if (path.startsWith("/api") || path.startsWith("/_next")) {
       return { action: "continue" };
     }
 
@@ -86,6 +117,11 @@ export function decideHostRoute(
 
   if (STUDIO_HOSTS.has(host) && (path === "/collections" || path.startsWith("/collections/"))) {
     return { action: "redirect", destination: `${STUDIO_ORIGIN}/about#originals` };
+  }
+
+  if (STUDIO_HOSTS.has(host) && (path === "/portfolio" || path.startsWith("/portfolio/"))) {
+    const clean = portfolioCleanPath(path) ?? "/";
+    return { action: "redirect", destination: withSearch(`${ABOUT_URL}${clean}`, search) };
   }
 
   return { action: "continue" };

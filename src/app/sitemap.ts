@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { SITE_URL } from "@/lib/config";
+import { ABOUT_URL } from "@/lib/links";
 import { serverFetch } from "@/lib/api-server";
 import { normalizeSlug } from "@/lib/slug";
 import type { Product } from "@/types/product";
@@ -37,6 +38,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
+  const portfolioEntries: MetadataRoute.Sitemap = ["", "/about", "/galleries", "/contact"].map(
+    (path) => ({
+      url: path ? `${ABOUT_URL}${path}` : `${ABOUT_URL}/`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: path ? 0.7 : 0.8,
+    }),
+  );
+
   const productEntries: MetadataRoute.Sitemap = products.map((product) => ({
     url: `${SITE_URL}/objects/${normalizeSlug(product.slug) || product.slug}`,
     lastModified: product.updatedAt ? new Date(product.updatedAt) : now,
@@ -51,5 +61,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticEntries, ...productEntries, ...journalEntries];
+  return [...staticEntries, ...portfolioEntries, ...productEntries, ...journalEntries];
 }
