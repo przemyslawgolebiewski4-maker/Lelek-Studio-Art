@@ -14,7 +14,7 @@ export async function JournalList({ posts }: { posts: JournalPostSummary[] }) {
   return (
     <div className="product-grid" style={{ marginTop: 40 }}>
       {posts.map((post) => {
-        const date = resolvePostDate(post);
+        const date = resolvePostDate(post, locale);
         return (
           <Link key={post._id} href={`/journal/${post.slug}`} className="product-card">
             {post.coverImage ? (

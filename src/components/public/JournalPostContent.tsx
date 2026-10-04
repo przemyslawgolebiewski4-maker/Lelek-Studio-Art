@@ -9,7 +9,7 @@ import { t } from "@/lib/i18n/messages";
 export async function JournalPostContent({ post }: { post: JournalPost }) {
   const locale = await getLocale();
   const html = marked.parse(post.body ?? "", { async: false }) as string;
-  const date = resolvePostDate(post);
+  const date = resolvePostDate(post, locale);
 
   return (
     <article>

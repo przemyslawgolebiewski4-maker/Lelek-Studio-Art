@@ -12,6 +12,7 @@ import Image from "next/image";
 import { SITE_URL } from "@/lib/config";
 import { isProductCategory, CATEGORY_TAB_LABELS } from "@/lib/categories";
 import type { ReservePublicData } from "@/lib/reserve";
+import { suggestPl } from "@/lib/i18n/dictionary";
 import {
   RESERVE_COPY,
   RESERVE_LANGS,
@@ -40,15 +41,21 @@ function formatEuro(price: number | null) {
   return `€${price.toFixed(2)}`;
 }
 
-function categoryLabel(category?: string) {
-  if (!category) return "";
-  if (isProductCategory(category)) return CATEGORY_TAB_LABELS[category];
-  return category;
+function reserveText(lang: ReserveLang, value?: string | null) {
+  const text = value?.trim() ?? "";
+  if (!text || lang !== "pl") return text;
+  return suggestPl(text) || text;
 }
 
-function photoTag(data: ReservePublicData) {
+function categoryLabel(category: string | undefined, lang: ReserveLang) {
+  if (!category) return "";
+  const label = isProductCategory(category) ? CATEGORY_TAB_LABELS[category] : category;
+  return reserveText(lang, label);
+}
+
+function photoTag(data: ReservePublicData, lang: ReserveLang) {
   const parts = [data.catalogCode].filter(Boolean);
-  if (data.material?.trim()) parts.push(data.material.trim());
+  if (data.material?.trim()) parts.push(reserveText(lang, data.material));
   return parts.join(" · ");
 }
 
@@ -59,13 +66,14 @@ function ProductPhoto({
   data: ReservePublicData;
   unavailableLabel?: string;
 }) {
+  const { lang } = useReserveLang();
   const src = data.imageUrl?.trim() || "";
   return (
     <div className={`reserve-photo${unavailableLabel ? " is-unavailable" : ""}`}>
       {src ? (
         <Image
           src={src}
-          alt={data.title}
+          alt={reserveText(lang, data.title)}
           fill
           sizes="(max-width: 480px) 100vw, 420px"
           className="reserve-photo-img"
@@ -80,7 +88,7 @@ function ProductPhoto({
           <span className="reserve-photo-stamp">{unavailableLabel}</span>
         </div>
       ) : (
-        <span className="reserve-photo-tag">{photoTag(data)}</span>
+        <span className="reserve-photo-tag">{photoTag(data, lang)}</span>
       )}
     </div>
   );
@@ -122,10 +130,10 @@ export function ReserveAvailable({
     <div className="reserve-state">
       <ProductPhoto data={data} />
       <div className="reserve-body">
-        {categoryLabel(data.category) ? (
-          <div className="reserve-cat">{categoryLabel(data.category)}</div>
+        {categoryLabel(data.category, lang) ? (
+          <div className="reserve-cat">{categoryLabel(data.category, lang)}</div>
         ) : null}
-        <h1 className="reserve-title">{data.title}</h1>
+        <h1 className="reserve-title">{reserveText(lang, data.title)}</h1>
         {price ? <div className="reserve-price">{price}</div> : null}
 
         {showPay ? (
@@ -164,7 +172,7 @@ export function ReserveAvailable({
 
         <div className="reserve-desc">
           <b>{t.displayOnlyHere}</b>
-          {data.description ? <span> {data.description}</span> : null}
+          {data.description ? <span> {reserveText(lang, data.description)}</span> : null}
         </div>
 
         <div className="reserve-exhib-note">{t.reservedExclusive}</div>
@@ -182,10 +190,10 @@ export function ReserveUnavailable({
   instagramUrl: string;
   email: string;
 }) {
-  const { t } = useReserveLang();
+  const { t, lang } = useReserveLang();
   const label =
     data.exhibitionStatus === "reserved" ? t.stampReserved : t.stampSold;
-  const cat = categoryLabel(data.category);
+  const cat = categoryLabel(data.category, lang);
   const meta = [cat, data.catalogCode].filter(Boolean).join(" · ");
 
   return (
@@ -205,7 +213,7 @@ export function ReserveUnavailable({
             Instagram
           </a>
           <a href={`mailto:${email}`} className="reserve-contact-btn">
-            Email
+            {lang === "pl" ? "E-mail" : lang === "de" ? "E-Mail" : "Email"}
           </a>
         </div>
         <div className="reserve-similar">
@@ -235,13 +243,15 @@ export function ReserveNotFound({ code }: { code: string }) {
 export function ReserveShell({
   locationName,
   code,
+  initialLang = "en",
   children,
 }: {
   locationName?: string;
   code: string;
+  initialLang?: ReserveLang;
   children: ReactNode;
 }) {
-  const [lang, setLang] = useState<ReserveLang>("en");
+  const [lang, setLang] = useState<ReserveLang>(initialLang);
   const value: ReserveLangContextValue = {
     lang,
     setLang,

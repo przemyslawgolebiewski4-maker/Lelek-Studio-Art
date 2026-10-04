@@ -16,7 +16,7 @@ export async function HomeJournalTeaser({
   if (posts.length === 0) return null;
 
   const [latest] = posts;
-  const date = resolvePostDate(latest);
+  const date = resolvePostDate(latest, locale);
 
   return (
     <section className="journal-sec">

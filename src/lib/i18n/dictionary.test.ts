@@ -12,6 +12,8 @@ for (const value of polishValues) {
 }
 
 assert.equal(suggestPl("The process comes first."), "Najpierw jest proces.");
+assert.equal(suggestPl("A space is never just a space."), "Przestrzeń nigdy nie jest tylko przestrzenią.");
+assert.equal(suggestPl("For architects & interior designers"), "Dla architektów i projektantów wnętrz");
 assert.equal(suggestPl("Shop"), "Sklep");
 assert.equal(suggestPl("Not a known sentence"), "");
 

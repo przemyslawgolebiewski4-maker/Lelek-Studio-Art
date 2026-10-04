@@ -23,8 +23,8 @@ export function localeText(
   const en = english ?? "";
   if (locale !== "pl") return en;
   const custom = storedPl?.trim();
-  if (custom) return custom;
-  return suggestPl(en) || en;
+  if (custom && custom !== en.trim()) return custom;
+  return suggestPl(en) || custom || en;
 }
 
 function presentKeys<T extends Record<string, unknown>>(

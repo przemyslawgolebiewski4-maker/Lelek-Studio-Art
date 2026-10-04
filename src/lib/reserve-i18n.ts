@@ -1,6 +1,6 @@
-export type ReserveLang = "en" | "de";
+export type ReserveLang = "en" | "de" | "pl";
 
-export const RESERVE_LANGS: ReserveLang[] = ["en", "de"];
+export const RESERVE_LANGS: ReserveLang[] = ["en", "de", "pl"];
 
 type ReserveCopy = {
   payCta: string;
@@ -98,12 +98,45 @@ export const RESERVE_COPY: Record<ReserveLang, ReserveCopy> = {
     goHome: "Zu lelekstudio.com",
     langLabel: "Sprache",
   },
+  pl: {
+    payCta: "Zarezerwuj i zapłać",
+    payIcons: "Karta · Apple Pay · Google Pay",
+    displayThrough: (date) => `Ta rzecz będzie tu wystawiona do ${date}.`,
+    displayThroughFallback: "końca tej wystawy",
+    keepConfirmation: "Zatrzymaj potwierdzenie płatności. Przyda się przy odbiorze.",
+    wantToday:
+      "Chcesz zabrać ją dziś? Zarezerwuj i zapłać, pokaż potwierdzenie osobie z obsługi i zabierz ze sobą.",
+    morePopupsBefore: "Więcej pop-upów i nie tylko. Obserwuj ",
+    morePopupsAfter: " na Instagramie, żeby widzieć, gdzie ta kolekcja pojawi się dalej.",
+    legalBefore: "Płacąc, zgadzasz się na ",
+    returnPolicy: "prawo odstąpienia",
+    legalAnd: " oraz ",
+    impressum: "Impressum",
+    displayOnlyHere: "Ta rzecz jest wystawiona tylko tutaj.",
+    reservedExclusive:
+      "Gdy zeskanujesz ten kod QR i zapłacisz, rzecz jest zarezerwowana wyłącznie dla Ciebie. Nikt inny jej nie kupi.",
+    stampReserved: "Zarezerwowane",
+    stampSold: "Sprzedane",
+    unavailableTitle: "Tej rzeczy już nie ma",
+    unavailableCopy:
+      "Ktoś był szybszy. Jeśli szukasz czegoś podobnego albo chcesz wiedzieć, kiedy pojawi się kolejna, napisz.",
+    seeCollection: "Cała kolekcja → lelekstudio.com",
+    notFoundEyebrow: "Rezerwacja",
+    notFoundTitle: "Nie znaleźliśmy tej rzeczy",
+    notFoundCopy: (code) =>
+      code
+        ? `Może już nie być częścią trwającej wystawy albo kod „${code}” jest nieprawidłowy.`
+        : "Może już nie być częścią trwającej wystawy.",
+    goHome: "Przejdź na lelekstudio.com",
+    langLabel: "Język",
+  },
 };
 
 export function formatReserveDate(iso: string, lang: ReserveLang) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return null;
-  return d.toLocaleDateString(lang === "de" ? "de-DE" : "en-US", {
+  const locale = lang === "de" ? "de-DE" : lang === "pl" ? "pl-PL" : "en-US";
+  return d.toLocaleDateString(locale, {
     month: "long",
     day: "numeric",
     year: "numeric",

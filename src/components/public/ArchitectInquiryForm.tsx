@@ -40,10 +40,10 @@ async function uploadInquiryImage(file: File): Promise<string> {
   try {
     data = await res.json();
   } catch {
-    throw new Error("Could not upload the image");
+    throw new Error("UPLOAD");
   }
   if (!res.ok || !data.ok || typeof data.url !== "string") {
-    throw new Error(data.error || "Could not upload the image");
+    throw new Error(data.error || "UPLOAD");
   }
   return data.url;
 }
@@ -60,6 +60,16 @@ export function ArchitectInquiryForm({
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState("");
   const tr = useT();
+
+  function shownError(message: string): string {
+    if (message === "Name, email and message required") return tr("form.required");
+    if (message === "Use JPG, PNG or WebP") return tr("form.imagesType");
+    if (message === "Each image can be up to 4 MB") return tr("form.imagesSize");
+    if (!message || message === "UPLOAD" || message === "Upload not allowed" || message === "No file provided" || message === "Invalid form data") {
+      return tr("form.uploadFail");
+    }
+    return tr("contact.error");
+  }
 
   function update(key: keyof FormState, value: string) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -117,7 +127,7 @@ export function ArchitectInquiryForm({
       const data = await res.json();
       if (!res.ok || !data.ok) {
         setStatus("error");
-        setError(data.error ?? tr("contact.error"));
+        setError(shownError(typeof data.error === "string" ? data.error : ""));
         return;
       }
       setStatus("success");
@@ -125,7 +135,7 @@ export function ArchitectInquiryForm({
       setFiles([]);
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : tr("contact.error"));
+      setError(shownError(err instanceof Error ? err.message : ""));
     }
   }
 
