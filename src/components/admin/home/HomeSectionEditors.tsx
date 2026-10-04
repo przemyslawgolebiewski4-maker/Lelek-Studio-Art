@@ -603,7 +603,7 @@ export function TradeSectionEditor({
           value={c.heroImage ?? ""}
           onChange={(v) => set("heroImage", v)}
           folder="architects"
-          hint="Object in an interior, not a product on a black background. About 1800px on the long side."
+          hint={MEDIA_HINTS.architectsHeroImage}
         />
         <CmsLangField content={content} onChange={onChange} name="heroImageAlt" label="Alt text" />
         <MediaUploadField
@@ -611,6 +611,7 @@ export function TradeSectionEditor({
           value={c.heroImageMobile ?? ""}
           onChange={(v) => set("heroImageMobile", v)}
           folder="architects"
+          hint={MEDIA_HINTS.architectsHeroImageMobile}
         />
         <MediaUploadField
           label="Hero video (optional)"
@@ -618,6 +619,7 @@ export function TradeSectionEditor({
           onChange={(v) => set("heroVideo", v)}
           folder="architects"
           mode="video"
+          hint={MEDIA_HINTS.architectsHeroVideo}
         />
         <MediaUploadField
           label="Hero video mobile"
@@ -625,6 +627,7 @@ export function TradeSectionEditor({
           onChange={(v) => set("heroVideoMobile", v)}
           folder="architects"
           mode="video"
+          hint={MEDIA_HINTS.architectsHeroVideoMobile}
         />
         <CmsLangField content={content} onChange={onChange} name="heroCaption" label="Caption" multiline rows={2} />
       </div>
@@ -646,7 +649,7 @@ export function TradeSectionEditor({
           value={c.existingImage ?? ""}
           onChange={(v) => set("existingImage", v)}
           folder="architects"
-          hint="A finished piece, ideally already in a space. Caption it honestly if the setting is your own arrangement."
+          hint={MEDIA_HINTS.architectsExistingImage}
         />
         <CmsLangField content={content} onChange={onChange} name="existingImageAlt" label="Alt text" />
         <CmsLangField content={content} onChange={onChange} name="existingCaption" label="Caption" multiline rows={2} />
@@ -655,7 +658,7 @@ export function TradeSectionEditor({
           value={c.processImage ?? ""}
           onChange={(v) => set("processImage", v)}
           folder="architects"
-          hint="Making the work, or an object at architectural scale."
+          hint={MEDIA_HINTS.architectsProcessImage}
         />
         <CmsLangField content={content} onChange={onChange} name="processImageAlt" label="Alt text" />
         <CmsLangField content={content} onChange={onChange} name="processCaption" label="Caption" multiline rows={2} />
