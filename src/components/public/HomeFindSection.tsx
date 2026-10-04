@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { FindSection } from "@/types/content";
-import { SHOP_URL } from "@/lib/config";
+import { SHOP_URL, resolveInstagramHandle, resolveInstagramUrl } from "@/lib/config";
 import { getLocale } from "@/lib/i18n/get-locale";
 import { t } from "@/lib/i18n/messages";
 import { localeText } from "@/lib/i18n/present";
@@ -18,9 +18,7 @@ export async function HomeFindSection({
   shopUrl = SHOP_URL,
 }: HomeFindSectionProps) {
   const locale = await getLocale();
-  const instagramUrl =
-    section.studioInstagramUrl ||
-    "https://www.instagram.com/claystories.berlin/";
+  const instagramUrl = resolveInstagramUrl(section.studioInstagramUrl);
   const openDaysNote =
     section.openDaysNote ||
     localeText(
@@ -49,7 +47,7 @@ export async function HomeFindSection({
           rel="noopener noreferrer"
           className="fb-link"
         >
-          {section.studioInstagram ?? "@claystories.berlin"} ↗
+          {resolveInstagramHandle(section.studioInstagram)} ↗
         </Link>
       </div>
 

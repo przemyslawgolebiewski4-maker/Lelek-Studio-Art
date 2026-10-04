@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: `${SITE_URL}/about`,
       firstName: CREATOR_GIVEN_NAME,
       lastName: CREATOR_FAMILY_NAME,
-      username: "lelek.berlin",
+      username: "lelek.studio_",
     },
   });
 }

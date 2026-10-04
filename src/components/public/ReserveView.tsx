@@ -146,7 +146,7 @@ export function ReserveAvailable({
             <p>
               {t.morePopupsBefore}
               <a href={instagramUrl} target="_blank" rel="noopener noreferrer">
-                @lelek.berlin
+                @lelek.studio_
               </a>
               {t.morePopupsAfter}
             </p>

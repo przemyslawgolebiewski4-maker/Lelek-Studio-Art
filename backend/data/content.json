@@ -4,16 +4,16 @@
     "tagline": "The process comes first, always",
     "description": "Przemysław Gołębiewski is a self-taught ceramist in Berlin. Working by intuition rather than plan, he shapes vessels, cups and lamps by hand - never exactly the same.",
     "url": "https://www.lelekstudio.com",
-    "instagram": "https://www.instagram.com/lelek.berlin/",
-    "instagramHandle": "@lelek.berlin",
+    "instagram": "https://www.instagram.com/lelek.studio_/",
+    "instagramHandle": "@lelek.studio_",
     "email": "lelekstudio@lelekstudio.com",
     "etsy": "https://www.etsy.com/shop/LelekStudio",
     "artistUrl": "https://www.p-golebiewski.xyz",
     "location": "Berlin, Germany",
     "studioName": "Clay Stories Berlin",
     "studioAddress": "Kollwitzstrasse 82\n10435 Berlin",
-    "studioInstagram": "https://www.instagram.com/claystories.berlin/",
-    "studioInstagramHandle": "@claystories.berlin",
+    "studioInstagram": "https://www.instagram.com/lelek.studio_/",
+    "studioInstagramHandle": "@lelek.studio_",
     "lelekMeaning": "Lelek - kozodoj - the nightjar"
   },
   "hero": {
@@ -220,7 +220,7 @@
   "slot": {
     "visible": false,
     "label": "Upcoming",
-    "text": "New series dropping soon - follow @lelek.berlin"
+    "text": "New series dropping soon - follow @lelek.studio_"
   },
   "process": {
     "eyebrow": "Process",
@@ -239,8 +239,8 @@
       "name": "Clay Stories Berlin",
       "address": "Kollwitzstrasse 82\n10435 Berlin",
       "body": "Available in studio during open days and selected sales events. Follow Instagram for dates.",
-      "instagramHandle": "@claystories.berlin",
-      "instagramUrl": "https://www.instagram.com/claystories.berlin/",
+      "instagramHandle": "@lelek.studio_",
+      "instagramUrl": "https://www.instagram.com/lelek.studio_/",
       "note": "Studio visits by appointment - contact us directly"
     },
     "online": {
