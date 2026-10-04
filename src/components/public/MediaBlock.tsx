@@ -8,6 +8,8 @@ export type MediaBlockProps = {
   videoMobile?: string;
   alt: string;
   variant?: "hero" | "story";
+  /** Load immediately. Defaults to true for the homepage hero variant. */
+  priority?: boolean;
 };
 
 function mediaUrl(value?: string): string {
@@ -21,6 +23,7 @@ export function MediaBlock({
   videoMobile,
   alt,
   variant = "hero",
+  priority,
 }: MediaBlockProps) {
   const desktopImage = mediaUrl(image);
   const mobileImage = mediaUrl(imageMobile) || desktopImage;
@@ -60,7 +63,7 @@ export function MediaBlock({
                 fill
                 className="media-image media-poster hidden md:block"
                 sizes={isHero ? "58vw" : "50vw"}
-                priority={isHero}
+                priority={priority ?? isHero}
               />
             ) : null}
             {mobileImage ? (
@@ -70,7 +73,7 @@ export function MediaBlock({
                 fill
                 className="media-image media-poster md:hidden"
                 sizes="100vw"
-                priority={isHero}
+                priority={priority ?? isHero}
               />
             ) : null}
             <LoopVideo
@@ -97,7 +100,7 @@ export function MediaBlock({
                 fill
                 className="media-image md:hidden"
                 sizes="100vw"
-                priority={isHero}
+                priority={priority ?? isHero}
               />
             ) : null}
             {desktopImage ? (
@@ -107,7 +110,7 @@ export function MediaBlock({
                 fill
                 className="media-image hidden md:block"
                 sizes={isHero ? "58vw" : "50vw"}
-                priority={isHero}
+                priority={priority ?? isHero}
               />
             ) : null}
           </>

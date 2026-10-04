@@ -187,33 +187,73 @@ export async function seedDatabase(options?: { force?: boolean }) {
       sectionKey: "architects",
       order: 5,
       content: {
-        eyebrow: "For architects & designers",
-        headline: "Looking for something made by hand, not manufactured?",
-        sub:
-          "Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of a room - but always through the same process: the hand moves, the mind follows after. Never to a fixed specification. Never by mold.",
-        body: "Wall objects, vessels and functional pieces for contemporary interiors. Custom dimensions and glazes available on request.",
-        point1Title: "Wall objects",
-        point1Body:
-          "Handbuilt ceramic pieces for walls. Each exists once. Available for residential and hospitality projects.",
-        point2Title: "Vessels and objects",
-        point2Body:
-          "Sculptural forms for shelves, tables and surfaces. Selected, not configured.",
-        point3Title: "Functional ceramics",
-        point3Body:
-          "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold.",
-        closingNote:
-          "Not every collaboration fits a category. If you see a fit between LELEK and your project - a brand, a gallery, an idea - write to us.",
-        ctaText: "Get in touch",
-        ctaUrl: "/for-architects",
-        formIntro:
-          "Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days.",
+        eyebrow: "For architects & interior designers",
+        headline: "A space is never just a space.",
+        dek: "Ceramic objects that change how a space feels.",
+        heroBody:
+          "Some spaces need a focal point. Others need texture, contrast or something unexpected. A ceramic object can do more than fill a space - it can shift its atmosphere, create a connection between materials or bring a sense of presence to an otherwise quiet interior.",
+        intro:
+          "LELEK creates ceramic wall pieces, vessels, lamps and sculptural objects for residential, hospitality and commercial spaces. Raw, organic forms meet architectural structure, bringing material, texture and a different kind of expression into the spaces we inhabit.",
         heroImage: "",
         heroImageMobile: "",
         heroVideo: "",
         heroVideoMobile: "",
-        heroImageAlt: "Ceramic wall objects and vessels for spaces",
+        heroImageAlt: "Ceramic object by Przemysław Gołębiewski placed in an interior",
         heroCaption:
-          "Ceramic wall objects and vessels made for spaces - hospitality, offices, private commissions.",
+          "A studio arrangement - the object in relation to a wall, a surface, a light. Not a completed client project.",
+        collabHeadline: "Made for the space.",
+        collabHeadlineEm: "Shaped by hand.",
+        collabBody1:
+          "Some works are already made, each existing as a singular form, ready to find its place. Others begin with a conversation.",
+        collabBody2:
+          "Working directly with the artist behind LELEK, you can explore a piece conceived around your project's scale, materials, light and atmosphere. It might be a sculptural wall object, a series of vessels, a lighting element or something that doesn't yet have a name.",
+        collabBody3:
+          "The process is collaborative, but never mechanical. Rather than reproducing a fixed design or following a rigid specification, each commission develops through an exchange of ideas, material exploration and an intuitive approach to form.",
+        collabBody4:
+          "Every piece is designed and made by one artist, from the first gesture in clay to the finished object. This means a direct connection between the person shaping the work and the person imagining the space.",
+        collabNote:
+          "Not every idea can be made. A commission is taken only when it sits within the practice - the clay, the scale, and what one artist can shape by hand.",
+        existingImage: "",
+        existingImageAlt: "Existing ceramic work",
+        existingCaption: "An existing work, as it is.",
+        processImage: "",
+        processImageAlt: "Ceramic piece taking shape in the studio",
+        processCaption: "In the studio - a form taking shape.",
+        kindsEyebrow: "What can find its place",
+        points: [
+          {
+            title: "Wall objects",
+            body: "Handbuilt ceramic pieces that give walls a new dimension. Sculptural forms, textures and shadows that interact with natural and artificial light. Available as existing works or developed for a specific space.",
+          },
+          {
+            title: "Vessels & sculptural objects",
+            body: "Ceramic forms for shelves, tables, niches and architectural settings. Objects that can stand alone, complement a composition or introduce a contrast in shape and material.",
+          },
+          {
+            title: "Functional ceramics",
+            body: "Cups, bowls and tea objects for interiors where everyday rituals matter. Available as individual pieces or selected series for hospitality, restaurants and other projects.",
+          },
+          {
+            title: "Lamps & commissioned works",
+            body: "Lighting objects and custom ceramic pieces developed in dialogue with your project. From an initial idea to a finished form, each commission is approached as an individual creative process.",
+          },
+        ],
+        inviteHeadline: "Let's give your space a different presence.",
+        inviteBody1:
+          "You don't need to have a finished concept or a precise idea of the object. Sometimes a material, a surface, a feeling or a detail in the architecture is enough to start a conversation.",
+        inviteBody2:
+          "Tell me about your project - the space, its scale, light, materials and what you feel is missing. We can explore whether an existing work is the right fit or develop something specifically for it.",
+        inviteSignoff:
+          "LELEK is an independent ceramic practice by Przemysław Gołębiewski, who designs and makes each commissioned piece by hand in Berlin.",
+        formEyebrow: "Project inquiry",
+        formIntro:
+          "Tell me about your space, your project and the kind of object you have in mind. Include reference images, approximate dimensions and your project timeline if available.",
+        formCta: "Let's start a conversation.",
+        formEmail: "lelekstudio@lelekstudio.com",
+        formSuccessTitle: "Message received.",
+        formSuccessBody: "Thank you. I will reply within a few business days.",
+        ctaText: "Get in touch",
+        ctaUrl: "/for-architects",
       },
     },
     {

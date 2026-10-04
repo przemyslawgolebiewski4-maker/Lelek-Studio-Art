@@ -62,34 +62,76 @@ export interface StorySection {
   originalsIntro?: string;
 }
 
+export interface ArchitectsPoint {
+  title: string;
+  body: string;
+  titlePl?: string;
+  bodyPl?: string;
+}
+
+/** /for-architects — editable in Admin → Homepage → For architects */
 export interface ArchitectsSection {
+  /** Hero */
   eyebrow?: string;
   headline?: string;
+  /** Short line under the headline */
+  dek?: string;
+  heroBody?: string;
+  intro?: string;
+  heroImage?: string;
+  heroImageMobile?: string;
+  heroVideo?: string;
+  heroVideoMobile?: string;
+  heroImageAlt?: string;
+  /** Honest caption. Studio arrangements must not read as client projects. */
+  heroCaption?: string;
+
+  /** Existing works and commissions */
+  collabHeadline?: string;
+  collabHeadlineEm?: string;
+  collabBody1?: string;
+  collabBody2?: string;
+  collabBody3?: string;
+  collabBody4?: string;
+  /** Commission is not open-ended — it has to fit the practice. */
+  collabNote?: string;
+  existingImage?: string;
+  existingImageAlt?: string;
+  existingCaption?: string;
+  processImage?: string;
+  processImageAlt?: string;
+  processCaption?: string;
+
+  /** Numbered kinds of work */
+  kindsEyebrow?: string;
+  points?: ArchitectsPoint[];
+
+  /** Low-threshold invitation */
+  inviteHeadline?: string;
+  inviteBody1?: string;
+  inviteBody2?: string;
+  inviteSignoff?: string;
+
+  /** Inquiry */
+  formEyebrow?: string;
+  formIntro?: string;
+  formCta?: string;
+  formEmail?: string;
+  formSuccessTitle?: string;
+  formSuccessBody?: string;
+
+  /** Legacy keys kept so older documents and the unused homepage block still resolve */
   headlineEm?: string;
   sub?: string;
-  /** Preferred repeatable points list (falls back to point1Title/Body …) */
-  points?: { title: string; body: string; titlePl?: string; bodyPl?: string }[];
   point1Title?: string;
   point1Body?: string;
   point2Title?: string;
   point2Body?: string;
   point3Title?: string;
   point3Body?: string;
-  /** Closing note below the three points on /for-architects */
   closingNote?: string;
   ctaText?: string;
   formTitle?: string;
-  formEyebrow?: string;
-  formIntro?: string;
-  formSuccessTitle?: string;
-  formSuccessBody?: string;
-  /** Trade page hero media */
-  heroImage?: string;
-  heroImageMobile?: string;
-  heroVideo?: string;
-  heroVideoMobile?: string;
-  heroImageAlt?: string;
-  heroCaption?: string;
 }
 
 export interface JournalSection {

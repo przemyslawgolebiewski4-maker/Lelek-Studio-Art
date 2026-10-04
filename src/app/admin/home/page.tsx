@@ -19,6 +19,7 @@ import {
 } from "@/components/admin/home/HomeSectionEditors";
 import { stampSectionPl } from "@/lib/i18n/cms";
 import { apiGet, apiPatch, readApiResult } from "@/lib/api";
+import { architectsContentForEditor } from "@/lib/brand-copy";
 import type { HomeSectionKey } from "@/lib/site";
 
 type SectionRow = {
@@ -35,7 +36,7 @@ const SECTION_LABELS: Record<HomeSectionKey, string> = {
   story: "Story / About",
   elements: "Elements",
   featured: "Featured works",
-  architects: "Trade",
+  architects: "For architects",
   journal: "Journal teaser",
   find: "Find us",
 };
@@ -46,7 +47,8 @@ const SECTION_DESCRIPTIONS: Partial<Record<HomeSectionKey, string>> = {
   story: "Homepage teaser (paragraph 1) + full About page (all paragraphs, gallery, CTAs).",
   elements: "Earth · Water · Fire · Air labels and ceramics scope note.",
   featured: "Video + product thumbnails. Products marked Visible on Home appear below the video.",
-  architects: "Full Trade page (/for-architects): hero, intro, points, form copy.",
+  architects:
+    "For architects page: hero, existing works and commissions, kinds of work, invitation, inquiry.",
   journal: "Journal teaser heading on the homepage (posts from Journal admin).",
   find: "Homepage Find block + footer brand tagline. Shop URL is env-based.",
 };
@@ -88,7 +90,8 @@ export default function AdminHomePage() {
       setError("");
       return;
     }
-    setDraft(section.content as Record<string, unknown>);
+    const raw = section.content as Record<string, unknown>;
+    setDraft(section.sectionKey === "architects" ? architectsContentForEditor(raw) : raw);
     setVisible(section.visible);
     setSaved(false);
     setError("");

@@ -95,13 +95,15 @@ export const ABOUT_PAGE_KEYWORDS = [
 export const ARCHITECTS_PAGE_KEYWORDS = [
   ...SEO_KEYWORDS,
   "ceramics for architects",
+  "ceramics for interior designers",
   "hospitality ceramics",
   "interior design ceramics",
-  "ceramic objects for spaces",
+  "ceramic wall objects",
+  "commissioned ceramics",
 ];
 
 export const TRADE_DESCRIPTION =
-  "Ceramic objects by Przemysław Gołębiewski for interiors - organic and raw forms, placed as they are, never to a fixed specification.";
+  "Ceramic wall pieces, vessels, lamps and sculptural objects by Przemysław Gołębiewski for residential, hospitality and commercial spaces. Existing works, or a piece shaped with the project.";
 
 export const CREATOR_KNOWS_ABOUT = [
   "Ceramics",

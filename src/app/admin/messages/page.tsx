@@ -12,6 +12,10 @@ type MessageRow = {
   message: string;
   company?: string;
   projectType?: string;
+  location?: string;
+  dimensions?: string;
+  timeline?: string;
+  attachments?: string[];
   type: "general" | "architect" | "custom-order";
   read: boolean;
   createdAt: string;
@@ -127,6 +131,35 @@ export default function AdminMessagesPage() {
                 <p className="admin-stat-label" style={{ marginTop: 8 }}>
                   Project: {selected.projectType}
                 </p>
+              ) : null}
+              {selected.location ? (
+                <p className="admin-stat-label" style={{ marginTop: 8 }}>
+                  Location: {selected.location}
+                </p>
+              ) : null}
+              {selected.dimensions ? (
+                <p className="admin-stat-label" style={{ marginTop: 8 }}>
+                  Dimensions: {selected.dimensions}
+                </p>
+              ) : null}
+              {selected.timeline ? (
+                <p className="admin-stat-label" style={{ marginTop: 8 }}>
+                  Timeline: {selected.timeline}
+                </p>
+              ) : null}
+              {selected.attachments && selected.attachments.length > 0 ? (
+                <div style={{ marginTop: 12 }}>
+                  <p className="admin-stat-label">References</p>
+                  <ul className="admin-message-body">
+                    {selected.attachments.map((url) => (
+                      <li key={url}>
+                        <a href={url} className="admin-link" target="_blank" rel="noopener noreferrer">
+                          {url}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               ) : null}
               <p className="admin-message-body">{selected.message}</p>
               <div style={{ marginTop: 24, display: "flex", gap: 12 }}>

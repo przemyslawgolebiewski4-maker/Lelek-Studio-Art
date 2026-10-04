@@ -583,19 +583,29 @@ export function TradeSectionEditor({
   return (
     <div className="admin-form-stack-lg">
       <p className="admin-muted">
-        Order matches /for-architects: hero media → intro → service points → closing note → inquiry form.
-        Empty point fields fall back to seeded defaults on the public page.
+        Order matches /for-architects: hero, two ways of working, numbered kinds of work, invitation, inquiry.
+        Empty text falls back to the current page copy. Each text field has English and Polish.
       </p>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">1. Trade page hero</h3>
+        <h3 className="admin-group-title">1. Hero</h3>
+        <p className="admin-field-hint">
+          Photograph the object in a real space, in relation to a wall, a surface or the architecture.
+          If the arrangement is yours, say so in the caption. Do not present it as a finished client project.
+        </p>
+        <CmsLangField content={content} onChange={onChange} name="eyebrow" label="Eyebrow" />
+        <CmsLangField content={content} onChange={onChange} name="headline" label="Headline" multiline rows={2} />
+        <CmsLangField content={content} onChange={onChange} name="dek" label="Line under the headline" />
+        <CmsLangField content={content} onChange={onChange} name="heroBody" label="First paragraph" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="intro" label="Second paragraph" multiline rows={4} />
         <MediaUploadField
           label="Hero image"
           value={c.heroImage ?? ""}
           onChange={(v) => set("heroImage", v)}
           folder="architects"
+          hint="Object in an interior, not a product on a black background. About 1800px on the long side."
         />
-        <CmsLangField content={content} onChange={onChange} name="heroImageAlt" label="Alt text for hero image" fallbackEn="Ceramic objects by Przemysław Gołębiewski for interiors" />
+        <CmsLangField content={content} onChange={onChange} name="heroImageAlt" label="Alt text" />
         <MediaUploadField
           label="Hero image mobile"
           value={c.heroImageMobile ?? ""}
@@ -616,47 +626,58 @@ export function TradeSectionEditor({
           folder="architects"
           mode="video"
         />
-        <CmsLangField content={content} onChange={onChange} name="heroCaption" label="Hero caption" multiline rows={2} />
+        <CmsLangField content={content} onChange={onChange} name="heroCaption" label="Caption" multiline rows={2} />
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">2. Intro</h3>
-        <CmsLangField content={content} onChange={onChange} name="eyebrow" label="Eyebrow" fallbackEn="For architects & designers" />
-        <CmsLangField content={content} onChange={onChange} name="headline" label="Headline line 1" fallbackEn="Objects for spaces" />
-        <CmsLangField content={content} onChange={onChange} name="headlineEm" label="Headline line 2 (italic)" fallbackEn="that refuse the ordinary." />
-        <CmsLangField
-          content={content}
-          onChange={onChange}
-          name="sub"
-          label="Intro paragraph (page sub)"
-          multiline
-          rows={5}
-          placeholder="Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic."
-        />
-      </div>
-
-      <div className="admin-field-group">
-        <h3 className="admin-group-title">3. Service points</h3>
-        <p className="admin-muted">
-          Typically three points (01 / 02 / 03). Add, remove, or reorder with Move up / Move down.
+        <h3 className="admin-group-title">2. Existing works and commissions</h3>
+        <CmsLangField content={content} onChange={onChange} name="collabHeadline" label="Headline" />
+        <CmsLangField content={content} onChange={onChange} name="collabHeadlineEm" label="Headline, italic" />
+        <CmsLangField content={content} onChange={onChange} name="collabBody1" label="Paragraph 1" multiline rows={3} />
+        <CmsLangField content={content} onChange={onChange} name="collabBody2" label="Paragraph 2" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="collabBody3" label="Paragraph 3" multiline rows={4} />
+        <CmsLangField content={content} onChange={onChange} name="collabBody4" label="Paragraph 4" multiline rows={3} />
+        <CmsLangField content={content} onChange={onChange} name="collabNote" label="What a commission is not" multiline rows={3} />
+        <p className="admin-field-hint">
+          Say that a commission has to fit the practice and what can be made by hand. Do not promise any object on request.
         </p>
-        {points.length === 0 ? (
-          <p className="admin-muted">No points yet - add the first service point below.</p>
-        ) : null}
+        <MediaUploadField
+          label="Existing work"
+          value={c.existingImage ?? ""}
+          onChange={(v) => set("existingImage", v)}
+          folder="architects"
+          hint="A finished piece, ideally already in a space. Caption it honestly if the setting is your own arrangement."
+        />
+        <CmsLangField content={content} onChange={onChange} name="existingImageAlt" label="Alt text" />
+        <CmsLangField content={content} onChange={onChange} name="existingCaption" label="Caption" multiline rows={2} />
+        <MediaUploadField
+          label="Process or larger scale"
+          value={c.processImage ?? ""}
+          onChange={(v) => set("processImage", v)}
+          folder="architects"
+          hint="Making the work, or an object at architectural scale."
+        />
+        <CmsLangField content={content} onChange={onChange} name="processImageAlt" label="Alt text" />
+        <CmsLangField content={content} onChange={onChange} name="processCaption" label="Caption" multiline rows={2} />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">3. Kinds of work</h3>
+        <CmsLangField content={content} onChange={onChange} name="kindsEyebrow" label="Section heading" />
+        <p className="admin-muted">
+          Numbered list, not large cards. Four is the current set. A single object and a series can both be named in the text.
+        </p>
         {points.map((point, i) => (
           <div
             key={i}
             className="admin-field-group"
             style={{ borderTop: "1px solid rgba(11,10,8,0.12)", paddingTop: 12 }}
           >
-            <h3 className="admin-group-title">
-              Point {String(i + 1).padStart(2, "0")}
-            </h3>
+            <h3 className="admin-group-title">Point {String(i + 1).padStart(2, "0")}</h3>
             <LangPair
               label="Title"
               en={point.title}
               pl={point.titlePl || suggestPl(point.title)}
-              placeholder={i === 0 ? "Wall objects" : undefined}
               onEn={(value) => updatePoint(i, { title: value })}
               onPl={(value) => updatePoint(i, { titlePl: value })}
             />
@@ -665,7 +686,7 @@ export function TradeSectionEditor({
               en={point.body}
               pl={point.bodyPl || suggestPl(point.body)}
               multiline
-              rows={2}
+              rows={3}
               onEn={(value) => updatePoint(i, { body: value })}
               onPl={(value) => updatePoint(i, { bodyPl: value })}
             />
@@ -695,24 +716,31 @@ export function TradeSectionEditor({
         >
           Add point
         </button>
-        <CmsLangField content={content} onChange={onChange} name="closingNote" label="Closing collaboration note" multiline rows={3} />
       </div>
 
       <div className="admin-field-group">
-        <h3 className="admin-group-title">4. Project inquiry form</h3>
-        <CmsLangField content={content} onChange={onChange} name="formEyebrow" label="Form section eyebrow" placeholder="Project inquiry" fallbackEn="Project inquiry" />
-        <CmsLangField
-          content={content}
-          onChange={onChange}
-          name="formIntro"
-          label="Form intro text"
-          multiline
-          rows={3}
-          placeholder="Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days."
-          fallbackEn="Tell us about the space - scale, light, the works you're drawn to. We reply within a few business days."
+        <h3 className="admin-group-title">4. Invitation</h3>
+        <p className="admin-field-hint">
+          The reader does not need a finished object in mind. Invite a conversation about the space.
+        </p>
+        <CmsLangField content={content} onChange={onChange} name="inviteHeadline" label="Headline" multiline rows={2} />
+        <CmsLangField content={content} onChange={onChange} name="inviteBody1" label="Paragraph 1" multiline rows={3} />
+        <CmsLangField content={content} onChange={onChange} name="inviteBody2" label="Paragraph 2" multiline rows={3} />
+        <CmsLangField content={content} onChange={onChange} name="inviteSignoff" label="Sign-off" multiline rows={3} />
+      </div>
+
+      <div className="admin-field-group">
+        <h3 className="admin-group-title">5. Project inquiry</h3>
+        <CmsLangField content={content} onChange={onChange} name="formEyebrow" label="Eyebrow" />
+        <CmsLangField content={content} onChange={onChange} name="formCta" label="Call to action" />
+        <CmsLangField content={content} onChange={onChange} name="formIntro" label="Intro" multiline rows={3} />
+        <AdminInput
+          label="Email shown on the page"
+          value={c.formEmail ?? ""}
+          onChange={(e) => set("formEmail", e.target.value)}
         />
-        <CmsLangField content={content} onChange={onChange} name="formSuccessTitle" label="Success title" fallbackEn="Message received." />
-        <CmsLangField content={content} onChange={onChange} name="formSuccessBody" label="Success body" multiline rows={2} fallbackEn="We will get back to you within 1-2 working days." />
+        <CmsLangField content={content} onChange={onChange} name="formSuccessTitle" label="Success title" />
+        <CmsLangField content={content} onChange={onChange} name="formSuccessBody" label="Success body" multiline rows={2} />
       </div>
     </div>
   );

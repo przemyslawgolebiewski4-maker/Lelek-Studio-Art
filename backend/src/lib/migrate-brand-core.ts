@@ -200,29 +200,79 @@ export async function migrateBrandCoreCopy(): Promise<number> {
   const architects = await HomeSection.findOne({ sectionKey: "architects" });
   if (architects) {
     const content = { ...(architects.content as Record<string, unknown>) };
-    let dirty = false;
-    const point3 =
-      "Cups, bowls and vessels - forms that repeat, never exactly. Shaped by hand, not by mold.";
-    if (isOffBrand(content.point3Body)) {
-      content.point3Body = point3;
-      dirty = true;
-    }
-    if (Array.isArray(content.points)) {
-      content.points = (content.points as { title?: string; body?: string }[]).map((p, i) => {
-        if (i === 2 && isOffBrand(p.body)) {
-          dirty = true;
-          return { ...p, body: point3 };
-        }
-        return p;
-      });
-    }
-    if (isOffBrand(content.sub) || /We do not produce to specification/i.test(String(content.sub ?? ""))) {
-      content.sub =
-        "Each wall object, vessel and lamp exists as a singular form - shaped by intuition, not brief. Some pieces stay raw, closer to brutalism; others lean fully organic. Most works are placed as they are, into a space that can hold them. In select cases, a new piece takes shape around the scale and context of a room - but always through the same process: the hand moves, the mind follows after. Never to a fixed specification. Never by mold.";
-      dirty = true;
-    }
-    if (dirty) {
-      architects.content = content;
+    const hasNewModel = ["collabHeadline", "inviteHeadline", "dek"].some((key) =>
+      String(content[key] ?? "").trim(),
+    );
+    if (!hasNewModel) {
+      const next: Record<string, unknown> = {
+        eyebrow: "For architects & interior designers",
+        headline: "A space is never just a space.",
+        dek: "Ceramic objects that change how a space feels.",
+        heroBody:
+          "Some spaces need a focal point. Others need texture, contrast or something unexpected. A ceramic object can do more than fill a space - it can shift its atmosphere, create a connection between materials or bring a sense of presence to an otherwise quiet interior.",
+        intro:
+          "LELEK creates ceramic wall pieces, vessels, lamps and sculptural objects for residential, hospitality and commercial spaces. Raw, organic forms meet architectural structure, bringing material, texture and a different kind of expression into the spaces we inhabit.",
+        heroCaption:
+          "A studio arrangement - the object in relation to a wall, a surface, a light. Not a completed client project.",
+        heroImageAlt: `Ceramic object by ${CREATOR_NAME} placed in an interior`,
+        collabHeadline: "Made for the space.",
+        collabHeadlineEm: "Shaped by hand.",
+        collabBody1:
+          "Some works are already made, each existing as a singular form, ready to find its place. Others begin with a conversation.",
+        collabBody2:
+          "Working directly with the artist behind LELEK, you can explore a piece conceived around your project's scale, materials, light and atmosphere. It might be a sculptural wall object, a series of vessels, a lighting element or something that doesn't yet have a name.",
+        collabBody3:
+          "The process is collaborative, but never mechanical. Rather than reproducing a fixed design or following a rigid specification, each commission develops through an exchange of ideas, material exploration and an intuitive approach to form.",
+        collabBody4:
+          "Every piece is designed and made by one artist, from the first gesture in clay to the finished object. This means a direct connection between the person shaping the work and the person imagining the space.",
+        collabNote:
+          "Not every idea can be made. A commission is taken only when it sits within the practice - the clay, the scale, and what one artist can shape by hand.",
+        existingCaption: "An existing work, as it is.",
+        existingImageAlt: "Existing ceramic work",
+        processCaption: "In the studio - a form taking shape.",
+        processImageAlt: "Ceramic piece taking shape in the studio",
+        kindsEyebrow: "What can find its place",
+        points: [
+          {
+            title: "Wall objects",
+            body: "Handbuilt ceramic pieces that give walls a new dimension. Sculptural forms, textures and shadows that interact with natural and artificial light. Available as existing works or developed for a specific space.",
+          },
+          {
+            title: "Vessels & sculptural objects",
+            body: "Ceramic forms for shelves, tables, niches and architectural settings. Objects that can stand alone, complement a composition or introduce a contrast in shape and material.",
+          },
+          {
+            title: "Functional ceramics",
+            body: "Cups, bowls and tea objects for interiors where everyday rituals matter. Available as individual pieces or selected series for hospitality, restaurants and other projects.",
+          },
+          {
+            title: "Lamps & commissioned works",
+            body: "Lighting objects and custom ceramic pieces developed in dialogue with your project. From an initial idea to a finished form, each commission is approached as an individual creative process.",
+          },
+        ],
+        inviteHeadline: "Let's give your space a different presence.",
+        inviteBody1:
+          "You don't need to have a finished concept or a precise idea of the object. Sometimes a material, a surface, a feeling or a detail in the architecture is enough to start a conversation.",
+        inviteBody2:
+          "Tell me about your project - the space, its scale, light, materials and what you feel is missing. We can explore whether an existing work is the right fit or develop something specifically for it.",
+        inviteSignoff: `LELEK is an independent ceramic practice by ${CREATOR_NAME}, who designs and makes each commissioned piece by hand in Berlin.`,
+        formEyebrow: "Project inquiry",
+        formIntro:
+          "Tell me about your space, your project and the kind of object you have in mind. Include reference images, approximate dimensions and your project timeline if available.",
+        formCta: "Let's start a conversation.",
+        formEmail: "lelekstudio@lelekstudio.com",
+        formSuccessTitle: "Message received.",
+        formSuccessBody: "Thank you. I will reply within a few business days.",
+        ctaText: "Get in touch",
+        formTitle: "Project inquiry",
+      };
+      const previousHero = typeof content.heroImage === "string" ? content.heroImage.trim() : "";
+      if (previousHero) {
+        next.existingImage = previousHero;
+        next.existingCaption = "Existing works, photographed in the studio.";
+        next.existingImageAlt = "Ceramic vessels photographed in the studio";
+      }
+      architects.content = next;
       architects.markModified("content");
       await architects.save();
       changed += 1;
