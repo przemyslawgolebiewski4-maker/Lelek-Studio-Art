@@ -273,6 +273,7 @@ export async function seedDatabase(options?: { force?: boolean }) {
         studioName: site.studioName,
         studioAddress: site.studioAddress,
         studioInstagram: site.studioInstagramHandle,
+        studioInstagramUrl: site.studioInstagram,
         etsyUrl: site.etsy,
         lelekMeaning: site.lelekMeaning,
       },

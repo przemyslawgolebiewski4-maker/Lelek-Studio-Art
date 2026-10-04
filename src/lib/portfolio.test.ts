@@ -24,7 +24,7 @@ const structured = portfolioStructuredData(
     aeoQuestion: "Who is Przemysław Gołębiewski?",
     aeoAnswer: "A visual artist.",
   },
-  ["https://www.instagram.com/lelek.berlin/", "https://shop.lelekstudio.com"],
+  ["https://www.instagram.com/lelek.studio_/", "https://shop.lelekstudio.com"],
 );
 const graph = structured["@graph"] as Array<Record<string, unknown>>;
 assert.equal(graph[0]?.description, "Visual artist working in Berlin.");

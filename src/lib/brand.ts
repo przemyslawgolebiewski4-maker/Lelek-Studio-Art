@@ -20,7 +20,7 @@ export const STUDIO_NAME = "LELEK";
 export const STUDIO_NAME_LONG = "Lelek Studio Berlin";
 
 export const CREATOR_SAME_AS = [
-  "https://www.instagram.com/lelek.berlin/",
+  "https://www.instagram.com/lelek.studio_/",
   "https://www.p-golebiewski.xyz",
 ] as const;
 
