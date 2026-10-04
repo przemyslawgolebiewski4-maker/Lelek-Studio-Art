@@ -374,10 +374,15 @@ export function ProductForm({
       />
 
       <AdminInput
-        label="Etsy URL"
+        label="Shop URL"
         value={form.etsyUrl}
         onChange={(e) => update("etsyUrl", e.target.value)}
+        placeholder="https://shop.lelekstudio.com/..."
       />
+      <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
+        When a link is set, the product page action button reads SHOP and opens this URL.
+        Leave empty to show Inquire about this piece.
+      </p>
 
       <ImageListField
         label="Product gallery"
@@ -524,7 +529,7 @@ export function ProductForm({
         Sold out
       </label>
       <p className="admin-muted" style={{ marginTop: "-8px", marginBottom: "8px" }}>
-        Hides the buy/inquire button and shows &quot;Sold&quot; state on the product page.
+        Hides the SHOP or inquire button and shows &quot;Sold&quot; state on the product page.
         The product remains visible in the catalog.
       </p>
 

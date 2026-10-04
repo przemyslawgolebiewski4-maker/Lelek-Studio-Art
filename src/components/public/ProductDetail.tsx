@@ -123,9 +123,9 @@ export async function ProductDetail({ product }: { product: Product }) {
                   {t(locale, "product.inquireArrow")}
                 </Link>
               )
-            ) : product.etsyUrl ? (
+            ) : product.etsyUrl?.trim() ? (
               <Link
-                href={product.etsyUrl}
+                href={product.etsyUrl.trim()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-brutal filled"

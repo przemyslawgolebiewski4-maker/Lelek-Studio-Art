@@ -93,7 +93,7 @@ export default function AdminDashboardPage() {
         <AdminCard>
           <p className="admin-stat-label">Site settings</p>
           <p className="admin-muted" style={{ marginTop: 8 }}>
-            Site name, email, Etsy and Instagram links shown in nav and footer.
+            Site name, email, Shop and Instagram links shown in nav and footer.
           </p>
           <Link href="/admin/settings" className="admin-link">
             Settings →
